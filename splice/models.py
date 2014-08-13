@@ -51,10 +51,10 @@ class Campaign(db.Model):
     end_date = db.Column(db.DateTime(), nullable=True, index=True)
     impression_limit = db.Column(db.Integer(), nullable=False, default=-1)
 
-    countries = db.relationship("Country", secondary="CampaignsCountries",
+    countries = db.relationship("Country", secondary="campaigns_countries",
                                 backref=db.backref("campaigns", lazy="dynamic"))
 
-    locales = db.relationship("Locale", secondary="CampaignsLocales",
+    locales = db.relationship("Locale", secondary="campaigns_locales",
                                 backref=db.backref("campaigns", lazy="dynamic"))
 
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
@@ -90,7 +90,7 @@ class Tile(db.Model):
     enhanced_image_uri = db.Column(db.Text(), nullable=True)
 
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
-    lists = db.relationship("List", secondary="TilesLists",
+    lists = db.relationship("List", secondary="tiles_lists",
                                 backref=db.backref("tiles", lazy="dynamic"))
 
 class ImpressionStatsDaily(db.Model):
