@@ -35,7 +35,6 @@ setup(
                 "Firefox Directory and Enhanced Tiles",
     author="Mozilla",
     packages=find_packages(),
-    package_data={"": ["*.js", "*.html", "*.css", "*.jinja2", "*.png", "*.gif", "*.woff", "*.eot", "*.ttf", "*.svg"]},
     include_package_data=True,
     install_requires=requires,
     scripts=["scripts/manage.py"],

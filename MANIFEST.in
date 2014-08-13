@@ -1,0 +1,1 @@
+include *.js *.html *.css *.jinja2 *.png *.gif *.jpg *.woff *.eot *.ttf *.svg
