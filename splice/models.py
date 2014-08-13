@@ -12,7 +12,7 @@ class Country(db.Model):
     __tablename__ = "countries"
 
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True)
-    code = db.Column(db.String(2), unique=True)
+    code = db.Column(db.String(5), nullable=False, index=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
 
 class Locale(db.Model):

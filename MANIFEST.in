@@ -1,1 +1,2 @@
 include *.js *.html *.css *.jinja2 *.png *.gif *.jpg *.woff *.eot *.ttf *.svg
+recursive-include splice/fixtures all-locales.comm-aurora iso_3166_2_countries.csv

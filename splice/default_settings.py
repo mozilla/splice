@@ -16,6 +16,10 @@ class DefaultConfig(object):
 
     TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
     STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+    FIXTURES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures")
+
+    COUNTRY_FIXTURE_PATH = os.path.join(FIXTURES_DIR, "iso_3166_2_countries.csv")
+    LOCALE_FIXTURE_PATH = os.path.join(FIXTURES_DIR, "all-locales.comm-aurora")
 
     SQLALCHEMY_DATABASE_URI = "postgres://localhost/mozsplice"
     SQLALCHEMY_ECHO = False

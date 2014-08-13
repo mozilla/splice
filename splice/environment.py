@@ -72,6 +72,7 @@ class Environment(object):
             app.config['STATIC_FOLDER'] = None
         self.__application = app
 
+        self.db.init_app(self.__application)
         Migrate(self.__application, self.db)
 
         return app

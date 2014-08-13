@@ -91,3 +91,42 @@ class GunicornServerCommand(Command):
                         self.cfg.set(k.lower(), v)
 
         GunicornServer().run()
+
+class SeedDataCommand(Command):
+    """
+    Insert seed data in an empty database
+    """
+
+    def load_locales(self, filepath):
+        data = None
+        with open(filepath, 'r') as infile:
+            data = infile.readlines()
+        return data
+
+    def load_countries(self, filepath):
+        data = None
+        import csv
+        with open(filepath, 'rb') as f:
+            reader = csv.DictReader(f)
+            data = [(d['ISO 3166-1 2 Letter Code'], d['Common Name']) for d in reader]
+        return data
+
+    def run(self, **kwargs):
+        from splice.environment import Environment
+        from splice.models import Country, Locale
+        env = Environment.instance()
+
+        locale_data = self.load_locales(env.config.LOCALE_FIXTURE_PATH)
+        for locale_str in locale_data:
+            locale = Locale(name=locale_str)
+            env.db.session.add(locale)
+        env.db.session.add(Locale(name="ERROR"))
+
+        country_data = self.load_countries(env.config.COUNTRY_FIXTURE_PATH)
+        for code, name in country_data:
+            if code:
+                env.db.session.add(Country(code=code, name=name))
+
+        env.db.session.add(Country(code="ERROR", name="GeoIP Lookup Error"))
+
+        env.db.session.commit()
