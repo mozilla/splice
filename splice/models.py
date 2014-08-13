@@ -18,7 +18,7 @@ class Country(db.Model):
 class Locale(db.Model):
     __tablename__ = "locales"
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True)
-    locale = db.Column(db.String(14), unique=True)
+    name = db.Column(db.String(14), unique=True)
 
 class Company(db.Model):
     __tablename__ = "companies"
