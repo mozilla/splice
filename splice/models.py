@@ -131,5 +131,5 @@ class UniqueHLL(db.Model):
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0,1]})
     unique_counts_daily_id = db.Column(db.Integer(), db.ForeignKey("unique_counts_daily.id"))
 
-    index = db.Column(db.SmallInteger(), nullable=False, primary_key=True, index=True)
-    value = db.Column(db.SmallInteger(), nullable=False, primary_key=True, index=True)
+    index = db.Column(db.SmallInteger(), nullable=False, index=True)
+    value = db.Column(db.SmallInteger(), nullable=False, index=True)
