@@ -1,6 +1,7 @@
 from datetime import datetime
 import sqlalchemy
 from sqlalchemy.types import *
+from sqlalchemy.ext.declarative import declarative_base
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.functions import current_date
 from sqlalchemy.dialects.postgresql import ARRAY
@@ -95,25 +96,6 @@ class Tile(db.Model):
     lists = db.relationship("List", secondary="tiles_lists",
                                 backref=db.backref("tiles", lazy="dynamic"))
 
-class ImpressionStatsDaily(db.Model):
-    __tablename__ = "impression_stats_daily"
-
-    tile_id = db.Column(db.Integer(), db.ForeignKey("tiles.id"), primary_key=True)
-    day = db.Column(db.Date(), nullable=False, default=current_date, index=True, primary_key=True)
-
-    impressions = db.Column(db.Integer(), nullable=False, default=0)
-    clicks = db.Column(db.Integer(), nullable=False, default=0)
-    pinned = db.Column(db.Integer(), nullable=False, default=0)
-    blocked = db.Column(db.Integer(), nullable=False, default=0)
-
-    position = db.Column(db.Integer(), nullable=False, default=-1, index=True)
-    locale = db.Column(db.String(5), nullable=False, default="en-US", index=True)
-    country_code = db.Column(db.String(2), nullable=False, default="US", index=True)
-    os = db.Column(db.String(64), index=True)
-    browser = db.Column(db.String(64), index=True)
-    version = db.Column(db.String(64), index=True)
-    device = db.Column(db.String(64), index=True)
-
 class UniqueCountsDaily(db.Model):
     __tablename__ = "unique_counts_daily"
 
@@ -133,3 +115,21 @@ class UniqueHLL(db.Model):
 
     index = db.Column(db.SmallInteger(), nullable=False, index=True)
     value = db.Column(db.SmallInteger(), nullable=False, index=True)
+
+impression_stats_daily = db.Table('impression_stats_daily',
+        db.Column('tile_id', db.Integer, db.ForeignKey('tiles.id'), nullable = False),
+        db.Column('date', db.Date, index = True, nullable = False),
+        db.Column('impressions', db.Integer, nullable = False, server_default = "0"),
+        db.Column('clicks', db.Integer, nullable = False, server_default = "0"),
+        db.Column('pinned', db.Integer, nullable = False, server_default = "0"),
+        db.Column('blocked', db.Integer, nullable = False, server_default = "0"),
+        db.Column('sponsored_link', db.Integer, nullable = False, server_default = "0"),
+        db.Column('sponsored', db.Integer, nullable = False, server_default = "0"),
+        db.Column('position', db.Integer, nullable = False, server_default = "0"),
+        db.Column('locale', db.String(5), index = True, nullable = False),
+        db.Column('country_code', db.String(2), index = True, nullable = False),
+        db.Column('os', db.String(64), index = True, nullable = False),
+        db.Column('browser', db.String(64), index = True, nullable = False),
+        db.Column('version', db.String(64), index = True, nullable = False),
+        db.Column('device', db.String(64), index = True, nullable = False),
+)
