@@ -120,7 +120,7 @@ class UniqueCountsDaily(db.Model):
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0,1]})
     tile_id = db.Column(db.Integer(), db.ForeignKey("tiles.id"))
 
-    day = db.Column(db.Date(), nullable=False, default=current_date, index=True)
+    date = db.Column(db.Date(), nullable=False, default=current_date, index=True)
     impression = db.Column(db.Boolean(), nullable=False, default=True)
     locale = db.Column(db.String(5), nullable=False, default="en-US", index=True)
     country_code = db.Column(db.String(2), nullable=False, default="US", index=True)
