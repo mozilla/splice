@@ -11,20 +11,20 @@ db = Environment.instance().db
 class Country(db.Model):
     __tablename__ = "countries"
 
-    id = db.Column(db.Integer(), autoincrement=True, primary_key=True)
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0,1]})
     code = db.Column(db.String(5), nullable=False, index=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
 
 class Locale(db.Model):
     __tablename__ = "locales"
-    id = db.Column(db.Integer(), autoincrement=True, primary_key=True)
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0,1]})
     name = db.Column(db.String(14), unique=True)
 
 class Company(db.Model):
     __tablename__ = "companies"
 
-    id = db.Column(db.Integer(), autoincrement=True, primary_key=True)
-    name = db.Column(db.String(255))
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0,1]})
+    name = db.Column(db.String(255), unique=True)
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
     campaigns = db.relationship("Campaign")
@@ -44,7 +44,7 @@ class CampaignsCountries(db.Model):
 class Campaign(db.Model):
     __tablename__ = "campaigns"
 
-    id = db.Column(db.Integer(), autoincrement=True, primary_key=True)
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0,1]})
     company_id = db.Column(db.Integer(), db.ForeignKey("companies.id"))
 
     flight_date = db.Column(db.DateTime(), nullable=False, index=True)
@@ -62,14 +62,16 @@ class Campaign(db.Model):
 class TileList(db.Model):
     __tablename__ = "tiles_lists"
 
-    tile_id = db.Column(db.Integer(), db.ForeignKey("tiles.id"), primary_key=True)
-    list_id = db.Column(db.Integer(), db.ForeignKey("lists.id"), primary_key=True)
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0,1]})
+
+    tile_id = db.Column(db.Integer(), db.ForeignKey("tiles.id"))
+    list_id = db.Column(db.Integer(), db.ForeignKey("lists.id"))
     order_index = db.Column(db.Integer(), nullable=False, index=True)
 
 class List(db.Model):
     __tablename__ = "lists"
 
-    id = db.Column(db.Integer(), autoincrement=True, primary_key=True)
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0,1]})
     name = db.Column(db.String(255), nullable=False)
 
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
@@ -79,7 +81,7 @@ class Tile(db.Model):
 
     TYPES = ["organic", "sponsored", "affiliate"]
 
-    id = db.Column(db.Integer(), autoincrement=True, primary_key=True)
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0,1]})
     campaign_id = db.Column(db.Integer(), db.ForeignKey("campaigns.id"))
     target_url = db.Column(db.String(255), nullable=False)
     bg_color = db.Column(db.String(16), nullable=False)
@@ -115,7 +117,7 @@ class ImpressionStatsDaily(db.Model):
 class UniqueCountsDaily(db.Model):
     __tablename__ = "unique_counts_daily"
 
-    id = db.Column(db.Integer(), autoincrement=True, primary_key=True)
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0,1]})
     tile_id = db.Column(db.Integer(), db.ForeignKey("tiles.id"))
 
     day = db.Column(db.Date(), nullable=False, default=current_date, index=True)
@@ -126,6 +128,7 @@ class UniqueCountsDaily(db.Model):
 class UniqueHLL(db.Model):
     __tablename__ = "unique_hlls"
 
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0,1]})
     unique_counts_daily_id = db.Column(db.Integer(), db.ForeignKey("unique_counts_daily.id"))
 
     index = db.Column(db.SmallInteger(), nullable=False, primary_key=True, index=True)
