@@ -157,7 +157,7 @@ def import_tiles(in_file, country_code, out_dir, *args, **kwargs):
 
             else:
                 print "tile already exists with another id. discarding new id"
-                t["directoryId"] = tile_id
+                t["directoryId"] = db_tile_id
                 new_tiles_list.append(t)
 
         env.db.session.commit()
