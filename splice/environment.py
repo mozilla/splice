@@ -24,6 +24,7 @@ class Environment(object):
         self.__config_filename = config_filename
 
         self.config = self.load_config_obj(config_filename)
+        self.__fixtures = None
         self.init()
         if not hasattr(Environment, "_instance"):
             Environment._instance = self
@@ -63,6 +64,13 @@ class Environment(object):
         if not self.__db:
             self.__db = SQLAlchemy()
         return self.__db
+
+    @property
+    def fixtures(self):
+        from splice.utils import load_fixtures
+        if not self.__fixtures:
+            self.__fixtures = load_fixtures(self)
+        return self.__fixtures
 
     def init(self):
         app = Flask('splice')
