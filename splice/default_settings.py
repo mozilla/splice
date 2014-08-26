@@ -19,7 +19,7 @@ class DefaultConfig(object):
     FIXTURES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures")
 
     COUNTRY_FIXTURE_PATH = os.path.join(FIXTURES_DIR, "iso3166.csv")
-    LOCALE_FIXTURE_PATH = os.path.join(FIXTURES_DIR, "all-locales.comm-aurora")
+    LOCALE_FIXTURE_PATH = os.path.join(FIXTURES_DIR, "all-locales.mozilla-aurora")
 
     SQLALCHEMY_DATABASE_URI = "postgres://localhost/mozsplice"
     SQLALCHEMY_ECHO = False

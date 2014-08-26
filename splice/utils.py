@@ -32,6 +32,7 @@ def load_locales(filepath):
     data = None
     with open(filepath, 'r') as infile:
         data = [line.strip() for line in infile.readlines()]
+    data.extend(["en-US", "ERROR"])
     return data
 
 def load_countries(filepath):
