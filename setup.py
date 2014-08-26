@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 requires = [
     "Flask==0.10.1",
     "Flask-SQLAlchemy==1.0",
-    "Flask-Script==0.6.7",
+    "Flask-Script==2.0.5",
     "Flask-Migrate==1.2.0",
     "Flask-Security==1.7.3",
     "Flask-Uploads==0.1.3",

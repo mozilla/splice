@@ -1,4 +1,6 @@
-from flask.ext.script import Command, Option
+import os
+from flask.ext.script import Command, Option, Manager
+from flask.ext.script.commands import InvalidCommand
 from gunicorn.app.base import Application as GunicornApplication
 from gunicorn.config import Config as GunicornConfig
 from splice.utils import environment_manager_create
@@ -92,41 +94,76 @@ class GunicornServerCommand(Command):
 
         GunicornServer().run()
 
-class SeedDataCommand(Command):
+DataCommand = Manager(usage="database import/export utility")
+
+@DataCommand.option("out_dir", type=str, help="Path to dump produced json")
+@DataCommand.option("in_file", type=str, help="Path to directoryLinks.json file")
+@DataCommand.option("country_code", type=str, help="ISO3166 country code for the file")
+def import_tiles(in_file, country_code, out_dir, *args, **kwargs):
     """
-    Insert seed data in an empty database
+    From a directoryLinks.json file and a country, load into datawarehouse for reporting
     """
+    import json
+    from splice.models import Tile
+    from splice.queries import tile_exists
+    from splice.environment import Environment
+    env = Environment.instance()
 
-    def load_locales(self, filepath):
-        data = None
-        with open(filepath, 'r') as infile:
-            data = infile.readlines()
-        return data
+    country_code = country_code.upper()
+    if country_code not in env.fixtures["countries"]:
+        raise InvalidCommand("ERROR: country_code '{0}' is invalid\n\nvalid countries: {1}".format(country_code, json.dumps(env.fixtures["countries"], indent=2)))
 
-    def load_countries(self, filepath):
-        data = None
-        import csv
-        with open(filepath, 'rb') as f:
-            reader = csv.DictReader(f)
-            data = [(d['ISO 3166-1 2 Letter Code'], d['Common Name']) for d in reader]
-        return data
+    data = None
+    with open(in_file, 'r') as f:
+        data = json.load(f)
 
-    def run(self, **kwargs):
-        from splice.environment import Environment
-        from splice.models import Country, Locale
-        env = Environment.instance()
 
-        locale_data = self.load_locales(env.config.LOCALE_FIXTURE_PATH)
-        for locale_str in locale_data:
-            locale = Locale(name=locale_str)
-            env.db.session.add(locale)
-        env.db.session.add(Locale(name="ERROR"))
+    for locale, tiles in data.iteritems():
 
-        country_data = self.load_countries(env.config.COUNTRY_FIXTURE_PATH)
-        for code, name in country_data:
-            if code:
-                env.db.session.add(Country(code=code, name=name))
+        if locale not in  env.fixtures["locales"]:
+            raise InvalidCommand("ERROR: locale '{0}' is invalid\n\nvalid locales: {1}".format(locale, json.dumps(list(env.fixtures["locales"]), indent=2)))
 
-        env.db.session.add(Country(code="ERROR", name="GeoIP Lookup Error"))
+        new_tiles_data = {}
+        new_tiles_list = []
+
+        for t in tiles:
+            columns = dict(
+                target_url = t["url"],
+                bg_color = t["bgColor"],
+                title = t["title"],
+                type = t["type"],
+                image_uri = t["imageURI"],
+                enhanced_image_uri = t.get("enhancedImageURI"),
+                locale = locale,
+                country_code = country_code,
+            )
+
+            db_tile_id = tile_exists(**columns)
+            f_tile_id = t.get("directoryId")
+
+
+            if not db_tile_id or not f_tile_id:
+                """
+                Will generate a new id if not found in db
+                """
+                obj = Tile(**columns)
+                env.db.session.add(obj)
+                env.db.session.flush()
+                t["directoryId"] = obj.id
+
+            elif db_tile_id == f_tile_id:
+                print "tile {0} already exists".format(t["directoryId"])
+                new_tiles_list.append(t)
+
+            else:
+                print "tile already exists with another id. discarding new id"
+                t["directoryId"] = tile_id
+                new_tiles_list.append(t)
 
         env.db.session.commit()
+        new_tiles_data[locale] = {locale: new_tiles_list}
+
+        out_file = os.path.join(out_dir, "{0}-{1}-directoryLinks.json".format(country_code, locale))
+        with open(out_file, "w") as f:
+            json.dump(new_tiles_data, f)
+            print "wrote {0}".format(out_file)
