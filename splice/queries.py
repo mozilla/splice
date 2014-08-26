@@ -1,7 +1,7 @@
-from sqlalchemy import exists
 from splice.environment import Environment
 from splice.models import Tile
 env = Environment.instance()
+
 
 def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, country_code, *args, **kwargs):
     """

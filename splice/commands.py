@@ -1,4 +1,5 @@
 import os
+import multiprocessing
 from flask.ext.script import Command, Option, Manager
 from flask.ext.script.commands import InvalidCommand
 from gunicorn.app.base import Application as GunicornApplication
@@ -96,6 +97,7 @@ class GunicornServerCommand(Command):
 
 DataCommand = Manager(usage="database import/export utility")
 
+
 @DataCommand.option("out_dir", type=str, help="Path to dump produced json")
 @DataCommand.option("in_file", type=str, help="Path to directoryLinks.json file")
 @DataCommand.option("country_code", type=str, help="ISO3166 country code for the file")
@@ -117,10 +119,9 @@ def import_tiles(in_file, country_code, out_dir, *args, **kwargs):
     with open(in_file, 'r') as f:
         data = json.load(f)
 
-
     for locale, tiles in data.iteritems():
 
-        if locale not in  env.fixtures["locales"]:
+        if locale not in env.fixtures["locales"]:
             raise InvalidCommand("ERROR: locale '{0}' is invalid\n\nvalid locales: {1}".format(locale, json.dumps(list(env.fixtures["locales"]), indent=2)))
 
         new_tiles_data = {}
@@ -128,19 +129,18 @@ def import_tiles(in_file, country_code, out_dir, *args, **kwargs):
 
         for t in tiles:
             columns = dict(
-                target_url = t["url"],
-                bg_color = t["bgColor"],
-                title = t["title"],
-                type = t["type"],
-                image_uri = t["imageURI"],
-                enhanced_image_uri = t.get("enhancedImageURI"),
-                locale = locale,
-                country_code = country_code,
+                target_url=t["url"],
+                bg_color=t["bgColor"],
+                title=t["title"],
+                type=t["type"],
+                image_uri=t["imageURI"],
+                enhanced_image_uri=t.get("enhancedImageURI"),
+                locale=locale,
+                country_code=country_code,
             )
 
             db_tile_id = tile_exists(**columns)
             f_tile_id = t.get("directoryId")
-
 
             if not db_tile_id or not f_tile_id:
                 """
@@ -150,6 +150,7 @@ def import_tiles(in_file, country_code, out_dir, *args, **kwargs):
                 env.db.session.add(obj)
                 env.db.session.flush()
                 t["directoryId"] = obj.id
+                new_tiles_list.append(t)
 
             elif db_tile_id == f_tile_id:
                 print "tile {0} already exists".format(t["directoryId"])

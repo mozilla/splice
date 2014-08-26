@@ -4,7 +4,9 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate
 
 
-class EnvironmentUninitializedError(Exception): pass
+class EnvironmentUninitializedError(Exception):
+    pass
+
 
 class Environment(object):
 
@@ -60,7 +62,7 @@ class Environment(object):
 
     @property
     def db(self):
-        self.application # raise if application is not initted
+        self.application  # raise if application is not initted
         if not self.__db:
             self.__db = SQLAlchemy()
         return self.__db

@@ -1,9 +1,9 @@
 import os
 import sys
-import csv
 from splice.environment import Environment
 
 CONFIG_PATH_LOCATIONS = ['/etc/onyx', os.path.abspath(os.path.dirname(__file__))]
+
 
 def environment_manager_create(config=None):
     """
@@ -28,12 +28,14 @@ def environment_manager_create(config=None):
 
     return env.application
 
+
 def load_locales(filepath):
     data = None
     with open(filepath, 'r') as infile:
         data = [line.strip() for line in infile.readlines()]
     data.extend(["en-US", "ERROR"])
     return data
+
 
 def load_countries(filepath):
     data = None
@@ -43,6 +45,7 @@ def load_countries(filepath):
         data = [line for line in reader]
     data.append(("ERROR", "ERROR"))
     return data
+
 
 def load_fixtures(env):
     locales = set(load_locales(env.config.LOCALE_FIXTURE_PATH))
@@ -55,4 +58,3 @@ def load_fixtures(env):
         "locales": locales,
         "countries": countries,
     }
-
