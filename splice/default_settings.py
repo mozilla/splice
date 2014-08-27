@@ -21,7 +21,7 @@ class DefaultConfig(object):
     COUNTRY_FIXTURE_PATH = os.path.join(FIXTURES_DIR, "iso3166.csv")
     LOCALE_FIXTURE_PATH = os.path.join(FIXTURES_DIR, "all-locales.mozilla-aurora")
 
-    SQLALCHEMY_DATABASE_URI = "postgres://postgres:p@ssw0rd66@localhost/mozsplice"
+    SQLALCHEMY_DATABASE_URI = "postgres://localhost/mozsplice"
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_POOL_SIZE = 5
     SQLALCHEMY_POOL_TIMEOUT = 10
