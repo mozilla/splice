@@ -20,9 +20,8 @@ class Tile(db.Model):
     enhanced_image_uri = db.Column(db.Text(), nullable=True)
 
     locale = db.Column(db.String(14), nullable=False, index=True)
-    country_code = db.Column(db.String(5), nullable=False, index=True)
 
-    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow, index=True)
 
 
 class UniqueCountsDaily(db.Model):
