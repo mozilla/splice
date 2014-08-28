@@ -26,6 +26,7 @@ class Environment(object):
         self.__config_filename = config_filename
 
         self.config = self.load_config_obj(config_filename)
+
         self.__fixtures = None
         self.init()
         if not hasattr(Environment, "_instance"):
@@ -82,7 +83,10 @@ class Environment(object):
             app.config['STATIC_FOLDER'] = None
         self.__application = app
 
+        # A hack to keep the sqlalchemy binds state. Flask-SQLAlchemy strips it out
+        sqlalchemy_binds = app.config.get('SQLALCHEMY_BINDS')
         self.db.init_app(self.__application)
+        app.config.SQLALCHEMY_BINDS = sqlalchemy_binds
         Migrate(self.__application, self.db)
 
         return app

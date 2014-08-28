@@ -25,3 +25,6 @@ class DefaultConfig(object):
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_POOL_SIZE = 5
     SQLALCHEMY_POOL_TIMEOUT = 10
+    SQLALCHEMY_BINDS = {
+        "distributions": "mysql+pymysql://root:@localhost/distributions"
+    }
