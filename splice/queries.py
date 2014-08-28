@@ -1,8 +1,10 @@
 from datetime import datetime
 from sqlalchemy.sql import text
 from splice.environment import Environment
-from splice.models import Tile
+from splice.models import Tile, impression_stats_daily
+from sqlalchemy.sql import select, func, and_
 env = Environment.instance()
+
 
 
 def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
@@ -26,6 +28,23 @@ def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri
 
     return results
 
+
+def tile_stats_weekly(connection, start_date, tile_id=None):
+    imps = impression_stats_daily
+    week_func_table = func.date_part('week', imps.c.date)
+    week_func_param = func.date_part('week', func.date(start_date))
+    if tile_id is not None:
+        where_clause = and_()
+    stmt = select([
+        week_func_table, imps.c.tile_id,
+        func.sum(imps.c.impressions),
+        func.sum(imps.c.clicks),
+        func.sum(imps.c.pinned),
+        func.sum(imps.c.blocked),
+        func.sum(imps.c.sponsored),
+        func.sum(imps.c.sponsored_link)
+    ])
+    return connection.execute(stmt)
 
 def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
     conn = env.db.engine.connect()
