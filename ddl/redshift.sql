@@ -1,13 +1,7 @@
 BEGIN;
 
-CREATE TABLE alembic_version (
-    version_num VARCHAR(32) NOT NULL
-);
-
--- Running upgrade None -> 4809e18091d6
-
 CREATE TABLE tiles (
-    id SERIAL NOT NULL, 
+    id INTEGER IDENTITY(0,0) NOT NULL, 
     target_url VARCHAR(255) NOT NULL, 
     bg_color VARCHAR(16) NOT NULL, 
     title VARCHAR(255) NOT NULL, 
@@ -57,7 +51,7 @@ CREATE INDEX ix_impression_stats_daily_os ON impression_stats_daily (os);
 CREATE INDEX ix_impression_stats_daily_version ON impression_stats_daily (version);
 
 CREATE TABLE unique_counts_daily (
-    id SERIAL NOT NULL, 
+    id INTEGER IDENTITY(0,0) NOT NULL, 
     tile_id INTEGER, 
     date DATE NOT NULL, 
     impression BOOLEAN NOT NULL, 
@@ -83,8 +77,6 @@ CREATE TABLE unique_hlls (
 CREATE INDEX ix_unique_hlls_index ON unique_hlls (index);
 
 CREATE INDEX ix_unique_hlls_value ON unique_hlls (value);
-
-INSERT INTO alembic_version (version_num) VALUES ('4809e18091d6');
 
 COMMIT;
 
