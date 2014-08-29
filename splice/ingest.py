@@ -48,7 +48,7 @@ def ingest_links(data, logger=None, *args, **kwargs):
                 db_tile_id = tile_exists(**columns)
                 f_tile_id = t.get("directoryId")
 
-                if not db_tile_id:
+                if db_tile_id is not None:
                     """
                     Will generate a new id if not found in db
                     """
@@ -82,17 +82,18 @@ def ingest_links(data, logger=None, *args, **kwargs):
 
     return ingested_data
 
+
 def generate_artifacts(data):
     """
     Generate locale json files, upload to s3
     """
     artifacts = []
     tile_index = {}
-    for country_locale, data in data.iteritems():
+    for country_locale, tile_data in data.iteritems():
 
-        serialized = json.dumps(data, sort_keys=True)
-        hash = hashlib.sha1(serialized).hexdigest()
-        s3_key = "{0}.{1}.json".format(country_locale, hash)
+        serialized = json.dumps(tile_data, sort_keys=True)
+        hsh = hashlib.sha1(serialized).hexdigest()
+        s3_key = "{0}.{1}.json".format(country_locale, hsh)
         artifacts.append({
             "key": s3_key,
             "data": serialized,
@@ -106,6 +107,7 @@ def generate_artifacts(data):
     })
 
     return artifacts
+
 
 def deploy(data, logger=None):
     if logger:
@@ -121,7 +123,7 @@ def deploy(data, logger=None):
     for file in artifacts:
         key = Key(bucket)
         key.name = file["key"]
-        key.set_contents_from_string(file["serialized"])
+        key.set_contents_from_string(file["data"])
         key.set_acl("public-read")
 
         if logger:

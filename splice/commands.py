@@ -205,12 +205,11 @@ def ingest_tiles(in_file, out_dir, console_out, deploy_flag, verbose, *args, **k
     try:
         new_data = ingest_links(rawdata, logger)
 
-        now_str = datetime.now().isoformat()
-
         if console_out:
             print json.dumps(new_data, sort_keys=True, indent=2)
 
         if out_dir:
+            now_str = datetime.now().isoformat()
             out_file = os.path.join(out_dir, "all-directoryLinks-{0}.json".format(now_str))
 
             with open(out_file, "w") as f:
