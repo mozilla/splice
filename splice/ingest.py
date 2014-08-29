@@ -48,7 +48,7 @@ def ingest_links(data, logger=None, *args, **kwargs):
                 db_tile_id = tile_exists(**columns)
                 f_tile_id = t.get("directoryId")
 
-                if db_tile_id is not None:
+                if db_tile_id is None:
                     """
                     Will generate a new id if not found in db
                     """
