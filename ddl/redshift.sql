@@ -2,7 +2,7 @@ BEGIN;
 
 CREATE TABLE tiles (
     id INTEGER IDENTITY(0,0) NOT NULL, 
-    target_url VARCHAR(255) NOT NULL, 
+    target_url TEXT NOT NULL,
     bg_color VARCHAR(16) NOT NULL, 
     title VARCHAR(255) NOT NULL, 
     type VARCHAR(40) NOT NULL, 
