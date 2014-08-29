@@ -1,10 +1,51 @@
 import os
 import multiprocessing
+import logging
+import sys
+import json
+from datetime import datetime
 from flask.ext.script import Command, Option, Manager
 from flask.ext.script.commands import InvalidCommand
 from gunicorn.app.base import Application as GunicornApplication
 from gunicorn.config import Config as GunicornConfig
 from splice.utils import environment_manager_create
+
+command_logger_set = False
+
+
+def setup_command_logger(loglevel=None):
+    global command_logger_set
+    if not command_logger_set:
+        loglevel = loglevel or logging.INFO
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setLevel(loglevel)
+
+        try:
+            from colorlog import ColoredFormatter
+            fmt = ColoredFormatter(
+                    "%(log_color)s%(message)s",
+                    log_colors = {
+                        "DEBUG": "cyan",
+                        "INFO": "green",
+                        "WARNING": "yellow",
+                        "ERROR": "red",
+                        "CRITICAL": "bold_red",
+                    }
+            )
+        except ImportError:
+            # fall back to non-colored output
+            fmt = logging.Formatter("%(message)s")
+
+        handler.setFormatter(fmt)
+
+        logger = logging.getLogger("command")
+        logger.addHandler(handler)
+        logger.setLevel(loglevel)
+        command_logger_set = True
+    else:
+        logger = logging.getLogger("command")
+
+    return logger
 
 
 class GunicornServerCommand(Command):
@@ -98,73 +139,71 @@ class GunicornServerCommand(Command):
 DataCommand = Manager(usage="database import/export utility")
 
 
-@DataCommand.option("out_dir", type=str, help="Path to dump produced json")
+@DataCommand.option("-v", "--verbose", action="store_true", dest="verbose", help="turns on verbose mode", default=False, required=False)
+@DataCommand.option("-o", "--out_dir", type=str, help="Path to dump produced json. defaults to ./out", default="./out", required=False)
 @DataCommand.option("in_file", type=str, help="Path to directoryLinks.json file")
 @DataCommand.option("country_code", type=str, help="ISO3166 country code for the file")
-def import_tiles(in_file, country_code, out_dir, *args, **kwargs):
+def import_tiles(in_file, country_code, out_dir, verbose, *args, **kwargs):
     """
     From a directoryLinks.json file and a country, load into datawarehouse for reporting
     """
-    import json
-    from splice.models import Tile
-    from splice.queries import tile_exists
-    from splice.environment import Environment
-    env = Environment.instance()
+    if verbose:
+        logger = setup_command_logger(logging.DEBUG)
+    else:
+        logger = setup_command_logger(logging.WARNING)
 
-    country_code = country_code.upper()
-    if country_code not in env.fixtures["countries"]:
-        raise InvalidCommand("ERROR: country_code '{0}' is invalid\n\nvalid countries: {1}".format(country_code, json.dumps(env.fixtures["countries"], indent=2)))
-
-    data = None
+    rawdata = None
     with open(in_file, 'r') as f:
-        data = json.load(f)
+        rawdata = json.load(f)
 
-    for locale, tiles in data.iteritems():
+    from splice.ingest import ingest_links, IngestError
 
-        if locale not in env.fixtures["locales"]:
-            raise InvalidCommand("ERROR: locale '{0}' is invalid\n\nvalid locales: {1}".format(locale, json.dumps(list(env.fixtures["locales"]), indent=2)))
+    try:
+        new_data = ingest_links({country_code: rawdata}, logger)
 
-        new_tiles_data = {}
-        new_tiles_list = []
+        directory = os.path.join(out_dir, country_code)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
 
-        for t in tiles:
-            columns = dict(
-                target_url=t["url"],
-                bg_color=t["bgColor"],
-                title=t["title"],
-                type=t["type"],
-                image_uri=t["imageURI"],
-                enhanced_image_uri=t.get("enhancedImageURI"),
-                locale=locale,
-                country_code=country_code,
-            )
+        now_str = datetime.now().isoformat()
+        out_file = os.path.join(directory, "directoryLinks-{0}.json".format(now_str))
 
-            db_tile_id = tile_exists(**columns)
-            f_tile_id = t.get("directoryId")
-
-            if not db_tile_id or not f_tile_id:
-                """
-                Will generate a new id if not found in db
-                """
-                obj = Tile(**columns)
-                env.db.session.add(obj)
-                env.db.session.flush()
-                t["directoryId"] = obj.id
-                new_tiles_list.append(t)
-
-            elif db_tile_id == f_tile_id:
-                print "tile {0} already exists".format(t["directoryId"])
-                new_tiles_list.append(t)
-
-            else:
-                print "tile already exists with another id. discarding new id"
-                t["directoryId"] = db_tile_id
-                new_tiles_list.append(t)
-
-        env.db.session.commit()
-        new_tiles_data[locale] = {locale: new_tiles_list}
-
-        out_file = os.path.join(out_dir, "{0}-{1}-directoryLinks.json".format(country_code, locale))
         with open(out_file, "w") as f:
-            json.dump(new_tiles_data, f)
-            print "wrote {0}".format(out_file)
+            json.dump(new_data, f)
+            logger.info("wrote {0}".format(out_file))
+    except IngestError, e:
+        raise InvalidCommand(e.message)
+    except:
+        import traceback
+        traceback.print_exc()
+
+@DataCommand.option("-o", "--out_dir", type=str, help="Path to dump produced json. defaults to ./out", default="./out", required=False)
+@DataCommand.option("in_file", type=str, help="Path to directoryLinks.json file")
+def import_links(in_file, out_dir, *args, **kwargs):
+    """
+    From a specially formatted directoryLinks with countries, load into data warehouse for reporting
+    """
+    setup_command_logger(logging.INFO)
+
+    logger = setup_command_logger(logging.INFO)
+
+    rawdata = None
+    with open(in_file, 'r') as f:
+        rawdata = json.load(f)
+
+    from splice.ingest import ingest_links, IngestError
+
+    try:
+        new_data = ingest_links(rawdata, logger)
+
+        now_str = datetime.now().isoformat()
+        out_file = os.path.join(out_dir, "all-directoryLinks-{0}.json".format(now_str))
+
+        with open(out_file, "w") as f:
+            json.dump(new_data, f)
+            logger.info("wrote {0}".format(out_file))
+    except IngestError, e:
+        raise InvalidCommand(e.message)
+    except:
+        import traceback
+        traceback.print_exc()
