@@ -54,7 +54,7 @@ def ingest_links(data, logger=None, *args, **kwargs):
                     """
                     obj = Tile(**columns)
                     env.db.session.add(obj)
-                    env.db.session.flush()
+                    env.db.session.commit()
                     t["directoryId"] = obj.id
                     new_tiles_list.append(t)
                     if logger:
@@ -75,7 +75,6 @@ def ingest_links(data, logger=None, *args, **kwargs):
                     if logger:
                         logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))
 
-            env.db.session.commit()
             new_tiles_data[locale] = new_tiles_list
             key_name = "{0}/{1}".format(country_code, locale)
             ingested_data[key_name] = new_tiles_data
