@@ -140,17 +140,18 @@ DataCommand = Manager(usage="database import/export utility")
 
 
 @DataCommand.option("-v", "--verbose", action="store_true", dest="verbose", help="turns on verbose mode", default=False, required=False)
-@DataCommand.option("-o", "--out_dir", type=str, help="Path to dump produced json. defaults to ./out", default="./out", required=False)
+@DataCommand.option("-c", "--console", action="store_true", dest="console_out", help="Enable console output", required=False)
+@DataCommand.option("-o", "--out_dir", type=str, help="To dump to a file, provide the path to a directory", required=False)
 @DataCommand.option("in_file", type=str, help="Path to directoryLinks.json file")
 @DataCommand.option("country_code", type=str, help="ISO3166 country code for the file")
-def import_tiles(in_file, country_code, out_dir, verbose, *args, **kwargs):
+def load_links(in_file, country_code, out_dir, console_out, verbose, *args, **kwargs):
     """
-    From a directoryLinks.json file and a country, load into datawarehouse for reporting
+    Load a set of links in the data warehouse
     """
     if verbose:
         logger = setup_command_logger(logging.DEBUG)
     else:
-        logger = setup_command_logger(logging.WARNING)
+        logger = setup_command_logger(logging.INFO)
 
     rawdata = None
     with open(in_file, 'r') as f:
@@ -161,16 +162,20 @@ def import_tiles(in_file, country_code, out_dir, verbose, *args, **kwargs):
     try:
         new_data = ingest_links({country_code: rawdata}, logger)
 
-        directory = os.path.join(out_dir, country_code)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+        if console_out:
+            print json.dumps(new_data, sort_keys=True, indent=2)
 
-        now_str = datetime.now().isoformat()
-        out_file = os.path.join(directory, "directoryLinks-{0}.json".format(now_str))
+        if out_dir:
+            directory = os.path.join(out_dir, country_code)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            now_str = datetime.now().isoformat()
+            out_file = os.path.join(directory, "directoryLinks-{0}.json".format(now_str))
 
-        with open(out_file, "w") as f:
-            json.dump(new_data, f)
-            logger.info("wrote {0}".format(out_file))
+            with open(out_file, "w") as f:
+                json.dump(new_data, f, sort_keys=True, indent=2)
+                logger.info("wrote {0}".format(out_file))
+
     except IngestError, e:
         raise InvalidCommand(e.message)
     except:

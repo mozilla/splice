@@ -74,6 +74,7 @@ def ingest_links(data, logger=None, *args, **kwargs):
 
             env.db.session.commit()
             new_tiles_data[locale] = new_tiles_list
-        ingested_data[country_code] = new_tiles_data
+            key_name = "{0}/{1}".format(country_code, locale)
+            ingested_data[key_name] = new_tiles_data
 
     return ingested_data
