@@ -11,7 +11,7 @@ class Tile(db.Model):
     TYPES = {"organic", "sponsored", "affiliate"}
 
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0, 1]})
-    target_url = db.Column(db.String(255), nullable=False)
+    target_url = db.Column(db.Text(), nullable=False)
     bg_color = db.Column(db.String(16), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(40), nullable=False)
