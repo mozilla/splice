@@ -182,31 +182,43 @@ def load_links(in_file, country_code, out_dir, console_out, verbose, *args, **kw
         import traceback
         traceback.print_exc()
 
-@DataCommand.option("-o", "--out_dir", type=str, help="Path to dump produced json. defaults to ./out", default="./out", required=False)
-@DataCommand.option("in_file", type=str, help="Path to directoryLinks.json file")
-def import_links(in_file, out_dir, *args, **kwargs):
+@DataCommand.option("-v", "--verbose", action="store_true", dest="verbose", help="turns on verbose mode", default=False, required=False)
+@DataCommand.option("-d", "--deploy", action="store_true", dest="deploy_flag", help="Deploy to S3", required=False)
+@DataCommand.option("-c", "--console", action="store_true", dest="console_out", help="Enable console output", required=False)
+@DataCommand.option("-o", "--out_dir", type=str, help="To dump to a file, provide the path to a directory", required=False)
+@DataCommand.option("in_file", type=str, help="Path to tiles.json file")
+def ingest_tiles(in_file, out_dir, console_out, deploy_flag, verbose, *args, **kwargs):
     """
-    From a specially formatted directoryLinks with countries, load into data warehouse for reporting
+    Load a set of links for all country/locale combinations into data warehouse and optionally deploy
     """
-    setup_command_logger(logging.INFO)
-
-    logger = setup_command_logger(logging.INFO)
+    if verbose:
+        logger = setup_command_logger(logging.DEBUG)
+    else:
+        logger = setup_command_logger(logging.INFO)
 
     rawdata = None
     with open(in_file, 'r') as f:
         rawdata = json.load(f)
 
-    from splice.ingest import ingest_links, IngestError
+    from splice.ingest import ingest_links, deploy, IngestError
 
     try:
         new_data = ingest_links(rawdata, logger)
 
         now_str = datetime.now().isoformat()
-        out_file = os.path.join(out_dir, "all-directoryLinks-{0}.json".format(now_str))
 
-        with open(out_file, "w") as f:
-            json.dump(new_data, f)
-            logger.info("wrote {0}".format(out_file))
+        if console_out:
+            print json.dumps(new_data, sort_keys=True, indent=2)
+
+        if out_dir:
+            out_file = os.path.join(out_dir, "all-directoryLinks-{0}.json".format(now_str))
+
+            with open(out_file, "w") as f:
+                json.dump(new_data, f, sort_keys=True, indent=2)
+                logger.info("wrote {0}".format(out_file))
+
+        if deploy_flag:
+            deploy(new_data, logger)
     except IngestError, e:
         raise InvalidCommand(e.message)
     except:

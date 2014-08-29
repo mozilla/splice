@@ -1,4 +1,5 @@
 import importlib
+import boto
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate
@@ -22,6 +23,7 @@ class Environment(object):
     def __init__(self, config_filename):
         self.__application = None
         self.__db = None
+        self.__s3_conn = None
 
         self.__config_filename = config_filename
 
@@ -67,6 +69,12 @@ class Environment(object):
         if not self.__db:
             self.__db = SQLAlchemy()
         return self.__db
+
+    @property
+    def s3(self):
+        if not self.__s3_conn:
+            self.__s3_conn = boto.connect_s3(env.config.AWS["key"], env.config.AWS["secret"])
+        return self.__s3_conn
 
     @property
     def fixtures(self):

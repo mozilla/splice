@@ -1,4 +1,7 @@
+import os
 import json
+import hashlib
+from boto.s3.key import Key
 from splice.models import Tile
 from splice.queries import tile_exists
 from splice.environment import Environment
@@ -78,3 +81,49 @@ def ingest_links(data, logger=None, *args, **kwargs):
             ingested_data[key_name] = new_tiles_data
 
     return ingested_data
+
+def generate_artifacts(data):
+    """
+    Generate locale json files, upload to s3
+    """
+    artifacts = []
+    tile_index = {}
+    for country_locale, data in data.iteritems():
+
+        serialized = json.dumps(data, sort_keys=True)
+        hash = hashlib.sha1(serialized).hexdigest()
+        s3_key = "{0}.{1}.json".format(country_locale, hash)
+        artifacts.append({
+            "key": s3_key,
+            "data": serialized,
+        })
+
+        tile_index[country_locale] = os.path.join(env.config.CLOUDFRONT_BASE_URL, s3_key)
+
+    artifacts.append({
+        "key": env.config.S3["tile_index_key"],
+        "data": json.dumps(tile_index, sort_keys=True)
+    })
+
+    return artifacts
+
+def deploy(data, logger=None):
+    if logger:
+        logger.info("Generating Data")
+    artifacts = generate_artifacts(data)
+
+    if logger:
+        logger.info("Uploading to S3")
+
+    bucket = env.s3.get_bucket(env.config.S3["bucket"])
+
+    # upload individual files
+    for file in artifacts:
+        key = Key(bucket)
+        key.name = file["key"]
+        key.set_contents_from_string(file["serialized"])
+        key.set_acl("public-read")
+
+        if logger:
+            url = key.generate_url(expires_in=0, query_auth=False)
+            logger.info("Deployed file at {0}".format(url))

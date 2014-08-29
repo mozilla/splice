@@ -28,3 +28,15 @@ class DefaultConfig(object):
     SQLALCHEMY_BINDS = {
         "distributions": "mysql+pymysql://root:@localhost/distributions"
     }
+
+    AWS = {
+        "key": "development_key",
+        "secret_key": "government_secret"
+    }
+
+    S3 = {
+        "bucket": "tiles",
+        "tile_index_key": "tile_index.json"
+    }
+
+    CLOUDFRONT_BASE_URL = "https://d1tiksivlekcfk.cloudfront.net"
