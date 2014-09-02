@@ -3,7 +3,7 @@ import json
 import hashlib
 from boto.s3.key import Key
 from splice.models import Tile
-from splice.queries import tile_exists
+from splice.queries import tile_exists, insert_tile
 from splice.environment import Environment
 
 env = Environment.instance()
@@ -52,13 +52,11 @@ def ingest_links(data, logger=None, *args, **kwargs):
                     """
                     Will generate a new id if not found in db
                     """
-                    obj = Tile(**columns)
-                    env.db.session.add(obj)
-                    env.db.session.commit()
-                    t["directoryId"] = obj.id
+                    db_tile_id = insert_tile(**columns)
+                    t["directoryId"] = db_tile_id
                     new_tiles_list.append(t)
                     if logger:
-                        logger.info("INSERT: Creating id:{0}".format(obj.id))
+                        logger.info("INSERT: Creating id:{0}".format(db_tile_id))
 
                 elif db_tile_id == f_tile_id:
                     new_tiles_list.append(t)
