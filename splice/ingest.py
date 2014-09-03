@@ -35,13 +35,16 @@ def ingest_links(data, logger=None, *args, **kwargs):
             new_tiles_list = []
 
             for t in tiles:
+                image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
+                enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() if "enhancedImageURI" in t else None
+
                 columns = dict(
                     target_url=t["url"],
                     bg_color=t["bgColor"],
                     title=t["title"],
                     type=t["type"],
-                    image_uri=t["imageURI"],
-                    enhanced_image_uri=t.get("enhancedImageURI"),
+                    image_uri=image_hash,
+                    enhanced_image_uri=enhanced_image_hash,
                     locale=locale,
                 )
 
