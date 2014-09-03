@@ -32,17 +32,16 @@ def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri
     conn = env.db.engine.connect()
     trans = conn.begin()
     try:
-        result = conn.execute(
+        conn.execute("LOCK TABLE tiles IN SHARE ROW EXCLUSIVE MODE;")
+        conn.execute(
 
             text(
-                "BEGIN; "
                 "INSERT INTO tiles ("
                 " target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, created_at"
                 ") "
                 "VALUES ("
                 " :target_url, :bg_color, :title, :type, :image_uri, :enhanced_image_uri, :locale, :created_at"
-                ") "
-                "RETURNING id"
+                ")"
             ),
             target_url=target_url,
             bg_color=bg_color,
@@ -53,8 +52,10 @@ def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri
             locale=locale,
             created_at=datetime.utcnow()
         )
+
+        result = conn.execute("SELECT MAX(id) FROM tiles;").scalar()
         trans.commit()
-        return result.scalar()
+        return result
     except:
         trans.rollback()
         raise
