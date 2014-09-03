@@ -53,7 +53,8 @@ def _stats_query(connection, start_date, date_window, group_column_name, group_v
             func.sum(imps.c.sponsored),
             func.sum(imps.c.sponsored_link)])\
         .where(where_clause)\
-        .group_by(window_func_table, group_column)
+        .group_by(window_func_table, group_column)\
+        .order_by(window_func_table, group_column)
     return connection.execute(stmt)
 
 
@@ -66,11 +67,11 @@ def tile_stats_monthly(connection, start_date, tile_id=None):
 
 
 def slot_stats_weekly(connection, start_date, slot_id=None):
-    return _stats_query(connection, start_date, 'week', 'slot_id', slot_id)
+    return _stats_query(connection, start_date, 'week', 'position', slot_id)
 
 
 def slot_stats_monthly(connection, start_date, slot_id=None):
-    return _stats_query(connection, start_date, 'month', 'slot_id', slot_id)
+    return _stats_query(connection, start_date, 'month', 'position', slot_id)
 
         week_func_table, imps.c.tile_id,
         func.sum(imps.c.impressions),
