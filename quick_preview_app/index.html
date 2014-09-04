@@ -1,0 +1,39 @@
+<!doctype html>
+<html ng-app="tilesPreviewApp">
+<head>
+    <meta charset="UTF-8">
+    <script src="angular.min.js"></script>
+    <script src="previewApp.js"></script>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-theme.min.css">
+    <link rel="stylesheet" href="previewApp.css">
+</head>
+<body>
+<div class="container-fluid" ng-controller="PreviewController">
+    <div>
+        <h2>Quick Tiles Preview</h2>
+        <p>Hey. To quickly check on tiles, choose a tiles file version in the select box below:</p>
+    </div>
+    <div>
+        <select ng-model="linkFile" required="1">
+            <option ng-repeat="choice in choices" value="{{ choice }} ">{{ choice }}</option>
+        </select>
+        <div>
+            <ul ng-hide="downloadInProgress" class="tile-container">
+                <li ng-repeat="tile in tiles">
+                    <ul class="tile">
+                        <li><a href="{{ tile.url }}">{{ tile.title }} [{{tile.type}}]</a></li>
+                        <li><div class="enhanced-content" style="background-color: {{ tile.bgColor }}; background-image: url('{{ tile.imageURI }}')"></div></li>
+                        <li><div class="enhanced-content" style="background-image: url('{{ tile.enhancedImageURI }}')"></div></li>
+                    </ul>
+                </li>
+            </ul>
+            <div ng-show="downloadInProgress" class="progress">
+                <div class="progress-bar progress-bar-striped active" role="progressbar">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

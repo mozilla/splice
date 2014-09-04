@@ -1,0 +1,31 @@
+.enhanced-content {
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 290px;
+    height: 180px;
+}
+
+.tile {
+    width: 290px;
+    margin: 0;
+    padding: 10px;
+}
+
+ul.tile li {
+    list-style-type: none;
+}
+
+ul.tile-container li {
+    display: inline;
+    list-style-type: none;
+    float: left;
+    padding-right: 10px;
+}
+
+.progress-bar {
+    width: 50%;
+}
+
+.progress {
+    margin-top: 50px;
+}
