@@ -3,7 +3,7 @@ import json
 import hashlib
 from boto.s3.key import Key
 from splice.models import Tile
-from splice.queries import tile_exists
+from splice.queries import tile_exists, insert_tile
 from splice.environment import Environment
 
 env = Environment.instance()
@@ -35,13 +35,16 @@ def ingest_links(data, logger=None, *args, **kwargs):
             new_tiles_list = []
 
             for t in tiles:
+                image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
+                enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() if "enhancedImageURI" in t else None
+
                 columns = dict(
                     target_url=t["url"],
                     bg_color=t["bgColor"],
                     title=t["title"],
                     type=t["type"],
-                    image_uri=t["imageURI"],
-                    enhanced_image_uri=t.get("enhancedImageURI"),
+                    image_uri=image_hash,
+                    enhanced_image_uri=enhanced_image_hash,
                     locale=locale,
                 )
 
@@ -52,13 +55,11 @@ def ingest_links(data, logger=None, *args, **kwargs):
                     """
                     Will generate a new id if not found in db
                     """
-                    obj = Tile(**columns)
-                    env.db.session.add(obj)
-                    env.db.session.commit()
-                    t["directoryId"] = obj.id
+                    db_tile_id = insert_tile(**columns)
+                    t["directoryId"] = db_tile_id
                     new_tiles_list.append(t)
                     if logger:
-                        logger.info("INSERT: Creating id:{0}".format(obj.id))
+                        logger.info("INSERT: Creating id:{0}".format(db_tile_id))
 
                 elif db_tile_id == f_tile_id:
                     new_tiles_list.append(t)
