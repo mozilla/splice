@@ -1,5 +1,5 @@
 import os
-import json
+import ujson
 import hashlib
 from boto.s3.key import Key
 from splice.queries import tile_exists, insert_tile
@@ -22,13 +22,13 @@ def ingest_links(data, logger=None, *args, **kwargs):
         country_code = country_code.upper()
 
         if country_code not in env.fixtures["countries"]:
-            raise IngestError("ERROR: country_code '{0}' is invalid\n\nvalid countries: {1}".format(country_code, json.dumps(env.fixtures["countries"], indent=2)))
+            raise IngestError("ERROR: country_code '{0}' is invalid\n\nvalid countries: {1}".format(country_code, ujson.dumps(env.fixtures["countries"], indent=2)))
         logger.info("PROCESSING FOR COUNTRY: {0}".format(country_code))
 
         for locale, tiles in tile_data.iteritems():
 
             if locale not in env.fixtures["locales"]:
-                raise IngestError("ERROR: locale '{0}' is invalid\n\nvalid locales: {1}".format(locale, json.dumps(list(env.fixtures["locales"]), indent=2)))
+                raise IngestError("ERROR: locale '{0}' is invalid\n\nvalid locales: {1}".format(locale, ujson.dumps(list(env.fixtures["locales"]), indent=2)))
 
             new_tiles_data = {}
             new_tiles_list = []
@@ -90,7 +90,7 @@ def generate_artifacts(data):
     tile_index = {}
     for country_locale, tile_data in data.iteritems():
 
-        serialized = json.dumps(tile_data, sort_keys=True)
+        serialized = ujson.dumps(tile_data, sort_keys=True)
         hsh = hashlib.sha1(serialized).hexdigest()
         s3_key = "{0}.{1}.json".format(country_locale, hsh)
         artifacts.append({
@@ -102,7 +102,7 @@ def generate_artifacts(data):
 
     artifacts.append({
         "key": env.config.S3["tile_index_key"],
-        "data": json.dumps(tile_index, sort_keys=True)
+        "data": ujson.dumps(tile_index, sort_keys=True)
     })
 
     return artifacts

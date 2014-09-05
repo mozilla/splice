@@ -6,8 +6,6 @@ from sqlalchemy.sql import select, func, and_
 
 
 def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, country_code, *args, **kwargs):
-
-def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
@@ -55,7 +53,9 @@ def _stats_query(connection, start_date, date_window, group_column_name, group_v
         .where(where_clause)\
         .group_by(window_func_table, group_column)\
         .order_by(window_func_table, group_column)
-    return connection.execute(stmt)
+    return (date_window, group_column_name, 'impressions', 'clicks', 'pinned',
+                'blocked', 'sponsored', 'sponsored_link'),\
+           connection.execute(stmt)
 
 
 def tile_stats_weekly(connection, start_date, tile_id=None):
