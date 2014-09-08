@@ -23,6 +23,7 @@ CREATE TABLE impression_stats_daily (
     sponsored_link INTEGER DEFAULT '0' NOT NULL, 
     sponsored INTEGER DEFAULT '0' NOT NULL, 
     position INTEGER DEFAULT '0' NOT NULL, 
+    enhanced BOOLEAN DEFAULT FALSE NOT NULL,
     locale VARCHAR(14) NOT NULL, 
     country_code VARCHAR(5) NOT NULL, 
     os VARCHAR(64) NOT NULL, 
