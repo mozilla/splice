@@ -140,11 +140,12 @@ DataCommand = Manager(usage="database import/export utility")
 
 
 @DataCommand.option("-v", "--verbose", action="store_true", dest="verbose", help="turns on verbose mode", default=False, required=False)
+@DataCommand.option("-p", "--preserve-format", action="store_true", dest="old_format", help="To keep data in the non-country aware format", required=False)
 @DataCommand.option("-c", "--console", action="store_true", dest="console_out", help="Enable console output", required=False)
-@DataCommand.option("-o", "--out_dir", type=str, help="To dump to a file, provide the path to a directory", required=False)
+@DataCommand.option("-o", "--out_path", type=str, help="To dump to a file, provide a path/filename", required=False)
 @DataCommand.option("in_file", type=str, help="Path to directoryLinks.json file")
 @DataCommand.option("country_code", type=str, help="ISO3166 country code for the file")
-def load_links(in_file, country_code, out_dir, console_out, verbose, *args, **kwargs):
+def load_links(in_file, country_code, out_path, console_out, verbose, old_format, *args, **kwargs):
     """
     Load a set of links in the data warehouse
     """
@@ -162,19 +163,20 @@ def load_links(in_file, country_code, out_dir, console_out, verbose, *args, **kw
     try:
         new_data = ingest_links({country_code: rawdata}, logger)
 
+        if old_format:
+            new_data = new_data[new_data.keys()[0]]
+
         if console_out:
             print json.dumps(new_data, sort_keys=True, indent=2)
 
-        if out_dir:
-            directory = os.path.join(out_dir, country_code)
+        if out_path:
+            directory, _ = os.path.split(out_path)
             if not os.path.exists(directory):
                 os.makedirs(directory)
-            now_str = datetime.now().isoformat()
-            out_file = os.path.join(directory, "directoryLinks-{0}.json".format(now_str))
 
-            with open(out_file, "w") as f:
+            with open(out_path, "w") as f:
                 json.dump(new_data, f, sort_keys=True, indent=2)
-                logger.info("wrote {0}".format(out_file))
+                logger.info("wrote {0}".format(out_path))
 
     except IngestError, e:
         raise InvalidCommand(e.message)
@@ -185,9 +187,9 @@ def load_links(in_file, country_code, out_dir, console_out, verbose, *args, **kw
 @DataCommand.option("-v", "--verbose", action="store_true", dest="verbose", help="turns on verbose mode", default=False, required=False)
 @DataCommand.option("-d", "--deploy", action="store_true", dest="deploy_flag", help="Deploy to S3", required=False)
 @DataCommand.option("-c", "--console", action="store_true", dest="console_out", help="Enable console output", required=False)
-@DataCommand.option("-o", "--out_dir", type=str, help="To dump to a file, provide the path to a directory", required=False)
+@DataCommand.option("-o", "--out_path", type=str, help="To dump to a file, provide a path/filename", required=False)
 @DataCommand.option("in_file", type=str, help="Path to tiles.json file")
-def ingest_tiles(in_file, out_dir, console_out, deploy_flag, verbose, *args, **kwargs):
+def ingest_tiles(in_file, out_path, console_out, deploy_flag, verbose, *args, **kwargs):
     """
     Load a set of links for all country/locale combinations into data warehouse and optionally deploy
     """
@@ -208,13 +210,14 @@ def ingest_tiles(in_file, out_dir, console_out, deploy_flag, verbose, *args, **k
         if console_out:
             print json.dumps(new_data, sort_keys=True, indent=2)
 
-        if out_dir:
-            now_str = datetime.now().isoformat()
-            out_file = os.path.join(out_dir, "all-directoryLinks-{0}.json".format(now_str))
+        if out_path:
+            directory, _ = os.path.split(out_path)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
 
-            with open(out_file, "w") as f:
+            with open(out_path, "w") as f:
                 json.dump(new_data, f, sort_keys=True, indent=2)
-                logger.info("wrote {0}".format(out_file))
+                logger.info("wrote {0}".format(out_path))
 
         if deploy_flag:
             deploy(new_data, logger)
