@@ -1,11 +1,8 @@
 from flask import (
     Response,
-    redirect,
-    request,
     Blueprint
 )
 import ujson
-from splice.environment import Environment
 from splice.queries import *
 from splice.models import *
 
@@ -27,6 +24,7 @@ def build_response(it, keys):
     for tup in it:
         rval.append(dict(zip(keys, tup)))
     return Response(ujson.dumps(rval), content_type='application/json; charset=utf-8', status=200)
+
 
 @admin.route('/tile_stats/weekly/<start_date>/<tile_id>', methods=['GET'])
 def path_tile_stats_weekly(start_date, tile_id=None):
