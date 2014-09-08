@@ -1,7 +1,7 @@
 BEGIN;
 
 CREATE TABLE tiles (
-    id INTEGER IDENTITY(0,1) NOT NULL, 
+    id INTEGER IDENTITY(1,1) NOT NULL,
     target_url TEXT NOT NULL,
     bg_color VARCHAR(16) NOT NULL, 
     title VARCHAR(255) NOT NULL, 
@@ -33,7 +33,7 @@ CREATE TABLE impression_stats_daily (
 );
 
 CREATE TABLE unique_counts_daily (
-    id INTEGER IDENTITY(0,1) NOT NULL, 
+    id INTEGER IDENTITY(1,1) NOT NULL,
     tile_id INTEGER, 
     date DATE NOT NULL, 
     impression BOOLEAN NOT NULL, 
