@@ -53,8 +53,7 @@ def _stats_query(connection, start_date, date_window, group_column_name, group_v
         .where(where_clause)\
         .group_by(window_func_table, group_column)\
         .order_by(window_func_table, group_column)
-    return (date_window, group_column_name, 'impressions', 'clicks', 'pinned',
-                'blocked', 'sponsored', 'sponsored_link'),\
+    return (date_window, group_column_name, 'impressions', 'clicks', 'pinned', 'blocked', 'sponsored', 'sponsored_link'),\
            connection.execute(stmt)
 
 
@@ -73,17 +72,10 @@ def slot_stats_weekly(connection, start_date, slot_id=None):
 def slot_stats_monthly(connection, start_date, slot_id=None):
     return _stats_query(connection, start_date, 'month', 'position', slot_id)
 
-        week_func_table, imps.c.tile_id,
-        func.sum(imps.c.impressions),
-        func.sum(imps.c.clicks),
-        func.sum(imps.c.pinned),
-        func.sum(imps.c.blocked),
-        func.sum(imps.c.sponsored),
-        func.sum(imps.c.sponsored_link)
-    ])
-    return connection.execute(stmt)
 
 def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
+    from splice.environment import Environment
+    env = Environment.instance()
     conn = env.db.engine.connect()
     trans = conn.begin()
     try:
