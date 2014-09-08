@@ -53,6 +53,7 @@ impression_stats_daily = db.Table(
     db.Column('sponsored_link', db.Integer, nullable=False, server_default="0"),
     db.Column('sponsored', db.Integer, nullable=False, server_default="0"),
     db.Column('position', db.Integer, nullable=False, server_default="0"),
+    db.Column('enhanced', db.Boolean, nullable=False, server_default="false"),
     db.Column('locale', db.String(14), nullable=False),
     db.Column('country_code', db.String(5), nullable=False),
     db.Column('os', db.String(64), nullable=False),
