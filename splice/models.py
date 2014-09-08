@@ -35,12 +35,14 @@ class UniqueCountsDaily(db.Model):
     locale = db.Column(db.String(14), nullable=False, default="en-US")
     country_code = db.Column(db.String(5), nullable=False, default="US")
 
+
 unique_hlls = db.Table(
     'unique_hlls',
     db.Column('unique_counts_daily_id', db.Integer, db.ForeignKey('unique_counts_daily.id')),
     db.Column('index', db.SmallInteger, nullable=False, server_default="0"),
     db.Column('value', db.SmallInteger, nullable=False, server_default="0"),
 )
+
 
 impression_stats_daily = db.Table(
     'impression_stats_daily',

@@ -2,7 +2,6 @@ import os
 import json
 import hashlib
 from boto.s3.key import Key
-from splice.models import Tile
 from splice.queries import tile_exists, insert_tile
 from splice.environment import Environment
 

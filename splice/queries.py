@@ -21,7 +21,6 @@ def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri
         .first()
     )
 
-
     if results:
         return results[0]
 

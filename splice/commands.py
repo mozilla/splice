@@ -3,7 +3,6 @@ import multiprocessing
 import logging
 import sys
 import json
-from datetime import datetime
 from flask.ext.script import Command, Option, Manager
 from flask.ext.script.commands import InvalidCommand
 from gunicorn.app.base import Application as GunicornApplication
@@ -22,16 +21,13 @@ def setup_command_logger(loglevel=None):
 
         try:
             from colorlog import ColoredFormatter
-            fmt = ColoredFormatter(
-                    "%(log_color)s%(message)s",
-                    log_colors = {
-                        "DEBUG": "cyan",
-                        "INFO": "green",
-                        "WARNING": "yellow",
-                        "ERROR": "red",
-                        "CRITICAL": "bold_red",
-                    }
-            )
+            fmt = ColoredFormatter("%(log_color)s%(message)s",
+                                   log_colors={
+                                       "DEBUG": "cyan",
+                                       "INFO": "green",
+                                       "WARNING": "yellow",
+                                       "ERROR": "red",
+                                       "CRITICAL": "bold_red"})
         except ImportError:
             # fall back to non-colored output
             fmt = logging.Formatter("%(message)s")
@@ -183,6 +179,7 @@ def load_links(in_file, country_code, out_path, console_out, verbose, old_format
     except:
         import traceback
         traceback.print_exc()
+
 
 @DataCommand.option("-v", "--verbose", action="store_true", dest="verbose", help="turns on verbose mode", default=False, required=False)
 @DataCommand.option("-d", "--deploy", action="store_true", dest="deploy_flag", help="Deploy to S3", required=False)
