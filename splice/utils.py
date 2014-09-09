@@ -5,7 +5,7 @@ from splice.environment import Environment
 CONFIG_PATH_LOCATIONS = ['/etc/onyx', os.path.abspath(os.path.dirname(__file__))]
 
 
-def environment_manager_create(config=None):
+def environment_manager_create(config=None, test=False, test_db_uri="sqlite://"):
     """
     Create and configure application
     If not specified, the default config will be loaded.
@@ -21,6 +21,10 @@ def environment_manager_create(config=None):
         config = 'splice.default_settings.DefaultConfig'
 
     config = os.environ.get('SPLICE_SETTINGS', config)
+
+    if test:
+        config.ENVIRONMENT = 'test'
+        config.SQLALCHEMY_DATABASE_URI = test_db_uri
 
     env = Environment.instance(config)
     from splice.webapp import setup_routes
