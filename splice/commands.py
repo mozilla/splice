@@ -2,7 +2,8 @@ import os
 import multiprocessing
 import logging
 import sys
-import json
+import ujson
+from datetime import datetime
 from flask.ext.script import Command, Option, Manager
 from flask.ext.script.commands import InvalidCommand
 from gunicorn.app.base import Application as GunicornApplication
@@ -152,7 +153,7 @@ def load_links(in_file, country_code, out_path, console_out, verbose, old_format
 
     rawdata = None
     with open(in_file, 'r') as f:
-        rawdata = json.load(f)
+        rawdata = ujson.load(f)
 
     from splice.ingest import ingest_links, IngestError
 
@@ -163,7 +164,7 @@ def load_links(in_file, country_code, out_path, console_out, verbose, old_format
             new_data = new_data[new_data.keys()[0]]
 
         if console_out:
-            print json.dumps(new_data, sort_keys=True, indent=2)
+            print ujson.dumps(new_data, sort_keys=True, indent=2)
 
         if out_path:
             directory, _ = os.path.split(out_path)
@@ -171,7 +172,7 @@ def load_links(in_file, country_code, out_path, console_out, verbose, old_format
                 os.makedirs(directory)
 
             with open(out_path, "w") as f:
-                json.dump(new_data, f, sort_keys=True, indent=2)
+                ujson.dump(new_data, f, sort_keys=True, indent=2)
                 logger.info("wrote {0}".format(out_path))
 
     except IngestError, e:
@@ -197,7 +198,7 @@ def ingest_tiles(in_file, out_path, console_out, deploy_flag, verbose, *args, **
 
     rawdata = None
     with open(in_file, 'r') as f:
-        rawdata = json.load(f)
+        rawdata = ujson.load(f)
 
     from splice.ingest import ingest_links, deploy, IngestError
 
@@ -205,7 +206,7 @@ def ingest_tiles(in_file, out_path, console_out, deploy_flag, verbose, *args, **
         new_data = ingest_links(rawdata, logger)
 
         if console_out:
-            print json.dumps(new_data, sort_keys=True, indent=2)
+            print ujson.dumps(new_data, sort_keys=True, indent=2)
 
         if out_path:
             directory, _ = os.path.split(out_path)
@@ -213,7 +214,7 @@ def ingest_tiles(in_file, out_path, console_out, deploy_flag, verbose, *args, **
                 os.makedirs(directory)
 
             with open(out_path, "w") as f:
-                json.dump(new_data, f, sort_keys=True, indent=2)
+                ujson.dump(new_data, f, sort_keys=True, indent=2)
                 logger.info("wrote {0}".format(out_path))
 
         if deploy_flag:
