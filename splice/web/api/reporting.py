@@ -15,26 +15,23 @@ def root():
 
 @report.route('/tile_stats/weekly/<start_date>/<tile_id>', methods=['GET'])
 def path_tile_stats_weekly(start_date, tile_id=None):
-    with env.application.app_context():
-        conn = env.db.engine.connect()
-        keys, rval = tile_stats_weekly(conn, start_date, tile_id)
-        return build_response(rval, keys)
+    conn = env.db.engine.connect()
+    keys, rval = tile_stats_weekly(conn, start_date, tile_id)
+    return build_response(rval, keys)
 
 
 @report.route('/tile_stats/monthly/<start_date>/<tile_id>', methods=['GET'])
 def path_tile_stats_monthly(start_date, tile_id=None):
-    with env.application.app_context():
-        conn = env.db.engine.connect()
-        keys, rval = tile_stats_monthly(conn, start_date, tile_id)
-        return build_response(rval, keys)
+    conn = env.db.engine.connect()
+    keys, rval = tile_stats_monthly(conn, start_date, tile_id)
+    return build_response(rval, keys)
 
 
 @report.route('/slot_stats/weekly/<start_date>/<slot_id>', methods=['GET'])
 def path_slot_stats_weekly(start_date, slot_id=None):
-    with env.application.app_context():
-        conn = env.db.engine.connect()
-        keys, rval = slot_stats_weekly(conn, start_date, slot_id)
-        return build_response(rval, keys)
+    conn = env.db.engine.connect()
+    keys, rval = slot_stats_weekly(conn, start_date, slot_id)
+    return build_response(rval, keys)
 
 
 @report.route('/slot_stats/monthly/<start_date>/<slot_id>', methods=['GET'])
@@ -47,3 +44,6 @@ def path_slot_stats_monthly(start_date, slot_id=None):
 
 def register_routes(app):
     app.register_blueprint(report)
+    conn = env.db.engine.connect()
+    keys, rval = slot_stats_monthly(conn, start_date, slot_id)
+    return build_response(rval, keys)

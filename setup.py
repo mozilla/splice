@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-
+import os
 
 requires = [
     "Flask==0.10.1",
