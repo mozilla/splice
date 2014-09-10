@@ -3,6 +3,7 @@ import multiprocessing
 import logging
 import sys
 import ujson
+from operator import itemgetter
 from datetime import datetime
 from flask.ext.script import Command, Option, Manager
 from flask.ext.script.commands import InvalidCommand
@@ -134,6 +135,34 @@ class GunicornServerCommand(Command):
         GunicornServer().run()
 
 DataCommand = Manager(usage="database import/export utility")
+
+
+ListCommand = Manager(usage="list http endpoints enabled")
+
+@ListCommand.command
+def urls():
+    """
+    Return available endpoints
+    """
+    logger = setup_command_logger()
+
+    endpoints = []
+    from flask import current_app
+    for rule in current_app.url_map.iter_rules():
+        try:
+            endpoints.append((
+                rule.rule,
+                sorted(list(rule.methods)),
+            ))
+        except Exception, e:
+            logger.error(e)
+
+    endpoints = sorted(endpoints, key=itemgetter(0))
+    for url, methods in endpoints:
+        logger.info("{0} {1}".format(
+            url,
+            ujson.dumps(methods),
+        ))
 
 
 @DataCommand.option("-v", "--verbose", action="store_true", dest="verbose", help="turns on verbose mode", default=False, required=False)
