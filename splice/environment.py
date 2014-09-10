@@ -3,6 +3,7 @@ import boto
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate
+from flask_wtf.csrf import CsrfProtect
 
 
 class EnvironmentUninitializedError(Exception):
@@ -90,6 +91,8 @@ class Environment(object):
         if app.config['ENVIRONMENT'] not in app.config['STATIC_ENABLED_ENVS']:
             app.config['STATIC_FOLDER'] = None
         self.__application = app
+        self.csrf = CsrfProtect()
+        self.csrf.init_app(self.__application)
 
         # A hack to keep the sqlalchemy binds state. Flask-SQLAlchemy strips it out
         sqlalchemy_binds = app.config.get('SQLALCHEMY_BINDS')
