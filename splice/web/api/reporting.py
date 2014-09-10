@@ -1,5 +1,4 @@
 from flask import Blueprint
-import ujson
 from splice.web.api import build_response
 from splice.queries import *
 from splice.models import *
