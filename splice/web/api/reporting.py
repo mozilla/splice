@@ -8,7 +8,7 @@ report = Blueprint('api.report', __name__, url_prefix='/api/report')
 env = Environment.instance()
 
 
-@report.route('/', methods='GET')
+@report.route('/', methods=['GET'])
 def root():
     return ""
 
