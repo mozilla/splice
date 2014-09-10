@@ -36,14 +36,10 @@ def path_slot_stats_weekly(start_date, slot_id=None):
 
 @report.route('/slot_stats/monthly/<start_date>/<slot_id>', methods=['GET'])
 def path_slot_stats_monthly(start_date, slot_id=None):
-    with env.application.app_context():
-        conn = env.db.engine.connect()
-        keys, rval = slot_stats_monthly(conn, start_date, slot_id)
-        return build_response(rval, keys)
+    conn = env.db.engine.connect()
+    keys, rval = slot_stats_monthly(conn, start_date, slot_id)
+    return build_response(rval, keys)
 
 
 def register_routes(app):
     app.register_blueprint(report)
-    conn = env.db.engine.connect()
-    keys, rval = slot_stats_monthly(conn, start_date, slot_id)
-    return build_response(rval, keys)
