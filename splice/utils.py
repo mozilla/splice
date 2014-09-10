@@ -22,11 +22,13 @@ def environment_manager_create(config=None, test=False, test_db_uri="sqlite://")
 
     config = os.environ.get('SPLICE_SETTINGS', config)
 
-    if test:
-        config.ENVIRONMENT = 'test'
-        config.SQLALCHEMY_DATABASE_URI = test_db_uri
-
     env = Environment.instance(config)
+
+    if test:
+        env.ENVIRONMENT = 'test'
+        env.SQLALCHEMY_DATABASE_URI = test_db_uri
+
+
     from splice.webapp import setup_routes
     setup_routes(env.application)
 

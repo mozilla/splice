@@ -1,6 +1,5 @@
 from datetime import datetime
 from sqlalchemy.sql import text
-from splice.environment import Environment
 from splice.models import Tile, impression_stats_daily
 from sqlalchemy.sql import select, func, and_
 
