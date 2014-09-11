@@ -5,8 +5,6 @@ from boto.s3.key import Key
 from splice.queries import tile_exists, insert_tile
 from splice.environment import Environment
 
-env = Environment.instance()
-
 
 class IngestError(Exception):
     pass
@@ -21,14 +19,14 @@ def ingest_links(data, logger=None, *args, **kwargs):
     for country_code, tile_data in data.iteritems():
         country_code = country_code.upper()
 
-        if country_code not in env.fixtures["countries"]:
-            raise IngestError("ERROR: country_code '{0}' is invalid\n\nvalid countries: {1}".format(country_code, ujson.dumps(env.fixtures["countries"], indent=2)))
+        if country_code not in Environment.instance().fixtures["countries"]:
+            raise IngestError("ERROR: country_code '{0}' is invalid\n\nvalid countries: {1}".format(country_code, ujson.dumps(Environment.instance().fixtures["countries"], indent=2)))
         logger.info("PROCESSING FOR COUNTRY: {0}".format(country_code))
 
         for locale, tiles in tile_data.iteritems():
 
-            if locale not in env.fixtures["locales"]:
-                raise IngestError("ERROR: locale '{0}' is invalid\n\nvalid locales: {1}".format(locale, ujson.dumps(list(env.fixtures["locales"]), indent=2)))
+            if locale not in Environment.instance().fixtures["locales"]:
+                raise IngestError("ERROR: locale '{0}' is invalid\n\nvalid locales: {1}".format(locale, ujson.dumps(list(Environment.instance().fixtures["locales"]), indent=2)))
 
             new_tiles_data = {}
             new_tiles_list = []
@@ -98,10 +96,10 @@ def generate_artifacts(data):
             "data": serialized,
         })
 
-        tile_index[country_locale] = os.path.join(env.config.CLOUDFRONT_BASE_URL, s3_key)
+        tile_index[country_locale] = os.path.join(Environment.instance().config.CLOUDFRONT_BASE_URL, s3_key)
 
     artifacts.append({
-        "key": env.config.S3["tile_index_key"],
+        "key": Environment.instance().config.S3["tile_index_key"],
         "data": ujson.dumps(tile_index, sort_keys=True)
     })
 
@@ -116,7 +114,8 @@ def deploy(data, logger=None):
     if logger:
         logger.info("Uploading to S3")
 
-    bucket = env.s3.get_bucket(env.config.S3["bucket"])
+    env = Environment.instance()
+    bucket = Environment.instance().s3.get_bucket(Environment.instance().config.S3["bucket"])
 
     # upload individual files
     for file in artifacts:

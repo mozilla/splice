@@ -9,7 +9,7 @@ from flask.ext.script import Command, Option, Manager
 from flask.ext.script.commands import InvalidCommand
 from gunicorn.app.base import Application as GunicornApplication
 from gunicorn.config import Config as GunicornConfig
-from splice.utils import environment_manager_create
+from splice.environment import Environment
 
 command_logger_set = False
 
@@ -120,8 +120,9 @@ class GunicornServerCommand(Command):
 
             def load(self):
                 # Step needed to get around flask's import time side-effects
-                app = environment_manager_create()
-                return app
+                env = Environment.instance()
+                env.setup_routes()
+                return env.application
 
             def load_config(self):
                 # Overriding to prevent Gunicorn from reading

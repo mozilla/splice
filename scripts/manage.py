@@ -3,10 +3,10 @@ import sys
 from flask.ext.script import Manager
 from flask.ext.script.commands import InvalidCommand
 from flask.ext.migrate import MigrateCommand
-from splice.utils import environment_manager_create
 from splice.commands import GunicornServerCommand, DataCommand, ListCommand
+from splice.environment import Environment
 
-manager = Manager(environment_manager_create)
+manager = Manager(lambda: Environment.instance().application)
 manager.add_option('-c', '--config', dest='config', required=False)
 manager.add_command('runserver_gunicorn', GunicornServerCommand())
 manager.add_command('db', MigrateCommand)

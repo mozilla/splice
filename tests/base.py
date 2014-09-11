@@ -1,13 +1,17 @@
 import os
-from splice.utils import environment_manager_create
 from flask.ext.testing import TestCase
+from splice.environment import Environment
 
 
 class BaseTestCase(TestCase):
 
+    def __init__(self, methodName='runTest'):
+        super(BaseTestCase, self).__init__(methodName)
+        self.env = Environment.instance(test=True)
+        self.env.setup_routes()
+
     def create_app(self):
-        self.app = environment_manager_create(test=True)
-        return self.app
+        return self.env.application
 
     def setUp(self):
         self.create_app()
@@ -27,9 +31,6 @@ class BaseTestCase(TestCase):
         self.env.db.drop_all()
 
     def get_fixture_path(self, name):
-        return os.path.join(os.path.dirname(__file__), '/fixtures/{0}'.format(name))
+        path = os.path.dirname(__file__)
+        return os.path.join(path, 'fixtures/{0}'.format(name))
 
-    @property
-    def env(self):
-        from splice.environment import Environment
-        return Environment.instance()
