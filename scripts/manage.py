@@ -6,7 +6,12 @@ from flask.ext.migrate import MigrateCommand
 from splice.commands import GunicornServerCommand, DataCommand, ListCommand
 from splice.environment import Environment
 
-manager = Manager(lambda: Environment.instance().application)
+def load_manager(*args, **kwargs):
+    env = Environment.instance(*args, **kwargs)
+    env.setup_routes()
+    return env.application
+
+manager = Manager(load_manager)
 manager.add_option('-c', '--config', dest='config', required=False)
 manager.add_command('runserver_gunicorn', GunicornServerCommand())
 manager.add_command('db', MigrateCommand)
