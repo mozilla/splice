@@ -8,7 +8,7 @@ from flask.ext.script import Command, Option, Manager
 from flask.ext.script.commands import InvalidCommand
 from gunicorn.app.base import Application as GunicornApplication
 from gunicorn.config import Config as GunicornConfig
-from splice.environment import create_webapp
+from splice.webapp import create_webapp
 
 command_logger_set = False
 
