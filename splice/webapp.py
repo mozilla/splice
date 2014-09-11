@@ -2,6 +2,12 @@ from splice.environment import Environment
 
 
 def setup_routes(app):
+    import splice.web.views
+    splice.web.views.register_routes(app)
+
+    import splice.web.api.authoring
+    splice.web.api.authoring.register_routes(app)
+
     import splice.web.api.reporting
     splice.web.api.reporting.register_routes(app)
 

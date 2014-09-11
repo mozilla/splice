@@ -1,0 +1,52 @@
+.enhanced-content {
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 290px;
+    height: 180px;
+}
+
+.tile {
+    width: 290px;
+    margin: 0;
+    padding: 10px;
+}
+
+ul.tile li {
+    list-style-type: none;
+}
+
+ul.tile-container li {
+    display: inline;
+    list-style-type: none;
+    float: left;
+    padding-right: 10px;
+}
+
+.progress-bar {
+    width: 50%;
+}
+
+.progress {
+    margin-top: 50px;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}

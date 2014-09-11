@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>{% block title %}Firefox Tiles{% endblock %}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap-theme.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/spliceApp.css') }}">
+        <script src="{{ url_for('static', filename='vendor/modernizr-2.6.2.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendor/angular/angular.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendor/angular/angular-sanitize.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendor/angular-ui/ui-bootstrap-tpls-0.11.0.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendor/angular-ui/angular-ui-router.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendor/angular-ui/ui-utils.min.js') }}"></script>
+    </head>
+    <body {% block angular_mount %}ng-app="spliceApp"{% endblock %}>
+        <!--[if lt IE 10]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        {% block content %}
+        <div ui-view></div>
+        {% endblock %}
+
+        {% block body_js %}
+        <script src="{{ url_for('static', filename='js/splice.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/routes.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/services/fileReader.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/services/spliceData.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/directives/fileSelect.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/controllers/authoring.js') }}"></script>
+        {% endblock %}
+    </body>
+</html>
+
