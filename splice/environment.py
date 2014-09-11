@@ -6,7 +6,6 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate
 from flask_wtf.csrf import CsrfProtect
-from splice.webapp import setup_routes
 
 CONFIG_PATH_LOCATIONS = ['/etc/onyx', os.path.abspath(os.path.dirname(__file__))]
 
@@ -73,9 +72,6 @@ class Environment(object):
         self.db.init_app(self.__application)
         app.config.SQLALCHEMY_BINDS = sqlalchemy_binds
         Migrate(self.__application, self.db)
-
-    def setup_routes(self):
-        setup_routes(self.application)
 
     @property
     def is_debug(self):

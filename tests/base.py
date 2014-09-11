@@ -1,6 +1,7 @@
 import os
 from flask.ext.testing import TestCase
 from splice.environment import Environment
+from splice.webapp import create_webapp
 
 
 class BaseTestCase(TestCase):
@@ -8,7 +9,7 @@ class BaseTestCase(TestCase):
     def __init__(self, methodName='runTest'):
         super(BaseTestCase, self).__init__(methodName)
         self.env = Environment.instance(test=True)
-        self.env.setup_routes()
+        create_webapp(self.env)
 
     def create_app(self):
         return self.env.application

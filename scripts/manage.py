@@ -4,14 +4,9 @@ from flask.ext.script import Manager
 from flask.ext.script.commands import InvalidCommand
 from flask.ext.migrate import MigrateCommand
 from splice.commands import GunicornServerCommand, DataCommand, ListCommand
-from splice.environment import Environment
+from splice.webapp import create_webapp
 
-def load_manager(*args, **kwargs):
-    env = Environment.instance(*args, **kwargs)
-    env.setup_routes()
-    return env.application
-
-manager = Manager(load_manager)
+manager = Manager(create_webapp)
 manager.add_option('-c', '--config', dest='config', required=False)
 manager.add_command('runserver_gunicorn', GunicornServerCommand())
 manager.add_command('db', MigrateCommand)

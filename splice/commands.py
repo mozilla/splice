@@ -4,12 +4,11 @@ import logging
 import sys
 import ujson
 from operator import itemgetter
-from datetime import datetime
 from flask.ext.script import Command, Option, Manager
 from flask.ext.script.commands import InvalidCommand
 from gunicorn.app.base import Application as GunicornApplication
 from gunicorn.config import Config as GunicornConfig
-from splice.environment import Environment
+from splice.environment import create_webapp
 
 command_logger_set = False
 
@@ -120,9 +119,7 @@ class GunicornServerCommand(Command):
 
             def load(self):
                 # Step needed to get around flask's import time side-effects
-                env = Environment.instance()
-                env.setup_routes()
-                return env.application
+                return create_webapp()
 
             def load_config(self):
                 # Overriding to prevent Gunicorn from reading
