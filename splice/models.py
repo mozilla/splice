@@ -18,7 +18,7 @@ class Tile(db.Model):
 
     TYPES = {"organic", "sponsored", "affiliate"}
 
-    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0, 1]})
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     target_url = db.Column(db.Text(), nullable=False)
     bg_color = db.Column(db.String(16), nullable=False)
     title = db.Column(db.String(255), nullable=False)
@@ -35,7 +35,7 @@ class Tile(db.Model):
 class UniqueCountsDaily(db.Model):
     __tablename__ = "unique_counts_daily"
 
-    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [0, 1]})
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     tile_id = db.Column(db.Integer(), db.ForeignKey("tiles.id"))
 
     date = db.Column(db.Date(), nullable=False, default=current_date)
