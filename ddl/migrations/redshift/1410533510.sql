@@ -1,0 +1,11 @@
+BEGIN;
+
+CREATE TABLE distributions (
+    id INTEGER IDENTITY(1,1) NOT NULL, 
+    url TEXT NOT NULL, 
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL, 
+    PRIMARY KEY (id)
+);
+
+COMMIT;
+

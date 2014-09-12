@@ -5,6 +5,14 @@ from splice.environment import Environment
 db = Environment.instance().db
 
 
+class Distribution(db.Model):
+    __tablename__ = "distributions"
+
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
+    url = db.Column(db.Text(), nullable=False)
+    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+
+
 class Tile(db.Model):
     __tablename__ = "tiles"
 
