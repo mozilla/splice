@@ -4,14 +4,14 @@ from splice.models import Tile, impression_stats_daily
 from sqlalchemy.sql import select, func, and_
 
 
-def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, country_code, *args, **kwargs):
+def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
     from splice.environment import Environment
     env = Environment.instance()
     results = (
-        env.session
+        env.db.session
         .query(Tile.id)
         .filter(Tile.target_url == target_url)
         .filter(Tile.bg_color == bg_color)
