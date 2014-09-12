@@ -101,7 +101,7 @@ class Environment(object):
     def s3(self):
         if not self.__s3_conn:
             self.__s3_conn = boto.connect_s3(self.config.AWS["key"],
-                                             self.config.AWS["secret"])
+                                             self.config.AWS["secret_key"])
         return self.__s3_conn
 
     @property
