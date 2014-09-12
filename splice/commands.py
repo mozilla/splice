@@ -119,7 +119,9 @@ class GunicornServerCommand(Command):
 
             def load(self):
                 # Step needed to get around flask's import time side-effects
-                return create_webapp()
+                from splice.environment import Environment
+                env = Environment.instance()
+                return env.application
 
             def load_config(self):
                 # Overriding to prevent Gunicorn from reading
