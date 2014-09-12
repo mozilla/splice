@@ -50,7 +50,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
   };
 
   $scope.publish = function(tiles) {
-    var confirmation = confirm("You are about to publish tiles to ALL Firefoxen. Are you sure?");
+    var confirmation = confirm("Achtung!\nYou are about to publish tiles to ALL Firefoxen. Are you sure?");
     if (confirmation) {
       spliceData.postTiles(tiles)
         .success(function(data) {
