@@ -26,7 +26,8 @@ def ingest_links(data, logger=None, *args, **kwargs):
         if locale not in Environment.instance().fixtures["locales"]:
             raise IngestError("ERROR: locale '{0}' is invalid\n\nvalid locales: {1}".format(locale, json.dumps(list(Environment.instance().fixtures["locales"]), indent=2)))
 
-        logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1}".format(country_code, locale))
+        if logger:
+            logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1}".format(country_code, locale))
 
         new_tiles_list = []
 
