@@ -16,6 +16,7 @@ requires = [
     "psycopg2==2.5.3",
     "redshift-sqlalchemy==0.4.1",
     "ujson==1.33",
+    "jsonschema==2.4.0",
 ]
 
 if 'MOZ_SPLICE_DEV' in os.environ:
