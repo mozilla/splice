@@ -187,7 +187,10 @@ def load_links(in_file, country_code, out_path, console_out, verbose, old_format
     from splice.ingest import ingest_links, IngestError
 
     try:
-        new_data = ingest_links({country_code: rawdata}, logger)
+        locale = rawdata.keys()[0]
+        country_locale_str = "/".join([country_code, locale])
+
+        new_data = ingest_links({country_locale_str: rawdata[locale]}, logger)
 
         if old_format:
             new_data = new_data[new_data.keys()[0]]

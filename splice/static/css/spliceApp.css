@@ -50,3 +50,32 @@ ul.tile-container li {
     cursor: inherit;
     display: block;
 }
+
+.publish-bar {
+    position: sticky;
+    background-color: rgba(255, 255, 255, 0.6);
+    bottom: 0vh;
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid #DDD;
+}
+
+ol.tiles-list {
+    list-style-type: none;
+    counter-reset: li-counter;
+}
+
+ol.tiles-list > li {
+    position: relative;
+}
+
+ol.tiles-list > li:before {
+    float: left;
+    margin-right: 10px;
+    top: 0;
+    font-size: 3em;
+    font-weight: bold;
+    content: counter(li-counter);
+    counter-increment: li-counter;
+}

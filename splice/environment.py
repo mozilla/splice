@@ -35,7 +35,6 @@ class Environment(object):
         if self.__class__._instance is not None:
             raise EnvironmentUninitializedError()
 
-        self.config = config
         self.__s3_conn = None
         self.__fixtures = None
         self.__db = SQLAlchemy()
@@ -58,6 +57,7 @@ class Environment(object):
             config_obj.SQLALCHEMY_POOL_SIZE = None
             config_obj.SQLALCHEMY_POOL_TIMEOUT = None
 
+        self.config = config_obj
         app = Flask('splice')
         app.config.from_object(config)
 
@@ -122,6 +122,7 @@ class Environment(object):
             reader = csv.reader(f)
             data = [line for line in reader]
         data.append(("ERROR", "ERROR"))
+        data.append(("STAR", "All Countries"))
         return data
 
     def _load_fixtures(self):

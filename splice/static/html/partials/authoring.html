@@ -12,8 +12,8 @@
                 <label for="newTiles">Load a new distribution from file:</label>
                 <input type="file" name="newTiles" ng-file-select>
             </div>
-            <div class="col-md-12">
-                <div ng-repeat="(locale, tileList) in tiles">
+            <ol class="row tiles-list">
+                <li class="col-md-12" ng-repeat="(locale, tileList) in tiles">
                     <h3>{{ locale }}</h3>
                     <ul ng-hide="downloadInProgress" class="tile-container">
                         <li ng-repeat="tile in tileList">
@@ -24,14 +24,10 @@
                             </ul>
                         </li>
                     </ul>
-                </div>
-                <div ng-show="downloadInProgress" class="progress">
-                    <div class="progress-bar progress-bar-striped active" role="progressbar">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <button ng-show="tiles" ng-click="publish(tiles)" class="btn btn-primary">Publish</button>
+                </li>
+            </ol>
+            <div ng-show="tiles" class="col-md-12 publish-bar">
+                <button ng-show="tiles" ng-click="publish(tiles)" class="btn btn-danger">Publish</button>
             </div>
         </form>
     </div>
