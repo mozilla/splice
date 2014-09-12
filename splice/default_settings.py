@@ -32,8 +32,8 @@ class DefaultConfig(object):
     }
 
     S3 = {
-        "bucket": "tiles",
+        "bucket": "moz-tiles-local",
         "tile_index_key": "tile_index.json"
     }
 
-    CLOUDFRONT_BASE_URL = "https://d1tiksivlekcfk.cloudfront.net"
+    CLOUDFRONT_BASE_URL = "https://d3bhweee2a5al5.cloudfront.net"
