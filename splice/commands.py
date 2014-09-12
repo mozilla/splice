@@ -3,6 +3,8 @@ import multiprocessing
 import logging
 import sys
 import json
+import calendar
+from datetime import datetime
 from operator import itemgetter
 from flask.ext.script import Command, Option, Manager
 from flask.ext.script.commands import InvalidCommand
@@ -256,3 +258,18 @@ def ingest_tiles(in_file, out_path, console_out, deploy_flag, verbose, *args, **
     except:
         import traceback
         traceback.print_exc()
+
+
+RedshiftCommand = Manager(usage="Redshift utility commands")
+
+@RedshiftCommand.option("out_path", type=str, help="Path to output new migration file")
+def new_migration(out_path, *args, **kwargs):
+    """
+    Create an empty migration file
+    """
+    logger = setup_command_logger(logging.INFO)
+
+    utc_seconds = calendar.timegm(datetime.utcnow().timetuple())
+    file_path = os.path.join(out_path, "{0}.sql".format(utc_seconds))
+    open(file_path, "a").close()
+    logger.info("wrote {0}".format(file_path))
