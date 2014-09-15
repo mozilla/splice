@@ -115,6 +115,8 @@ def deploy(data, logger=None):
     env = Environment.instance()
     bucket = Environment.instance().s3.get_bucket(Environment.instance().config.S3["bucket"])
 
+    deployed = []
+
     # upload individual files
     for file in artifacts:
         key = Key(bucket)
@@ -122,6 +124,9 @@ def deploy(data, logger=None):
         key.set_contents_from_string(file["data"])
         key.set_acl("public-read")
 
+        url = key.generate_url(expires_in=0, query_auth=False)
         if logger:
-            url = key.generate_url(expires_in=0, query_auth=False)
             logger.info("Deployed file at {0}".format(url))
+        deployed.append(url)
+
+    return deployed
