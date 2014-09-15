@@ -73,9 +73,9 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
         .error(function(data, status, headers, config, statusText) {
           var errors = data.err;
           var msg = '<strong>Error: '+ status + ' ' + statusText + '</strong>';
-          if (errors != undefined) {
+          if (errors != null) {
             msg += "<ul>";
-            for (var error in errors) {
+            for (var error of errors) {
               msg += "<li>In <strong>" + error.path + "</strong>: " + error.msg + "</li>";
             }
             msg += "</ul>";
