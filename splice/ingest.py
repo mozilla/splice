@@ -1,9 +1,52 @@
+import sys
 import os
 import json
 import hashlib
 from boto.s3.key import Key
+import jsonschema
 from splice.queries import tile_exists, insert_tile
 from splice.environment import Environment
+
+payload_schema = {
+    "type": "object",
+    "patternProperties": {
+        "^([A-Za-z]+)/([A-Za-z-]+)$": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "directoryId": {
+                        "type": "integer",
+                    },
+                    "url": {
+                        "type": "string",
+                        "pattern": "^https?://.*$",
+                    },
+                    "title": {
+                        "type": "string",
+                    },
+                    "bgColor": {
+                        "type": "string",
+                        "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
+                    },
+                    "type": {
+                        "enum": ["affiliate", "organic", "sponsored"],
+                    },
+                    "imageURI": {
+                        "type": "string",
+                        "pattern": "^data:image/.*$|^https?://.*$",
+                    },
+                    "enhancedImageURI": {
+                        "type": "string",
+                        "pattern": "^data:image/.*$|^https?://.*$",
+                    },
+                },
+                "required": ["url", "title", "bgColor", "type", "imageURI"],
+            }
+        }
+    },
+    "additionalProperties": False,
+}
 
 
 class IngestError(Exception):
@@ -14,6 +57,14 @@ def ingest_links(data, logger=None, *args, **kwargs):
     """
     Obtain links, insert in data warehouse
     """
+
+    try:
+        jsonschema.validate(data, payload_schema)
+    except jsonschema.exceptions.ValidationError, e:
+        if logger:
+            logger.error("ERROR: cannot validate JSON: {0}".format(e.message))
+        exc_class, exc, tb = sys.exc_info()
+        raise exc_class, exc, tb
 
     ingested_data = {}
     for country_locale_str, tiles in data.iteritems():

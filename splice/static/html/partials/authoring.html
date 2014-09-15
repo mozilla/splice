@@ -12,6 +12,11 @@
                 <label for="newTiles">Load a new distribution from file:</label>
                 <input type="file" name="newTiles" ng-file-select>
             </div>
+            <div class="alert-growl">
+                <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg"></span>
+                </alert>
+            </div>
             <ol class="row tiles-list">
                 <li class="col-md-12" ng-repeat="(locale, tileList) in tiles">
                     <h3>{{ locale }}</h3>

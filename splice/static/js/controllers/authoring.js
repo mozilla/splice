@@ -6,6 +6,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
     'directoryLinks2.json',
     'directoryLinks3.json',
   ];
+  $scope.alerts = [];
   $scope.data = {};
   $scope.tiles = [];
   $scope.downloadInProgress = false;
@@ -49,15 +50,41 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
       })
   };
 
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
+  };
+
   $scope.publish = function(tiles) {
     var confirmation = confirm("Achtung!\nYou are about to publish tiles to ALL Firefoxen. Are you sure?");
     if (confirmation) {
       spliceData.postTiles(tiles)
         .success(function(data) {
-          console.log("success!");
+          var msg = '<strong>Success!</strong><p>Tiles published and deployed:<ul>'
+          for (var url of data.urls) {
+            msg += '<li><a href="' + url + '">' + url + '</a></li>';
+          }
+          msg += '</ul></p>'
+          $scope.alerts.push({
+            type: 'success',
+            msg: msg
+          });
+          var urls = data.urls;
         })
-        .error(function(data, status) {
-          console.error("status: " + status + " error: " + data);
+        .error(function(data, status, headers, config, statusText) {
+          var errors = data.err;
+          var msg = '<strong>Error: '+ status + ' ' + statusText + '</strong>';
+          if (errors != undefined) {
+            msg += "<ul>";
+            for (var error in errors) {
+              msg += "<li>In <strong>" + error.path + "</strong>: " + error.msg + "</li>";
+            }
+            msg += "</ul>";
+          }
+
+          $scope.alerts.push({
+            type: 'danger',
+            msg: msg,
+          });
         });
     }
   };

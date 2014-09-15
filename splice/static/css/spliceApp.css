@@ -79,3 +79,10 @@ ol.tiles-list > li:before {
     content: counter(li-counter);
     counter-increment: li-counter;
 }
+
+.alert-growl {
+    position: fixed;
+    right: 20px;
+    opacity: 0.9;
+    z-index: 999;
+}
