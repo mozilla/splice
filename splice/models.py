@@ -70,4 +70,7 @@ impression_stats_daily = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(64), nullable=False),
+    db.Column('year', db.Integer, nullable=False),
+    db.Column('month', db.Integer, nullable=False),
+    db.Column('week', db.Integer, nullable=False),
 )
