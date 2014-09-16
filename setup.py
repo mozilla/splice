@@ -31,7 +31,7 @@ if 'MOZ_SPLICE_DEV' in os.environ:
 
 setup(
     name="splice",
-    version="1.0",
+    version="1.0.0",
     description="Link authoring tool for " +
                 "Firefox Directory and Enhanced Tiles",
     author="Mozilla",
