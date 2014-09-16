@@ -1,4 +1,9 @@
 <div class="container-fluid">
+    <div class="alert-growl">
+        <alert ng-show="alertMsg" type="{{alertMsg.type}}" close="closeAlert()">
+            <span ng-bind-html="alertMsg.msg"></span>
+        </alert>
+    </div>
     <h1>Firefox Tiles Authoring</h1>
     <div>
         <form name="allTilesForm">
@@ -12,27 +17,39 @@
                 <label for="newTiles">Load a new distribution from file:</label>
                 <input type="file" name="newTiles" ng-file-select>
             </div>
-            <div class="alert-growl">
-                <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
-                    <span ng-bind-html="alert.msg"></span>
-                </alert>
+            <div ng-show="downloadInProgress" class="form-group col-md-12">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar">
+                    </div>
+                </div>
             </div>
-            <ol class="row tiles-list">
-                <li class="col-md-12" ng-repeat="(locale, tileList) in tiles">
-                    <h3>{{ locale }}</h3>
-                    <ul ng-hide="downloadInProgress" class="tile-container">
-                        <li ng-repeat="tile in tileList">
-                            <ul class="tile">
-                                <li><a href="{{ tile.url }}">{{ tile.title }} [ {{tile.type}} ]</a></li>
-                                <li><div class="enhanced-content img" style="background-color: {{ tile.bgColor }}; background-image: url('{{ tile.imageURI }}')"></div></li>
-                                <li><div class="enhanced-content enhanced-img" style=" background-color: {{ tile.enhancedImageURI ? tile.bgColor : 'inherit' }}; background-image: url('{{ tile.enhancedImageURI }}')"></div></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ol>
-            <div ng-show="tiles" class="col-md-12 publish-bar">
-                <button ng-show="tiles" ng-click="publish(tiles)" class="btn btn-danger">Publish</button>
+            <div ng-show="!tilesEmpty() && !downloadInProgress">
+                <div class="form-group col-md-12 tiles-info">
+                    <h2>Data Source</h2>
+                    <dl class="dl-horizontal">
+                        <dt>Type</dt>
+                        <dd>{{ source.type }}</dd>
+                        <dt>Origin</dt>
+                        <dd>{{ source.origin }}</dd>
+                    </dl>
+                </div>
+                <ol class="row tiles-list">
+                    <li ng-repeat="(locale, tileList) in tiles" class="col-md-12">
+                        <h2>{{ locale }}</h2>
+                        <ul ng-hide="downloadInProgress" class="tile-container">
+                            <li ng-repeat="tile in tileList">
+                                <ul class="tile">
+                                    <li><a href="{{ tile.url }}">{{ tile.title }} [ {{tile.type}} ]</a></li>
+                                    <li><div class="enhanced-content img" style="background-color: {{ tile.bgColor }}; background-image: url('{{ tile.imageURI }}')"></div></li>
+                                    <li><div class="enhanced-content enhanced-img" style=" background-color: {{ tile.enhancedImageURI ? tile.bgColor : 'inherit' }}; background-image: url('{{ tile.enhancedImageURI }}')"></div></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            <div ng-show="!tilesEmpty() && !downloadInProgress" class="col-md-12 publish-bar">
+                <button ng-click="publish(tiles)" class="btn btn-danger">Publish</button>
             </div>
         </form>
     </div>

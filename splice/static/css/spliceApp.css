@@ -82,7 +82,21 @@ ol.tiles-list > li:before {
 
 .alert-growl {
     position: fixed;
+    top: 30px;
     right: 20px;
     opacity: 0.9;
     z-index: 999;
+}
+
+.progress-bar {
+    width: 50%;
+}
+
+.progress {
+    margin-top: 50px;
+}
+
+.tiles-info {
+    border-top: 1px solid #DDD;
+    padding-top: 20px;
 }

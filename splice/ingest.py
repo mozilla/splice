@@ -2,9 +2,11 @@ import sys
 import os
 import json
 import hashlib
+from datetime import datetime
+from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
 import jsonschema
-from splice.queries import tile_exists, insert_tile
+from splice.queries import tile_exists, insert_tile, insert_distribution
 from splice.environment import Environment
 
 payload_schema = {
@@ -147,9 +149,22 @@ def generate_artifacts(data):
 
         tile_index[country_locale] = os.path.join(Environment.instance().config.CLOUDFRONT_BASE_URL, s3_key)
 
+    # include tile index
+
     artifacts.append({
         "key": Environment.instance().config.S3["tile_index_key"],
         "data": json.dumps(tile_index, sort_keys=True)
+    })
+
+    # include data submission in artifacts
+
+    data_serialized = json.dumps(data, sort_keys=True)
+    hsh = hashlib.sha1(data_serialized).hexdigest()
+    dt_str = datetime.utcnow().isoformat().replace(":", "-")
+    artifacts.append({
+        "key": os.path.join("/distributions", "{0}.{1}.json".format(hsh, dt_str)),
+        "data": data_serialized,
+        "dist": True
     })
 
     return artifacts
@@ -165,6 +180,9 @@ def deploy(data, logger=None):
 
     env = Environment.instance()
     bucket = Environment.instance().s3.get_bucket(Environment.instance().config.S3["bucket"])
+    cors = CORSConfiguration()
+    cors.add_rule("GET", "*", allowed_header="*");
+    bucket.set_cors(cors)
 
     deployed = []
 
@@ -174,10 +192,15 @@ def deploy(data, logger=None):
         key.name = file["key"]
         key.set_contents_from_string(file["data"])
         key.set_acl("public-read")
+        key.content_type = "application/json"
+        key.content_disposition = "inline"
 
         url = key.generate_url(expires_in=0, query_auth=False)
         if logger:
             logger.info("Deployed file at {0}".format(url))
         deployed.append(url)
+
+        if file.get("dist", False):
+            insert_distribution(url)
 
     return deployed

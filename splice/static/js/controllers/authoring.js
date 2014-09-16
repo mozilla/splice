@@ -1,17 +1,40 @@
 "use strict";
 angular.module('spliceApp').controller('authoringController', function($scope, spliceData, fileReader) {
-  // TODO: obtain from data warehouse
-  $scope.choices = [
-    'directoryLinks.json',
-    'directoryLinks2.json',
-    'directoryLinks3.json',
-  ];
-  $scope.alerts = [];
-  $scope.data = {};
-  $scope.tiles = [];
-  $scope.downloadInProgress = false;
 
+  /** Distribution select/choice setup **/
+  $scope.distributions = null;
+  $scope.choices = [];
+  $scope.source = {};
+
+  $scope.setupDistributions = function(dists) {
+    var choices = [];
+    var distributions = {}
+    for (var d of dists) {
+      choices.push(d[1]);
+      distributions[d[1]] = d[0];
+    }
+    $scope.choices = choices;
+    $scope.distributions = distributions;
+  }
+
+  $scope.refreshDistributions = function() {
+    spliceData.getDistributions()
+      .success(function(data) {
+        $scope.setupDistributions(data.d);
+      })
+  }
+  $scope.refreshDistributions();
+
+  /** UI and tile data **/
+  $scope.alertMsg = null;
+  $scope.cache = {};
+  $scope.tiles = {};
+  $scope.downloadInProgress = false;
   $scope.versionSelect = null;
+
+  $scope.tilesEmpty = function() {
+    return Object.keys($scope.tiles).length == 0;
+  };
 
   $scope.$watch('versionSelect', function(newValue, oldValue) {
     if (newValue == null) {
@@ -20,22 +43,31 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
 
     allTilesForm.newTiles.value = null;
 
-    /* TODO: download from S3
-    if (!$scope.data.hasOwnProperty(newValue)) {
+    if (!$scope.cache.hasOwnProperty(newValue) && $scope.distributions.hasOwnProperty(newValue)) {
       $scope.downloadInProgress = true;
-      $http({method: 'GET', url: $scope.linkFile})
+      spliceData.getJSON($scope.distributions[newValue])
         .success(function(data) {
-          if (data != null) {
-            $scope.data[newValue] = data["en-US"];
-            $scope.downloadInProgress = false;
-            $scope.tiles = $scope.data[newValue];
+          if (data != null && data instanceof Object) {
+            $scope.cache[newValue] = data;
+            $scope.tiles = $scope.cache[newValue];
+            $scope.source = {origin: $scope.distributions[newValue], type: 'remote'}
+            $scope.alertMsg = null;
           }
+          else {
+            $scope.alertMsg = {
+              type: 'danger',
+              msg: '<strong>Error</strong>: Invalid file at <a href="' + $scope.distributions[newValue] + '">' + $scope.distributions[newValue] + '</a>',
+            };
+            $scope.tiles = {};
+          }
+          $scope.downloadInProgress = false;
         });
     } else {
       $scope.downloadInProgress = false;
-      $scope.tiles = $scope.data[newValue];
+      $scope.tiles = $scope.cache[newValue];
+      $scope.source = {origin: $scope.distributions[newValue], type: 'remote'}
+      $scope.alertMsg = null;
     }
-    */
   });
 
   $scope.readFile = function(fileInput) {
@@ -44,14 +76,20 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
         try {
           $scope.tiles = JSON.parse(result);
           $scope.versionSelect = null;
+          $scope.source = {origin: allTilesForm.newTiles.value, type: 'local'}
+          $scope.alertMsg = null;
         } catch(e) {
-          console.error("Error!");
+          $scope.alertMsg = {
+            type: 'danger',
+            msg: '<strong>Error</strong>: Unable to parse file ' + fileInput,
+          };
+          $scope.tiles = {};
         }
       })
   };
 
   $scope.closeAlert = function(index) {
-    $scope.alerts.splice(index, 1);
+    $scope.alertMsg = null;
   };
 
   $scope.publish = function(tiles) {
@@ -64,15 +102,16 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
             msg += '<li><a href="' + url + '">' + url + '</a></li>';
           }
           msg += '</ul></p>'
-          $scope.alerts.push({
+          $scope.alertMsg = {
             type: 'success',
             msg: msg
-          });
+          };
           var urls = data.urls;
+          $scope.refreshDistributions();
         })
         .error(function(data, status, headers, config, statusText) {
           var errors = data.err;
-          var msg = '<strong>Error: '+ status + ' ' + statusText + '</strong>';
+          var msg = '<strong>Error</strong>: '+ status + ' ' + statusText;
           if (errors != null) {
             msg += "<ul>";
             for (var error of errors) {
@@ -81,10 +120,10 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
             msg += "</ul>";
           }
 
-          $scope.alerts.push({
+          $scope.alertMsg = {
             type: 'danger',
             msg: msg,
-          });
+          };
         });
     }
   };

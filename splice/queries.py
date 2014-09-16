@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy.sql import text
-from splice.models import Tile, impression_stats_daily
+from splice.models import Distribution, Tile, impression_stats_daily
 from sqlalchemy.sql import select, func, and_
 
 
@@ -105,3 +105,28 @@ def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri
     except:
         trans.rollback()
         raise
+
+
+def insert_distribution(url, *args, **kwargs):
+    from splice.environment import Environment
+    env = Environment.instance()
+
+    dist = Distribution(url=url)
+    env.db.session.add(dist)
+
+    env.db.session.commit()
+
+
+def get_distributions(limit=100, *args, **kwargs):
+    from splice.environment import Environment
+    env = Environment.instance()
+
+    rows = (
+        env.db.session
+        .query(Distribution.url, Distribution.created_at)
+        .order_by(Distribution.id.desc())
+        .limit(limit)
+        .all()
+    )
+
+    return rows
