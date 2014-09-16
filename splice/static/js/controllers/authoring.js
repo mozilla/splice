@@ -1,7 +1,9 @@
 "use strict";
-angular.module('spliceApp').controller('authoringController', function($scope, spliceData, fileReader) {
+
+angular.module('spliceApp').controller('authoringController', function($scope, spliceData, fileReader, payloadSchema) {
 
   /** Distribution select/choice setup **/
+
   $scope.distributions = null;
   $scope.choices = [];
   $scope.source = {};
@@ -26,17 +28,58 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
   $scope.refreshDistributions();
 
   /** UI and tile data **/
-  $scope.alertMsg = null;
+
+  /**
+   * Alerts is expected to be an array,
+   * even though we only show 1 alert at a time.
+   * This is due to how ui-bootstrap works
+   */
+  $scope.alerts = [];
   $scope.cache = {};
   $scope.tiles = {};
   $scope.downloadInProgress = false;
   $scope.versionSelect = null;
 
+
+  $scope.loadPayload = function(data, source, cacheValue) {
+    /**
+     * Validate and load tiles payload
+     */
+    var cacheValue = cacheValue || false;
+    var results = tv4.validateResult(data, payloadSchema);
+
+    if (results.valid) {
+      if (cacheValue) {
+        $scope.cache[cacheValue] = data;
+        $scope.tiles = $scope.cache[cacheValue];
+      }
+      else {
+        $scope.tiles = data;
+      }
+      $scope.source = source;
+      $scope.alerts = [];
+    }
+    else {
+      $scope.alerts = [{
+        type: 'danger',
+        msg: '<strong>Error</strong>: Validation failed: ' + results.error.message + ' at ' + results.error.dataPath,
+      }];
+      $scope.tiles = {};
+    }
+    return results.valid;
+  };
+
   $scope.tilesEmpty = function() {
+    /**
+     * angular template expression test for empty tiles
+     */
     return Object.keys($scope.tiles).length == 0;
   };
 
   $scope.$watch('versionSelect', function(newValue, oldValue) {
+    /**
+     * Event handler for Distribution selection
+     */
     if (newValue == null) {
       return;
     }
@@ -48,16 +91,13 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
       spliceData.getJSON($scope.distributions[newValue])
         .success(function(data) {
           if (data != null && data instanceof Object) {
-            $scope.cache[newValue] = data;
-            $scope.tiles = $scope.cache[newValue];
-            $scope.source = {origin: $scope.distributions[newValue], type: 'remote'}
-            $scope.alertMsg = null;
+            $scope.loadPayload(data, {origin: $scope.distributions[newValue], type: 'remote'}, newValue);
           }
           else {
-            $scope.alertMsg = {
+            $scope.alerts = [{
               type: 'danger',
               msg: '<strong>Error</strong>: Invalid file at <a href="' + $scope.distributions[newValue] + '">' + $scope.distributions[newValue] + '</a>',
-            };
+            }];
             $scope.tiles = {};
           }
           $scope.downloadInProgress = false;
@@ -66,33 +106,41 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
       $scope.downloadInProgress = false;
       $scope.tiles = $scope.cache[newValue];
       $scope.source = {origin: $scope.distributions[newValue], type: 'remote'}
-      $scope.alertMsg = null;
+      $scope.alerts = [];
     }
   });
 
   $scope.readFile = function(fileInput) {
+    /**
+     * Load a tile payload locally for preview
+     */
     fileReader.readAsText(fileInput, $scope)
       .then(function(result) {
         try {
-          $scope.tiles = JSON.parse(result);
-          $scope.versionSelect = null;
-          $scope.source = {origin: allTilesForm.newTiles.value, type: 'local'}
-          $scope.alertMsg = null;
+          var data = JSON.parse(result);
+          var valid = $scope.loadPayload(data, {origin: allTilesForm.newTiles.value, type: 'local'});
+          if (valid) {
+            $scope.versionSelect = null;
+          }
         } catch(e) {
-          $scope.alertMsg = {
+          $scope.alerts = [{
             type: 'danger',
             msg: '<strong>Error</strong>: Unable to parse file ' + fileInput,
-          };
+          }];
           $scope.tiles = {};
         }
       })
   };
 
   $scope.closeAlert = function(index) {
-    $scope.alertMsg = null;
+    $scope.alerts = [];
   };
 
   $scope.publish = function(tiles) {
+    /**
+     * Send tiles to backend for publication.
+     * Assumes data is correct.
+     */
     var confirmation = confirm("Achtung!\nYou are about to publish tiles to ALL Firefoxen. Are you sure?");
     if (confirmation) {
       spliceData.postTiles(tiles)
@@ -102,10 +150,10 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
             msg += '<li><a href="' + url + '">' + url + '</a></li>';
           }
           msg += '</ul></p>'
-          $scope.alertMsg = {
+          $scope.alerts = [{
             type: 'success',
             msg: msg
-          };
+          }];
           var urls = data.urls;
           $scope.refreshDistributions();
         })
@@ -120,10 +168,10 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
             msg += "</ul>";
           }
 
-          $scope.alertMsg = {
+          $scope.alerts = [{
             type: 'danger',
             msg: msg,
-          };
+          }];
         });
     }
   };

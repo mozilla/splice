@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from splice.web.api import build_response
 from splice.environment import Environment
 from splice.queries import get_distributions
-from splice.ingest import IngestError, ingest_links, deploy
+from splice.ingest import IngestError, ingest_links, deploy, payload_schema as schema
 from jsonschema.exceptions import ValidationError
 import json
 
@@ -27,6 +27,10 @@ def all_tiles():
         return "", 500
 
     return jsonify({"urls": urls}), 200
+
+@authoring.route('/payload_schema', methods=['GET'])
+def payload_schema():
+    return jsonify(schema), 200
 
 @authoring.route('/distributions', methods=['GET'])
 def distributions():

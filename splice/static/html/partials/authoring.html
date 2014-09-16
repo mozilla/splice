@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="alert-growl">
-        <alert ng-show="alertMsg" type="{{alertMsg.type}}" close="closeAlert()">
-            <span ng-bind-html="alertMsg.msg"></span>
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert()">
+            <span ng-bind-html="alert.msg"></span>
         </alert>
     </div>
     <h1>Firefox Tiles Authoring</h1>
