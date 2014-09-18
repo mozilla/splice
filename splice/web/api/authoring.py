@@ -16,15 +16,17 @@ def all_tiles():
         data = request.get_json(force=True)
         new_data = ingest_links(data)
         urls = deploy(new_data)
-    except (IngestError, ValidationError) as e:
+    except ValidationError, e:
         errors = []
         error = {"path": e.path[0], "msg": e.message}
         errors.append(error)
         return jsonify({"err": errors}), 400
-    except:
+    except IngestError, e:
+        return jsonify({"err": [{"msg": e.message}]}), 400
+    except Exception, e:
         import traceback
         print traceback.print_exc()
-        return "", 500
+        return jsonify({"err": [{"msg": e.message}]}), 500
 
     return jsonify({"urls": urls}), 200
 
