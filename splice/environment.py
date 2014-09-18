@@ -7,7 +7,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate
 from flask_wtf.csrf import CsrfProtect
 
-CONFIG_PATH_LOCATIONS = ['/etc/onyx', os.path.abspath(os.path.dirname(__file__))]
+CONFIG_PATH_LOCATIONS = ['/etc/splice', os.path.abspath(os.path.dirname(__file__))]
 
 
 class EnvironmentUninitializedError(Exception):
