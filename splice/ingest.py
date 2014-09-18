@@ -76,10 +76,10 @@ def ingest_links(data, *args, **kwargs):
         country_code = country_code.upper()
 
         if country_code not in Environment.instance().fixtures["countries"]:
-            raise IngestError("ERROR: country_code '{0}' is invalid\n\nvalid countries: {1}".format(country_code, json.dumps(Environment.instance().fixtures["countries"], indent=2)))
+            raise IngestError("country_code '{0}' is invalid".format(country_code))
 
         if locale not in Environment.instance().fixtures["locales"]:
-            raise IngestError("ERROR: locale '{0}' is invalid\n\nvalid locales: {1}".format(locale, json.dumps(list(Environment.instance().fixtures["locales"]), indent=2)))
+            raise IngestError("locale '{0}' is invalid".format(locale))
 
         command_logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1}".format(country_code, locale))
 

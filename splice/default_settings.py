@@ -1,4 +1,7 @@
+import sys
 import os
+import logging
+import socket
 
 
 class DefaultConfig(object):
@@ -37,3 +40,42 @@ class DefaultConfig(object):
     }
 
     CLOUDFRONT_BASE_URL = "https://d3bhweee2a5al5.cloudfront.net"
+
+    LOG_HANDLERS = {
+        'application': {
+            'handler': logging.handlers.SysLogHandler,
+            'level': logging.INFO,
+            'params': {
+                'address': ('localhost', 514),
+                'facility': logging.handlers.SysLogHandler.LOG_LOCAL0,
+                'socktype': socket.SOCK_DGRAM,
+            }
+        },
+        'client_error': {
+            'handler': logging.handlers.SysLogHandler,
+            'level': logging.INFO,
+            'params': {
+                'address': ('localhost', 514),
+                'facility': logging.handlers.SysLogHandler.LOG_LOCAL1,
+                'socktype': socket.SOCK_DGRAM,
+            }
+        },
+        'user_event': {
+            'handler': logging.handlers.SysLogHandler,
+            'format': '%(message)s',
+            'level': logging.INFO,
+            'params': {
+                'address': ('localhost', 514),
+                'facility': logging.handlers.SysLogHandler.LOG_LOCAL2,
+                'socktype': socket.SOCK_DGRAM,
+            }
+        },
+        'console': {
+            'handler': logging.StreamHandler,
+            'format': '%(asctime)s\t%(levelname)s\t%(message)s',
+            'level': logging.INFO,
+            'params': {
+                'stream': sys.stdout
+            }
+        }
+    }

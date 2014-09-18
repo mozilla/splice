@@ -2,6 +2,7 @@ import importlib
 import boto
 import sys
 import os
+import logging
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate
@@ -56,6 +57,10 @@ class Environment(object):
             config_obj.SQLALCHEMY_DATABASE_URI = test_db_uri
             config_obj.SQLALCHEMY_POOL_SIZE = None
             config_obj.SQLALCHEMY_POOL_TIMEOUT = None
+            self.log = Mock()
+        else:
+            self.__loggers = self.__setup_loggers(config_obj)
+
 
         self.config = config_obj
         app = Flask('splice')
@@ -136,3 +141,42 @@ class Environment(object):
             "locales": locales,
             "countries": countries,
         }
+
+    def __setup_loggers(self, config):
+        """
+        Setup and return loggers
+        """
+        loggers = {}
+        for name, settings in config.LOG_HANDLERS.iteritems():
+            internal_name = "splice-{0}".format(name)
+
+            handler = settings['handler'](**settings['params'])
+            if 'format' in settings:
+                handler.setFormatter(logging.Formatter(settings['format']))
+
+            logger = logging.getLogger(internal_name)
+            logger.setLevel(settings['level'])
+            logger.addHandler(handler)
+            loggers[internal_name] = logger
+
+        return loggers
+
+    def log(self, msg, name='console', **kwargs):
+        """
+        Log messages via defined outputs
+        """
+        level = kwargs.pop('level', logging.INFO)
+        internal_name = "splice-{0}".format(name)
+        loggers = {self.__loggers.get(internal_name)}
+
+        if self.is_debug:
+            # include the console logger in development mode
+            loggers.add(self.__loggers['splice-console'])
+
+        for logger in loggers:
+            if logging.handlers.SysLogHandler in logger.handlers:
+                # in syslog, message starts after first colon
+                logger_msg = ":{0}".format(msg)
+            else:
+                logger_msg = msg
+            logger.log(level, logger_msg, **kwargs)
