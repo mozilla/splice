@@ -29,6 +29,7 @@ class DefaultConfig(object):
     SQLALCHEMY_POOL_SIZE = 5
     SQLALCHEMY_POOL_TIMEOUT = 10
 
+    # set AWS to None to use boto defaults
     AWS = {
         "key": "development_key",
         "secret_key": "government_secret"
