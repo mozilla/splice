@@ -192,7 +192,7 @@ def load_links(in_file, country_code, out_path, console_out, verbose, old_format
         locale = rawdata.keys()[0]
         country_locale_str = "/".join([country_code, locale])
 
-        new_data = ingest_links({country_locale_str: rawdata[locale]}, logger)
+        new_data = ingest_links({country_locale_str: rawdata[locale]})
 
         if old_format:
             new_data = new_data[new_data.keys()[0]]
@@ -237,7 +237,7 @@ def ingest_tiles(in_file, out_path, console_out, deploy_flag, verbose, *args, **
     from splice.ingest import ingest_links, deploy, IngestError
 
     try:
-        new_data = ingest_links(rawdata, logger)
+        new_data = ingest_links(rawdata)
 
         if console_out:
             print json.dumps(new_data, sort_keys=True, indent=2)
@@ -252,7 +252,7 @@ def ingest_tiles(in_file, out_path, console_out, deploy_flag, verbose, *args, **
                 logger.info("wrote {0}".format(out_path))
 
         if deploy_flag:
-            deploy(new_data, logger)
+            deploy(new_data)
     except IngestError, e:
         raise InvalidCommand(e.message)
     except:

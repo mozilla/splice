@@ -2,12 +2,15 @@ import sys
 import os
 import json
 import hashlib
+import logging
 from datetime import datetime
 from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
 import jsonschema
 from splice.queries import tile_exists, insert_tile, insert_distribution
 from splice.environment import Environment
+
+command_logger = logging.getLogger("command")
 
 payload_schema = {
     "type": "object",
@@ -55,7 +58,7 @@ class IngestError(Exception):
     pass
 
 
-def ingest_links(data, logger=None, *args, **kwargs):
+def ingest_links(data, *args, **kwargs):
     """
     Obtain links, insert in data warehouse
     """
@@ -63,8 +66,7 @@ def ingest_links(data, logger=None, *args, **kwargs):
     try:
         jsonschema.validate(data, payload_schema)
     except jsonschema.exceptions.ValidationError, e:
-        if logger:
-            logger.error("ERROR: cannot validate JSON: {0}".format(e.message))
+        command_logger.error("ERROR: cannot validate JSON: {0}".format(e.message))
         exc_class, exc, tb = sys.exc_info()
         raise exc_class, exc, tb
 
@@ -79,8 +81,7 @@ def ingest_links(data, logger=None, *args, **kwargs):
         if locale not in Environment.instance().fixtures["locales"]:
             raise IngestError("ERROR: locale '{0}' is invalid\n\nvalid locales: {1}".format(locale, json.dumps(list(Environment.instance().fixtures["locales"]), indent=2)))
 
-        if logger:
-            logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1}".format(country_code, locale))
+        command_logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1}".format(country_code, locale))
 
         new_tiles_list = []
 
@@ -108,13 +109,11 @@ def ingest_links(data, logger=None, *args, **kwargs):
                 db_tile_id = insert_tile(**columns)
                 t["directoryId"] = db_tile_id
                 new_tiles_list.append(t)
-                if logger:
-                    logger.info("INSERT: Creating id:{0}".format(db_tile_id))
+                command_logger.info("INSERT: Creating id:{0}".format(db_tile_id))
 
             elif db_tile_id == f_tile_id:
                 new_tiles_list.append(t)
-                if logger:
-                    logger.info("NOOP: id:{0} already exists".format(f_tile_id))
+                command_logger.info("NOOP: id:{0} already exists".format(f_tile_id))
 
             else:
                 """
@@ -123,8 +122,7 @@ def ingest_links(data, logger=None, *args, **kwargs):
                 """
                 t["directoryId"] = db_tile_id
                 new_tiles_list.append(t)
-                if logger:
-                    logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))
+                command_logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))
 
         ingested_data[country_locale_str] = new_tiles_list
 
@@ -170,13 +168,11 @@ def generate_artifacts(data):
     return artifacts
 
 
-def deploy(data, logger=None):
-    if logger:
-        logger.info("Generating Data")
+def deploy(data):
+    command_logger.info("Generating Data")
     artifacts = generate_artifacts(data)
 
-    if logger:
-        logger.info("Uploading to S3")
+    command_logger.info("Uploading to S3")
 
     env = Environment.instance()
     bucket = Environment.instance().s3.get_bucket(Environment.instance().config.S3["bucket"])
@@ -196,8 +192,7 @@ def deploy(data, logger=None):
         key.content_disposition = "inline"
 
         url = key.generate_url(expires_in=0, query_auth=False)
-        if logger:
-            logger.info("Deployed file at {0}".format(url))
+        command_logger.info("Deployed file at {0}".format(url))
         deployed.append(url)
 
         if file.get("dist", False):
