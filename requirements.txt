@@ -2,6 +2,7 @@ Flask==0.10.1
 Flask-SQLAlchemy==1.0
 Flask-Script==2.0.5
 Flask-Migrate==1.2.0
+Flask-WTF==0.10.2
 gevent==1.0
 gunicorn==18.0
 boto==2.32.1
