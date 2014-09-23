@@ -137,7 +137,9 @@ def generate_artifacts(data):
     tile_index = {}
     for country_locale, tile_data in data.iteritems():
 
-        serialized = json.dumps(tile_data, sort_keys=True)
+        country_code, locale = country_locale.split("/")
+        d = dict.fromkeys([locale], tile_data)
+        serialized = json.dumps(d, sort_keys=True)
         hsh = hashlib.sha1(serialized).hexdigest()
         s3_key = "{0}.{1}.json".format(country_locale, hsh)
         artifacts.append({
