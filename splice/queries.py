@@ -2,6 +2,8 @@ from datetime import datetime
 from sqlalchemy.sql import text
 from splice.models import Distribution, Tile, impression_stats_daily
 from sqlalchemy.sql import select, func, and_
+from sqlalchemy import Integer
+from sqlalchemy.sql.expression import cast
 
 
 def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
@@ -29,9 +31,10 @@ def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri
 
 
 def _stats_query(connection, start_date, date_window, group_column_name, group_value):
+
     imps = impression_stats_daily
-    window_func_table = func.date_part(date_window, imps.c.date)
-    window_func_param = func.date_part(date_window, func.date(start_date))
+    window_func_table = cast(func.date_part(date_window, imps.c.date), Integer)
+    window_func_param = cast(func.date_part(date_window, func.date(start_date)), Integer)
     group_column = imps.c.get(group_column_name)
     if group_value is not None:
         where_clause = and_(

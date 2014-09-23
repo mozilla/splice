@@ -1,6 +1,6 @@
-from splice.environment import Environment, load_config_obj
+from splice.environment import Environment
 
-# env = Environment.instance("integration_tests.tim_settings.DefaultConfig")
+# env = Environment.instance("integration_tests.prod_settings.DefaultConfig")
 env = Environment.instance()
 
 from splice.queries import tile_stats_weekly, slot_stats_weekly, tile_stats_monthly, slot_stats_monthly
