@@ -1,7 +1,6 @@
 import sys
 import logging
 from flask import Blueprint, request, jsonify
-from splice.web.api import build_response
 from splice.environment import Environment
 from splice.queries import get_distributions
 from splice.ingest import IngestError, ingest_links, deploy, payload_schema as schema

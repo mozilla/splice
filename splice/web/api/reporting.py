@@ -8,21 +8,28 @@ import csv
 
 
 def _build_response(it, keys, name=''):
-    json = request.args.get('json', False)
-    if json == 'True':
+    json = request.args.get('json')
+    if json == 'true':
         json = True
-    headers = request.args.get('headers', True)
-    if headers == 'True':
+    else:
+        json = False
+    headers = request.args.get('headers')
+    if headers == 'false':
+        headers = False
+    else:
         headers = True
-    download = request.args.get('download', False)
-    if download == 'True':
+    download = request.args.get('download')
+    if download == 'true':
         download = True
+    else:
+        download = False
 
     if json:
         rval = []
         for tup in it:
             rval.append(dict(zip(keys, tup)))
         response = Response(ujson.dumps(rval), content_type='application/json; charset=utf-8', status=200)
+        ending = 'json'
     else:
         buf = StringIO.StringIO()
         writer = csv.writer(buf)
@@ -31,9 +38,11 @@ def _build_response(it, keys, name=''):
         for tup in it:
             writer.writerow(tup)
         response = Response(buf.getvalue(), content_type='text/csv; charset=utf-8', status=200)
+        buf.close()
+        ending = 'csv'
 
     if download:
-        response.headers['Content-Disposition'] = 'attachment; filename=imps_%s.csv' % name
+        response.headers['Content-Disposition'] = 'attachment; filename=imps_%s.%s' % (name, ending)
     return response
 
 report = Blueprint('api.report', __name__, url_prefix='/api/report')

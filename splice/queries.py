@@ -2,8 +2,6 @@ from datetime import datetime
 from sqlalchemy.sql import text
 from splice.models import Distribution, Tile, impression_stats_daily
 from sqlalchemy.sql import select, func, and_
-from sqlalchemy import Integer
-from sqlalchemy.sql.expression import cast
 
 
 def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
@@ -32,18 +30,29 @@ def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri
 
 def _stats_query(connection, start_date, date_window, group_column_name, group_value):
 
+    dt = datetime.strptime(start_date, "%Y-%m-%d")
+    year = dt.year
+    if date_window == 'month':
+        window_param = dt.month
+    else:
+        window_param = dt.isocalendar()[1]
+
     imps = impression_stats_daily
-    window_func_table = cast(func.date_part(date_window, imps.c.date), Integer)
-    window_func_param = cast(func.date_part(date_window, func.date(start_date)), Integer)
+    window_func_table = imps.c.get(date_window)
     group_column = imps.c.get(group_column_name)
     if group_value is not None:
         where_clause = and_(
-            window_func_table >= window_func_param,
+            imps.c.year >= year,
+            window_func_table >= window_param,
             group_column == group_value)
     else:
-        where_clause = window_func_table >= window_func_param
+        where_clause = and_(
+            imps.c.year >= year,
+            window_func_table >= window_param)
 
-    stmt = select([
+    stmt = select(
+        [
+            imps.c.year,
             window_func_table,
             group_column,
             func.sum(imps.c.impressions),
@@ -51,12 +60,13 @@ def _stats_query(connection, start_date, date_window, group_column_name, group_v
             func.sum(imps.c.pinned),
             func.sum(imps.c.blocked),
             func.sum(imps.c.sponsored),
-            func.sum(imps.c.sponsored_link)])\
+            func.sum(imps.c.sponsored_link)
+        ])\
         .where(where_clause)\
-        .group_by(window_func_table, group_column)\
-        .order_by(window_func_table, group_column)
-    return (date_window, group_column_name, 'impressions', 'clicks', 'pinned', 'blocked', 'sponsored', 'sponsored_link'),\
-           connection.execute(stmt)
+        .group_by(imps.c.year, window_func_table, group_column)\
+        .order_by(imps.c.year, window_func_table, group_column)
+    return ('year', date_window, group_column_name, 'impressions', 'clicks', 'pinned',
+            'blocked', 'sponsored', 'sponsored_link'), connection.execute(stmt)
 
 
 def tile_stats_weekly(connection, start_date, tile_id=None):
