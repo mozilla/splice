@@ -1,0 +1,2 @@
+COPY distributions (id, url, created_at) FROM 's3://BUCKET_NAME/migrations/1411477984.distributions.tsv' CREDENTIALS 'aws_access_key_id=ACCESS_KEY;aws_secret_access_key=SECRET_KEY' DELIMITER '\t' EXPLICIT_IDS;
+COPY tiles (id, target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, created_at) FROM 's3://BUCKET_NAME/migrations/1411477984.tiles.tsv' CREDENTIALS 'aws_access_key_id=ACCESS_KEY;aws_secret_access_key=SECRET_KEY' DELIMITER '\t' EXPLICIT_IDS;
