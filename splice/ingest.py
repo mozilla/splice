@@ -179,7 +179,7 @@ def deploy(data):
     env = Environment.instance()
     bucket = Environment.instance().s3.get_bucket(Environment.instance().config.S3["bucket"])
     cors = CORSConfiguration()
-    cors.add_rule("GET", "*", allowed_header="*");
+    cors.add_rule("GET", "*", allowed_header="*")
     bucket.set_cors(cors)
 
     deployed = []
