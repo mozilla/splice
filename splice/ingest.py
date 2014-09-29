@@ -184,14 +184,18 @@ def deploy(data):
 
     deployed = []
 
+    headers = {
+        'Cache-Control': 'public, max-age=31536000',
+        'Content-Type': 'application/json',
+        'Content-Disposition': 'inline',
+    }
+
     # upload individual files
     for file in artifacts:
         key = Key(bucket)
         key.name = file["key"]
-        key.set_contents_from_string(file["data"])
+        key.set_contents_from_string(file["data"], headers=headers)
         key.set_acl("public-read")
-        key.content_type = "application/json"
-        key.content_disposition = "inline"
 
         url = key.generate_url(expires_in=0, query_auth=False)
         command_logger.info("Deployed file at {0}".format(url))
