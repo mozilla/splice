@@ -142,4 +142,8 @@ def get_distributions(limit=100, *args, **kwargs):
         .all()
     )
 
-    return rows
+    # ensure items are lists of lists rather than KeyedTuples
+    # KeyedTuples may serialize differently on other systems
+    output = [list(d) for d in rows]
+
+    return output
