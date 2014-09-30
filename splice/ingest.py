@@ -176,7 +176,6 @@ def deploy(data):
 
     command_logger.info("Uploading to S3")
 
-    env = Environment.instance()
     bucket = Environment.instance().s3.get_bucket(Environment.instance().config.S3["bucket"])
     cors = CORSConfiguration()
     cors.add_rule("GET", "*", allowed_header="*")
