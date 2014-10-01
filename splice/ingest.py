@@ -7,6 +7,7 @@ from datetime import datetime
 from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
 import jsonschema
+from furl import furl
 from splice.queries import tile_exists, insert_tile, insert_distribution
 from splice.environment import Environment
 
@@ -197,6 +198,16 @@ def deploy(data):
         key.set_acl("public-read")
 
         url = key.generate_url(expires_in=0, query_auth=False)
+
+        # remove x-amz-security-token, which is inserted even if query_auth=False
+        # ref: https://github.com/boto/boto/issues/1477
+        uri = furl(url)
+        try:
+            uri.args.pop('x-amz-security-token')
+        except:
+            pass
+        url = uri.url
+
         command_logger.info("Deployed file at {0}".format(url))
         deployed.append(url)
 
