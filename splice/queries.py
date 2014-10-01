@@ -123,11 +123,25 @@ def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri
 def insert_distribution(url, *args, **kwargs):
     from splice.environment import Environment
     env = Environment.instance()
-
-    dist = Distribution(url=url)
-    env.db.session.add(dist)
-
-    env.db.session.commit()
+    conn = env.db.engine.connect()
+    trans = conn.begin()
+    try:
+        conn.execute(
+            text(
+                "INSERT INTO distributions ("
+                " url, created_at"
+                ") "
+                "VALUES ("
+                " :url, :created_at"
+                ")"
+            ),
+            url=url,
+            created_at=datetime.utcnow()
+        )
+        trans.commit()
+    except:
+        trans.rollback()
+        raise
 
 
 def get_distributions(limit=100, *args, **kwargs):
