@@ -1,4 +1,4 @@
-INSERT INTO distributions (url, created_at) VALUES ('https://tiles-origin-stage.s3.amazonaws.com/distributions/d5903474bda9f0ed3d3e7a2f378b53142671ae0c.2014-09-23T19-21-00.058545.json', '2014-09-23 19:21:01.083392')
+INSERT INTO distributions (url, created_at) VALUES ('https://tiles-origin-stage.s3.amazonaws.com/distributions/d5903474bda9f0ed3d3e7a2f378b53142671ae0c.2014-09-23T19-21-00.058545.json', '2014-09-23 19:21:01.083392');
 
 INSERT INTO tiles (target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, created_at) VALUES ('https://www.facebook.com/', '#3a5898', 'Facebook', 'organic', 'b28df1882153b198b6444f2a64f393abd4c5f1c3', NULL, 'en-US', '2014-09-12 15:49:32.914837');
 INSERT INTO tiles (target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, created_at) VALUES ('https://www.youtube.com/', '#e5523f', 'YouTube', 'organic', 'afde8dbe01fbac4077604966493546256d79dce3', NULL, 'en-US', '2014-09-12 15:49:32.931908');
