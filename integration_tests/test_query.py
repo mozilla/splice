@@ -6,7 +6,7 @@ env = Environment.instance()
 from splice.queries import tile_stats_weekly, slot_stats_weekly, tile_stats_monthly, slot_stats_monthly
 
 with env.application.app_context():
-    #TODO: check results
+    # TODO: check results
     conn = env.db.engine.connect()
     print "\ntile_stats_weekly - no tile_id"
     key, rval = tile_stats_weekly(conn, '2014-05-15')
@@ -48,4 +48,3 @@ with env.application.app_context():
     _, rval = slot_stats_monthly(conn, '2014-05-15', 1)
     for year, week, tile_id, imps, clicks, pinned, blocked, spon, spon_link in rval:
         print year, week, tile_id, imps, clicks, pinned, blocked, spon, spon_link
-

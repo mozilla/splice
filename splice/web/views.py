@@ -9,5 +9,6 @@ env = Environment.instance()
 def index():
     return render_template('index.jinja2')
 
+
 def register_routes(app):
     app.register_blueprint(root)

@@ -10,7 +10,6 @@ from flask.ext.script import Command, Option, Manager
 from flask.ext.script.commands import InvalidCommand
 from gunicorn.app.base import Application as GunicornApplication
 from gunicorn.config import Config as GunicornConfig
-from splice.webapp import create_webapp
 
 command_logger_set = False
 
@@ -141,6 +140,7 @@ DataCommand = Manager(usage="database import/export utility")
 
 ListCommand = Manager(usage="list http endpoints enabled")
 
+
 @ListCommand.command
 def urls():
     """
@@ -261,6 +261,7 @@ def ingest_tiles(in_file, out_path, console_out, deploy_flag, verbose, *args, **
 
 
 RedshiftCommand = Manager(usage="Redshift utility commands")
+
 
 @RedshiftCommand.option("out_path", type=str, help="Path to output new migration file")
 def new_migration(out_path, *args, **kwargs):
