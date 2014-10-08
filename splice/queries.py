@@ -28,7 +28,7 @@ def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri
     return results
 
 
-def _stats_query(connection, start_date, date_window, group_column_name, group_value):
+def _stats_query(connection, start_date, date_window, group_column_name, group_value, country_code):
 
     dt = datetime.strptime(start_date, "%Y-%m-%d")
     year = dt.year
@@ -40,15 +40,59 @@ def _stats_query(connection, start_date, date_window, group_column_name, group_v
     imps = impression_stats_daily
     window_func_table = imps.c.get(date_window)
     group_column = imps.c.get(group_column_name)
+
+    # the where clause is an ANDed list of country, monthly|weekly, and year conditions
+    where_elements = [imps.c.year >= year, window_func_table >= window_param]
+    if country_code is not None:
+        where_elements.append(imps.c.country_code == country_code)
+
     if group_value is not None:
-        where_clause = and_(
-            imps.c.year >= year,
-            window_func_table >= window_param,
-            group_column == group_value)
+        where_elements.append(group_column == group_value)
+
+    where_clause = and_(*where_elements)
+
+    stmt = select(
+        [
+            imps.c.year,
+            window_func_table,
+            group_column,
+            imps.c.country_code,
+            imps.c.locale,
+            func.sum(imps.c.impressions),
+            func.sum(imps.c.clicks),
+            func.sum(imps.c.pinned),
+            func.sum(imps.c.blocked),
+            func.sum(imps.c.sponsored),
+            func.sum(imps.c.sponsored_link),
+            func.sum(imps.c.newtabs)
+        ])\
+        .where(where_clause)\
+        .group_by(imps.c.year, window_func_table, group_column, imps.c.country_code, imps.c.locale)\
+        .order_by(imps.c.year, window_func_table, group_column, imps.c.country_code, imps.c.locale)
+    return ('year', date_window, group_column_name, 'country_code', 'locale',
+            'impressions', 'clicks', 'pinned', 'blocked', 'sponsored', 'sponsored_link', 'newtabs'), \
+           connection.execute(stmt)
+
+
+def _summary_query(connection, start_date, date_window, group_column_name, country_code):
+
+    dt = datetime.strptime(start_date, "%Y-%m-%d")
+    year = dt.year
+    if date_window == 'month':
+        window_param = dt.month
     else:
-        where_clause = and_(
-            imps.c.year >= year,
-            window_func_table >= window_param)
+        window_param = dt.isocalendar()[1]
+
+    imps = impression_stats_daily
+    window_func_table = imps.c.get(date_window)
+    group_column = imps.c.get(group_column_name)
+
+    # the where clause is an ANDed list of country, monthly|weekly, and year conditions
+    where_elements = [imps.c.year >= year, window_func_table >= window_param]
+    if country_code is not None:
+        where_elements.append(imps.c.country_code == country_code)
+
+    where_clause = and_(*where_elements)
 
     stmt = select(
         [
@@ -60,29 +104,47 @@ def _stats_query(connection, start_date, date_window, group_column_name, group_v
             func.sum(imps.c.pinned),
             func.sum(imps.c.blocked),
             func.sum(imps.c.sponsored),
-            func.sum(imps.c.sponsored_link)
+            func.sum(imps.c.sponsored_link),
+            func.sum(imps.c.newtabs)
         ])\
         .where(where_clause)\
         .group_by(imps.c.year, window_func_table, group_column)\
         .order_by(imps.c.year, window_func_table, group_column)
-    return ('year', date_window, group_column_name, 'impressions', 'clicks', 'pinned',
-            'blocked', 'sponsored', 'sponsored_link'), connection.execute(stmt)
+    return ('year', date_window, group_column_name,
+            'impressions', 'clicks', 'pinned', 'blocked', 'sponsored', 'sponsored_link', 'newtabs'), \
+           connection.execute(stmt)
 
 
-def tile_stats_weekly(connection, start_date, tile_id=None):
-    return _stats_query(connection, start_date, 'week', 'tile_id', tile_id)
+def tile_stats_weekly(connection, start_date, tile_id=None, country_code=None):
+    return _stats_query(connection, start_date, 'week', 'tile_id', tile_id, country_code)
 
 
-def tile_stats_monthly(connection, start_date, tile_id=None):
-    return _stats_query(connection, start_date, 'month', 'tile_id', tile_id)
+def tile_stats_monthly(connection, start_date, tile_id=None, country_code=None):
+    return _stats_query(connection, start_date, 'month', 'tile_id', tile_id, country_code)
 
 
-def slot_stats_weekly(connection, start_date, slot_id=None):
-    return _stats_query(connection, start_date, 'week', 'position', slot_id)
+def tile_summary_weekly(connection, start_date, country_code=None):
+    return _summary_query(connection, start_date, 'week', 'tile_id', country_code)
 
 
-def slot_stats_monthly(connection, start_date, slot_id=None):
-    return _stats_query(connection, start_date, 'month', 'position', slot_id)
+def tile_summary_monthly(connection, start_date, country_code=None):
+    return _summary_query(connection, start_date, 'month', 'tile_id', country_code)
+
+
+def slot_stats_weekly(connection, start_date, slot_id=None, country_code=None):
+    return _stats_query(connection, start_date, 'week', 'position', slot_id, country_code)
+
+
+def slot_stats_monthly(connection, start_date, slot_id=None, country_code=None):
+    return _stats_query(connection, start_date, 'month', 'position', slot_id, country_code)
+
+
+def slot_summary_weekly(connection, start_date, country_code=None):
+    return _summary_query(connection, start_date, 'week', 'position', country_code)
+
+
+def slot_summary_monthly(connection, start_date, country_code=None):
+    return _summary_query(connection, start_date, 'month', 'position', country_code)
 
 
 def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
