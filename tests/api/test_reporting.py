@@ -9,7 +9,7 @@ from nose.tools import (
 from tests.base import BaseTestCase
 
 
-class TestApi(BaseTestCase):
+class TestReporting(BaseTestCase):
     pass
     # def test_tile_weekly(self):
     #     """
