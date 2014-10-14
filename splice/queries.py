@@ -34,6 +34,8 @@ def _stats_query(connection, start_date, date_window, group_column_name, group_v
     year = dt.year
     if date_window == 'month':
         window_param = dt.month
+    elif date_window == 'date':
+        window_param = dt
     else:
         window_param = dt.isocalendar()[1]
 
@@ -80,6 +82,8 @@ def _summary_query(connection, start_date, date_window, group_column_name, count
     year = dt.year
     if date_window == 'month':
         window_param = dt.month
+    elif date_window == 'date':
+        window_param = dt
     else:
         window_param = dt.isocalendar()[1]
 
@@ -123,12 +127,20 @@ def tile_stats_monthly(connection, start_date, tile_id=None, country_code=None):
     return _stats_query(connection, start_date, 'month', 'tile_id', tile_id, country_code)
 
 
+def tile_stats_daily(connection, start_date, tile_id=None, country_code=None):
+    return _stats_query(connection, start_date, 'date', 'tile_id', tile_id, country_code)
+
+
 def tile_summary_weekly(connection, start_date, country_code=None):
     return _summary_query(connection, start_date, 'week', 'tile_id', country_code)
 
 
 def tile_summary_monthly(connection, start_date, country_code=None):
     return _summary_query(connection, start_date, 'month', 'tile_id', country_code)
+
+
+def tile_summary_daily(connection, start_date, country_code=None):
+    return _summary_query(connection, start_date, 'date', 'tile_id', country_code)
 
 
 def slot_stats_weekly(connection, start_date, slot_id=None, country_code=None):

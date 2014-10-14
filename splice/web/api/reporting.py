@@ -1,7 +1,7 @@
 from flask import Blueprint, request, Response
 from splice.queries import tile_stats_monthly, tile_stats_weekly, slot_stats_weekly, \
     slot_stats_monthly, tile_summary_monthly, tile_summary_weekly, slot_summary_monthly, \
-    slot_summary_weekly
+    slot_summary_weekly, tile_stats_daily, tile_summary_daily
 from splice.models import Environment
 
 import ujson
@@ -71,6 +71,14 @@ def path_tile_stats_monthly(start_date, tile_id, country_code=None):
     return _build_response(rval, keys, name=start_date)
 
 
+@report.route('/tile_stats/daily/<start_date>/<tile_id>/<country_code>', methods=['GET'])
+@report.route('/tile_stats/daily/<start_date>/<tile_id>', methods=['GET'])
+def path_tile_stats_daily(start_date, tile_id, country_code=None):
+    conn = Environment.instance().db.engine.connect()
+    keys, rval = tile_stats_daily(conn, start_date, tile_id, country_code)
+    return _build_response(rval, keys, name=start_date)
+
+
 @report.route('/tile_summary/weekly/<start_date>/<country_code>', methods=['GET'])
 @report.route('/tile_summary/weekly/<start_date>', methods=['GET'])
 def path_tile_summary_weekly(start_date, country_code=None):
@@ -84,6 +92,14 @@ def path_tile_summary_weekly(start_date, country_code=None):
 def path_tile_summary_monthly(start_date, country_code=None):
     conn = Environment.instance().db.engine.connect()
     keys, rval = tile_summary_monthly(conn, start_date, country_code)
+    return _build_response(rval, keys, name=start_date)
+
+
+@report.route('/tile_summary/daily/<start_date>/<country_code>', methods=['GET'])
+@report.route('/tile_summary/daily/<start_date>', methods=['GET'])
+def path_tile_summary_daily(start_date, country_code=None):
+    conn = Environment.instance().db.engine.connect()
+    keys, rval = tile_summary_daily(conn, start_date, country_code)
     return _build_response(rval, keys, name=start_date)
 
 
