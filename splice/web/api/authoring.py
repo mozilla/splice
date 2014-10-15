@@ -9,6 +9,7 @@ from jsonschema.exceptions import ValidationError
 authoring = Blueprint('api.authoring', __name__, url_prefix='/api/authoring')
 env = Environment.instance()
 
+
 @authoring.route('/all_tiles', methods=['POST'])
 def all_tiles():
 
@@ -31,9 +32,11 @@ def all_tiles():
 
     return jsonify({"urls": urls}), 200
 
+
 @authoring.route('/payload_schema', methods=['GET'])
 def payload_schema():
     return jsonify(schema), 200
+
 
 @authoring.route('/distributions', methods=['GET'])
 def distributions():
@@ -42,6 +45,7 @@ def distributions():
     dists = get_distributions(limit=limit)
 
     return jsonify({"d": dists})
+
 
 def register_routes(app):
     app.register_blueprint(authoring)

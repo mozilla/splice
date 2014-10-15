@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-from fabric.api import local, require, put, run, env
+from fabric.api import local, require, put, run, env, serial
 from distutils.util import strtobool
 
 env.path = "/home/oyiptong/splice"
@@ -76,6 +76,12 @@ def flake(config="flake8.cfg"):
     local("flake8 . --config={}".format(config))
 
 
+def build():
+    test()
+    flake()
+    package()
+
+
 def deploy_cold():
     """
     Deploy code but don"t change current running version
@@ -84,3 +90,10 @@ def deploy_cold():
     setup_virtualenv()
     clean_release_dir()
     set_symlinks()
+
+
+@serial
+def package(clean=True):
+    if to_bool(clean):
+        local("rm -rf build/")
+    local("python setup.py build")

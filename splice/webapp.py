@@ -16,5 +16,3 @@ def create_webapp(*args, **kwargs):
     env = Environment.instance(*args, **kwargs)
     setup_routes(env.application)
     return env.application
-
-

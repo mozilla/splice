@@ -3,6 +3,7 @@ import boto
 import sys
 import os
 import logging
+from mock import Mock
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate
@@ -60,7 +61,6 @@ class Environment(object):
             self.log = Mock()
         else:
             self.__loggers = self.__setup_loggers(config_obj)
-
 
         self.config = config_obj
         app = Flask('splice')
@@ -141,7 +141,7 @@ class Environment(object):
         for iso_code, name in self._load_countries():
             countries[iso_code] = name
 
-        self.__fixtures =  {
+        self.__fixtures = {
             "locales": locales,
             "countries": countries,
         }

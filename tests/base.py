@@ -34,4 +34,3 @@ class BaseTestCase(TestCase):
     def get_fixture_path(self, name):
         path = os.path.dirname(__file__)
         return os.path.join(path, 'fixtures/{0}'.format(name))
-
