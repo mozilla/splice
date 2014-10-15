@@ -9,6 +9,7 @@ def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri
     Return the id of a tile having the data provided
     """
     from splice.environment import Environment
+
     env = Environment.instance()
     results = (
         env.db.session
@@ -29,7 +30,6 @@ def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri
 
 
 def _stats_query(connection, start_date, date_window, group_column_name, group_value, country_code):
-
     dt = datetime.strptime(start_date, "%Y-%m-%d")
     year = dt.year
     if date_window == 'month':
@@ -67,17 +67,16 @@ def _stats_query(connection, start_date, date_window, group_column_name, group_v
             func.sum(imps.c.sponsored),
             func.sum(imps.c.sponsored_link),
             func.sum(imps.c.newtabs)
-        ])\
-        .where(where_clause)\
-        .group_by(imps.c.year, window_func_table, group_column, imps.c.country_code, imps.c.locale)\
+        ]) \
+        .where(where_clause) \
+        .group_by(imps.c.year, window_func_table, group_column, imps.c.country_code, imps.c.locale) \
         .order_by(imps.c.year, window_func_table, group_column, imps.c.country_code, imps.c.locale)
     return ('year', date_window, group_column_name, 'country_code', 'locale',
             'impressions', 'clicks', 'pinned', 'blocked', 'sponsored', 'sponsored_link', 'newtabs'), \
-           connection.execute(stmt)
+        connection.execute(stmt)
 
 
 def _summary_query(connection, start_date, date_window, group_column_name, country_code):
-
     dt = datetime.strptime(start_date, "%Y-%m-%d")
     year = dt.year
     if date_window == 'month':
@@ -110,13 +109,13 @@ def _summary_query(connection, start_date, date_window, group_column_name, count
             func.sum(imps.c.sponsored),
             func.sum(imps.c.sponsored_link),
             func.sum(imps.c.newtabs)
-        ])\
-        .where(where_clause)\
-        .group_by(imps.c.year, window_func_table, group_column)\
+        ]) \
+        .where(where_clause) \
+        .group_by(imps.c.year, window_func_table, group_column) \
         .order_by(imps.c.year, window_func_table, group_column)
     return ('year', date_window, group_column_name,
             'impressions', 'clicks', 'pinned', 'blocked', 'sponsored', 'sponsored_link', 'newtabs'), \
-           connection.execute(stmt)
+        connection.execute(stmt)
 
 
 def tile_stats_weekly(connection, start_date, tile_id=None, country_code=None):
@@ -161,6 +160,7 @@ def slot_summary_monthly(connection, start_date, country_code=None):
 
 def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
     from splice.environment import Environment
+
     env = Environment.instance()
     conn = env.db.engine.connect()
     trans = conn.begin()
@@ -196,6 +196,7 @@ def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri
 
 def insert_distribution(url, *args, **kwargs):
     from splice.environment import Environment
+
     env = Environment.instance()
     conn = env.db.engine.connect()
     trans = conn.begin()
@@ -220,6 +221,7 @@ def insert_distribution(url, *args, **kwargs):
 
 def get_distributions(limit=100, *args, **kwargs):
     from splice.environment import Environment
+
     env = Environment.instance()
 
     rows = (
