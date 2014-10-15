@@ -3,7 +3,7 @@ import os
 
 setup(
     name="splice",
-    version="1.0.7",
+    version="1.0.6",
     description="Link authoring tool for " +
                 "Firefox Directory and Enhanced Tiles",
     author="Mozilla",
