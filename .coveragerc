@@ -1,0 +1,11 @@
+[run]
+branch = True
+source = splice
+include = splice/*
+omit = splice/tests/*
+
+[report]
+show_missing = True
+
+[html]
+title = Mozilla Splice coverage report

@@ -29,4 +29,9 @@ Next get your postgresql database setup
 ## Run
 
  * `manage.py`
- * `manage.py data import_links --help`
+ * `manage.py data --help`: link ingestion command line tools
+ * `manage.py runserver`: run a webserver listening on port 5000
+
+## Test
+
+ * `fab test`: run unit tests and code coverage tools

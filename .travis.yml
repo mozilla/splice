@@ -1,0 +1,10 @@
+language: python
+env: MOZ_ONYX_DEV=1
+python:
+  - "2.7"
+# command to install dependencies
+install: pip install -r requirements.txt -r requirements-dev.txt
+# command to run the build
+script: fab build
+after_success:
+  - coveralls

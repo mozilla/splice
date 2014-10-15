@@ -1,13 +1,15 @@
+"""
 import ujson
 from flask import url_for
 from nose.tools import (
     assert_equals,
     assert_is_none,
 )
+"""
 from tests.base import BaseTestCase
 
 
-class TestApi(BaseTestCase):
+class TestReporting(BaseTestCase):
     pass
     # def test_tile_weekly(self):
     #     """
