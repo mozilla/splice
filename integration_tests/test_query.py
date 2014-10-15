@@ -84,4 +84,3 @@ with env.application.app_context():
     _, rval = slot_stats_monthly(conn, '2014-05-15', 1, 'US')
     for year, week, tile_id, country, locale, imps, clicks, pinned, blocked, spon, spon_link, newtabs in rval:
         print year, week, tile_id, country, locale, imps, clicks, pinned, blocked, spon, spon_link, newtabs
-
