@@ -8,5 +8,6 @@ gunicorn==18.0
 boto==2.32.1
 psycopg2==2.5.3
 ujson==1.33
+mock==1.0.1
 jsonschema==2.4.0
 furl==0.3.95
