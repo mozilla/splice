@@ -1,8 +1,6 @@
-import hashlib
 from nose.tools import assert_raises, assert_equal, assert_not_equal
 from jsonschema.exceptions import ValidationError
 from splice.ingest import ingest_links, IngestError
-from splice.queries import tile_exists
 from tests.base import BaseTestCase
 
 
