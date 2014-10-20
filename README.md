@@ -1,5 +1,7 @@
 # splice
 
+[![Build Status](https://travis-ci.org/oyiptong/splice.svg?branch=master)](https://travis-ci.org/oyiptong/splice)
+[![Coverage Status](https://coveralls.io/repos/oyiptong/splice/badge.png?branch=master)](https://coveralls.io/r/oyiptong/splice?branch=master)
 
 Ingestion, validation and authoring tool for the Firefox Directory and Enhanced
 Tiles project

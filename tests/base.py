@@ -1,14 +1,16 @@
 import os
-from flask.ext.testing import TestCase
 from splice.environment import Environment
 from splice.webapp import create_webapp
+env = Environment.instance(test=True)
+
+from flask.ext.testing import TestCase
 
 
 class BaseTestCase(TestCase):
 
     def __init__(self, methodName='runTest'):
+        self.env = env
         super(BaseTestCase, self).__init__(methodName)
-        self.env = Environment.instance(test=True)
         create_webapp(self.env)
 
     def create_app(self):

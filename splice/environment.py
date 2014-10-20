@@ -49,7 +49,9 @@ class Environment(object):
             # A default param value will get overwritten, so this is implemented here.
             config = 'splice.default_settings.DefaultConfig'
 
-        config = os.environ.get('SPLICE_SETTINGS', config)
+        if not test:
+            # load config from environment if it exists
+            config = os.environ.get('SPLICE_SETTINGS', config)
 
         config_obj = load_config_obj(config)
 

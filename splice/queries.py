@@ -247,7 +247,9 @@ def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri
     conn = env.db.engine.connect()
     trans = conn.begin()
     try:
-        conn.execute("LOCK TABLE tiles IN SHARE ROW EXCLUSIVE MODE;")
+        if not env.is_test:
+            # test database is sqlite and doesn't support LOCK syntax
+            conn.execute("LOCK TABLE tiles IN SHARE ROW EXCLUSIVE MODE;")
         conn.execute(
 
             text(
