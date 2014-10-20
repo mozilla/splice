@@ -56,7 +56,7 @@ def setup_virtualenv():
     run("cd %(path)s/%(release)s && MOZ_UPHEADLINER_PROD=1 ./setup-project.sh" % env)
 
 
-def test(config="nose.cfg", debug_errors=False, debug_failures=False):
+def test(config="setup.cfg", debug_errors=False, debug_failures=False):
     """
     Run automated tests.
     If debug_errors is provided as a truey value, will drop on debug prompt as
