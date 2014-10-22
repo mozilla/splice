@@ -19,6 +19,7 @@ command_logger = logging.getLogger("command")
 metadata_pattern = re.compile("data:(.+);base64")
 mime_extensions = {
     "image/png": "png",
+    "image/gif": "gif",
     "image/jpeg": "jpg",
     "image/svg+xml": "svg",
 }
