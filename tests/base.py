@@ -25,16 +25,30 @@ class BaseTestCase(TestCase):
             for line in fd:
                 row = line.split(',')
                 # sqlalchemy doesn't like date strings....
-                row[1] = datetime.strptime(row[1], "%Y-%m-%d").date()
+                row[1] = datetime.strptime(row[1], "%Y-%m-%d")
                 yield row
 
+        def tile_values(fd):
+            for line in fd:
+                row = line.split(',')
+                yield dict(zip(
+                    ('id', 'target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'locale'),
+                    row))
+
         # load db
-        from splice.models import impression_stats_daily
+        from splice.models import impression_stats_daily, Tile
         conn = Environment.instance().db.engine.connect()
         with open(self.get_fixture_path('impression_stats.csv')) as fd:
             for row in values(fd):
                 ins = impression_stats_daily.insert().values(row)
                 conn.execute(ins)
+
+        session = Environment.instance().db.session
+        with open(self.get_fixture_path('tiles.csv')) as fd:
+            for row in tile_values(fd):
+                tile = Tile(**row)
+                session.add(tile)
+        session.commit()
 
     def tearDown(self):
         self.env.db.session.remove()

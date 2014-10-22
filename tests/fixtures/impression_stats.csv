@@ -1,544 +1,380 @@
-2,2014-09-03,1,0,0,0,0,0,1,0,en-US,CN,Windows,Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,5,0,en-US,JP,Windows,Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,6,0,en-US,BD,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,6,0,en-US,FI,Windows,Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,8,0,en-US,GB,Windows,Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,2,0,0,0,0,0,9,0,en-US,DE,Windows,Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,2,0,0,0,0,0,6,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-8,2014-09-03,7,0,0,0,0,0,7,0,en-US,ERROR,"Mac OS X",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,6,3,0,0,0,0,-1,0,en-US,DE,"Windows 7",Firefox,33.0,Other,9,36,2014,9
-11,2014-09-03,1,0,0,0,0,0,10,0,en-US,CO,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,12,0,en-US,JP,Windows,Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,5,0,en-US,US,"Windows 8",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,1,1,0,0,0,0,-1,0,es-CL,CN,"Windows 7",Firefox,34.0,Other,9,36,2014,2
-10,2014-09-03,2,0,0,0,0,0,10,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,14,0,en-US,US,Windows,Firefox,35.0,Other,9,36,2014,0
-9,2014-09-03,3,0,0,0,0,0,8,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,4,1,0,0,0,0,-1,0,en-US,NL,"Windows 7",Firefox,35.0,Other,9,36,2014,5
-5,2014-09-03,1,0,0,0,0,0,11,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,13,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,3,0,en-US,AU,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-6,2014-09-03,2,0,0,0,0,0,7,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,9,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,12,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,19,0,0,0,0,0,2,0,en-US,ERROR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,4,0,en-US,ERROR,Windows,Firefox,33.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,6,0,en-US,US,Windows,Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,8,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,3,0,0,0,0,0,-1,0,en-US,FR,"Mac OS X",Firefox,33.0,Other,9,36,2014,3
--1,2014-09-03,4,2,0,0,0,0,-1,0,en-US,US,"Windows 8",Firefox,33.0,Other,9,36,2014,6
-6,2014-09-03,1,0,0,0,0,0,1,0,en-US,CA,Windows,Firefox,33.0,Other,9,36,2014,0
-10,2014-09-03,3,0,0,0,0,0,11,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,2,0,en-US,BR,Linux,Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,6,0,en-US,BR,"Windows 8",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,2,0,0,0,0,0,-1,0,en-US,HK,Windows,Firefox,34.0,Other,9,36,2014,2
-6,2014-09-03,1,0,0,0,0,0,12,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,2,0,0,0,0,0,2,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
-8,2014-09-03,3,0,0,0,0,0,7,0,en-US,US,Windows,Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,3,0,0,0,0,0,11,0,en-US,ERROR,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,2,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,4,0,en-US,CA,"Windows 8",Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,7,0,en-US,FR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,8,0,0,0,0,0,4,0,en-US,ERROR,"Windows Vista",Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,7,0,en-US,FI,Windows,Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,2,0,0,0,0,0,9,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,10,0,en-US,KR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,21,0,0,0,0,0,3,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-5,2014-09-03,1,0,0,0,0,0,4,0,en-US,US,Linux,Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,2,0,0,0,0,0,8,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,2,0,0,0,0,0,-1,0,en-US,HR,Windows,Firefox,35.0,Other,9,36,2014,2
-1,2014-09-03,3,0,0,0,0,0,0,0,en-US,CN,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,9,0,0,0,0,0,2,0,en-US,ERROR,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-9,2014-09-03,9,0,0,0,0,0,7,0,en-US,ERROR,"Windows 8",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,CN,"Windows 8",Firefox,35.0,Other,9,36,2014,1
-10,2014-09-03,1,0,0,0,0,0,14,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,2,0,en-US,IN,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,5,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-6,2014-09-03,2,0,0,0,0,0,8,0,en-US,DE,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,12,0,en-US,US,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,14,0,en-US,JP,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,8,0,0,0,0,0,4,0,en-US,ERROR,"Windows Vista",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,9,0,en-US,CN,"Mac OS X",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,7,0,0,0,0,0,-1,0,en-US,US,Linux,Firefox,35.0,Other,9,36,2014,7
-8,2014-09-03,1,0,0,0,0,0,11,0,en-US,ID,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,13,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-8,2014-09-03,8,0,0,0,0,0,6,0,en-US,ERROR,"Windows Vista",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,4,3,0,0,0,0,-1,0,en-US,SE,"Windows 7",Firefox,33.0,Other,9,36,2014,7
-6,2014-09-03,2,0,0,0,0,0,12,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,7,0,en-US,CO,"Mac OS X",Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,11,0,en-US,JP,Windows,Firefox,33.0,Other,9,36,2014,0
-6,2014-09-03,2,0,0,0,0,0,7,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,2,0,0,0,0,0,-1,0,en-US,IT,"Windows 7",Firefox,35.0,Other,9,36,2014,2
-6,2014-09-03,1,0,0,0,0,0,10,0,en-US,CA,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,2,0,en-US,BR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,FR,Windows,Firefox,33.0,Other,9,36,2014,1
-3,2014-09-03,2,0,0,0,0,0,12,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,5,0,en-US,US,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,9,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,7,0,0,0,0,0,2,0,en-US,ERROR,"Mac OS X",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,12,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,2,0,0,0,0,0,-1,0,en-US,CA,Windows,Firefox,35.0,Other,9,36,2014,2
-1,2014-09-03,1,0,0,0,0,0,2,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,0,1,0,0,0,0,-1,0,en-US,GB,"Windows 8",Firefox,33.0,Other,9,36,2014,1
-3,2014-09-03,1,0,0,0,0,0,1,0,en-US,CN,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,10,0,en-US,GB,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,7,0,en-US,JP,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,12,0,en-US,ERROR,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,3,0,en-US,US,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,9,0,en-US,ERROR,"Windows XP",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,14,2,0,7,0,0,-1,0,en-US,US,"Windows 8",Firefox,34.0,Other,9,36,2014,23
-10,2014-09-03,1,0,0,0,0,0,12,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,7,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,0,1,0,0,0,0,-1,0,en-US,IR,Windows,Firefox,33.0,Other,9,36,2014,1
-11,2014-09-03,1,0,0,0,0,0,12,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-8,2014-09-03,2,0,0,0,0,0,12,0,en-US,DE,Windows,Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,4,0,en-US,GB,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,6,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,8,0,en-US,CN,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,1,0,en-US,US,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,14,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,3,0,en-US,JP,Windows,Firefox,33.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,3,0,en-US,CN,Windows,Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,6,0,en-US,US,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,7,0,en-US,GB,"Windows 8",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,3,1,0,2,0,0,-1,0,en-US,ID,"Windows 7",Firefox,34.0,Other,9,36,2014,6
-11,2014-09-03,1,0,0,0,0,0,2,0,en-US,DE,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,3,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,9,0,en-US,JP,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,13,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,14,0,en-US,ERROR,Windows,Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,7,0,en-US,KR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,12,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,4,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,6,0,en-US,KR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,8,0,en-US,FR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,2,0,0,0,0,0,9,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,3,0,en-US,JP,Windows,Firefox,35.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,5,0,en-US,CN,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,8,0,en-US,US,"Windows 8",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,10,2,0,0,0,0,-1,0,en-US,JP,"Windows 7",Firefox,34.0,Other,9,36,2014,12
-6,2014-09-03,2,0,0,0,0,0,11,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,4,0,en-US,FR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,DE,"Windows 8",Firefox,35.0,Other,9,36,2014,1
-8,2014-09-03,1,0,0,0,0,0,10,0,en-US,ERROR,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,7,0,en-US,BE,Windows,Firefox,35.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,10,0,en-US,US,Windows,Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,60,0,0,0,0,0,4,0,en-US,ERROR,"Mac OS X",Firefox,35.0,Other,9,36,2014,0
-6,2014-09-03,15,0,0,0,0,0,5,0,en-US,ERROR,Windows,Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,7,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,PH,Windows,Firefox,35.0,Other,9,36,2014,1
-4,2014-09-03,1,0,0,0,0,0,11,0,en-US,ERROR,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,13,0,en-US,ZA,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,3,0,en-US,CA,"Windows 8",Firefox,33.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,8,0,en-US,DO,"Windows 7",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,2,0,0,0,0,0,-1,0,en-US,TH,"Windows 7",Firefox,35.0,Other,9,36,2014,2
-8,2014-09-03,3,0,0,0,0,0,13,0,en-US,ERROR,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,44,0,0,0,0,0,5,0,en-US,ERROR,Linux,Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,0,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,3,0,0,0,0,0,4,0,en-US,CN,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,2,0,0,0,0,0,8,0,en-US,JP,Windows,Firefox,35.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,12,0,en-US,CN,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,9,0,en-US,CN,"Windows XP",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,CH,"Windows 7",Firefox,33.0,Other,9,36,2014,1
--1,2014-09-03,2,0,0,0,0,0,-1,0,ru,JP,"Windows 7",Firefox,35.0,Other,9,36,2014,2
-11,2014-09-03,1,0,0,0,0,0,2,0,en-US,CA,"Windows 8",Firefox,33.0,Other,9,36,2014,0
-3,2014-09-03,2,0,0,0,0,0,4,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,6,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,IN,"Mac OS X",Firefox,33.0,Other,9,36,2014,1
-11,2014-09-03,1,0,0,0,0,0,11,0,en-US,MY,Windows,Firefox,33.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,12,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,3,0,en-US,KR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,3,0,0,0,0,0,4,0,en-US,ERROR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,4,0,en-US,BR,Linux,Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,IN,"Windows XP",Firefox,35.0,Other,9,36,2014,1
-1,2014-09-03,2,0,0,0,0,0,0,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,2,0,0,0,0,0,12,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,6,0,en-US,CN,"Windows XP",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,2,0,0,0,0,0,-1,0,en-US,IT,"Windows 8",Firefox,35.0,Other,9,36,2014,2
-1,2014-09-03,8,0,0,0,0,0,1,0,en-US,ERROR,"Windows Vista",Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,5,0,en-US,US,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-8,2014-09-03,60,0,0,0,0,0,6,0,en-US,ERROR,"Mac OS X",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,8,0,en-US,BD,"Windows 7",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,5,0,0,0,0,0,-1,0,en-US,KR,"Windows 7",Firefox,34.0,Other,9,36,2014,5
-11,2014-09-03,2,0,0,0,0,0,10,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,10,0,en-US,JP,Windows,Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,11,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,3,0,0,0,0,0,2,0,en-US,CN,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,6,0,en-US,CN,Windows,Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,3,1,0,0,0,0,-1,0,en-US,KR,Windows,Firefox,35.0,Other,9,36,2014,4
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,NO,"Mac OS X",Firefox,35.0,Other,9,36,2014,1
-11,2014-09-03,1,0,0,0,0,0,10,0,en-US,ERROR,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,2,0,0,0,0,0,13,0,en-US,DE,Windows,Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,4,0,en-US,KR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,6,0,en-US,CA,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,9,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,5,0,0,0,0,0,-1,0,en-US,DE,"Windows 7",Firefox,35.0,Other,9,36,2014,5
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,NO,"Windows 8",Firefox,33.0,Other,9,36,2014,1
-3,2014-09-03,2,0,0,0,0,0,5,0,en-US,DE,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,3,0,0,0,0,0,-1,0,en-US,KR,"Windows 7",Firefox,33.0,Other,9,36,2014,3
-4,2014-09-03,1,0,0,0,0,0,11,0,en-US,PT,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,3,0,0,0,0,0,6,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-10,2014-09-03,3,0,0,0,0,0,7,0,en-US,IT,Windows,Firefox,33.0,Other,9,36,2014,0
-10,2014-09-03,2,0,0,0,0,0,14,0,en-US,US,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-2,2014-09-03,2,0,0,0,0,0,4,0,en-US,US,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,5,0,en-US,SE,Windows,Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,0,1,0,0,0,0,-1,0,en-US,FR,"Windows 8",Firefox,33.0,Other,9,36,2014,1
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,SG,"Windows XP",Firefox,33.0,Other,9,36,2014,1
-2,2014-09-03,1,0,0,0,0,0,1,0,en-US,CO,"Mac OS X",Firefox,35.0,Other,9,36,2014,0
-8,2014-09-03,2,0,0,0,0,0,12,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,14,0,en-US,TW,Windows,Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,4,0,en-US,BR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,10,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,6,0,en-US,US,"Windows XP",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,2,0,0,0,0,0,6,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-9,2014-09-03,2,0,0,0,0,0,7,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,8,0,en-US,CO,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,10,0,en-US,CA,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,6,0,en-US,NL,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,8,0,en-US,BR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,VE,"Windows 7",Firefox,35.0,Other,9,36,2014,1
-11,2014-09-03,1,0,0,0,0,0,10,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,14,0,en-US,US,Windows,Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,MU,"Windows 8",Firefox,34.0,Other,9,36,2014,1
--1,2014-09-03,1,0,0,0,0,0,-1,0,ja,US,"Windows 7",Firefox,34.0,Other,9,36,2014,1
-8,2014-09-03,1,0,0,0,0,0,13,0,en-US,DO,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,5,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-9,2014-09-03,3,0,0,0,0,0,8,0,en-US,US,Windows,Firefox,33.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,0,0,en-US,CO,"Mac OS X",Firefox,33.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,12,0,en-US,GB,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,13,0,en-US,CO,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,5,0,en-US,US,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,3,0,0,0,0,0,8,0,en-US,ERROR,"Windows 7",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,0,1,0,0,0,0,-1,0,en-US,KR,Linux,Firefox,33.0,Other,9,36,2014,1
-10,2014-09-03,1,0,0,0,0,0,12,0,en-US,KR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,3,0,en-US,SE,Windows,Firefox,34.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,5,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-1,2014-09-03,2,0,0,0,0,0,8,0,en-US,US,"Windows Vista",Firefox,33.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,9,0,en-US,IN,"Windows 7",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,GR,"Windows 7",Firefox,35.0,Other,9,36,2014,1
-1,2014-09-03,1,0,0,0,0,0,1,0,en-US,IN,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,10,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,11,0,en-US,US,Windows,Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,5,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,8,0,en-US,FI,Windows,Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,ru,US,"Windows XP",Firefox,34.0,Other,9,36,2014,1
-11,2014-09-03,1,0,0,0,0,0,13,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,5,0,en-US,KR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,7,1,0,0,0,0,-1,0,en-US,CN,Windows,Firefox,34.0,Other,9,36,2014,8
-1,2014-09-03,1,0,0,0,0,0,2,0,en-US,US,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,3,0,en-US,CN,Windows,Firefox,33.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,7,0,en-US,US,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,3,0,0,0,0,0,9,0,en-US,ERROR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,5,0,en-US,GB,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,8,0,en-US,CA,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,10,0,en-US,ERROR,"Mac OS X",Firefox,33.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,12,0,en-US,US,Windows,Firefox,35.0,Other,9,36,2014,0
-9,2014-09-03,2,0,0,0,0,0,3,0,en-US,AE,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,5,0,en-US,JP,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,3,0,0,0,0,0,9,0,en-US,ERROR,"Windows 7",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,KR,"Windows XP",Firefox,35.0,Other,9,36,2014,1
-10,2014-09-03,1,0,0,0,0,0,14,0,en-US,GB,Windows,Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,4,0,en-US,GB,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,9,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,RO,"Mac OS X",Firefox,34.0,Other,9,36,2014,1
-2,2014-09-03,1,0,0,0,0,0,2,0,en-US,ERROR,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,2,0,0,0,0,0,3,0,en-US,US,Windows,Firefox,33.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,8,0,en-US,JP,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,2,0,0,0,0,0,9,0,en-US,US,"Windows Vista",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,19,0,0,0,0,0,-1,0,de,ERROR,"Windows Vista",Firefox,34.0,Other,9,36,2014,19
-10,2014-09-03,1,0,0,0,0,0,13,0,en-US,US,"Windows XP",Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,8,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,DK,Windows,Firefox,35.0,Other,9,36,2014,1
--1,2014-09-03,4,0,0,0,0,0,-1,0,en-US,IN,"Windows 7",Firefox,33.0,Other,9,36,2014,4
-10,2014-09-03,1,0,0,0,0,0,13,0,en-US,JP,Windows,Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,5,0,en-US,CA,"Windows 8",Firefox,33.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,0,0,en-US,CA,Windows,Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,10,0,en-US,ERROR,Windows,Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,2,0,0,0,0,0,13,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,6,0,en-US,IN,"Windows 7",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,FR,Windows,Firefox,35.0,Other,9,36,2014,1
-1,2014-09-03,1,0,0,0,0,0,12,0,en-US,US,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,14,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,9,0,en-US,FI,Windows,Firefox,35.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,0,0,en-US,JP,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,14,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,4,0,en-US,US,"Windows Vista",Firefox,33.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,7,0,en-US,JP,Windows,Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,KR,Windows,Firefox,33.0,Other,9,36,2014,1
-10,2014-09-03,1,0,0,0,0,0,8,0,en-US,NO,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,CN,"Mac OS X",Firefox,35.0,Other,9,36,2014,1
-10,2014-09-03,2,0,0,0,0,0,13,0,en-US,US,Windows,Firefox,35.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,2,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,0,0,en-US,KR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,14,0,en-US,ERROR,"Mac OS X",Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,7,0,en-US,NL,"Windows 7",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,5,1,0,0,0,0,-1,0,en-US,CN,Windows,Firefox,33.0,Other,9,36,2014,6
--1,2014-09-03,4,0,0,0,0,0,-1,0,en-US,JP,"Windows 7",Firefox,33.0,Other,9,36,2014,4
-1,2014-09-03,19,0,0,0,0,0,0,0,en-US,ERROR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,14,0,en-US,ERROR,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,9,0,0,0,0,0,3,0,en-US,ERROR,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,7,0,en-US,TW,"Windows 7",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,MY,Windows,Firefox,33.0,Other,9,36,2014,1
-9,2014-09-03,1,0,0,0,0,0,14,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,7,0,en-US,CO,"Windows 7",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,2,1,0,0,0,0,-1,0,en-US,ERROR,Linux,Firefox,34.0,Other,9,36,2014,3
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,TR,"Windows 7",Firefox,35.0,Other,9,36,2014,1
-2,2014-09-03,1,0,0,0,0,0,3,0,en-US,GB,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,4,0,en-US,IN,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,8,0,en-US,ERROR,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,11,0,en-US,AR,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,3,0,en-US,CN,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,7,0,en-US,BR,"Windows 8",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,3,0,0,0,0,0,-1,0,en-US,KR,"Windows 8",Firefox,35.0,Other,9,36,2014,3
-3,2014-09-03,2,0,0,0,0,0,2,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,2,0,0,0,0,0,5,0,en-US,US,Windows,Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,6,0,en-US,US,"Windows Vista",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,21,0,0,0,0,0,-1,0,de,ERROR,"Windows 8",Firefox,34.0,Other,9,36,2014,21
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,IN,"Windows XP",Firefox,33.0,Other,9,36,2014,1
-10,2014-09-03,1,0,0,0,0,0,12,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,3,0,0,0,0,0,5,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,3,0,0,0,0,0,6,0,en-US,CN,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,7,0,en-US,US,"Windows XP",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,3,0,0,0,0,0,1,0,en-US,IT,Windows,Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,11,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,2,0,en-US,GB,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,6,0,en-US,KR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,9,0,en-US,AR,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,0,0,en-US,FI,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,5,0,en-US,US,Windows,Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,8,0,0,0,0,0,7,0,en-US,ERROR,"Windows Vista",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,11,0,en-US,AU,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,12,0,en-US,JP,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,3,0,en-US,UA,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,6,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,MX,"Windows 7",Firefox,35.0,Other,9,36,2014,1
-11,2014-09-03,2,0,0,0,0,0,11,0,en-US,US,"Windows Vista",Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,11,0,en-US,KR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,14,0,en-US,US,Windows,Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,2,0,0,0,0,0,8,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,0,0,en-US,DE,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,5,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,US,"Windows 7",Firefox,29.0,Other,9,36,2014,1
-9,2014-09-03,1,0,0,0,0,0,11,0,en-US,NL,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,8,0,en-US,CO,"Mac OS X",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,3,0,0,0,0,0,-1,0,en-US,MX,"Windows 7",Firefox,34.0,Other,9,36,2014,3
-11,2014-09-03,1,0,0,0,0,0,2,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,2,1,0,0,0,0,-1,0,en-US,CH,"Windows 7",Firefox,34.0,Other,9,36,2014,3
--1,2014-09-03,0,1,0,0,0,0,-1,0,en-US,PK,"Windows 7",Firefox,35.0,Other,9,36,2014,1
-6,2014-09-03,1,0,0,0,0,0,14,0,en-US,KR,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,8,0,en-US,US,"Windows XP",Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,10,0,en-US,US,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,7,0,en-US,IT,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,21,0,0,0,0,0,8,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,12,0,en-US,JP,Windows,Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,8,0,en-US,ERROR,Windows,Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,29,12,0,2,0,0,-1,0,en-US,US,Windows,Firefox,35.0,Other,9,36,2014,43
-10,2014-09-03,1,0,0,0,0,0,10,0,en-US,BR,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,3,0,0,0,0,0,5,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,2,0,0,0,0,0,10,0,en-US,JP,Windows,Firefox,35.0,Other,9,36,2014,0
-2,2014-09-03,8,0,0,0,0,0,2,0,en-US,ERROR,"Windows Vista",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,8,0,en-US,GB,"Windows 7",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,UA,"Windows 7",Firefox,34.0,Other,9,36,2014,1
-8,2014-09-03,1,0,0,0,0,0,11,0,en-US,CA,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,13,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,1,0,0,0,0,-1,0,en-US,ERROR,"Mac OS X",Firefox,34.0,Other,9,36,2014,2
-2,2014-09-03,1,1,0,0,0,0,1,0,en-US,JP,Windows,Firefox,33.0,Other,9,36,2014,0
-2,2014-09-03,2,0,0,0,0,0,12,0,en-US,JP,"Windows 8",Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,14,0,en-US,ES,"Windows Vista",Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,6,0,en-US,KR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,7,0,en-US,GB,"Windows 7",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,IT,Windows,Firefox,34.0,Other,9,36,2014,1
-6,2014-09-03,1,0,0,0,0,0,11,0,en-US,ERROR,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,2,0,en-US,TW,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,2,0,0,0,0,0,3,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,4,0,en-US,FI,Windows,Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,7,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,FR,"Windows 8",Firefox,34.0,Other,9,36,2014,1
-1,2014-09-03,2,0,0,0,0,0,0,0,en-US,CN,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,2,0,en-US,US,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,4,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,32,4,0,0,0,0,-1,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,36
-6,2014-09-03,1,0,0,0,0,0,13,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,8,0,0,0,0,0,3,0,en-US,ERROR,"Windows Vista",Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,2,0,0,0,0,0,8,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,13,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,4,0,en-US,US,Windows,Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,7,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,8,0,en-US,JP,Windows,Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,ru,US,Windows,Firefox,34.0,Other,9,36,2014,1
-10,2014-09-03,2,0,0,0,0,0,4,0,en-US,AE,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,5,0,en-US,US,Windows,Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,8,0,en-US,ERROR,Linux,Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,2,0,0,0,0,0,11,0,en-US,DE,Windows,Firefox,33.0,Other,9,36,2014,0
-6,2014-09-03,3,0,0,0,0,0,12,0,en-US,ERROR,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,13,0,en-US,ERROR,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-6,2014-09-03,19,0,0,0,0,0,5,0,en-US,ERROR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,12,0,en-US,AU,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,8,0,0,0,0,0,2,0,en-US,ERROR,"Windows Vista",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,7,0,0,0,0,0,4,0,en-US,ERROR,"Mac OS X",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,AU,Windows,Firefox,33.0,Other,9,36,2014,1
-2,2014-09-03,3,0,0,0,0,0,2,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,7,0,en-US,CA,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,2,0,0,0,0,0,9,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,0,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,2,0,0,0,0,0,10,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,3,0,0,0,0,0,5,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,5,0,en-US,CN,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,6,0,en-US,JP,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,9,0,en-US,US,"Windows XP",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,IE,Linux,Firefox,35.0,Other,9,36,2014,1
-3,2014-09-03,2,0,0,0,0,0,10,0,en-US,US,"Windows Vista",Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,12,0,en-US,NL,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,8,0,en-US,SE,Windows,Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,0,2,0,0,0,0,-1,0,fr,ERROR,Windows,Firefox,35.0,Other,9,36,2014,2
-9,2014-09-03,1,0,0,0,0,0,12,0,en-US,US,"Windows XP",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,4,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,6,0,en-US,ERROR,"Windows 8",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,10,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,13,0,en-US,US,Windows,Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,2,0,0,0,0,0,-1,0,en-US,HT,"Windows 7",Firefox,33.0,Other,9,36,2014,2
-2,2014-09-03,1,0,0,0,0,0,1,0,en-US,TW,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,10,0,en-US,GB,Windows,Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,4,0,en-US,CO,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,7,0,en-US,CN,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-10,2014-09-03,60,0,0,0,0,0,8,0,en-US,ERROR,"Mac OS X",Firefox,35.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,9,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,10,0,en-US,PT,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,11,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,5,0,en-US,KR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,2,0,0,0,0,0,7,0,en-US,US,"Windows XP",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,2,2,0,0,0,0,-1,0,en-US,HU,"Windows 7",Firefox,34.0,Other,9,36,2014,4
-1,2014-09-03,1,1,0,0,0,0,0,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,2,0,0,0,0,0,2,0,en-US,CN,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,7,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,0,1,0,0,0,0,-1,0,en-US,BR,"Windows XP",Firefox,33.0,Other,9,36,2014,1
-4,2014-09-03,2,0,0,0,0,0,12,0,en-US,US,"Windows Vista",Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,5,0,en-US,DE,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,44,0,0,0,0,0,10,0,en-US,ERROR,Linux,Firefox,35.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,14,0,en-US,ERROR,Windows,Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,3,0,en-US,ERROR,Linux,Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,9,0,en-US,JP,Windows,Firefox,34.0,Other,9,36,2014,0
-9,2014-09-03,2,0,0,0,0,0,9,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,0,0,en-US,CN,Windows,Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,8,0,en-US,JP,Windows,Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,9,0,en-US,DO,"Windows 7",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,45,0,0,0,0,0,-1,0,zh-CN,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,45
-11,2014-09-03,2,0,0,0,0,0,2,0,en-US,US,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,8,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,11,1,0,0,0,0,-1,0,en-US,US,"Windows XP",Firefox,33.0,Other,9,36,2014,12
-9,2014-09-03,1,0,0,0,0,0,11,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,3,0,0,0,0,0,7,0,en-US,US,"Windows XP",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,CO,"Mac OS X",Firefox,33.0,Other,9,36,2014,1
--1,2014-09-03,1,0,0,0,0,0,-1,0,pl,US,"Windows 7",Firefox,35.0,Other,9,36,2014,1
-3,2014-09-03,1,0,0,0,0,0,1,0,en-US,US,"Windows Vista",Firefox,33.0,Other,9,36,2014,0
-2,2014-09-03,2,0,0,0,0,0,4,0,en-US,JP,Windows,Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,9,0,en-US,AU,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,1,0,en-US,US,Windows,Firefox,33.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,6,0,en-US,US,"Windows XP",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,2,0,0,0,0,0,-1,0,en-US,MX,Windows,Firefox,35.0,Other,9,36,2014,2
-11,2014-09-03,1,0,0,0,0,0,2,0,en-US,US,"Windows Vista",Firefox,33.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,1,0,en-US,ERROR,Windows,Firefox,33.0,Other,9,36,2014,0
-3,2014-09-03,60,0,0,0,0,0,2,0,en-US,ERROR,"Mac OS X",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,9,0,0,0,0,0,4,0,en-US,ERROR,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-1,2014-09-03,2,0,0,0,0,0,6,0,en-US,CN,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,8,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,6,0,0,0,0,0,-1,0,en-US,US,"Mac OS X",Firefox,34.0,Other,9,36,2014,6
-6,2014-09-03,1,0,0,0,0,0,11,0,en-US,GB,Windows,Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,3,0,0,0,0,0,3,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,8,0,en-US,CO,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,9,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,13,0,en-US,US,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,14,0,en-US,FR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,5,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,2,0,0,0,0,0,13,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,8,0,en-US,ERROR,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,8,0,en-US,JP,Windows,Firefox,34.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,8,0,en-US,IN,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,5,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,2,0,0,0,0,0,-1,0,en-US,CO,"Windows 7",Firefox,34.0,Other,9,36,2014,2
-1,2014-09-03,1,0,0,0,0,0,2,0,en-US,CN,"Mac OS X",Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,3,0,0,0,0,0,3,0,en-US,CN,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,6,0,en-US,US,"Windows 8",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,20,0,0,0,0,0,-1,0,en-US,ERROR,"Windows Vista",Firefox,34.0,Other,9,36,2014,20
-2,2014-09-03,2,0,0,0,0,0,1,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,12,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,3,0,en-US,DE,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,3,0,en-US,JP,Windows,Firefox,34.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,4,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,0,1,0,0,0,0,-1,0,en-US,CZ,"Windows 7",Firefox,34.0,Other,9,36,2014,1
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,NL,"Windows XP",Firefox,35.0,Other,9,36,2014,1
-6,2014-09-03,1,0,0,0,0,0,12,0,en-US,PT,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,3,0,en-US,FI,Windows,Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,8,0,en-US,ID,"Windows 7",Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,LK,"Windows 8",Firefox,35.0,Other,9,36,2014,1
-3,2014-09-03,1,0,0,0,0,0,12,0,en-US,CN,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,6,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,7,0,en-US,GB,"Windows 7",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,4,1,0,0,0,0,-1,0,en-US,CA,"Windows 7",Firefox,34.0,Other,9,36,2014,5
-1,2014-09-03,1,0,0,0,0,0,1,0,en-US,CN,Windows,Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,2,0,0,0,0,0,10,0,en-US,DE,Windows,Firefox,33.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,11,0,en-US,US,Windows,Firefox,33.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,13,0,en-US,ERROR,Windows,Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,5,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-9,2014-09-03,60,0,0,0,0,0,7,0,en-US,ERROR,"Mac OS X",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,MO,"Windows 7",Firefox,33.0,Other,9,36,2014,1
-1,2014-09-03,1,0,0,0,0,0,0,0,en-US,FR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,10,0,en-US,MY,Windows,Firefox,33.0,Other,9,36,2014,0
-8,2014-09-03,2,0,0,0,0,0,14,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-1,2014-09-03,1,0,0,0,0,0,6,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,7,0,en-US,US,"Windows XP",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,0,1,0,0,0,0,-1,0,en-US,BE,"Windows 7",Firefox,35.0,Other,9,36,2014,1
--1,2014-09-03,2,1,0,0,0,0,-1,0,en-US,GB,"Windows 7",Firefox,33.0,Other,9,36,2014,3
-8,2014-09-03,1,0,0,0,0,0,14,0,en-US,MY,Windows,Firefox,33.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,5,0,en-US,BR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,fr,DE,Windows,Firefox,34.0,Other,9,36,2014,1
-4,2014-09-03,2,0,0,0,0,0,11,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,6,0,en-US,US,Windows,Firefox,35.0,Other,9,36,2014,0
-9,2014-09-03,1,0,0,0,0,0,13,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,2,0,0,0,0,0,3,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,15,0,0,0,0,0,4,0,en-US,ERROR,Windows,Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,12,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,4,0,en-US,US,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,8,0,en-US,BE,Windows,Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,9,0,en-US,ERROR,"Mac OS X",Firefox,33.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,10,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,2,0,0,0,0,0,3,0,en-US,US,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-8,2014-09-03,1,0,0,0,0,0,6,0,en-US,JP,Windows,Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,de,ERROR,Linux,Firefox,34.0,Other,9,36,2014,1
-4,2014-09-03,2,0,0,0,0,0,10,0,en-US,US,"Windows XP",Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,2,0,0,0,0,0,6,0,en-US,DE,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,2,0,0,0,0,0,9,0,en-US,ERROR,"Windows 8",Firefox,33.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,9,0,en-US,ERROR,"Windows 7",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,3,0,0,0,0,0,-1,0,en-US,US,Linux,Firefox,33.0,Other,9,36,2014,3
-6,2014-09-03,2,0,0,0,0,0,11,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,8,0,en-US,CA,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-10,2014-09-03,1,0,0,0,0,0,9,0,en-US,ERROR,Linux,Firefox,34.0,Other,9,36,2014,0
--1,2014-09-03,0,1,0,0,0,0,-1,0,en-US,JP,"Windows 8",Firefox,35.0,Other,9,36,2014,1
-6,2014-09-03,1,0,0,0,0,0,10,0,en-US,ERROR,Windows,Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,1,0,0,0,0,0,12,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,2,0,en-US,AU,"Windows 7",Firefox,33.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,9,0,en-US,GB,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,11,0,en-US,US,"Windows 8",Firefox,33.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,6,0,en-US,ERROR,"Windows 7",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,2,1,0,0,0,0,-1,0,en-US,JP,"Windows 8",Firefox,34.0,Other,9,36,2014,3
-8,2014-09-03,1,0,0,0,0,0,10,0,en-US,US,Windows,Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,2,0,0,0,0,0,14,0,en-US,ERROR,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,3,0,0,0,0,0,4,0,en-US,ERROR,"Windows 7",Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,9,0,en-US,GB,Windows,Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,3,1,0,0,0,0,-1,0,en-US,IT,"Windows 7",Firefox,34.0,Other,9,36,2014,4
-9,2014-09-03,3,0,0,0,0,0,10,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,6,0,en-US,AR,"Windows XP",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,AU,Linux,Firefox,35.0,Other,9,36,2014,1
-9,2014-09-03,1,0,0,0,0,0,11,0,en-US,US,"Windows 7",Firefox,35.0,Other,9,36,2014,0
-3,2014-09-03,1,0,0,0,0,0,2,0,en-US,KR,"Windows XP",Firefox,34.0,Other,9,36,2014,0
-6,2014-09-03,2,0,0,0,0,0,5,0,en-US,ERROR,Windows,Firefox,35.0,Other,9,36,2014,0
-2,2014-09-03,1,0,0,0,0,0,8,0,en-US,ERROR,"Windows XP",Firefox,33.0,Other,9,36,2014,0
--1,2014-09-03,6,0,0,0,0,0,-1,0,en-US,US,"Mac OS X",Firefox,35.0,Other,9,36,2014,6
-8,2014-09-03,1,0,0,0,0,0,11,0,en-US,JP,Windows,Firefox,34.0,Other,9,36,2014,0
-11,2014-09-03,1,0,0,0,0,0,3,0,en-US,GB,"Windows 8",Firefox,34.0,Other,9,36,2014,0
-4,2014-09-03,7,0,0,0,0,0,5,0,en-US,ERROR,"Mac OS X",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,1,0,0,0,0,0,8,0,en-US,US,Windows,Firefox,35.0,Other,9,36,2014,0
--1,2014-09-03,1,0,0,0,0,0,-1,0,en-US,AR,"Windows XP",Firefox,35.0,Other,9,36,2014,1
-2,2014-09-03,60,0,0,0,0,0,1,0,en-US,ERROR,"Mac OS X",Firefox,35.0,Other,9,36,2014,0
-11,2014-09-03,60,0,0,0,0,0,3,0,en-US,ERROR,"Mac OS X",Firefox,35.0,Other,9,36,2014,0
-4,2014-09-03,3,0,0,0,0,0,7,0,en-US,US,"Windows 7",Firefox,33.0,Other,9,36,2014,0
+-1,2014-10-08,0,0,0,0,0,0,-1,0,ar,LB,"Windows 7",Firefox,34.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-GB,MY,"Windows 8",Firefox,34.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,BF,"Windows 7",Firefox,33.0,Other,10,41,2014,6
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,BR,Windows,Firefox,35.0,Other,10,41,2014,76
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,CL,"Windows 7",Firefox,35.0,Other,10,41,2014,18
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,CO,Windows,Firefox,34.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,DO,Windows,Firefox,34.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,GB,Windows,Firefox,33.0,Other,10,41,2014,72
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,IN,"Windows XP",Firefox,35.0,Other,10,41,2014,26
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,JP,Windows,Firefox,33.0,Other,10,41,2014,3
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,MA,"Windows 7",Firefox,33.0,Other,10,41,2014,20
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,MZ,"Windows 7",Firefox,34.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,RO,Linux,Firefox,35.0,Other,10,41,2014,4
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,SE,"Mac OS X",Firefox,34.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,TN,"Windows 8",Firefox,35.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,ZW,"Windows XP",Firefox,33.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,es-ES,VE,Linux,Firefox,33.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,fr,CA,"Windows 7",Firefox,33.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,fr,FR,"Windows XP",Firefox,35.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,pt-BR,MZ,"Windows 7",Firefox,34.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,ru,LV,"Windows 7",Firefox,35.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,AT,Windows,Firefox,33.0,Other,10,41,2014,4
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,TH,Windows,Firefox,33.0,Other,10,41,2014,15
+-1,2014-10-08,0,0,0,0,0,0,-1,0,pl,PL,Windows,Firefox,33.0,Other,10,41,2014,4
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,ERROR,"Windows 7",Firefox,33.0,Other,10,41,2014,7
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,SI,"Windows 7",Firefox,35.0,Other,10,41,2014,21
+-1,2014-10-08,0,0,0,0,0,0,-1,0,pt-BR,BR,"Windows 7",Firefox,34.0,Other,10,41,2014,281
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,EE,"Windows 7",Firefox,34.0,Other,10,41,2014,4
+-1,2014-10-08,0,0,0,0,0,0,-1,0,hu,HU,"Windows 8",Firefox,34.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,BH,"Windows 8",Firefox,33.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,ru,UZ,"Windows 7",Firefox,34.0,Other,10,41,2014,3
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,CH,Linux,Iceweasel,33.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,de,AT,"Windows 7",Firefox,35.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,GE,"Windows XP",Firefox,35.0,Other,10,41,2014,7
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,SD,Windows,Firefox,35.0,Other,10,41,2014,5
+-1,2014-10-08,0,0,0,0,0,0,-1,0,es-ES,CU,Windows,Firefox,33.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,pt-BR,BR,"Mac OS X",Firefox,34.0,Other,10,41,2014,24
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,EC,"Windows 8",Firefox,33.0,Other,10,41,2014,3
+-1,2014-10-08,0,0,0,0,0,0,-1,0,es-AR,CL,"Windows 7",Firefox,34.0,Other,10,41,2014,6
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,LY,Linux,Firefox,35.0,Other,10,41,2014,3
+-1,2014-10-08,0,0,0,0,0,0,-1,0,fr,CG,"Windows 8",Firefox,34.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,HU,"Mac OS X",Firefox,33.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,ru,RU,Linux,Firefox,35.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,DK,Windows,Firefox,35.0,Other,10,41,2014,15
+-1,2014-10-08,0,0,0,0,0,0,-1,0,es-MX,MX,"Windows XP",Firefox,34.0,Other,10,41,2014,35
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,MM,Windows,Firefox,35.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,ru,UA,"Mac OS X",Firefox,35.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,de,DE,"Windows Vista",Firefox,33.0,Other,10,41,2014,7
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,CU,"Windows 7",Firefox,35.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,MU,"Windows 7",Firefox,35.0,Other,10,41,2014,8
+-1,2014-10-08,0,0,0,0,0,0,-1,0,es-CL,EC,Windows,Firefox,34.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-GB,PT,"Windows 8",Firefox,34.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,NO,Windows,Firefox,35.0,Other,10,41,2014,44
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,LT,"Mac OS X",Firefox,33.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,fr,RE,"Windows 7",Firefox,33.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,IE,"Windows 8",Firefox,33.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,RS,Windows,Firefox,33.0,Other,10,41,2014,12
+-1,2014-10-08,0,0,0,0,0,0,-1,0,fr,DZ,"Windows 8",Firefox,35.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,BG,Windows,Firefox,35.0,Other,10,41,2014,15
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,SK,"Windows 7",Firefox,33.0,Other,10,41,2014,7
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,AR,"Windows 7",Firefox,34.0,Other,10,41,2014,18
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,HU,Windows,Firefox,35.0,Other,10,41,2014,66
+-1,2014-10-08,0,0,0,0,0,0,-1,0,fr,FR,Linux,Firefox,34.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,IN,"Windows 7",Firefox,34.0,Other,10,41,2014,214
+-1,2014-10-08,0,0,0,0,0,0,-1,0,fr,TG,Windows,Firefox,34.0,Other,10,41,2014,3
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,FI,"Windows Vista",Firefox,34.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,MM,"Windows 7",Firefox,33.0,Other,10,41,2014,30
+-1,2014-10-08,0,0,0,0,0,0,-1,0,lv,LV,"Windows XP",Firefox,34.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,GH,"Windows XP",Firefox,35.0,Other,10,41,2014,6
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,RU,"Windows 7",Firefox,24.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,AE,"Windows 8",Firefox,35.0,Other,10,41,2014,5
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,MY,Linux,Firefox,33.0,Other,10,41,2014,3
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,AE,"Windows 7",Firefox,35.0,Other,10,41,2014,10
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,HK,"Windows 7",Firefox,33.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,SG,"Windows 7",Firefox,35.0,Other,10,41,2014,11
+-1,2014-10-08,0,0,0,0,0,0,-1,0,pl,PL,"Mac OS X",Firefox,35.0,Other,10,41,2014,3
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-GB,TR,Windows,Firefox,34.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,NO,"Windows 7",Firefox,35.0,Other,10,41,2014,17
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,GB,"Windows 7",Firefox,35.0,Other,10,41,2014,297
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,IN,"Windows Vista",Firefox,33.0,Other,10,41,2014,29
+-1,2014-10-08,0,0,0,0,0,0,-1,0,pt-BR,ERROR,"Windows 7",Firefox,33.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,BG,Windows,Firefox,33.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,IL,Windows,Firefox,33.0,Other,10,41,2014,4
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,SE,"Windows 7",Firefox,34.0,Other,10,41,2014,20
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,EG,"Mac OS X",Firefox,33.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,MX,Windows,Firefox,34.0,Other,10,41,2014,7
+-1,2014-10-08,0,0,0,0,0,0,-1,0,fr,DZ,"Windows XP",Firefox,35.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,MU,Windows,Firefox,35.0,Other,10,41,2014,9
+-1,2014-10-08,0,0,0,0,0,0,-1,0,nl,BE,"Windows 7",Firefox,34.0,Other,10,41,2014,5
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,NO,"Windows 7",Firefox,34.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,de,PL,"Mac OS X",Firefox,34.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,GY,"Windows 7",Firefox,33.0,Other,10,41,2014,6
+-1,2014-10-08,0,0,0,0,0,0,-1,0,ru,BY,"Windows XP",Firefox,35.0,Other,10,41,2014,8
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,AR,"Mac OS X",Firefox,33.0,Other,10,41,2014,3
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,SR,Windows,Firefox,35.0,Other,10,41,2014,1
+-1,2014-10-08,0,0,0,0,0,0,-1,0,fr,BE,"Windows 7",Firefox,33.0,Other,10,41,2014,2
+-1,2014-10-08,0,0,0,0,0,0,-1,0,en-US,BG,"Windows XP",Firefox,34.0,Other,10,41,2014,3
+-1,2014-10-08,0,0,0,0,0,0,-1,0,lt,LT,"Windows 7",Firefox,34.0,Other,10,41,2014,19
+12,2014-10-01,18,0,0,0,0,0,0,0,en-US,AE,Windows,Firefox,35.0,Other,10,40,2014,0
+12,2014-10-01,432,0,0,1,0,0,0,0,en-US,BA,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,2,0,0,0,0,0,0,0,en-US,CN,"Windows XP",Firefox,34.0,Other,10,40,2014,0
+12,2014-10-01,1,0,0,0,0,0,0,0,en-US,CZ,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,135,0,0,0,0,0,0,0,en-US,GB,Android,Android,1.6,"HTC TATTOO",10,40,2014,0
+12,2014-10-01,714,0,0,1,0,0,0,0,en-US,GR,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,28,0,0,0,0,0,0,0,en-US,ID,Windows,Firefox,34.0,Other,10,40,2014,0
+12,2014-10-01,86,0,0,0,0,0,0,0,en-US,IT,"Mac OS X",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,332,2,1,4,0,0,0,0,en-US,JP,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,2,0,0,0,0,0,0,0,en-US,LV,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+12,2014-10-01,30,0,0,2,0,0,0,0,en-US,MZ,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,3,0,0,0,0,0,0,0,en-US,PA,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,50,0,0,5,0,0,0,0,en-US,PK,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,14,0,0,0,0,0,0,0,en-US,SO,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,2,0,0,0,0,0,0,0,en-US,TR,"Windows XP",Firefox,34.0,Other,10,40,2014,0
+12,2014-10-01,769,0,0,0,0,0,0,0,en-US,US,Android,Android,4.0,"HTC Desire",10,40,2014,0
+12,2014-10-01,8,0,0,0,0,0,0,0,en-US,US,Ubuntu,Firefox,34.0,Other,10,40,2014,0
+12,2014-10-01,651,0,0,0,0,0,0,0,en-US,US,Windows,Firefox,34.0,Other,10,40,2014,0
+12,2014-10-01,2,0,0,0,0,0,0,0,en-US,US,"Windows XP",Chrome,11.0,Other,10,40,2014,0
+13,2014-10-01,6,0,0,2,0,0,0,0,en-US,EG,"Windows XP",Firefox,34.0,Other,10,40,2014,0
+13,2014-10-01,0,0,0,3,0,0,0,0,en-US,LB,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,306,0,0,174,0,0,0,0,en-US,PK,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,2,0,0,0,0,0,0,0,en-US,GB,"Mac OS X",Firefox,34.0,Other,10,40,2014,0
+14,2014-10-01,2,0,0,0,0,0,0,0,en-US,KW,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,0,0,0,1,0,0,0,0,en-US,DZ,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,1,0,0,0,0,0,0,0,en-US,MM,Windows,Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,0,0,0,3,0,0,0,0,en-US,TW,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,0,0,0,2,0,0,0,0,en-US,VU,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,13,0,0,0,0,0,0,0,en-US,IT,Windows,Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,4,0,0,0,0,0,0,0,en-US,US,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+17,2014-10-01,82,1,0,255,0,0,0,0,en-US,ID,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,1,0,0,1,0,0,0,0,en-US,QA,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,1,0,0,8,0,0,0,0,en-US,EG,Windows,Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,5,0,0,0,0,0,0,0,en-US,LK,Windows,Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,4,0,0,0,0,0,0,0,en-US,NL,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,0,0,0,1,0,0,0,0,en-US,VE,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,1,0,0,31,0,0,0,0,en-US,ID,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,0,0,0,1,0,0,0,0,en-US,SV,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+20,2014-10-01,27,0,0,29,0,0,0,0,en-US,ID,Windows,Firefox,33.0,Other,10,40,2014,0
+20,2014-10-01,7,0,0,6,0,0,0,0,en-US,MY,Windows,Firefox,33.0,Other,10,40,2014,0
+20,2014-10-01,0,0,0,4,0,0,0,0,en-US,TR,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,1,0,0,0,0,0,1,0,en-US,CL,Ubuntu,Firefox,35.0,Other,10,40,2014,0
+12,2014-10-01,2,0,0,0,0,0,1,0,en-US,DJ,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,8,0,0,0,0,0,1,0,en-US,GH,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,19,0,0,0,0,0,1,0,en-US,IT,Windows,Firefox,34.0,Other,10,40,2014,0
+12,2014-10-01,2,0,0,0,0,0,1,0,en-US,LU,"Mac OS X",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,10,0,0,0,0,0,1,0,en-US,MN,Windows,Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,1,0,0,0,0,0,1,0,en-US,MY,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+12,2014-10-01,13,0,0,0,0,0,1,0,en-US,NZ,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+12,2014-10-01,2,0,0,0,0,0,1,0,en-US,SD,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,4,0,0,0,0,0,1,0,en-US,SN,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,40,0,0,1,0,0,1,0,en-US,TZ,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,163,0,0,1,0,0,1,0,en-US,US,Windows,Firefox,34.0,Other,10,40,2014,0
+12,2014-10-01,4,0,0,0,0,0,1,0,en-US,ZW,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+13,2014-10-01,1,0,0,0,0,0,1,0,en-US,AT,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,228,0,0,1,0,0,1,0,en-US,BG,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,4,0,0,0,0,0,1,0,en-US,CO,"BlackBerry OS","BlackBerry WebKit",7.1,"BlackBerry 9900",10,40,2014,0
+13,2014-10-01,9,0,0,0,0,0,1,0,en-US,EG,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,37,0,0,0,0,0,1,0,en-US,FI,"Windows 7",Firefox,34.0,Other,10,40,2014,0
+13,2014-10-01,4,0,0,0,0,0,1,0,en-US,HK,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+13,2014-10-01,15,0,0,0,0,0,1,0,en-US,JP,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,2,0,0,0,0,0,1,0,en-US,LR,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,1,0,0,0,0,0,1,0,en-US,MD,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,7,0,0,0,0,0,1,0,en-US,NL,Ubuntu,Firefox,34.0,Other,10,40,2014,0
+13,2014-10-01,1,0,0,0,0,0,1,0,en-US,PK,"Windows Vista",Chrome,15.0,Other,10,40,2014,0
+13,2014-10-01,10,0,0,0,0,0,1,0,en-US,RU,"Mac OS X",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,35,0,0,0,0,0,1,0,en-US,SE,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+13,2014-10-01,845,0,0,0,0,0,1,0,en-US,US,"Mac OS X",Firefox,34.0,Other,10,40,2014,0
+13,2014-10-01,1,0,0,0,0,0,1,0,en-US,US,"Windows 7",Firefox,24.0,Other,10,40,2014,0
+13,2014-10-01,2,0,0,0,0,0,1,0,en-US,US,Windows,Arora,0.8,Other,10,40,2014,0
+14,2014-10-01,1,0,0,0,0,0,1,0,en-US,EG,"Windows XP",Firefox,34.0,Other,10,40,2014,0
+14,2014-10-01,50,0,0,19,0,0,1,0,en-US,IQ,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,3,0,0,1,0,0,1,0,en-US,RW,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,4,0,0,0,0,0,1,0,en-US,EC,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,0,0,0,1,0,0,1,0,en-US,LB,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+15,2014-10-01,15,0,0,1,0,0,1,0,en-US,TH,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+16,2014-10-01,0,0,0,1,0,0,1,0,en-US,CA,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+16,2014-10-01,4,0,0,0,0,0,1,0,en-US,FR,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,8,0,0,0,0,0,1,0,en-US,US,Windows,Firefox,35.0,Other,10,40,2014,0
+17,2014-10-01,36,0,0,14,0,0,1,0,en-US,IR,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,1,0,0,2,0,0,1,0,en-US,MA,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,7,0,0,0,0,0,1,0,en-US,ZA,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,3,0,0,1,0,0,1,0,en-US,GM,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,3,0,0,0,0,0,1,0,en-US,IT,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,0,0,0,1,0,0,1,0,en-US,UG,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,0,0,0,1,0,0,1,0,en-US,GM,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,3,0,0,1,0,0,1,0,en-US,MY,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+20,2014-10-01,11,0,0,9,0,0,1,0,en-US,DZ,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+20,2014-10-01,3,0,0,5,0,0,1,0,en-US,SA,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+10,2014-10-01,1,0,0,0,0,0,10,0,en-US,DE,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+12,2014-10-01,3,0,0,0,0,0,10,0,en-US,BT,Windows,Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,5,0,0,0,0,0,10,0,en-US,CU,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,205,0,0,0,0,0,10,0,en-US,EG,Windows,Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,21,0,0,0,0,0,10,0,en-US,GR,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,821,0,0,1,0,0,10,0,en-US,IR,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,3,0,0,0,0,0,10,0,en-US,MK,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,2,0,0,0,0,0,10,0,en-US,PF,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,19,0,0,0,0,0,10,0,en-US,SE,Windows,Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,21,0,0,0,0,0,10,0,en-US,VE,Windows,Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,67,0,0,0,0,0,10,0,en-US,ZA,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,10,0,0,0,0,0,10,0,en-US,AM,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,6,0,0,0,0,0,10,0,en-US,BA,"Windows XP",Firefox,35.0,Other,10,40,2014,0
+13,2014-10-01,27,0,0,0,0,0,10,0,en-US,BN,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,2,0,0,0,0,0,10,0,en-US,FI,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,6,0,0,0,0,0,10,0,en-US,GH,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+13,2014-10-01,6,0,0,0,0,0,10,0,en-US,IQ,"Windows 7",Firefox,34.0,Other,10,40,2014,0
+13,2014-10-01,7,0,0,0,0,0,10,0,en-US,KR,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,6,0,0,0,0,0,10,0,en-US,LT,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,12,0,0,0,0,0,10,0,en-US,NG,"Windows 8",Firefox,34.0,Other,10,40,2014,0
+13,2014-10-01,6,0,0,0,0,0,10,0,en-US,RU,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,16,0,0,0,0,0,10,0,en-US,SY,Windows,Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,5,0,0,0,0,0,10,0,en-US,TW,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+14,2014-10-01,368,0,0,0,0,0,10,0,en-US,AE,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,3,0,0,0,0,0,10,0,en-US,AU,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+14,2014-10-01,2,0,0,0,0,0,10,0,en-US,CA,Windows,Firefox,34.0,Other,10,40,2014,0
+14,2014-10-01,16,0,0,0,0,0,10,0,en-US,EG,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+14,2014-10-01,2347,0,0,1,0,0,10,0,en-US,ID,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,14,0,0,0,0,0,10,0,en-US,LR,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,3,0,0,0,0,0,10,0,en-US,MX,"Mac OS X",Firefox,34.0,Other,10,40,2014,0
+14,2014-10-01,34,0,0,0,0,0,10,0,en-US,NA,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,313,0,0,0,0,0,10,0,en-US,SA,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,1,0,0,0,0,0,10,0,en-US,TH,Windows,Firefox,34.0,Other,10,40,2014,0
+14,2014-10-01,63,0,0,0,0,0,10,0,en-US,VE,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,3,0,0,0,0,0,10,0,en-US,ZM,"Windows 7",Firefox,34.0,Other,10,40,2014,0
+15,2014-10-01,28,0,0,0,0,0,10,0,en-US,CA,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,87,0,0,0,0,0,10,0,en-US,CM,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,1,0,0,0,0,0,10,0,en-US,EG,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,34,0,0,0,0,0,10,0,en-US,ID,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,1,0,0,0,0,0,10,0,en-US,KH,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,2,0,0,0,0,0,10,0,en-US,NI,Windows,Firefox,34.0,Other,10,40,2014,0
+15,2014-10-01,5,0,0,0,0,0,10,0,en-US,PR,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,29,0,0,0,0,0,10,0,en-US,TT,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,3,0,0,0,0,0,10,0,en-US,UY,Windows,Firefox,34.0,Other,10,40,2014,0
+16,2014-10-01,2,0,0,0,0,0,10,0,en-US,AU,Linux,Firefox,34.0,Other,10,40,2014,0
+16,2014-10-01,3,0,0,0,0,0,10,0,en-US,BT,Windows,Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,18,0,0,0,0,0,10,0,en-US,CO,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,8,0,0,0,0,0,10,0,en-US,ES,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+16,2014-10-01,43,0,0,0,0,0,10,0,en-US,GB,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+16,2014-10-01,4,0,0,0,0,0,10,0,en-US,MD,Windows,Firefox,35.0,Other,10,40,2014,0
+16,2014-10-01,1,0,0,0,0,0,10,0,en-US,PF,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,1,0,0,0,0,0,10,0,en-US,RU,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,7,0,0,0,0,0,10,0,en-US,UG,"Windows XP",Firefox,34.0,Other,10,40,2014,0
+17,2014-10-01,7,0,0,0,0,0,10,0,en-US,AF,Windows,Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,18,0,0,0,0,0,10,0,en-US,BR,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+17,2014-10-01,3,0,0,0,0,0,10,0,en-US,CR,Windows,Firefox,35.0,Other,10,40,2014,0
+17,2014-10-01,307,0,0,0,0,0,10,0,en-US,EG,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,3,0,0,0,0,0,10,0,en-US,HK,"Mac OS X",Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,2,0,0,0,0,0,10,0,en-US,ID,iOS,"Mobile Safari",4.0,iPhone,10,40,2014,0
+17,2014-10-01,2,0,0,0,0,0,10,0,en-US,IS,Windows,Firefox,35.0,Other,10,40,2014,0
+17,2014-10-01,15,0,0,0,0,0,10,0,en-US,PH,"Windows 7",Firefox,34.0,Other,10,40,2014,0
+17,2014-10-01,13,0,0,0,0,0,10,0,en-US,SI,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,2,0,0,0,0,0,10,0,en-US,SV,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,13,0,0,0,0,0,10,0,en-US,TH,Windows,Firefox,35.0,Other,10,40,2014,0
+17,2014-10-01,4,0,0,0,0,0,10,0,en-US,VN,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,3,0,0,0,0,0,10,0,en-US,AF,Windows,Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,2,0,0,0,0,0,10,0,en-US,BS,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,1,0,0,0,0,0,10,0,en-US,CM,"Windows 8",Firefox,34.0,Other,10,40,2014,0
+18,2014-10-01,1,0,0,0,0,0,10,0,en-US,CW,Windows,Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,5,0,0,0,0,0,10,0,en-US,GR,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+18,2014-10-01,3,0,0,0,0,0,10,0,en-US,ID,iOS,"Mobile Safari",4.0,iPhone,10,40,2014,0
+18,2014-10-01,56,0,0,0,0,0,10,0,en-US,IT,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,4,0,0,0,0,0,10,0,en-US,KH,"Mac OS X",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,7,0,0,0,0,0,10,0,en-US,ME,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,13,0,0,0,0,0,10,0,en-US,MX,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+18,2014-10-01,11,0,0,0,0,0,10,0,en-US,NA,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,25,0,0,0,0,0,10,0,en-US,PS,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,22,0,0,0,0,0,10,0,en-US,SL,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,28,0,0,0,0,0,10,0,en-US,TN,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,3,0,0,0,0,0,10,0,en-US,ZA,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+19,2014-10-01,38,0,0,0,0,0,10,0,en-US,AF,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,2,0,0,0,0,0,10,0,en-US,BE,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,2,0,0,0,0,0,10,0,en-US,BR,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+19,2014-10-01,3,0,0,0,0,0,10,0,en-US,BW,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,2,0,0,0,0,0,10,0,en-US,CL,Windows,Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,1,0,0,0,0,0,10,0,en-US,DE,"Windows Vista",Firefox,35.0,Other,10,40,2014,0
+19,2014-10-01,3354,0,0,2,0,0,10,0,en-US,EG,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,1,0,0,0,0,0,10,0,en-US,FI,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,52,0,0,0,0,0,10,0,en-US,GY,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,1,0,0,0,0,0,10,0,en-US,IL,"Mac OS X",Firefox,35.0,Other,10,40,2014,0
+19,2014-10-01,9,0,0,0,0,0,10,0,en-US,JO,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,65,0,0,0,0,0,10,0,en-US,LK,Windows,Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,2,0,0,0,0,0,10,0,en-US,ME,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,23,0,0,0,0,0,10,0,en-US,PH,"Windows 7",Firefox,34.0,Other,10,40,2014,0
+19,2014-10-01,149,0,0,0,0,0,10,0,en-US,SD,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,980,0,0,0,0,0,10,0,en-US,VN,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,15,0,0,0,0,0,10,0,en-US,ZW,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+20,2014-10-01,6,0,0,0,0,0,10,0,en-US,BR,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+20,2014-10-01,3,0,0,0,0,0,10,0,en-US,CH,"Mac OS X",Firefox,33.0,Other,10,40,2014,0
+20,2014-10-01,4,0,0,0,0,0,10,0,en-US,CN,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+20,2014-10-01,15,0,0,0,0,0,10,0,en-US,FR,"Mac OS X",Firefox,33.0,Other,10,40,2014,0
+20,2014-10-01,3,0,0,0,0,0,10,0,en-US,GH,"Windows XP",Firefox,34.0,Other,10,40,2014,0
+20,2014-10-01,27,0,0,0,0,0,10,0,en-US,IN,iOS,"Mobile Safari",4.0,iPhone,10,40,2014,0
+20,2014-10-01,6,0,0,0,0,0,10,0,en-US,MG,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+20,2014-10-01,3,0,0,0,0,0,10,0,en-US,MX,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+20,2014-10-01,16,0,0,0,0,0,10,0,en-US,NL,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+20,2014-10-01,11,0,0,0,0,0,10,0,en-US,PK,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+20,2014-10-01,60,0,0,0,0,0,10,0,en-US,SG,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+20,2014-10-01,3,0,0,0,0,0,10,0,en-US,ZA,"Windows 8",Firefox,34.0,Other,10,40,2014,0
+12,2014-10-01,2,0,0,0,0,0,11,0,en-US,AL,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,1,0,0,0,0,0,11,0,en-US,BT,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,14,0,0,0,0,0,11,0,en-US,ERROR,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,107,0,0,0,0,0,11,0,en-US,IN,"Windows 7",Firefox,34.0,Other,10,40,2014,0
+12,2014-10-01,8,0,0,0,0,0,11,0,en-US,MT,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+12,2014-10-01,1,0,0,0,0,0,11,0,en-US,SK,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+13,2014-10-01,32,0,0,0,0,0,11,0,en-US,AL,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,4,0,0,0,0,0,11,0,en-US,CA,Linux,Firefox,35.0,Other,10,40,2014,0
+13,2014-10-01,2,0,0,0,0,0,11,0,en-US,CR,Windows,Firefox,34.0,Other,10,40,2014,0
+13,2014-10-01,7,0,0,0,0,0,11,0,en-US,FR,"Windows Vista",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,2,0,0,0,0,0,11,0,en-US,HK,"Mac OS X",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,5,0,0,0,0,0,11,0,en-US,IT,"Mac OS X",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,64,0,0,0,0,0,11,0,en-US,LB,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,1,0,0,0,0,0,11,0,en-US,MO,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,1,0,0,0,0,0,11,0,en-US,PK,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+13,2014-10-01,1,0,0,0,0,0,11,0,en-US,SV,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+13,2014-10-01,73,0,0,0,0,0,11,0,en-US,ZA,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,4,0,0,0,0,0,11,0,en-US,AZ,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,12,0,0,0,0,0,11,0,en-US,BH,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,5,0,0,0,0,0,11,0,en-US,FJ,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,40,0,0,0,0,0,11,0,en-US,ID,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+14,2014-10-01,6,0,0,0,0,0,11,0,en-US,KE,"Windows XP",Firefox,35.0,Other,10,40,2014,0
+14,2014-10-01,78,0,0,0,0,0,11,0,en-US,LK,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,3,0,0,0,0,0,11,0,en-US,ML,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+14,2014-10-01,1,0,0,0,0,0,11,0,en-US,NG,"Mac OS X",Chrome,34.0,Other,10,40,2014,0
+14,2014-10-01,9,0,0,0,0,0,11,0,en-US,PG,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+14,2014-10-01,5,0,0,0,0,0,11,0,en-US,SE,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+14,2014-10-01,11,0,0,0,0,0,11,0,en-US,VE,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,3,0,0,0,0,0,11,0,en-US,CD,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,5,0,0,0,0,0,11,0,en-US,CN,Windows,Firefox,35.0,Other,10,40,2014,0
+15,2014-10-01,1,0,0,0,0,0,11,0,en-US,ERROR,"Mac OS X",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,65,0,0,0,0,0,11,0,en-US,GR,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,10,0,0,0,0,0,11,0,en-US,IQ,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,9,0,0,0,0,0,11,0,en-US,LB,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,12,0,0,0,0,0,11,0,en-US,NG,"Windows XP",Firefox,34.0,Other,10,40,2014,0
+15,2014-10-01,8,0,0,0,0,0,11,0,en-US,PL,Windows,Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,5,0,0,0,0,0,11,0,en-US,SC,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,3,0,0,0,0,0,11,0,en-US,SZ,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+15,2014-10-01,2,0,0,0,0,0,11,0,en-US,VE,Windows,Firefox,35.0,Other,10,40,2014,0
+16,2014-10-01,33,0,0,0,0,0,11,0,en-US,AU,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,3,0,0,0,0,0,11,0,en-US,BO,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,6,0,0,0,0,0,11,0,en-US,CL,Windows,Firefox,35.0,Other,10,40,2014,0
+16,2014-10-01,181,0,0,0,0,0,11,0,en-US,ET,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,2,0,0,0,0,0,11,0,en-US,KE,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+16,2014-10-01,5,0,0,0,0,0,11,0,en-US,LY,Windows,Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,2,0,0,0,0,0,11,0,en-US,NL,Windows,Firefox,34.0,Other,10,40,2014,0
+16,2014-10-01,17,0,0,0,0,0,11,0,en-US,QA,Windows,Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,37,0,0,0,0,0,11,0,en-US,SG,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+16,2014-10-01,6,0,0,0,0,0,11,0,en-US,US,Ubuntu,Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,2,0,0,0,0,0,11,0,en-US,AR,Windows,Firefox,35.0,Other,10,40,2014,0
+17,2014-10-01,5,0,0,0,0,0,11,0,en-US,CD,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,15,0,0,0,0,0,11,0,en-US,ERROR,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,22,0,0,0,0,0,11,0,en-US,ID,"Windows XP",Firefox,34.0,Other,10,40,2014,0
+17,2014-10-01,3,0,0,0,0,0,11,0,en-US,IQ,"Windows 7",Firefox,35.0,Other,10,40,2014,0
+17,2014-10-01,1,0,0,0,0,0,11,0,en-US,LY,"Windows 7",Firefox,34.0,Other,10,40,2014,0
+17,2014-10-01,1,0,0,0,0,0,11,0,en-US,PA,Windows,Firefox,35.0,Other,10,40,2014,0
+17,2014-10-01,2,0,0,0,0,0,11,0,en-US,RS,Windows,Firefox,35.0,Other,10,40,2014,0
+17,2014-10-01,25,0,0,0,0,0,11,0,en-US,SG,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,588,0,0,0,0,0,11,0,en-US,US,Windows,Firefox,33.0,Other,10,40,2014,0
+17,2014-10-01,12,0,0,0,0,0,11,0,en-US,VN,Windows,Firefox,35.0,Other,10,40,2014,0
+18,2014-10-01,10,0,0,0,0,0,11,0,en-US,BH,Windows,Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,2,0,0,0,0,0,11,0,en-US,CN,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,2,0,0,0,0,0,11,0,en-US,DK,"Mac OS X",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,5,0,0,0,0,0,11,0,en-US,GB,Linux,Firefox,35.0,Other,10,40,2014,0
+18,2014-10-01,1,0,0,0,0,0,11,0,en-US,HK,Windows,Firefox,35.0,Other,10,40,2014,0
+18,2014-10-01,1,0,0,0,0,0,11,0,en-US,IN,iOS,"Mobile Safari",4.0,iPhone,10,40,2014,0
+18,2014-10-01,25,0,0,0,0,0,11,0,en-US,JO,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,1,0,0,0,0,0,11,0,en-US,LC,Windows,Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,2,0,0,0,0,0,11,0,en-US,MM,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+18,2014-10-01,13,0,0,0,0,0,11,0,en-US,NA,Windows,Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,3,0,0,0,0,0,11,0,en-US,PA,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,9,0,0,0,0,0,11,0,en-US,SC,"Windows XP",Firefox,33.0,Other,10,40,2014,0
+18,2014-10-01,2,0,0,0,0,0,11,0,en-US,TZ,Windows,Firefox,34.0,Other,10,40,2014,0
+18,2014-10-01,175,0,0,0,0,0,11,0,en-US,ZW,"Windows 7",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,10,0,0,0,0,0,11,0,en-US,BR,Windows,Firefox,35.0,Other,10,40,2014,0
+19,2014-10-01,5,0,0,0,0,0,11,0,en-US,DE,"Windows 8",Firefox,34.0,Other,10,40,2014,0
+19,2014-10-01,1,0,0,0,0,0,11,0,en-US,ERROR,Windows,Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,5,0,0,0,0,0,11,0,en-US,FR,"Windows 8",Firefox,35.0,Other,10,40,2014,0
+19,2014-10-01,2,0,0,0,0,0,11,0,en-US,GT,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,11,0,0,0,0,0,11,0,en-US,JM,"Windows 8",Firefox,33.0,Other,10,40,2014,0
+19,2014-10-01,15,0,0,0,0,0,11,0,en-US,SG,Windows,Firefox,35.0,Other,10,40,2014,0
+19,2014-10-01,7,0,0,0,0,0,11,0,en-US,TW,Windows,Firefox,35.0,Other,10,40,2014,0
+20,2014-10-01,1,0,0,0,0,0,11,0,en-US,AO,"Mac OS X",Firefox,33.0,Other,10,40,2014,0
+20,2014-10-01,5,0,0,0,0,0,11,0,en-US,BY,"Windows 7",Firefox,33.0,Other,10,40,2014,0
