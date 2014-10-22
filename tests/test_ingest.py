@@ -199,6 +199,7 @@ class TestGenerateArtifacts(BaseTestCase):
         data = ingest_links({"STAR/en-US": tiles_star})
         assert_raises(IngestError, generate_artifacts, data)
 
+
 class TestDeploy(BaseTestCase):
 
     def setUp(self):
