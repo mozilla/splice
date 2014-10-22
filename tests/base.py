@@ -1,6 +1,7 @@
 import os
 from splice.environment import Environment
 from splice.webapp import create_webapp
+from datetime import datetime
 env = Environment.instance(test=True)
 
 from flask.ext.testing import TestCase
@@ -22,12 +23,18 @@ class BaseTestCase(TestCase):
 
         def values(fd):
             for line in fd:
-                yield line.split(',')
+                row = line.split(',')
+                # sqlalchemy doesn't like date strings....
+                row[1] = datetime.strptime(row[1], "%Y-%m-%d").date()
+                yield row
 
         # load db
         from splice.models import impression_stats_daily
+        conn = Environment.instance().db.engine.connect()
         with open(self.get_fixture_path('impression_stats.csv')) as fd:
-            impression_stats_daily.insert().values(values(fd))
+            for row in values(fd):
+                ins = impression_stats_daily.insert().values(row)
+                conn.execute(ins)
 
     def tearDown(self):
         self.env.db.session.remove()
