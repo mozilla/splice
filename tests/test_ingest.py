@@ -1,6 +1,7 @@
+from mock import Mock
 from nose.tools import assert_raises, assert_equal, assert_not_equal
 from jsonschema.exceptions import ValidationError
-from splice.ingest import ingest_links, generate_artifacts, IngestError
+from splice.ingest import ingest_links, generate_artifacts, IngestError, deploy
 from tests.base import BaseTestCase
 
 
@@ -25,7 +26,7 @@ class TestIngestLinks(BaseTestCase):
         """
         assert_raises(IngestError, ingest_links, {"INVALID/en-US": [
             {
-                "imageURI": "https://somewhere.com/image.png",
+                "imageURI": "data:image/png;base64,somedata",
                 "url": "https://somewhere.com",
                 "title": "Some Title",
                 "type": "organic",
@@ -39,7 +40,7 @@ class TestIngestLinks(BaseTestCase):
         """
         assert_raises(IngestError, ingest_links, {"US/en-DE": [
             {
-                "imageURI": "https://somewhere.com/image.png",
+                "imageURI": "data:image/png;base64,somedata",
                 "url": "https://somewhere.com",
                 "title": "Some Title",
                 "type": "organic",
@@ -52,7 +53,7 @@ class TestIngestLinks(BaseTestCase):
         Test an id is created for a valid tile
         """
         tile = {
-            "imageURI": "https://somewhere.com/image.png",
+            "imageURI": "data:image/png;base64,somedata",
             "url": "https://somewhere.com",
             "title": "Some Title",
             "type": "organic",
@@ -68,14 +69,14 @@ class TestIngestLinks(BaseTestCase):
         """
         tiles_star = [
             {
-                "imageURI": "https://somewhere.com/image.png",
+                "imageURI": "data:image/png;base64,somedata",
                 "url": "https://somewhere.com",
                 "title": "Some Title",
                 "type": "organic",
                 "bgColor": "#FFFFFF"
             },
             {
-                "imageURI": "https://somewhereelse.com/image.png",
+                "imageURI": "data:image/png;base64,someotherdata",
                 "url": "https://somewhereelse.com",
                 "title": "Some Other Title",
                 "type": "organic",
@@ -85,7 +86,7 @@ class TestIngestLinks(BaseTestCase):
 
         tiles_ca = [
             {
-                "imageURI": "https://somewhere.com/image.png",
+                "imageURI": "data:image/png;base64,somedata",
                 "url": "https://somewhere.com",
                 "title": "Some Title",
                 "type": "organic",
@@ -108,7 +109,7 @@ class TestIngestLinks(BaseTestCase):
         """
         tiles_star = [
             {
-                "imageURI": "https://somewhere.com/image.png",
+                "imageURI": "data:image/png;base64,somedata",
                 "url": "https://somewhere.com",
                 "title": "Some Title",
                 "type": "organic",
@@ -133,7 +134,7 @@ class TestGenerateArtifacts(BaseTestCase):
         """
         tiles_star = [
             {
-                "imageURI": "https://somewhere.com/image.png",
+                "imageURI": "data:image/png;base64,somedata",
                 "url": "https://somewhere.com",
                 "title": "Some Title",
                 "type": "organic",
@@ -143,7 +144,7 @@ class TestGenerateArtifacts(BaseTestCase):
 
         tiles_ca = [
             {
-                "imageURI": "https://somewhere.com/image.png",
+                "imageURI": "data:image/png;base64,somedata",
                 "url": "https://somewhere.com",
                 "title": "Some Title",
                 "type": "organic",
@@ -153,12 +154,97 @@ class TestGenerateArtifacts(BaseTestCase):
 
         data = ingest_links({"STAR/en-US": tiles_star})
         artifacts = generate_artifacts(data)
-        # tile index and distribution files are generated
-        assert_equal(3, len(artifacts))
+        # tile index, distribution and image files are generated
+        assert_equal(4, len(artifacts))
 
         data = ingest_links({
             "STAR/en-US": tiles_star,
             "CA/en-US": tiles_ca,
         })
         artifacts = generate_artifacts(data)
-        assert_equal(4, len(artifacts))
+        # includes one more file: the locale data payload
+        assert_equal(5, len(artifacts))
+
+    def test_unknown_mime_type(self):
+        """
+        Tests that an unknown mime type is rejected
+        """
+        tiles_star = [
+            {
+                "imageURI": "data:image/weirdimage;base64,somedata",
+                "url": "https://somewhere.com",
+                "title": "Some Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF"
+            }
+        ]
+
+        data = ingest_links({"STAR/en-US": tiles_star})
+        assert_raises(IngestError, generate_artifacts, data)
+
+    def test_malformed_data_uri_meta(self):
+        """
+        Tests that a malformed data uri declaration is rejected
+        """
+        tiles_star = [
+            {
+                "imageURI": "data:image/somedata",
+                "url": "https://somewhere.com",
+                "title": "Some Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF"
+            }
+        ]
+
+        data = ingest_links({"STAR/en-US": tiles_star})
+        assert_raises(IngestError, generate_artifacts, data)
+
+class TestDeploy(BaseTestCase):
+
+    def setUp(self):
+        import splice.ingest
+
+        self.key_mock = Mock()
+
+        def get_key_mock(*args, **kwargs):
+            return self.key_mock
+        splice.ingest.Key = Mock(side_effect=get_key_mock)
+
+        self.env.s3.get_bucket = Mock(return_value=Mock())
+        super(TestDeploy, self).setUp()
+
+    def test_deploy(self):
+        tiles_star = [
+            {
+                "imageURI": "data:image/png;base64,somedata",
+                "enhancedImageURI": "data:image/png;base64,somemoredata",
+                "url": "https://somewhere.com",
+                "title": "Some Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF"
+            }
+        ]
+
+        tiles_ca = [
+            {
+                "imageURI": "data:image/png;base64,somedata",
+                "url": "https://somewhere.com",
+                "title": "Some Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF"
+            }
+        ]
+
+        data = ingest_links({"STAR/en-US": tiles_star})
+        deploy(data)
+        # 5 files are uploaded, mirrors generate artifactes
+        assert_equal(5, self.key_mock.set_contents_from_string.call_count)
+
+        self.key_mock.set_contents_from_string = Mock()
+        data = ingest_links({
+            "STAR/en-US": tiles_star,
+            "CA/en-US": tiles_ca,
+        })
+        deploy(data)
+        #  includes one more upload: the locate data payload
+        assert_equal(6, self.key_mock.set_contents_from_string.call_count)

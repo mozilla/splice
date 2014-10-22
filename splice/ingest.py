@@ -3,6 +3,10 @@ import os
 import json
 import hashlib
 import logging
+import base64
+import urllib
+import copy
+import re
 from datetime import datetime
 from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
@@ -12,6 +16,12 @@ from splice.queries import tile_exists, insert_tile, insert_distribution
 from splice.environment import Environment
 
 command_logger = logging.getLogger("command")
+metadata_pattern = re.compile("data:(.+);base64")
+mime_extensions = {
+    "image/png": "png",
+    "image/jpeg": "jpg",
+    "image/svg+xml": "svg",
+}
 
 payload_schema = {
     "type": "object",
@@ -57,6 +67,24 @@ payload_schema = {
 
 class IngestError(Exception):
     pass
+
+
+def slice_image_uri(image_uri):
+    """
+    Turn an image uri into a sha1 hash, mime_type and data tuple
+    """
+    try:
+        meta, data = image_uri.split(',')
+        mime_type = metadata_pattern.match(meta).groups()[0]
+    except:
+        raise IngestError("Unexpected image data")
+
+    unquoted = urllib.unquote(data)
+    image_data = base64.b64decode(unquoted)
+
+    image_hash = hashlib.sha1(image_data).hexdigest()
+
+    return image_hash, mime_type, image_data
 
 
 def ingest_links(data, *args, **kwargs):
@@ -136,9 +164,45 @@ def generate_artifacts(data):
     """
     artifacts = []
     tile_index = {}
+    image_index = {}
+    env = Environment.instance()
+
+    def image_add(hash, mime_type, image, locale, tile_id, *args, **kwargs):
+        """
+        Add an image to the index and artifact list, return file url
+        """
+        if hash not in image_index:
+            try:
+                file_ext = mime_extensions[mime_type]
+            except:
+                raise IngestError("Unsupported file type: {0}".format(mime_type))
+            s3_key = "images/{0}/{1}/{2}.{3}".format(locale, tile_id, hash, file_ext)
+            url = os.path.join(env.config.CLOUDFRONT_BASE_URL, s3_key)
+
+            image_index[hash] = url
+            artifacts.append({
+                "mime": mime_type,
+                "key": s3_key,
+                "data": image
+            })
+
+        return image_index[hash]
+
     for country_locale, tile_data in data.iteritems():
 
         country_code, locale = country_locale.split("/")
+        # copy data to modify inplace
+        tile_data = copy.deepcopy(tile_data)
+
+        for tile in tile_data:
+            # image splitting from input
+            url = image_add(*slice_image_uri(tile["imageURI"]), locale=locale, tile_id=tile["directoryId"])
+            tile["imageURI"] = url
+
+            if 'enhancedImageURI' in tile:
+                url = image_add(*slice_image_uri(tile["enhancedImageURI"]), locale=locale, tile_id=tile["directoryId"])
+                tile["enhancedImageURI"] = url
+
         d = dict.fromkeys([locale], tile_data)
         serialized = json.dumps(d, sort_keys=True)
         hsh = hashlib.sha1(serialized).hexdigest()
@@ -148,12 +212,12 @@ def generate_artifacts(data):
             "data": serialized,
         })
 
-        tile_index[country_locale] = os.path.join(Environment.instance().config.CLOUDFRONT_BASE_URL, s3_key)
+        tile_index[country_locale] = os.path.join(env.config.CLOUDFRONT_BASE_URL, s3_key)
 
     # include tile index
 
     artifacts.append({
-        "key": Environment.instance().config.S3["tile_index_key"],
+        "key": env.config.S3["tile_index_key"],
         "data": json.dumps(tile_index, sort_keys=True)
     })
 
@@ -186,12 +250,17 @@ def deploy(data):
 
     headers = {
         'Cache-Control': 'public, max-age=31536000',
-        'Content-Type': 'application/json',
         'Content-Disposition': 'inline',
     }
 
     # upload individual files
     for file in artifacts:
+        if "mime" in file:
+            headers['Content-Type'] = file["mime"]
+        else:
+            # default to JSON for artifacts
+            headers['Content-Type'] = "application/json"
+
         key = Key(bucket)
         key.name = file["key"]
         key.set_contents_from_string(file["data"], headers=headers)
