@@ -1,7 +1,6 @@
 from flask import Blueprint, request, Response
-from splice.queries import tile_stats_monthly, tile_stats_weekly, slot_stats_weekly, \
-    slot_stats_monthly, tile_summary_monthly, tile_summary_weekly, slot_summary_monthly, \
-    slot_summary_weekly, tile_stats_daily, tile_summary_daily
+from splice.queries import tile_stats, slot_stats, newtab_stats, \
+    tile_summary, slot_summary
 from splice.models import Environment
 
 import ujson
@@ -54,84 +53,38 @@ report = Blueprint('api.report', __name__, url_prefix='/api/report')
 def root():
     return ""
 
+_periods = {'weekly': 'week', 'daily': 'date', 'monthly': 'month'}
+_sumaries = {'tile': tile_summary, 'slot': slot_summary}
 
-@report.route('/tile_stats/weekly/<start_date>/<tile_id>/<country_code>', methods=['GET'])
-@report.route('/tile_stats/weekly/<start_date>/<tile_id>', methods=['GET'])
-def path_tile_stats_weekly(start_date, tile_id, country_code=None):
+@report.route('/tile_stats/<period>/<start_date>/<tile_id>/<country_code>', methods=['GET'])
+@report.route('/tile_stats/<period>/<start_date>/<tile_id>', methods=['GET'])
+def path_tile_stats(start_date, period, tile_id, country_code=None):
     conn = Environment.instance().db.engine.connect()
-    keys, rval = tile_stats_weekly(conn, start_date, tile_id, country_code)
+    keys, rval = tile_stats(conn, start_date, _periods[period], tile_id, country_code)
     return _build_response(rval, keys, name=start_date)
 
 
-@report.route('/tile_stats/monthly/<start_date>/<tile_id>/<country_code>', methods=['GET'])
-@report.route('/tile_stats/monthly/<start_date>/<tile_id>', methods=['GET'])
-def path_tile_stats_monthly(start_date, tile_id, country_code=None):
+@report.route('/newtab_stats/<period>/<start_date>/<country_code>', methods=['GET'])
+@report.route('/newtab_stats/<period>/<start_date>', methods=['GET'])
+def path_newtab_stats(start_date, period, country_code=None):
     conn = Environment.instance().db.engine.connect()
-    keys, rval = tile_stats_monthly(conn, start_date, tile_id, country_code)
+    keys, rval = newtab_stats(conn, start_date, _periods[period], country_code)
     return _build_response(rval, keys, name=start_date)
 
 
-@report.route('/tile_stats/daily/<start_date>/<tile_id>/<country_code>', methods=['GET'])
-@report.route('/tile_stats/daily/<start_date>/<tile_id>', methods=['GET'])
-def path_tile_stats_daily(start_date, tile_id, country_code=None):
+@report.route('/summary/<summary>/<period>/<start_date>/<country_code>', methods=['GET'])
+@report.route('/summary/<summary>/<period>/<start_date>', methods=['GET'])
+def path_summary(summary, start_date, period, country_code=None):
     conn = Environment.instance().db.engine.connect()
-    keys, rval = tile_stats_daily(conn, start_date, tile_id, country_code)
+    keys, rval = _sumaries[summary](conn, start_date, _periods[period], country_code)
     return _build_response(rval, keys, name=start_date)
 
 
-@report.route('/tile_summary/weekly/<start_date>/<country_code>', methods=['GET'])
-@report.route('/tile_summary/weekly/<start_date>', methods=['GET'])
-def path_tile_summary_weekly(start_date, country_code=None):
+@report.route('/slot_stats/<period>/<start_date>/<slot_id>/<country_code>', methods=['GET'])
+@report.route('/slot_stats/<period>/<start_date>/<slot_id>', methods=['GET'])
+def path_slot_stats(start_date, period, slot_id, country_code=None):
     conn = Environment.instance().db.engine.connect()
-    keys, rval = tile_summary_weekly(conn, start_date, country_code)
-    return _build_response(rval, keys, name=start_date)
-
-
-@report.route('/tile_summary/monthly/<start_date>/<country_code>', methods=['GET'])
-@report.route('/tile_summary/monthly/<start_date>', methods=['GET'])
-def path_tile_summary_monthly(start_date, country_code=None):
-    conn = Environment.instance().db.engine.connect()
-    keys, rval = tile_summary_monthly(conn, start_date, country_code)
-    return _build_response(rval, keys, name=start_date)
-
-
-@report.route('/tile_summary/daily/<start_date>/<country_code>', methods=['GET'])
-@report.route('/tile_summary/daily/<start_date>', methods=['GET'])
-def path_tile_summary_daily(start_date, country_code=None):
-    conn = Environment.instance().db.engine.connect()
-    keys, rval = tile_summary_daily(conn, start_date, country_code)
-    return _build_response(rval, keys, name=start_date)
-
-
-@report.route('/slot_stats/weekly/<start_date>/<slot_id>/<country_code>', methods=['GET'])
-@report.route('/slot_stats/weekly/<start_date>/<slot_id>', methods=['GET'])
-def path_slot_stats_weekly(start_date, slot_id, country_code=None):
-    conn = Environment.instance().db.engine.connect()
-    keys, rval = slot_stats_weekly(conn, start_date, slot_id, country_code)
-    return _build_response(rval, keys, name=start_date)
-
-
-@report.route('/slot_stats/monthly/<start_date>/<slot_id>/<country_code>', methods=['GET'])
-@report.route('/slot_stats/monthly/<start_date>/<slot_id>', methods=['GET'])
-def path_slot_stats_monthly(start_date, slot_id, country_code=None):
-    conn = Environment.instance().db.engine.connect()
-    keys, rval = slot_stats_monthly(conn, start_date, slot_id, country_code)
-    return _build_response(rval, keys, name=start_date)
-
-
-@report.route('/slot_summary/weekly/<start_date>/<country_code>', methods=['GET'])
-@report.route('/slot_summary/weekly/<start_date>', methods=['GET'])
-def path_slot_summary_weekly(start_date, country_code=None):
-    conn = Environment.instance().db.engine.connect()
-    keys, rval = slot_summary_weekly(conn, start_date, country_code)
-    return _build_response(rval, keys, name=start_date)
-
-
-@report.route('/slot_summary/monthly/<start_date>/<country_code>', methods=['GET'])
-@report.route('/slot_summary/monthly/<start_date>', methods=['GET'])
-def path_slot_summary_monthly(start_date, country_code=None):
-    conn = Environment.instance().db.engine.connect()
-    keys, rval = slot_summary_monthly(conn, start_date, country_code)
+    keys, rval = slot_stats(conn, start_date, _periods[period], slot_id, country_code)
     return _build_response(rval, keys, name=start_date)
 
 
