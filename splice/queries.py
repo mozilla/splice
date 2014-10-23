@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy.sql import text
 from splice.models import Distribution, Tile, impression_stats_daily
-from sqlalchemy.sql import select, func, and_
+from sqlalchemy.sql import select, func, and_, or_
 
 
 def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
@@ -35,7 +35,7 @@ def _slot_query(connection, start_date, date_window, position, country_code):
     if date_window == 'month':
         window_param = dt.month
     elif date_window == 'date':
-        window_param = dt
+        window_param = dt.date()
     else:
         window_param = dt.isocalendar()[1]
 
@@ -78,7 +78,7 @@ def _tile_query(connection, start_date, date_window, tile_id, country_code):
     if date_window == 'month':
         window_param = dt.month
     elif date_window == 'date':
-        window_param = dt
+        window_param = dt.date()
     else:
         window_param = dt.isocalendar()[1]
 
@@ -86,7 +86,8 @@ def _tile_query(connection, start_date, date_window, tile_id, country_code):
     window_func_table = imps.c.get(date_window)
 
     # the where clause is an ANDed list of country, monthly|weekly, and year conditions
-    where_elements = [imps.c.year >= year, window_func_table >= window_param, imps.c.tile_id == tile_id]
+    where_elements = [imps.c.year >= year, window_func_table >= window_param,
+                      imps.c.tile_id == tile_id, imps.c.tile_id == Tile.id]
     if country_code is not None:
         where_elements.append(imps.c.country_code == country_code)
 
@@ -111,7 +112,7 @@ def _tile_query(connection, start_date, date_window, tile_id, country_code):
         .where(where_clause) \
         .group_by(imps.c.year, window_func_table, imps.c.tile_id, Tile.title, imps.c.country_code, imps.c.locale) \
         .order_by(imps.c.year, window_func_table, imps.c.tile_id, imps.c.country_code, imps.c.locale)
-
+    # print str(stmt)
     return ('year', date_window, 'tile_id', 'tile_title', 'country_code', 'locale',
             'impressions', 'clicks', 'pinned', 'blocked', 'sponsored', 'sponsored_link', 'newtabs'), \
         connection.execute(stmt)
@@ -123,7 +124,7 @@ def _tile_summary_query(connection, start_date, date_window, country_code):
     if date_window == 'month':
         window_param = dt.month
     elif date_window == 'date':
-        window_param = dt
+        window_param = dt.date()
     else:
         window_param = dt.isocalendar()[1]
 
@@ -166,7 +167,7 @@ def _slot_summary_query(connection, start_date, date_window, country_code):
     if date_window == 'month':
         window_param = dt.month
     elif date_window == 'date':
-        window_param = dt
+        window_param = dt.date()
     else:
         window_param = dt.isocalendar()[1]
 
