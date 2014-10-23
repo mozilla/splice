@@ -1,8 +1,6 @@
-import ujson
 from flask import url_for
 from nose.tools import (
     assert_equals,
-    assert_is_none,
 )
 from tests.base import BaseTestCase
 
