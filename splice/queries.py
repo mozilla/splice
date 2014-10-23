@@ -155,7 +155,6 @@ def _tile_summary_query(connection, start_date, date_window, country_code):
         .group_by(imps.c.year, window_func_table, imps.c.tile_id, Tile.title) \
         .order_by(imps.c.year, window_func_table, imps.c.tile_id)
 
-    print "sql", str(stmt)
     return ('year', date_window, 'tile_id', 'tile_title',
             'impressions', 'clicks', 'pinned', 'blocked', 'sponsored', 'sponsored_link', 'newtabs'), \
         connection.execute(stmt)
