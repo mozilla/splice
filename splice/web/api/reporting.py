@@ -46,6 +46,11 @@ def _build_response(it, keys, name=''):
         response.headers['Content-Disposition'] = 'attachment; filename=imps_%s.%s' % (name, ending)
     return response
 
+def _parse_country_locale():
+    country_code = request.args.get('country_code')
+    locale = request.args.get('locale')
+    return country_code, locale
+
 report = Blueprint('api.report', __name__, url_prefix='/api/report')
 
 
@@ -56,35 +61,35 @@ def root():
 _periods = {'weekly': 'week', 'daily': 'date', 'monthly': 'month'}
 _sumaries = {'tile': tile_summary, 'slot': slot_summary}
 
-@report.route('/tile_stats/<period>/<start_date>/<tile_id>/<country_code>', methods=['GET'])
 @report.route('/tile_stats/<period>/<start_date>/<tile_id>', methods=['GET'])
-def path_tile_stats(start_date, period, tile_id, country_code=None):
+def path_tile_stats(start_date, period, tile_id):
+    country_code, locale = _parse_country_locale()
     conn = Environment.instance().db.engine.connect()
-    keys, rval = tile_stats(conn, start_date, _periods[period], tile_id, country_code)
+    keys, rval = tile_stats(conn, start_date, _periods[period], tile_id, country_code, locale)
     return _build_response(rval, keys, name=start_date)
 
 
-@report.route('/newtab_stats/<period>/<start_date>/<country_code>', methods=['GET'])
 @report.route('/newtab_stats/<period>/<start_date>', methods=['GET'])
-def path_newtab_stats(start_date, period, country_code=None):
+def path_newtab_stats(start_date, period):
+    country_code, locale = _parse_country_locale()
     conn = Environment.instance().db.engine.connect()
-    keys, rval = newtab_stats(conn, start_date, _periods[period], country_code)
+    keys, rval = newtab_stats(conn, start_date, _periods[period], country_code, locale)
     return _build_response(rval, keys, name=start_date)
 
 
-@report.route('/summary/<summary>/<period>/<start_date>/<country_code>', methods=['GET'])
 @report.route('/summary/<summary>/<period>/<start_date>', methods=['GET'])
-def path_summary(summary, start_date, period, country_code=None):
+def path_summary(summary, start_date, period):
+    country_code, locale = _parse_country_locale()
     conn = Environment.instance().db.engine.connect()
-    keys, rval = _sumaries[summary](conn, start_date, _periods[period], country_code)
+    keys, rval = _sumaries[summary](conn, start_date, _periods[period], country_code, locale)
     return _build_response(rval, keys, name=start_date)
 
 
-@report.route('/slot_stats/<period>/<start_date>/<slot_id>/<country_code>', methods=['GET'])
 @report.route('/slot_stats/<period>/<start_date>/<slot_id>', methods=['GET'])
-def path_slot_stats(start_date, period, slot_id, country_code=None):
+def path_slot_stats(start_date, period, slot_id):
+    country_code, locale = _parse_country_locale()
     conn = Environment.instance().db.engine.connect()
-    keys, rval = slot_stats(conn, start_date, _periods[period], slot_id, country_code)
+    keys, rval = slot_stats(conn, start_date, _periods[period], slot_id, country_code, locale)
     return _build_response(rval, keys, name=start_date)
 
 
