@@ -79,14 +79,14 @@ impression_stats_daily = db.Table(
 newtab_stats_daily = db.Table(
     'newtab_stats_daily',
     db.Column('date', db.Date, nullable=False),
+    db.Column('newtabs', db.Integer, nullable=False, server_default="0"),
+    db.Column('month', db.Integer, nullable=False),
+    db.Column('week', db.Integer, nullable=False),
+    db.Column('year', db.Integer, nullable=False),
     db.Column('locale', db.String(14), nullable=False),
     db.Column('country_code', db.String(5), nullable=False),
     db.Column('os', db.String(64), nullable=False),
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(64), nullable=False),
-    db.Column('month', db.Integer, nullable=False),
-    db.Column('week', db.Integer, nullable=False),
-    db.Column('year', db.Integer, nullable=False),
-    db.Column('newtabs', db.Integer, nullable=False, server_default="0"),
 )

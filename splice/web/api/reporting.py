@@ -56,6 +56,7 @@ def root():
 _periods = {'weekly': 'week', 'daily': 'date', 'monthly': 'month'}
 _sumaries = {'tile': tile_summary, 'slot': slot_summary}
 
+
 @report.route('/tile_stats/<period>/<start_date>/<tile_id>/<country_code>', methods=['GET'])
 @report.route('/tile_stats/<period>/<start_date>/<tile_id>', methods=['GET'])
 def path_tile_stats(start_date, period, tile_id, country_code=None):
