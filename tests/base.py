@@ -20,14 +20,20 @@ class BaseTestCase(TestCase):
         self.create_app()
         self.env.db.create_all()
 
-        def values(fd):
+        def tile_values(fd):
             for line in fd:
-                yield line.split(',')
+                row = line.split(',')
+                yield dict(zip(
+                    ('id', 'target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'locale'),
+                    row))
 
-        # load db
-        from splice.models import impression_stats_daily
-        with open(self.get_fixture_path('impression_stats.csv')) as fd:
-            impression_stats_daily.insert().values(values(fd))
+        from splice.models import Tile
+        session = Environment.instance().db.session
+        with open(self.get_fixture_path('tiles.csv')) as fd:
+            for row in tile_values(fd):
+                tile = Tile(**row)
+                session.add(tile)
+        session.commit()
 
     def tearDown(self):
         self.env.db.session.remove()
