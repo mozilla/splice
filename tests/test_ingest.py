@@ -1,3 +1,7 @@
+# ensure environment is set up correctly in ALL test environments
+from splice.environment import Environment
+env = Environment.instance(test=True)
+
 from nose.tools import assert_raises, assert_equal, assert_not_equal
 from jsonschema.exceptions import ValidationError
 from splice.ingest import ingest_links, generate_artifacts, IngestError
@@ -60,7 +64,9 @@ class TestIngestLinks(BaseTestCase):
         }
         data = ingest_links({"STAR/en-US": [tile]})
         directory_id = data["STAR/en-US"][0]["directoryId"]
-        assert_equal(1, directory_id)
+
+        # there are IDs 1-29 in the tiles fixtures, the next ID needs to be 30
+        assert_equal(30, directory_id)
 
     def test_id_not_duplicated(self):
         """
@@ -98,7 +104,7 @@ class TestIngestLinks(BaseTestCase):
         })
         directory_id_star = data["STAR/en-US"][0]["directoryId"]
         directory_id_ca = data["CA/en-US"][0]["directoryId"]
-        assert_equal(1, directory_id_star)
+        assert_equal(30, directory_id_star)
         assert_not_equal(data["STAR/en-US"][1]["directoryId"], directory_id_star)
         assert_equal(directory_id_ca, directory_id_star)
 
@@ -118,11 +124,11 @@ class TestIngestLinks(BaseTestCase):
 
         data = ingest_links({"STAR/en-US": tiles_star})
         directory_id = data["STAR/en-US"][0]["directoryId"]
-        assert_equal(1, directory_id)
+        assert_equal(30, directory_id)
 
         data = ingest_links({"STAR/en-US": tiles_star})
         directory_id = data["STAR/en-US"][0]["directoryId"]
-        assert_equal(1, directory_id)
+        assert_equal(30, directory_id)
 
 
 class TestGenerateArtifacts(BaseTestCase):
