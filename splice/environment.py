@@ -61,6 +61,7 @@ class Environment(object):
             config_obj.SQLALCHEMY_POOL_SIZE = None
             config_obj.SQLALCHEMY_POOL_TIMEOUT = None
             self.log = Mock()
+            self.__s3_conn = Mock()
         else:
             self.__loggers = self.__setup_loggers(config_obj)
 
