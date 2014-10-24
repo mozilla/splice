@@ -204,8 +204,7 @@ def generate_artifacts(data):
                 url = image_add(*slice_image_uri(tile["enhancedImageURI"]), locale=locale, tile_id=tile["directoryId"])
                 tile["enhancedImageURI"] = url
 
-        d = dict.fromkeys([locale], tile_data)
-        serialized = json.dumps(d, sort_keys=True)
+        serialized = json.dumps({locale: tile_data}, sort_keys=True)
         hsh = hashlib.sha1(serialized).hexdigest()
         s3_key = "{0}.{1}.json".format(country_locale, hsh)
         artifacts.append({
