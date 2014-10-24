@@ -3,9 +3,29 @@ from flask import url_for
 from nose.tools import assert_equal
 from tests.base import BaseTestCase
 import csv
+from splice.environment import Environment
+from datetime import datetime
 
 
 class TestReporting(BaseTestCase):
+
+    def setUp(self):
+        super(TestReporting, self).setUp()
+
+        def values(fd):
+            for line in fd:
+                row = line.split(',')
+                # sqlalchemy doesn't like date strings....
+                row[1] = datetime.strptime(row[1], "%Y-%m-%d")
+                yield row
+
+        # load db
+        from splice.models import impression_stats_daily
+        conn = Environment.instance().db.engine.connect()
+        with open(self.get_fixture_path('impression_stats.csv')) as fd:
+            for row in values(fd):
+                ins = impression_stats_daily.insert().values(row)
+                conn.execute(ins)
 
     def test_tile_summary_weekly(self):
         """
