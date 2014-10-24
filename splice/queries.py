@@ -112,7 +112,6 @@ def _tile_query(connection, start_date, date_window, tile_id, country_code):
         .where(where_clause) \
         .group_by(imps.c.year, window_func_table, imps.c.tile_id, Tile.title, imps.c.country_code, imps.c.locale) \
         .order_by(imps.c.year, window_func_table, imps.c.tile_id, imps.c.country_code, imps.c.locale)
-    # print str(stmt)
     return ('year', date_window, 'tile_id', 'tile_title', 'country_code', 'locale',
             'impressions', 'clicks', 'pinned', 'blocked', 'sponsored', 'sponsored_link', 'newtabs'), \
         connection.execute(stmt)
@@ -197,7 +196,6 @@ def _slot_summary_query(connection, start_date, date_window, country_code):
         .where(where_clause) \
         .group_by(imps.c.year, window_func_table, imps.c.position) \
         .order_by(imps.c.year, window_func_table, imps.c.position)
-    # print str(stmt)
     return ('year', date_window, 'position',
             'impressions', 'clicks', 'pinned', 'blocked', 'sponsored', 'sponsored_link', 'newtabs'), \
         connection.execute(stmt)
