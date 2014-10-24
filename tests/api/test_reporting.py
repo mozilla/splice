@@ -70,6 +70,38 @@ class TestReporting(BaseTestCase):
         assert(f2 and f3)
         assert(not f1)
 
+    def test_slot_summary_weekly(self):
+        """
+        /tile_summary/daily/<start_date>/<country_code>
+        """
+        url = url_for('api.report.path_slot_summary_weekly',
+                      start_date='2014-10-10',
+                      headers='false',
+                      country_code='US')
+        response = self.client.get(url)
+        assert_equal(response.status_code, 200)
+
+        outtext = response.response.next()
+        results = csv.reader(StringIO(outtext))
+
+        f1 = False
+        f2 = False
+        f3 = False
+        for row in results:
+            id = tuple(row[:3])
+            vals = tuple(row[3:])
+            if id == ('2014', '40', '12'):
+                f1 = True
+            elif id == ('2014', '42', '7'):
+                assert_equal(vals, ('259', '0', '0', '0', '0', '0', '0'))
+                f2 = True
+            elif id == ('2014', '43', '4'):
+                assert_equal(vals, ('4', '0', '0', '0', '0', '0', '0'))
+                f3 = True
+
+        assert(f2 and f3)
+        assert(not f1)
+
     def test_tile_stats_daily(self):
         """
         /tile_stats/daily/<start_date>/<tile_id>
@@ -130,4 +162,3 @@ class TestReporting(BaseTestCase):
 
         assert(f1)
         assert(f2)
-

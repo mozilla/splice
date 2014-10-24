@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy.sql import text
 from splice.models import Distribution, Tile, impression_stats_daily
-from sqlalchemy.sql import select, func, and_, or_
+from sqlalchemy.sql import select, func, and_
 
 
 def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
@@ -197,6 +197,7 @@ def _slot_summary_query(connection, start_date, date_window, country_code):
         .where(where_clause) \
         .group_by(imps.c.year, window_func_table, imps.c.position) \
         .order_by(imps.c.year, window_func_table, imps.c.position)
+    # print str(stmt)
     return ('year', date_window, 'position',
             'impressions', 'clicks', 'pinned', 'blocked', 'sponsored', 'sponsored_link', 'newtabs'), \
         connection.execute(stmt)
