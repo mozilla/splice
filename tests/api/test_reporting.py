@@ -107,7 +107,7 @@ class TestReporting(BaseTestCase):
         url = url_for('api.report.path_summary',
                       start_date='2014-10-10',
                       headers='false',
-                      country_code='US',
+                      locale='en-US',
                       summary='slot',
                       period='weekly')
         response = self.client.get(url)
@@ -124,11 +124,11 @@ class TestReporting(BaseTestCase):
             vals = tuple(row[3:])
             if id == ('2014', '40', '12'):
                 f1 = True
-            elif id == ('2014', '42', '7'):
-                assert_equal(vals, ('259', '0', '0', '0', '0', '0'))
+            elif id == ('2014', '42', '5'):
+                assert_equal(vals, ('126', '0', '0', '1', '0', '0'))
                 f2 = True
-            elif id == ('2014', '43', '4'):
-                assert_equal(vals, ('4', '0', '0', '0', '0', '0'))
+            elif id == ('2014', '43', '1'):
+                assert_equal(vals, ('81', '0', '0', '5', '0', '0'))
                 f3 = True
 
         assert(f2 and f3)
@@ -141,6 +141,8 @@ class TestReporting(BaseTestCase):
         url = url_for('api.report.path_tile_stats',
                       start_date='2014-10-20',
                       headers='false',
+                      locale='en-US',
+                      country_code='US',
                       tile_id=19,
                       period='daily')
         response = self.client.get(url)
@@ -155,13 +157,14 @@ class TestReporting(BaseTestCase):
         for row in results:
             id = tuple(row[:6])
             vals = tuple(row[6:])
-            if id == ('2014', '2014-09-24', '19', "Firefox Marketplace", 'GB', 'en-US'):
+            assert id[4] == 'US' and id[5] == 'en-US'
+            if id == ('2014', '2014-09-20', '19', "Firefox Marketplace", 'US', 'en-US'):
                 f1 = True
-            elif id == ('2014', '2014-10-20', '19', "Firefox Marketplace", 'ID', 'en-US'):
-                assert_equal(vals, ('314', '0', '0', '0', '0', '0'))
+            elif id == ('2014', '2014-10-20', '19', "Firefox Marketplace", 'US', 'en-US'):
+                assert_equal(vals, ('20', '0', '0', '0', '0', '0'))
                 f2 = True
-            elif id == ('2014', '2014-10-23', '19', "Firefox Marketplace", 'RS', 'en-US'):
-                assert_equal(vals, ('2', '0', '0', '0', '0', '0'))
+            elif id == ('2014', '2014-10-22', '19', "Firefox Marketplace", 'US', 'en-US'):
+                assert_equal(vals, ('4', '0', '0', '0', '0', '0'))
                 f3 = True
 
         assert(f2 and f3)
@@ -201,7 +204,8 @@ class TestReporting(BaseTestCase):
         """
         /newtab_stats/daily/<start_date>/
         """
-        url = url_for('api.report.path_newtab_stats',
+        url = url_for('api.report.path_summary',
+                      summary='newtab',
                       start_date='2014-10-20',
                       headers='false',
                       period='daily')
@@ -232,7 +236,8 @@ class TestReporting(BaseTestCase):
         """
         /newtab_stats/monthly/<start_date>/<country_code>
         """
-        url = url_for('api.report.path_newtab_stats',
+        url = url_for('api.report.path_summary',
+                      summary='newtab',
                       start_date='2014-09-20',
                       headers='false',
                       country_code='US',

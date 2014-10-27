@@ -41,7 +41,7 @@ def _parse_date(start_date, date_window):
     return year, window_param
 
 
-def _slot_query(connection, start_date, date_window, position, country_code):
+def _slot_query(connection, start_date, date_window, position, country_code, locale):
     year, window_param = _parse_date(start_date, date_window)
     imps = impression_stats_daily
     window_func_table = imps.c.get(date_window)
@@ -50,6 +50,8 @@ def _slot_query(connection, start_date, date_window, position, country_code):
     where_elements = [imps.c.year >= year, window_func_table >= window_param, imps.c.position == position]
     if country_code is not None:
         where_elements.append(imps.c.country_code == country_code)
+    if locale is not None:
+        where_elements.append(imps.c.locale == locale)
 
     where_clause = and_(*where_elements)
 
@@ -75,7 +77,7 @@ def _slot_query(connection, start_date, date_window, position, country_code):
         connection.execute(stmt)
 
 
-def _tile_query(connection, start_date, date_window, tile_id, country_code):
+def _tile_query(connection, start_date, date_window, tile_id, country_code, locale):
     year, window_param = _parse_date(start_date, date_window)
 
     imps = impression_stats_daily
@@ -86,6 +88,8 @@ def _tile_query(connection, start_date, date_window, tile_id, country_code):
                       imps.c.tile_id == tile_id, imps.c.tile_id == Tile.id]
     if country_code is not None:
         where_elements.append(imps.c.country_code == country_code)
+    if locale is not None:
+        where_elements.append(imps.c.locale == locale)
 
     where_clause = and_(*where_elements)
 
@@ -113,7 +117,7 @@ def _tile_query(connection, start_date, date_window, tile_id, country_code):
         connection.execute(stmt)
 
 
-def _newtab_query(connection, start_date, date_window, country_code):
+def _newtab_query(connection, start_date, date_window, country_code, locale):
     year, window_param = _parse_date(start_date, date_window)
 
     imps = newtab_stats_daily
@@ -123,6 +127,8 @@ def _newtab_query(connection, start_date, date_window, country_code):
     where_elements = [imps.c.year >= year, window_func_table >= window_param]
     if country_code is not None:
         where_elements.append(imps.c.country_code == country_code)
+    if locale is not None:
+        where_elements.append(imps.c.locale == locale)
 
     where_clause = and_(*where_elements)
 
@@ -140,7 +146,7 @@ def _newtab_query(connection, start_date, date_window, country_code):
     return ('year', date_window, 'country_code', 'locale', 'newtabs'), connection.execute(stmt)
 
 
-def _tile_summary_query(connection, start_date, date_window, country_code):
+def _tile_summary_query(connection, start_date, date_window, country_code, locale):
     year, window_param = _parse_date(start_date, date_window)
 
     imps = impression_stats_daily
@@ -150,6 +156,8 @@ def _tile_summary_query(connection, start_date, date_window, country_code):
     where_elements = [imps.c.year >= year, window_func_table >= window_param, imps.c.tile_id == Tile.id]
     if country_code is not None:
         where_elements.append(imps.c.country_code == country_code)
+    if locale is not None:
+        where_elements.append(imps.c.locale == locale)
 
     where_clause = and_(*where_elements)
 
@@ -175,7 +183,7 @@ def _tile_summary_query(connection, start_date, date_window, country_code):
         connection.execute(stmt)
 
 
-def _slot_summary_query(connection, start_date, date_window, country_code):
+def _slot_summary_query(connection, start_date, date_window, country_code, locale):
     year, window_param = _parse_date(start_date, date_window)
 
     imps = impression_stats_daily
@@ -185,6 +193,8 @@ def _slot_summary_query(connection, start_date, date_window, country_code):
     where_elements = [imps.c.year >= year, window_func_table >= window_param]
     if country_code is not None:
         where_elements.append(imps.c.country_code == country_code)
+    if locale is not None:
+        where_elements.append(imps.c.locale == locale)
 
     where_clause = and_(*where_elements)
 
@@ -208,26 +218,26 @@ def _slot_summary_query(connection, start_date, date_window, country_code):
         connection.execute(stmt)
 
 
-def tile_stats(connection, start_date, period='week', tile_id=None, country_code=None):
+def tile_stats(connection, start_date, period='week', tile_id=None, country_code=None, locale=None):
     """period = 'week' | 'month' | 'date'"""
-    return _tile_query(connection, start_date, period, tile_id, country_code)
+    return _tile_query(connection, start_date, period, tile_id, country_code, locale)
 
 
-def tile_summary(connection, start_date, period='week', country_code=None):
-    return _tile_summary_query(connection, start_date, period, country_code)
+def tile_summary(connection, start_date, period='week', country_code=None, locale=None):
+    return _tile_summary_query(connection, start_date, period, country_code, locale)
 
 
-def newtab_stats(connection, start_date, period='week', country_code=None):
+def newtab_stats(connection, start_date, period='week', country_code=None, locale=None):
     """period = 'week' | 'month' | 'date'"""
-    return _newtab_query(connection, start_date, period, country_code)
+    return _newtab_query(connection, start_date, period, country_code, locale)
 
 
-def slot_stats(connection, start_date, period='week', position=None, country_code=None):
-    return _slot_query(connection, start_date, period, position, country_code)
+def slot_stats(connection, start_date, period='week', position=None, country_code=None, locale=None):
+    return _slot_query(connection, start_date, period, position, country_code, locale)
 
 
-def slot_summary(connection, start_date, period='week', country_code=None):
-    return _slot_summary_query(connection, start_date, period, country_code)
+def slot_summary(connection, start_date, period='week', country_code=None, locale=None):
+    return _slot_summary_query(connection, start_date, period, country_code, locale)
 
 
 def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
