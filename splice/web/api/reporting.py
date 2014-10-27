@@ -69,9 +69,9 @@ def path_tile_stats(start_date, period, tile_id):
     return _build_response(rval, keys, name=start_date)
 
 
-@report.route('/newtab_stats/<period>/<start_date>', methods=['GET'])
-def path_newtab_stats(start_date, period):
-    country_code, locale = _parse_country_locale()
+@report.route('/tile_stats/monthly/<start_date>/<tile_id>/<country_code>', methods=['GET'])
+@report.route('/tile_stats/monthly/<start_date>/<tile_id>', methods=['GET'])
+def path_tile_stats_monthly(start_date, tile_id, country_code=None):
     conn = Environment.instance().db.engine.connect()
     keys, rval = newtab_stats(conn, start_date, _periods[period], country_code, locale)
     return _build_response(rval, keys, name=start_date)
