@@ -46,6 +46,7 @@ def _build_response(it, keys, name=''):
         response.headers['Content-Disposition'] = 'attachment; filename=imps_%s.%s' % (name, ending)
     return response
 
+
 def _parse_country_locale():
     country_code = request.args.get('country_code')
     locale = request.args.get('locale')
@@ -60,6 +61,7 @@ def root():
 
 _periods = {'weekly': 'week', 'daily': 'date', 'monthly': 'month'}
 _sumaries = {'tile': tile_summary, 'slot': slot_summary, 'newtab': newtab_stats}
+
 
 @report.route('/tile_stats/<period>/<start_date>/<tile_id>', methods=['GET'])
 def path_tile_stats(start_date, period, tile_id):
