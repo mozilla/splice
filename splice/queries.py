@@ -19,6 +19,8 @@ def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri
     else:
         session = env.db.session
 
+    # we add order_by in the query although it shouldn't be necessary
+    # this is because of a previous bug where duplicate tiles could be created
     results = (
         session
         .query(Tile.id)
