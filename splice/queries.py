@@ -2,17 +2,27 @@ from datetime import datetime
 from sqlalchemy.sql import text
 from splice.models import Distribution, Tile, impression_stats_daily, newtab_stats_daily
 from sqlalchemy.sql import select, func, and_
+from sqlalchemy.sql.expression import asc
+from sqlalchemy.orm.session import sessionmaker
 
 
-def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
+def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, conn=None, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
     from splice.environment import Environment
-
     env = Environment.instance()
+
+    if conn is not None:
+        sm = sessionmaker(bind=conn)
+        session = sm()
+    else:
+        session = env.db.session
+
+    # we add order_by in the query although it shouldn't be necessary
+    # this is because of a previous bug where duplicate tiles could be created
     results = (
-        env.db.session
+        session
         .query(Tile.id)
         .filter(Tile.target_url == target_url)
         .filter(Tile.bg_color == bg_color)
@@ -20,6 +30,7 @@ def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri
         .filter(Tile.image_uri == image_uri)
         .filter(Tile.enhanced_image_uri == enhanced_image_uri)
         .filter(Tile.locale == locale)
+        .order_by(asc(Tile.id))
         .first()
     )
 
@@ -240,16 +251,17 @@ def slot_summary(connection, start_date, period='week', country_code=None, local
     return _slot_summary_query(connection, start_date, period, country_code, locale)
 
 
-def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, *args, **kwargs):
-    from splice.environment import Environment
+def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, conn=None, *args, **kwargs):
 
+    from splice.environment import Environment
     env = Environment.instance()
-    conn = env.db.engine.connect()
-    trans = conn.begin()
+
+    trans = None
+    if conn is None:
+        conn = env.db.engine.connect()
+        trans = conn.begin()
+
     try:
-        if not env.is_test:
-            # test database is sqlite and doesn't support LOCK syntax
-            conn.execute("LOCK TABLE tiles IN SHARE ROW EXCLUSIVE MODE;")
         conn.execute(
 
             text(
@@ -271,10 +283,12 @@ def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri
         )
 
         result = conn.execute("SELECT MAX(id) FROM tiles;").scalar()
-        trans.commit()
+        if trans is not None:
+            trans.commit()
         return result
     except:
-        trans.rollback()
+        if trans is not None:
+            trans.rollback()
         raise
 
 

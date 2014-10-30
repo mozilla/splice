@@ -100,8 +100,16 @@ def ingest_links(data, *args, **kwargs):
         exc_class, exc, tb = sys.exc_info()
         raise exc_class, exc, tb
 
+    from splice.environment import Environment
+    env = Environment.instance()
+
     ingested_data = {}
-    for country_locale_str, tiles in data.iteritems():
+
+    country_locales = sorted(data.keys())
+
+    for country_locale_str in country_locales:
+
+        tiles = data[country_locale_str]
         country_code, locale = country_locale_str.split("/")
         country_code = country_code.upper()
 
@@ -116,6 +124,11 @@ def ingest_links(data, *args, **kwargs):
         new_tiles_list = []
 
         for t in tiles:
+            conn = env.db.engine.connect()
+            trans = conn.begin()
+            if not env.is_test:
+                conn.execute("LOCK TABLE tiles;")
+
             image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
             enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() if "enhancedImageURI" in t else None
 
@@ -127,6 +140,7 @@ def ingest_links(data, *args, **kwargs):
                 image_uri=image_hash,
                 enhanced_image_uri=enhanced_image_hash,
                 locale=locale,
+                conn=conn
             )
 
             db_tile_id = tile_exists(**columns)
@@ -153,6 +167,8 @@ def ingest_links(data, *args, **kwargs):
                 t["directoryId"] = db_tile_id
                 new_tiles_list.append(t)
                 command_logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))
+
+            trans.commit()
 
         ingested_data[country_locale_str] = new_tiles_list
 
