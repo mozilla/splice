@@ -101,7 +101,12 @@ def ingest_links(data, *args, **kwargs):
         raise exc_class, exc, tb
 
     ingested_data = {}
-    for country_locale_str, tiles in data.iteritems():
+
+    country_locales = sorted(data.keys())
+
+    for country_locale_str in country_locales:
+
+        tiles = data[country_locale_str]
         country_code, locale = country_locale_str.split("/")
         country_code = country_code.upper()
 
