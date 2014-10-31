@@ -237,7 +237,6 @@ class TestGenerateArtifacts(BaseTestCase):
             tiles = json.load(f)
         ingest_links(tiles)
         num_tiles = self.env.db.session.query(Tile).count()
-        print "tile num: {0}".format(num_tiles)
         assert(num_tiles > 30)
 
     def test_ingest_no_duplicates(self):
