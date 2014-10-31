@@ -1,9 +1,11 @@
+import json
 import magic
 from mock import Mock
 from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_true
 from jsonschema.exceptions import ValidationError
-from splice.ingest import ingest_links, generate_artifacts, IngestError, deploy
 from tests.base import BaseTestCase
+from splice.ingest import ingest_links, generate_artifacts, IngestError, deploy
+from splice.models import Tile
 
 
 class TestIngestLinks(BaseTestCase):
@@ -226,6 +228,29 @@ class TestGenerateArtifacts(BaseTestCase):
                 assert_equal(file["mime"], magic.from_buffer(file["data"], mime=True))
 
         assert_true(found_image)
+
+    def test_ingest_dbpool(self):
+        """
+        Test a ingestion of a large number of tiles that could use up connections to the db
+        """
+        with open(self.get_fixture_path("2014-10-30.ja-pt.json"), 'r') as f:
+            tiles = json.load(f)
+        data = ingest_links(tiles)
+        num_tiles = self.env.db.session.query(Tile).count()
+        print "tile num: {0}".format(num_tiles)
+        assert(num_tiles > 30)
+
+    def test_ingest_no_duplicates(self):
+        """
+        Test that there is no duplication when ingesting tiles
+        """
+        with open(self.get_fixture_path("tiles_duplicates.json"), 'r') as f:
+            tiles = json.load(f)
+
+        num_tiles = self.env.db.session.query(Tile).count()
+        data = ingest_links(tiles)
+        new_num_tiles = self.env.db.session.query(Tile).count()
+        assert_equal(num_tiles+1, new_num_tiles)
 
 
 class TestDeploy(BaseTestCase):
