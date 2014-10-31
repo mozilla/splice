@@ -169,6 +169,7 @@ def ingest_links(data, *args, **kwargs):
                 command_logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))
 
             trans.commit()
+            conn.close()
 
         ingested_data[country_locale_str] = new_tiles_list
 
