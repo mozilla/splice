@@ -235,7 +235,7 @@ class TestGenerateArtifacts(BaseTestCase):
         """
         with open(self.get_fixture_path("2014-10-30.ja-pt.json"), 'r') as f:
             tiles = json.load(f)
-        data = ingest_links(tiles)
+        ingest_links(tiles)
         num_tiles = self.env.db.session.query(Tile).count()
         print "tile num: {0}".format(num_tiles)
         assert(num_tiles > 30)
@@ -248,9 +248,9 @@ class TestGenerateArtifacts(BaseTestCase):
             tiles = json.load(f)
 
         num_tiles = self.env.db.session.query(Tile).count()
-        data = ingest_links(tiles)
+        ingest_links(tiles)
         new_num_tiles = self.env.db.session.query(Tile).count()
-        assert_equal(num_tiles+1, new_num_tiles)
+        assert_equal(num_tiles + 1, new_num_tiles)
 
 
 class TestDeploy(BaseTestCase):
