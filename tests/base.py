@@ -1,10 +1,9 @@
 import os
 from splice.environment import Environment
-env = Environment.instance(test=True)
 from splice.webapp import create_webapp
-
 from flask.ext.testing import TestCase
 
+env = Environment.instance(test=True)
 
 class BaseTestCase(TestCase):
 
