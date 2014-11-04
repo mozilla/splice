@@ -14,7 +14,7 @@ class TestReporting(BaseTestCase):
 
         def values(fd, date_index=0):
             for line in fd:
-                row = line.split(',')
+                row = [unicode(el) for el in line.split(',')]
                 # sqlalchemy doesn't like date strings....
                 row[date_index] = datetime.strptime(row[date_index], "%Y-%m-%d")
                 yield row
