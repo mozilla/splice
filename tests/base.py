@@ -5,6 +5,7 @@ from flask.ext.testing import TestCase
 
 env = Environment.instance(test=True)
 
+
 class BaseTestCase(TestCase):
 
     def __init__(self, methodName='runTest'):
