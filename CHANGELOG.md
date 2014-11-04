@@ -17,3 +17,8 @@ existence and inserting tiles.
 * ingestion splits images into separate files and uploads them to S3 for cloudfront distribution
 
 Requires a database migration in sync with infernyx
+
+1.0.13
+======
+
+* fixes utf-8 errors in reporting API
