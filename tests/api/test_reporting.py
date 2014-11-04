@@ -1,3 +1,4 @@
+# This file uses coding: utf-8
 from StringIO import StringIO
 from flask import url_for
 from nose.tools import assert_equal
@@ -51,6 +52,7 @@ class TestReporting(BaseTestCase):
         f1 = False
         f2 = False
         f3 = False
+        f4 = False
         for row in results:
             id = tuple(int(r) for r in row[:3])
             vals = tuple(int(r) for r in row[4:])
@@ -63,8 +65,11 @@ class TestReporting(BaseTestCase):
             elif id == (2014, 40, 15):
                 assert_equal(vals, (2162, 2, 0, 12, 0, 0))
                 f3 = True
+            elif id == (2014, 41, 99):
+                assert_equal(row[3].decode('utf-8'), u'Firefox のカスタマイズ')
+                f4 = True
 
-        assert(f1 and f2 and f3)
+        assert(f1 and f2 and f3 and f4)
 
     def test_tile_summary_daily(self):
         """
