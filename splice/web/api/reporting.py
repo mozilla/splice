@@ -28,7 +28,8 @@ def _build_response(it, keys, name=''):
     if json:
         rval = []
         for tup in it:
-            rval.append(dict(zip(keys, tup)))
+            utup = [el.encode('utf-8') if isinstance(el, basestring) else el for el in tup]
+            rval.append(dict(zip(keys, utup)))
         response = Response(ujson.dumps(rval), content_type='application/json; charset=utf-8', status=200)
         ending = 'json'
     else:
@@ -37,7 +38,8 @@ def _build_response(it, keys, name=''):
         if headers:
             writer.writerow(keys)
         for tup in it:
-            writer.writerow(tup)
+            utup = [el.encode('utf-8') if isinstance(el, basestring) else el for el in tup]
+            writer.writerow(utup)
         response = Response(buf.getvalue(), content_type='text/csv; charset=utf-8', status=200)
         buf.close()
         ending = 'csv'
