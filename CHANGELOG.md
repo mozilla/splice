@@ -1,3 +1,13 @@
+1.0.12
+======
+
+Bugfix release for tile insertions: RedShift has no constraints therefore allows
+the possibility for duplicate tiles to be inserted due to our way of testing for
+existence and inserting tiles.
+
+* bugfix: inserts of tiles lock database to prevent concurrency issues in RedShift
+* in case of duplicate tiles (condition prior to bugfix above), use a consistent duplicate
+
 1.0.10
 ======
 
