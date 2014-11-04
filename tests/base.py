@@ -1,9 +1,9 @@
 import os
 from splice.environment import Environment
 from splice.webapp import create_webapp
-env = Environment.instance(test=True)
-
 from flask.ext.testing import TestCase
+
+env = Environment.instance(test=True)
 
 
 class BaseTestCase(TestCase):
@@ -22,7 +22,7 @@ class BaseTestCase(TestCase):
 
         def tile_values(fd):
             for line in fd:
-                row = line.split(',')
+                row = [el.decode('utf-8') for el in line.split(',')]
                 yield dict(zip(
                     ('id', 'target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'locale'),
                     row))
