@@ -127,49 +127,53 @@ def ingest_links(data, *args, **kwargs):
 
             for t in tiles:
                 trans = conn.begin()
-                if not env.is_test:
-                    conn.execute("LOCK TABLE tiles;")
+                try:
+                    if not env.is_test:
+                        conn.execute("LOCK TABLE tiles;")
 
-                image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
-                enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() if "enhancedImageURI" in t else None
+                    image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
+                    enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() if "enhancedImageURI" in t else None
 
-                columns = dict(
-                    target_url=t["url"],
-                    bg_color=t["bgColor"],
-                    title=t["title"],
-                    type=t["type"],
-                    image_uri=image_hash,
-                    enhanced_image_uri=enhanced_image_hash,
-                    locale=locale,
-                    conn=conn
-                )
+                    columns = dict(
+                        target_url=t["url"],
+                        bg_color=t["bgColor"],
+                        title=t["title"],
+                        type=t["type"],
+                        image_uri=image_hash,
+                        enhanced_image_uri=enhanced_image_hash,
+                        locale=locale,
+                        conn=conn
+                    )
 
-                db_tile_id = tile_exists(**columns)
-                f_tile_id = t.get("directoryId")
+                    db_tile_id = tile_exists(**columns)
+                    f_tile_id = t.get("directoryId")
 
-                if db_tile_id is None:
-                    """
-                    Will generate a new id if not found in db
-                    """
-                    db_tile_id = insert_tile(**columns)
-                    t["directoryId"] = db_tile_id
-                    new_tiles_list.append(t)
-                    command_logger.info("INSERT: Creating id:{0}".format(db_tile_id))
+                    if db_tile_id is None:
+                        """
+                        Will generate a new id if not found in db
+                        """
+                        db_tile_id = insert_tile(**columns)
+                        t["directoryId"] = db_tile_id
+                        new_tiles_list.append(t)
+                        command_logger.info("INSERT: Creating id:{0}".format(db_tile_id))
 
-                elif db_tile_id == f_tile_id:
-                    new_tiles_list.append(t)
-                    command_logger.info("NOOP: id:{0} already exists".format(f_tile_id))
+                    elif db_tile_id == f_tile_id:
+                        new_tiles_list.append(t)
+                        command_logger.info("NOOP: id:{0} already exists".format(f_tile_id))
 
+                    else:
+                        """
+                        Either f_tile_id was not provided or
+                        the id's provided differ
+                        """
+                        t["directoryId"] = db_tile_id
+                        new_tiles_list.append(t)
+                        command_logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))
+                except:
+                    trans.rollback()
+                    command_logger.error("ERROR: Error inserting {0}".format(json.dumps(t, sort_keys=True)))
                 else:
-                    """
-                    Either f_tile_id was not provided or
-                    the id's provided differ
-                    """
-                    t["directoryId"] = db_tile_id
-                    new_tiles_list.append(t)
-                    command_logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))
-
-                trans.commit()
+                    trans.commit()
 
             ingested_data[country_locale_str] = new_tiles_list
 

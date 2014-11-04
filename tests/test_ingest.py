@@ -130,6 +130,58 @@ class TestIngestLinks(BaseTestCase):
         directory_id = data["STAR/en-US"][0]["directoryId"]
         assert_equal(30, directory_id)
 
+    def test_error_mid_ingestion(self):
+        """
+        Test an error happening mid-ingestion
+        """
+        tiles_star = [
+            {
+                "imageURI": "data:image/png;base64,somedata",
+                "url": "https://somewhere.com",
+                "title": "Some Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF"
+            },
+            {
+                "imageURI": "data:image/png;base64,someotherdata",
+                "url": "https://somewhereelse.com",
+                "title": "Some Other Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF"
+            },
+        ]
+        tile_count_before = self.env.db.session.query(Tile).count()
+
+        import splice.ingest
+        insert_function = splice.ingest.insert_tile
+
+        # put counts in a dict to get around python's
+        # non-local scope restrictions on variables
+        # for access in mock_ingest
+        counts = {
+            'call': 0,
+            'exception_at': 2,
+        }
+
+        def mock_ingest(*args, **kwargs):
+            counts['call'] += 1
+            if counts['call'] < counts['exception_at']:
+                insert_function(*args, **kwargs)
+            else:
+                raise Exception('Boom')
+
+        function_mock = Mock(side_effect=mock_ingest)
+        splice.ingest.insert_tile = function_mock
+
+        ingest_links({"STAR/en-US": tiles_star})
+        tile_count_after = self.env.db.session.query(Tile).count()
+
+        # only one has been inserted out of two
+        assert_equal(1, tile_count_after - tile_count_before)
+
+        # put the module function back to what it was
+        splice.ingest.insert_tile = insert_function
+
 
 class TestGenerateArtifacts(BaseTestCase):
 
