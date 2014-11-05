@@ -1,3 +1,13 @@
+1.0.14
+======
+
+* bugfix: better client caching and less uploads in tile ingestion
+
+1.0.13
+======
+
+* fixes utf-8 errors in reporting API
+
 1.0.12
 ======
 
@@ -17,8 +27,3 @@ existence and inserting tiles.
 * ingestion splits images into separate files and uploads them to S3 for cloudfront distribution
 
 Requires a database migration in sync with infernyx
-
-1.0.13
-======
-
-* fixes utf-8 errors in reporting API
