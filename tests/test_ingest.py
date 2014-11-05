@@ -1,5 +1,6 @@
 import json
 import magic
+import copy
 from mock import Mock
 from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_true
 from jsonschema.exceptions import ValidationError
@@ -211,38 +212,23 @@ class TestGenerateArtifacts(BaseTestCase):
         """
         Tests that the correct number of artifacts are generated
         """
-        tiles_star = [
-            {
-                "imageURI": "data:image/png;base64,somedata",
-                "url": "https://somewhere.com",
-                "title": "Some Title",
-                "type": "organic",
-                "bgColor": "#FFFFFF"
-            }
-        ]
+        with open(self.get_fixture_path("valid_tile.json"), 'r') as f:
+            fixture = json.load(f)
 
-        tiles_ca = [
-            {
-                "imageURI": "data:image/png;base64,somedata",
-                "url": "https://somewhere.com",
-                "title": "Some Title",
-                "type": "organic",
-                "bgColor": "#FFFFFF"
-            }
-        ]
+        tile = fixture["STAR/en-US"][0]
 
-        data = ingest_links({"STAR/en-US": tiles_star})
+        data = ingest_links({"STAR/en-US": [tile]})
         artifacts = generate_artifacts(data)
-        # tile index, distribution and image files are generated
-        assert_equal(4, len(artifacts))
+        # tile index, distribution and 2 image files are generated
+        assert_equal(5, len(artifacts))
 
         data = ingest_links({
-            "STAR/en-US": tiles_star,
-            "CA/en-US": tiles_ca,
+            "STAR/en-US": [tile],
+            "CA/en-US": [tile]
         })
         artifacts = generate_artifacts(data)
         # includes one more file: the locale data payload
-        assert_equal(5, len(artifacts))
+        assert_equal(6, len(artifacts))
 
     def test_unknown_mime_type(self):
         """
@@ -291,6 +277,34 @@ class TestGenerateArtifacts(BaseTestCase):
                 assert_equal(file["mime"], magic.from_buffer(file["data"], mime=True))
 
         assert_true(found_image)
+
+    def test_image_artifact_hash(self):
+        """
+        Test that the correct number of image artifacts are produced
+        """
+        with open(self.get_fixture_path("valid_tile.json"), 'r') as f:
+            fixture = json.load(f)
+
+        tile_1 = fixture["STAR/en-US"][0]
+
+        tile_2 = copy.deepcopy(tile_1)
+        tile_2['title'] = 'Some Other Title'
+
+        tile_3 = copy.deepcopy(tile_1)
+        tile_3['title'] = 'Yet Another Title'
+
+        tiles = {'STAR/en-US': [tile_1, tile_2, tile_3]}
+        data = ingest_links(tiles)
+        artifacts = generate_artifacts(data)
+
+        # even if there are 3 tiles, there should only be 2 images
+        image_count = 0
+        for a in artifacts:
+            mime = a.get('mime')
+            if mime and mime == 'image/png':
+                image_count += 1
+
+        assert_equal(2, image_count)
 
 
 class TestDeploy(BaseTestCase):

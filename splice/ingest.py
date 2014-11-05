@@ -201,7 +201,7 @@ def generate_artifacts(data):
                 file_ext = mime_extensions[mime_type]
             except:
                 raise IngestError("Unsupported file type: {0}".format(mime_type))
-            s3_key = "images/{0}/{1}/{2}.{3}".format(locale, tile_id, hash, file_ext)
+            s3_key = "images/{0}.{1}.{2}".format(hash, len(image), file_ext)
             url = os.path.join(env.config.CLOUDFRONT_BASE_URL, s3_key)
 
             image_index[hash] = url
