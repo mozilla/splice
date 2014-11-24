@@ -10,6 +10,8 @@ class Channel(db.Model):
 
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     name = db.Column(db.String(16), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime(), default=datetime.utcnow)
+
 
 class Distribution(db.Model):
     __tablename__ = "distributions"
