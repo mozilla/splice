@@ -49,7 +49,8 @@
                 </ol>
             </div>
             <div ng-show="!tilesEmpty() && !downloadInProgress" class="col-md-12 publish-bar">
-                <button ng-click="publish(tiles)" class="btn btn-danger">Publish</button>
+                <button ng-click="publish(tiles, true)" class="btn btn-danger">Publish</button>
+                <span><input type="checkbox" ng-model="deployFlag"> Deploy to channel</span>
             </div>
         </form>
     </div>

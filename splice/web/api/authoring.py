@@ -12,11 +12,13 @@ env = Environment.instance()
 
 @authoring.route('/all_tiles', methods=['POST'])
 def all_tiles():
+    deploy_flag = request.args.get('deploy')
 
     try:
         data = request.get_json(force=True)
         new_data = ingest_links(data)
-        urls = deploy(new_data)
+        if deploy_flag is not None:
+            urls = deploy(new_data)
     except ValidationError, e:
         errors = []
         error = {"path": e.path[0], "msg": e.message}

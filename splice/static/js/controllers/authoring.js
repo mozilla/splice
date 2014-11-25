@@ -7,6 +7,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
   $scope.distributions = null;
   $scope.choices = [];
   $scope.source = {};
+  $scope.deployFlag = false;
 
   $scope.setupDistributions = function(dists) {
     var choices = [];
@@ -136,14 +137,14 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
     $scope.alerts = [];
   };
 
-  $scope.publish = function(tiles) {
+  $scope.publish = function(tiles, deploy) {
     /**
      * Send tiles to backend for publication.
      * Assumes data is correct.
      */
     var confirmation = confirm("Achtung!\nYou are about to publish tiles to ALL Firefoxen. Are you sure?");
     if (confirmation) {
-      spliceData.postTiles(tiles)
+      spliceData.postTiles(tiles, $scope.deployFlag)
         .success(function(data) {
           var msg = '<strong>Success!</strong><p>Tiles published and deployed:<ul>'
           for (var url of data.urls) {
