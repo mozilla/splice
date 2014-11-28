@@ -42,12 +42,5 @@
         url: url,
       });
     };
-
-    this.getSchema = function() {
-      return $http({
-        method: 'GET',
-        url: '/api/authoring/payload_schema',
-      });
-    };
   });
 })();

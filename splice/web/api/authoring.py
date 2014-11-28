@@ -47,11 +47,6 @@ def all_tiles():
     return jsonify({"urls": urls, "deployed": deploy}), 200
 
 
-@authoring.route('/payload_schema', methods=['GET'])
-def payload_schema():
-    return jsonify(schema), 200
-
-
 @authoring.route('/distributions', methods=['GET'])
 def distributions():
 
