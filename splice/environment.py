@@ -72,8 +72,10 @@ class Environment(object):
         if app.config['ENVIRONMENT'] not in app.config['STATIC_ENABLED_ENVS']:
             app.config['STATIC_FOLDER'] = None
         self.__application = app
-        self.csrf = CsrfProtect()
-        self.csrf.init_app(app)
+
+        if not test:
+            self.csrf = CsrfProtect()
+            self.csrf.init_app(app)
 
         # A hack to keep the sqlalchemy binds state. Flask-SQLAlchemy strips it out
         sqlalchemy_binds = app.config.get('SQLALCHEMY_BINDS')

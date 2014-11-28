@@ -232,15 +232,16 @@ def generate_artifacts(data, channel_name, deploy):
                 url = image_add(*slice_image_uri(tile["enhancedImageURI"]), locale=locale, tile_id=tile["directoryId"])
                 tile["enhancedImageURI"] = url
 
-        serialized = json.dumps({locale: tile_data}, sort_keys=True)
-        hsh = hashlib.sha1(serialized).hexdigest()
-        s3_key = "{0}/{1}.{2}.json".format(safe_channel_name, country_locale, hsh)
-        artifacts.append({
-            "key": s3_key,
-            "data": serialized,
-        })
+        if deploy:
+            serialized = json.dumps({locale: tile_data}, sort_keys=True)
+            hsh = hashlib.sha1(serialized).hexdigest()
+            s3_key = "{0}/{1}.{2}.json".format(safe_channel_name, country_locale, hsh)
+            artifacts.append({
+                "key": s3_key,
+                "data": serialized,
+            })
 
-        tile_index[country_locale] = os.path.join(env.config.CLOUDFRONT_BASE_URL, s3_key)
+            tile_index[country_locale] = os.path.join(env.config.CLOUDFRONT_BASE_URL, s3_key)
 
     if deploy:
         # include tile index if deployment is requested
