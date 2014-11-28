@@ -3,7 +3,7 @@ import logging
 from flask import Blueprint, request, jsonify
 from sqlalchemy.orm.exc import NoResultFound
 from splice.environment import Environment
-from splice.queries import get_distributions, get_channels, get_all_distributions
+from splice.queries import get_channels, get_all_distributions
 from splice.ingest import IngestError, ingest_links, distribute, payload_schema as schema
 from jsonschema.exceptions import ValidationError
 
@@ -69,6 +69,7 @@ def channels():
 
     return jsonify({'d': channels})
 
+
 @authoring.route('/init_data', methods=['GET'])
 def init_data():
     """
@@ -76,11 +77,10 @@ def init_data():
     """
 
     channels = get_channels()
-    channel_id = channels[0]['id']
-
     dists = get_all_distributions()
 
     return jsonify({'d': {'dists': dists, 'chans': channels, 'schema': schema}})
+
 
 def register_routes(app):
     app.register_blueprint(authoring)

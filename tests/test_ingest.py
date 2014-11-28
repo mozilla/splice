@@ -6,7 +6,7 @@ from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_tru
 from jsonschema.exceptions import ValidationError
 from tests.base import BaseTestCase
 from splice.ingest import ingest_links, generate_artifacts, IngestError, distribute
-from splice.models import Tile, Channel
+from splice.models import Tile
 
 
 class TestIngestLinks(BaseTestCase):

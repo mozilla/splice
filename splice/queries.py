@@ -1,5 +1,4 @@
 from datetime import datetime
-from sqlalchemy import over
 from sqlalchemy.sql import text
 from splice.models import Channel, Distribution, Tile, impression_stats_daily, newtab_stats_daily
 from sqlalchemy.sql import select, func, and_
@@ -339,6 +338,7 @@ def get_distributions(channel_id, limit=100, *args, **kwargs):
     output = [list(d) for d in rows]
 
     return output
+
 
 def get_all_distributions(limit=100):
     from splice.environment import Environment
