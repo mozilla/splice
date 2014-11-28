@@ -319,27 +319,6 @@ def insert_distribution(url, channel_id, deployed, *args, **kwargs):
         raise
 
 
-def get_distributions(channel_id, limit=100, *args, **kwargs):
-    from splice.environment import Environment
-
-    env = Environment.instance()
-
-    rows = (
-        env.db.session
-        .query(Distribution.url, Distribution.created_at)
-        .filter(Distribution.channel_id == channel_id)
-        .order_by(Distribution.id.desc())
-        .limit(limit)
-        .all()
-    )
-
-    # ensure items are lists of lists rather than KeyedTuples
-    # KeyedTuples may serialize differently on other systems
-    output = [list(d) for d in rows]
-
-    return output
-
-
 def get_all_distributions(limit=100):
     from splice.environment import Environment
 
