@@ -29,14 +29,6 @@
       return $http(config);
     };
 
-    this.getChannels = function(limit) {
-      return $http({
-        method: 'GET',
-        params: {limit: limit},
-        url: '/api/authoring/channels',
-      });
-    };
-
     this.getInitialData = function() {
       return $http({
         method: 'GET',

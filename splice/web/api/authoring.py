@@ -62,14 +62,6 @@ def distributions():
     return jsonify({'d': {'dists': dists, 'chans': channels}})
 
 
-@authoring.route('/channels', methods=['GET'])
-def channels():
-
-    channels = get_channels()
-
-    return jsonify({'d': channels})
-
-
 @authoring.route('/init_data', methods=['GET'])
 def init_data():
     """
