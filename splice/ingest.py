@@ -88,7 +88,7 @@ def slice_image_uri(image_uri):
     return image_hash, mime_type, image_data
 
 
-def ingest_links(data, *args, **kwargs):
+def ingest_links(data, channel_id, *args, **kwargs):
     """
     Obtain links, insert in data warehouse
     """
@@ -121,7 +121,7 @@ def ingest_links(data, *args, **kwargs):
             if locale not in Environment.instance().fixtures["locales"]:
                 raise IngestError("locale '{0}' is invalid".format(locale))
 
-            command_logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1}".format(country_code, locale))
+            command_logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1} CHANNEL:{2}".format(country_code, locale, channel_id))
 
             new_tiles_list = []
 
@@ -183,9 +183,11 @@ def ingest_links(data, *args, **kwargs):
         conn.close()
 
 
-def generate_artifacts(data):
-    """
-    Generate locale json files, upload to s3
+def generate_artifacts(data, channel_name, deploy):
+    """Generate locale json files for upload to s3
+    :param data: tile data for upload
+    :channel_name: distribution channel name
+    :deploy: tells whether to deploy to the channels
     """
     artifacts = []
     tile_index = {}
@@ -213,6 +215,8 @@ def generate_artifacts(data):
 
         return image_index[hash]
 
+    safe_channel_name = urllib.quote(channel_name)
+
     for country_locale, tile_data in data.iteritems():
 
         country_code, locale = country_locale.split("/")
@@ -230,7 +234,7 @@ def generate_artifacts(data):
 
         serialized = json.dumps({locale: tile_data}, sort_keys=True)
         hsh = hashlib.sha1(serialized).hexdigest()
-        s3_key = "{0}.{1}.json".format(country_locale, hsh)
+        s3_key = "{0}/{1}.{2}.json".format(safe_channel_name, country_locale, hsh)
         artifacts.append({
             "key": s3_key,
             "data": serialized,
@@ -238,12 +242,12 @@ def generate_artifacts(data):
 
         tile_index[country_locale] = os.path.join(env.config.CLOUDFRONT_BASE_URL, s3_key)
 
-    # include tile index
-
-    artifacts.append({
-        "key": env.config.S3["tile_index_key"],
-        "data": json.dumps(tile_index, sort_keys=True)
-    })
+    if deploy:
+        # include tile index if deployment is requested
+        artifacts.append({
+            "key": "{0}_{1}".format(safe_channel_name, env.config.S3["tile_index_key"]),
+            "data": json.dumps(tile_index, sort_keys=True)
+        })
 
     # include data submission in artifacts
 
@@ -251,7 +255,7 @@ def generate_artifacts(data):
     hsh = hashlib.sha1(data_serialized).hexdigest()
     dt_str = datetime.utcnow().isoformat().replace(":", "-")
     artifacts.append({
-        "key": os.path.join("/distributions", "{0}.{1}.json".format(hsh, dt_str)),
+        "key": os.path.join("/distributions", safe_channel_name, "{0}.{1}.json".format(hsh, dt_str)),
         "data": data_serialized,
         "dist": True
     })
@@ -259,18 +263,34 @@ def generate_artifacts(data):
     return artifacts
 
 
-def deploy(data):
+def distribute(data, channel_id, deploy):
+    """Upload tile data to S3
+    :data: tile data
+    :channel_id: channel id for which to distribute tile data
+    :deploy: whether to deploy tiles to firefox
+    """
     command_logger.info("Generating Data")
-    artifacts = generate_artifacts(data)
 
-    command_logger.info("Uploading to S3")
+    from splice.models import Channel
+    from splice.environment import Environment
+    env = Environment.instance()
+
+    channel = (
+        env.db.session
+        .query(Channel)
+        .filter(Channel.id == channel_id)
+        .one())
+
+    artifacts = generate_artifacts(data, channel.name, deploy)
+
+    command_logger.info("Uploading to S3 for channel {0}".format(channel.name))
 
     bucket = Environment.instance().s3.get_bucket(Environment.instance().config.S3["bucket"])
     cors = CORSConfiguration()
     cors.add_rule("GET", "*", allowed_header="*")
     bucket.set_cors(cors)
 
-    deployed = []
+    distributed = []
 
     headers = {
         'Cache-Control': 'public, max-age=31536000',
@@ -301,10 +321,10 @@ def deploy(data):
             pass
         url = uri.url
 
-        command_logger.info("Deployed file at {0}".format(url))
-        deployed.append(url)
+        command_logger.info("Uploaded file at {0}".format(url))
+        distributed.append(url)
 
         if file.get("dist", False):
-            insert_distribution(url)
+            insert_distribution(url, channel_id, deploy)
 
-    return deployed
+    return distributed

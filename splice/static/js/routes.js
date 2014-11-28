@@ -9,10 +9,10 @@
         url: '/authoring/all_tiles',
         templateUrl: '/static/html/partials/authoring.html',
         resolve: {
-          payloadSchema: function(spliceData){
-            return spliceData.getSchema()
+          initData: function(spliceData) {
+            return spliceData.getInitialData()
               .then(function(data) {
-                return data.data;
+                return data.data.d;
               });
           }
         },

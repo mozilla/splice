@@ -1,4 +1,5 @@
 import os
+import csv
 from splice.environment import Environment
 from splice.webapp import create_webapp
 from flask.ext.testing import TestCase
@@ -27,13 +28,27 @@ class BaseTestCase(TestCase):
                     ('id', 'target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'locale'),
                     row))
 
-        from splice.models import Tile
-        session = Environment.instance().db.session
+        from splice.models import Tile, Channel
+        session = env.db.session
+
         with open(self.get_fixture_path('tiles.csv')) as fd:
             for row in tile_values(fd):
                 tile = Tile(**row)
                 session.add(tile)
+
+        with open(self.get_fixture_path('channels.csv')) as fd:
+            reader = csv.DictReader(fd)
+            for row in reader:
+                channel = Channel(**row)
+                session.add(channel)
+
         session.commit()
+
+        self.channels = (
+            env.db.session
+            .query(Channel)
+            .order_by(Channel.id.asc())
+            .all())
 
     def tearDown(self):
         self.env.db.session.remove()

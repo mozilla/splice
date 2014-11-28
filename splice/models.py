@@ -19,6 +19,7 @@ class Distribution(db.Model):
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     url = db.Column(db.Text(), nullable=False)
     channel_id = db.Column(db.Integer(), db.ForeignKey('channels.id'), nullable=False)
+    deployed = db.Column(db.Boolean(), default=False)
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
 

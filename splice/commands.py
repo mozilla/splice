@@ -173,7 +173,8 @@ def urls():
 @DataCommand.option("-o", "--out_path", type=str, help="To dump to a file, provide a path/filename", required=False)
 @DataCommand.option("in_file", type=str, help="Path to directoryLinks.json file")
 @DataCommand.option("country_code", type=str, help="ISO3166 country code for the file")
-def load_links(in_file, country_code, out_path, console_out, verbose, old_format, *args, **kwargs):
+@DataCommand.option("channel_id", type=int, help="Channel ID to ingest for")
+def load_links(in_file, country_code, channel_id, out_path, console_out, verbose, old_format, *args, **kwargs):
     """
     Load a set of links in the data warehouse
     """
@@ -192,7 +193,7 @@ def load_links(in_file, country_code, out_path, console_out, verbose, old_format
         locale = rawdata.keys()[0]
         country_locale_str = "/".join([country_code, locale])
 
-        new_data = ingest_links({country_locale_str: rawdata[locale]})
+        new_data = ingest_links({country_locale_str: rawdata[locale]}, channel_id)
 
         if old_format:
             new_data = new_data[new_data.keys()[0]]
@@ -221,7 +222,8 @@ def load_links(in_file, country_code, out_path, console_out, verbose, old_format
 @DataCommand.option("-c", "--console", action="store_true", dest="console_out", help="Enable console output", required=False)
 @DataCommand.option("-o", "--out_path", type=str, help="To dump to a file, provide a path/filename", required=False)
 @DataCommand.option("in_file", type=str, help="Path to tiles.json file")
-def ingest_tiles(in_file, out_path, console_out, deploy_flag, verbose, *args, **kwargs):
+@DataCommand.option("channel_id", type=int, help="Channel ID to ingest for")
+def ingest_tiles(in_file, channel_id, out_path, console_out, deploy_flag, verbose, *args, **kwargs):
     """
     Load a set of links for all country/locale combinations into data warehouse and optionally deploy
     """
@@ -234,10 +236,10 @@ def ingest_tiles(in_file, out_path, console_out, deploy_flag, verbose, *args, **
     with open(in_file, 'r') as f:
         rawdata = json.load(f)
 
-    from splice.ingest import ingest_links, deploy, IngestError
+    from splice.ingest import ingest_links, distribute, IngestError
 
     try:
-        new_data = ingest_links(rawdata)
+        new_data = ingest_links(rawdata, channel_id)
 
         if console_out:
             print json.dumps(new_data, sort_keys=True, indent=2)
@@ -252,7 +254,10 @@ def ingest_tiles(in_file, out_path, console_out, deploy_flag, verbose, *args, **
                 logger.info("wrote {0}".format(out_path))
 
         if deploy_flag:
-            deploy(new_data)
+            logger.info("Distributing AND Deploying data")
+        logger.info("Distributing data (NO deploy)")
+
+        distribute(new_data, channel_id, deploy_flag)
     except IngestError, e:
         raise InvalidCommand(e.message)
     except:
