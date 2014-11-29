@@ -23,8 +23,28 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
     var choices = [];
     $scope.distributions = dists;
 
-    if ($scope.channelSelect in dists) {
-      $scope.choices = dists[$scope.channelSelect];
+    if ($scope.channelSelect != null) {
+      // if already set, try to preserve the same selection
+      // while the values are the same, it isn't the same object
+
+      var oldId = $scope.channelSelect.id;
+      $scope.channelSelect = null;
+
+      for (var i=0; i < $scope.channels.length; i++) {
+        if (oldId == $scope.channels[i].id) {
+          $scope.channelSelect = $scope.channels[i];
+          break;
+        }
+      }
+      // note that channelSelect could still be null after this
+    }
+
+    if ($scope.channelSelect == null) {
+      $scope.channelSelect = $scope.channels[0];
+    }
+
+    if ($scope.channelSelect.id in dists) {
+      $scope.choices = dists[$scope.channelSelect.id];
     }
   };
 
@@ -98,7 +118,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
     $scope.downloadInProgress = false;
     $scope.tiles = [];
     $scope.source = {};
-    $scope.choices = $scope.distributions[newValue];
+    $scope.choices = $scope.distributions[newValue.id];
     $scope.versionSelect = null;
   });
 
@@ -112,30 +132,30 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
 
     allTilesForm.newTiles.value = null;
     var chanId = $scope.channelSelect;
-    var cacheValue = chanId + newValue;
+    var cacheValue = chanId + newValue.url;
 
     if (!$scope.cache.hasOwnProperty(cacheValue)) {
       $scope.downloadInProgress = true;
-      spliceData.getJSON(newValue)
+      spliceData.getJSON(newValue.url)
         .success(function(data) {
           if (data != null && data instanceof Object) {
-            var cacheValue = chanId + newValue;
-            $scope.loadPayload(data, {origin: newValue, type: 'remote'}, cacheValue);
+            var cacheValue = chanId + newValue.url;
+            $scope.loadPayload(data, {origin: newValue.url, type: 'remote'}, cacheValue);
           }
           else {
             $scope.alerts = [{
               type: 'danger',
-              msg: '<strong>Error</strong>: Invalid file at <a href="' + newValue + '">' + newValue + '</a>',
+              msg: '<strong>Error</strong>: Invalid file at <a href="' + newValue.url + '">' + newValue.url + '</a>',
             }];
             $scope.tiles = {};
           }
           $scope.downloadInProgress = false;
         });
     } else {
-      var cacheValue = chanId + newValue;
+      var cacheValue = chanId + newValue.url;
       $scope.downloadInProgress = false;
       $scope.tiles = $scope.cache[cacheValue];
-      $scope.source = {origin: newValue, type: 'remote'}
+      $scope.source = {origin: newValue.url, type: 'remote'}
       $scope.alerts = [];
     }
   });
@@ -171,10 +191,10 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
      * Send tiles to backend for publication.
      * Assumes data is correct.
      */
-    var channel_name = $scope.channelIndex[$scope.channelSelect].name;
+    var channel_name = $scope.channelIndex[$scope.channelSelect.id].name;
     var confirmation = confirm("Achtung!\nYou are about to publish tiles to ALL Firefoxen in channel " + channel_name + ". Are you sure?");
     if (confirmation) {
-      spliceData.postTiles(tiles, $scope.deployFlag, $scope.channelSelect)
+      spliceData.postTiles(tiles, $scope.deployFlag, $scope.channelSelect.id)
         .success(function(data) {
           var deployed = data.deployed;
 
@@ -195,6 +215,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
             msg: msg
           }];
           var urls = data.urls;
+          $scope.deployFlag = false;
           $scope.refreshDistributions();
         })
         .error(function(data, status, headers, config, statusText) {
@@ -228,7 +249,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
     $scope.payloadSchema = initData.schema;
     $scope.setupChannels(initData.chans);
     $scope.setupDistributions(initData.dists);
-    $scope.channelSelect = initData.chans[0].id;
+    $scope.channelSelect = initData.chans[0];
   };
   $scope.init();
 });

@@ -10,15 +10,11 @@
             <div class="form-group distribution-select">
                 <span class="distribution-select">
                     <label for="channels">Channel:</label>
-                    <select name="channels" ng-model="channelSelect" required="1">
-                        <option ng-repeat="channel in channels" value="{{ channel.id }} ">{{ channel.name }}</option>
-                    </select>
+                    <select name="channels" ng-model="channelSelect" required="1" ng-options="channel.name for channel in channels"></select>
                 </span>
                 <span class="distribution-select">
                     <label for="previousTiles">Previous distributions:</label>
-                    <select name="previousTiles" ng-model="versionSelect" required="1">
-                        <option ng-repeat="choice in choices" value="{{ choice.url }}">{{ choice.created_at }}</option>
-                    </select>
+                    <select name="previousTiles" ng-model="versionSelect" required="1" ng-options="choice.created_at for choice in choices"></select>
                 </span>
             </div>
             <div class="form-group col-md-12">
