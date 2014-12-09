@@ -3,6 +3,7 @@ BEGIN;
 CREATE TABLE channels (
     id INTEGER IDENTITY(1,1) NOT NULL, 
     name VARCHAR(16) NOT NULL, 
+    created_at TIMESTAMP WITHOUT TIME ZONE,
     PRIMARY KEY (id)
 );
 
