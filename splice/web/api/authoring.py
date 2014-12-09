@@ -17,7 +17,7 @@ def all_tiles():
     deploy_flag = request.args.get('deploy')
     channel_id = request.args.get('channelId')
 
-    deploy = True if deploy_flag == '1' else False
+    deploy = deploy_flag == '1'
 
     if channel_id is None:
         msg = "channel_id not provided"
