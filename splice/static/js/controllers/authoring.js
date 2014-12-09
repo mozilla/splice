@@ -152,7 +152,6 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
           $scope.downloadInProgress = false;
         });
     } else {
-      var cacheValue = chanId + newValue.url;
       $scope.downloadInProgress = false;
       $scope.tiles = $scope.cache[cacheValue];
       $scope.source = {origin: newValue.url, type: 'remote'}
@@ -186,7 +185,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
     $scope.alerts = [];
   };
 
-  $scope.publish = function(tiles, deploy) {
+  $scope.publish = function(tiles) {
     /**
      * Send tiles to backend for publication.
      * Assumes data is correct.
