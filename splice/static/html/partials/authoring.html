@@ -54,7 +54,7 @@
             </div>
             <div ng-show="!tilesEmpty() && !downloadInProgress" class="col-md-12 publish-bar">
                 <button ng-click="publish(tiles, true)" class="btn btn-danger">Publish</button>
-                <span><input type="checkbox" ng-model="deployFlag"> Deploy to channel <strong>{{ channelIndex[channelSelect].name }}</strong></span>
+                <span><input type="checkbox" ng-model="deployFlag"> Deploy to channel <strong>{{ channelIndex[channelSelect.id].name }}</strong></span>
             </div>
         </form>
     </div>
