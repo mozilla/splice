@@ -10,10 +10,11 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
   $scope.choices = [];
   $scope.source = {};
   $scope.deployFlag = false;
+  $scope.channelSelect = null;
 
   $scope.setupChannels = function(chans) {
     $scope.channels = chans;
-    for (var i=0; i < chans.length; i++) {
+    for (var i = 0; i < chans.length; i++) {
       var chan = chans[i];
       $scope.channelIndex[chan.id] = chan;
     }
@@ -30,7 +31,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
       var oldId = $scope.channelSelect.id;
       $scope.channelSelect = null;
 
-      for (var i=0; i < $scope.channels.length; i++) {
+      for (var i = 0; i < $scope.channels.length; i++) {
         if (oldId == $scope.channels[i].id) {
           $scope.channelSelect = $scope.channels[i];
           break;
@@ -68,19 +69,18 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
   $scope.tiles = {};
   $scope.downloadInProgress = false;
   $scope.versionSelect = null;
-  $scope.channelSelect = null;
 
-  $scope.loadPayload = function(data, source, cacheValue) {
+  $scope.loadPayload = function(data, source, cacheKey) {
     /**
      * Validate and load tiles payload
      */
-    var cacheValue = cacheValue || false;
+    var cacheKey = cacheKey || false;
     var results = tv4.validateResult(data, $scope.payloadSchema);
 
     if (results.valid) {
-      if (cacheValue) {
-        $scope.cache[cacheValue] = data;
-        $scope.tiles = $scope.cache[cacheValue];
+      if (cacheKey) {
+        $scope.cache[cacheKey] = data;
+        $scope.tiles = $scope.cache[cacheKey];
       }
       else {
         $scope.tiles = data;
@@ -132,15 +132,14 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
 
     allTilesForm.newTiles.value = null;
     var chanId = $scope.channelSelect;
-    var cacheValue = chanId + newValue.url;
+    var cacheKey = chanId + newValue.url;
 
-    if (!$scope.cache.hasOwnProperty(cacheValue)) {
+    if (!$scope.cache.hasOwnProperty(cacheKey)) {
       $scope.downloadInProgress = true;
       spliceData.getJSON(newValue.url)
         .success(function(data) {
           if (data != null && data instanceof Object) {
-            var cacheValue = chanId + newValue.url;
-            $scope.loadPayload(data, {origin: newValue.url, type: 'remote'}, cacheValue);
+            $scope.loadPayload(data, {origin: newValue.url, type: 'remote'}, cacheKey);
           }
           else {
             $scope.alerts = [{
@@ -153,7 +152,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
         });
     } else {
       $scope.downloadInProgress = false;
-      $scope.tiles = $scope.cache[cacheValue];
+      $scope.tiles = $scope.cache[cacheKey];
       $scope.source = {origin: newValue.url, type: 'remote'}
       $scope.alerts = [];
     }

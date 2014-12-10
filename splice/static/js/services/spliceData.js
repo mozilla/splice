@@ -20,13 +20,11 @@
     };
 
     this.getDistributions = function(limit) {
-      var config = {
+      return $http({
         method: 'GET',
         params: {limit: limit},
-        url: '/api/authoring/distributions',
-      };
-
-      return $http(config);
+        url: '/api/authoring/distributions'
+      });
     };
 
     this.getInitialData = function() {
