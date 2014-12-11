@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy.sql import text
-from splice.models import Distribution, Tile, impression_stats_daily, newtab_stats_daily
+from splice.models import Channel, Distribution, Tile, impression_stats_daily, newtab_stats_daily
 from sqlalchemy.sql import select, func, and_
 from sqlalchemy.sql.expression import asc
 from sqlalchemy.orm.session import sessionmaker
@@ -292,7 +292,7 @@ def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri
         raise
 
 
-def insert_distribution(url, *args, **kwargs):
+def insert_distribution(url, channel_id, deployed, *args, **kwargs):
     from splice.environment import Environment
 
     env = Environment.instance()
@@ -302,13 +302,15 @@ def insert_distribution(url, *args, **kwargs):
         conn.execute(
             text(
                 "INSERT INTO distributions ("
-                " url, created_at"
+                " url, channel_id, deployed, created_at"
                 ") "
                 "VALUES ("
-                " :url, :created_at"
+                " :url, :channel_id, :deployed, :created_at"
                 ")"
             ),
             url=url,
+            channel_id=channel_id,
+            deployed=deployed,
             created_at=datetime.utcnow()
         )
         trans.commit()
@@ -317,21 +319,60 @@ def insert_distribution(url, *args, **kwargs):
         raise
 
 
-def get_distributions(limit=100, *args, **kwargs):
+def get_all_distributions(limit=100):
+    from splice.environment import Environment
+
+    env = Environment.instance()
+
+    dist_cte = (
+        env.db.session
+        .query(
+            Distribution.channel_id,
+            Distribution.url,
+            Distribution.created_at,
+            func.row_number().over(
+                partition_by=Distribution.channel_id,
+                order_by=Distribution.created_at.desc())
+            .label('row_num')
+        )
+    ).cte()
+
+    stmt = (
+        env.db.session
+        .query(
+            dist_cte.c.channel_id,
+            dist_cte.c.url,
+            dist_cte.c.created_at)
+        .filter(dist_cte.c.row_num <= limit)
+        .order_by(dist_cte.c.created_at.desc())
+    )
+
+    rows = stmt.all()
+
+    channels = {}
+
+    for row in rows:
+        c_dists = channels.setdefault(row.channel_id, [])
+        c_dists.append({'url': row.url, 'created_at': row.created_at})
+
+    return channels
+
+
+def get_channels(limit=100):
     from splice.environment import Environment
 
     env = Environment.instance()
 
     rows = (
         env.db.session
-        .query(Distribution.url, Distribution.created_at)
-        .order_by(Distribution.id.desc())
+        .query(Channel.id, Channel.name, Channel.created_at)
+        .order_by(Channel.id.asc())
         .limit(limit)
         .all()
     )
 
-    # ensure items are lists of lists rather than KeyedTuples
+    # ensure items are a list of dicts
     # KeyedTuples may serialize differently on other systems
-    output = [list(d) for d in rows]
+    output = [d._asdict() for d in rows]
 
     return output

@@ -5,11 +5,21 @@ from splice.environment import Environment
 db = Environment.instance().db
 
 
+class Channel(db.Model):
+    __tablename__ = "channels"
+
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
+    name = db.Column(db.String(16), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime(), default=datetime.utcnow)
+
+
 class Distribution(db.Model):
     __tablename__ = "distributions"
 
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     url = db.Column(db.Text(), nullable=False)
+    channel_id = db.Column(db.Integer(), db.ForeignKey('channels.id'), nullable=False)
+    deployed = db.Column(db.Boolean(), default=False)
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
 

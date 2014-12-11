@@ -7,11 +7,15 @@
     <h1>Firefox Tiles Authoring</h1>
     <div>
         <form name="allTilesForm">
-            <div class="form-group col-md-12">
+            <div class="form-group distribution-select">
+                <span class="distribution-select">
+                    <label for="channels">Channel:</label>
+                    <select name="channels" ng-model="channelSelect" required="1" ng-options="channel.name for channel in channels"></select>
+                </span>
+                <span class="distribution-select">
                     <label for="previousTiles">Previous distributions:</label>
-                    <select name="previousTiles" ng-model="versionSelect" required="1">
-                        <option ng-repeat="choice in choices" value="{{ choice }} ">{{ choice }}</option>
-                    </select>
+                    <select name="previousTiles" ng-model="versionSelect" required="1" ng-options="choice.created_at for choice in choices"></select>
+                </span>
             </div>
             <div class="form-group col-md-12">
                 <label for="newTiles">Load a new distribution from file:</label>
@@ -50,6 +54,7 @@
             </div>
             <div ng-show="!tilesEmpty() && !downloadInProgress" class="col-md-12 publish-bar">
                 <button ng-click="publish(tiles)" class="btn btn-danger">Publish</button>
+                <span><input type="checkbox" ng-model="deployFlag"> Deploy to channel <strong>{{ channelIndex[channelSelect.id].name }}</strong></span>
             </div>
         </form>
     </div>

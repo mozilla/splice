@@ -1,31 +1,61 @@
 "use strict";
 
-angular.module('spliceApp').controller('authoringController', function($scope, spliceData, fileReader, payloadSchema) {
+angular.module('spliceApp').controller('authoringController', function($scope, spliceData, fileReader, initData) {
 
   /** Distribution select/choice setup **/
 
   $scope.distributions = null;
+  $scope.channels = null;
+  $scope.channelIndex = {};
   $scope.choices = [];
   $scope.source = {};
+  $scope.deployFlag = false;
+  $scope.channelSelect = null;
+
+  $scope.setupChannels = function(chans) {
+    $scope.channels = chans;
+    for (var i = 0; i < chans.length; i++) {
+      var chan = chans[i];
+      $scope.channelIndex[chan.id] = chan;
+    }
+  };
 
   $scope.setupDistributions = function(dists) {
     var choices = [];
-    var distributions = {}
-    for (var d of dists) {
-      choices.push(d[1]);
-      distributions[d[1]] = d[0];
+    $scope.distributions = dists;
+
+    if ($scope.channelSelect != null) {
+      // if already set, try to preserve the same selection
+      // while the values are the same, it isn't the same object
+
+      var oldId = $scope.channelSelect.id;
+      $scope.channelSelect = null;
+
+      for (var i = 0; i < $scope.channels.length; i++) {
+        if (oldId == $scope.channels[i].id) {
+          $scope.channelSelect = $scope.channels[i];
+          break;
+        }
+      }
+      // note that channelSelect could still be null after this
     }
-    $scope.choices = choices;
-    $scope.distributions = distributions;
-  }
+
+    if ($scope.channelSelect == null) {
+      $scope.channelSelect = $scope.channels[0];
+    }
+
+    if ($scope.channelSelect.id in dists) {
+      $scope.choices = dists[$scope.channelSelect.id];
+    }
+  };
 
   $scope.refreshDistributions = function() {
     spliceData.getDistributions()
       .success(function(data) {
-        $scope.setupDistributions(data.d);
-      })
-  }
-  $scope.refreshDistributions();
+        $scope.setupChannels(data.d.chans);
+        $scope.setupDistributions(data.d.dists);
+      });
+  };
 
   /** UI and tile data **/
 
@@ -40,18 +70,17 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
   $scope.downloadInProgress = false;
   $scope.versionSelect = null;
 
-
-  $scope.loadPayload = function(data, source, cacheValue) {
+  $scope.loadPayload = function(data, source, cacheKey) {
     /**
      * Validate and load tiles payload
      */
-    var cacheValue = cacheValue || false;
-    var results = tv4.validateResult(data, payloadSchema);
+    var cacheKey = cacheKey || false;
+    var results = tv4.validateResult(data, $scope.payloadSchema);
 
     if (results.valid) {
-      if (cacheValue) {
-        $scope.cache[cacheValue] = data;
-        $scope.tiles = $scope.cache[cacheValue];
+      if (cacheKey) {
+        $scope.cache[cacheKey] = data;
+        $scope.tiles = $scope.cache[cacheKey];
       }
       else {
         $scope.tiles = data;
@@ -76,6 +105,23 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
     return Object.keys($scope.tiles).length == 0;
   };
 
+  $scope.$watch('channelSelect', function(newValue, oldValue) {
+    /**
+     * Event handler for Channel selection
+     */
+    if (newValue == null) {
+      return;
+    }
+
+    allTilesForm.newTiles.value = null;
+
+    $scope.downloadInProgress = false;
+    $scope.tiles = [];
+    $scope.source = {};
+    $scope.choices = $scope.distributions[newValue.id];
+    $scope.versionSelect = null;
+  });
+
   $scope.$watch('versionSelect', function(newValue, oldValue) {
     /**
      * Event handler for Distribution selection
@@ -85,18 +131,20 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
     }
 
     allTilesForm.newTiles.value = null;
+    var chanId = $scope.channelSelect;
+    var cacheKey = chanId + newValue.url;
 
-    if (!$scope.cache.hasOwnProperty(newValue) && $scope.distributions.hasOwnProperty(newValue)) {
+    if (!$scope.cache.hasOwnProperty(cacheKey)) {
       $scope.downloadInProgress = true;
-      spliceData.getJSON($scope.distributions[newValue])
+      spliceData.getJSON(newValue.url)
         .success(function(data) {
           if (data != null && data instanceof Object) {
-            $scope.loadPayload(data, {origin: $scope.distributions[newValue], type: 'remote'}, newValue);
+            $scope.loadPayload(data, {origin: newValue.url, type: 'remote'}, cacheKey);
           }
           else {
             $scope.alerts = [{
               type: 'danger',
-              msg: '<strong>Error</strong>: Invalid file at <a href="' + $scope.distributions[newValue] + '">' + $scope.distributions[newValue] + '</a>',
+              msg: '<strong>Error</strong>: Invalid file at <a href="' + newValue.url + '">' + newValue.url + '</a>',
             }];
             $scope.tiles = {};
           }
@@ -104,8 +152,8 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
         });
     } else {
       $scope.downloadInProgress = false;
-      $scope.tiles = $scope.cache[newValue];
-      $scope.source = {origin: $scope.distributions[newValue], type: 'remote'}
+      $scope.tiles = $scope.cache[cacheKey];
+      $scope.source = {origin: newValue.url, type: 'remote'}
       $scope.alerts = [];
     }
   });
@@ -141,11 +189,21 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
      * Send tiles to backend for publication.
      * Assumes data is correct.
      */
-    var confirmation = confirm("Achtung!\nYou are about to publish tiles to ALL Firefoxen. Are you sure?");
+    var channel_name = $scope.channelIndex[$scope.channelSelect.id].name;
+    var confirmation = confirm("Achtung!\nYou are about to publish tiles to ALL Firefoxen in channel " + channel_name + ". Are you sure?");
     if (confirmation) {
-      spliceData.postTiles(tiles)
+      spliceData.postTiles(tiles, $scope.deployFlag, $scope.channelSelect.id)
         .success(function(data) {
-          var msg = '<strong>Success!</strong><p>Tiles published and deployed:<ul>'
+          var deployed = data.deployed;
+
+          var msg;
+          if (deployed) {
+            msg = '<strong>Success!</strong><p>Tiles published and deployed:<ul>';
+          }
+          else {
+            msg = '<strong>Success!</strong><p>Tiles published but <strong>NOT</strong> deployed:<ul>';
+          }
+
           for (var url of data.urls) {
             msg += '<li><a href="' + url + '">' + url + '</a></li>';
           }
@@ -155,6 +213,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
             msg: msg
           }];
           var urls = data.urls;
+          $scope.deployFlag = false;
           $scope.refreshDistributions();
         })
         .error(function(data, status, headers, config, statusText) {
@@ -183,4 +242,12 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
         });
     }
   };
+
+  $scope.init = function() {
+    $scope.payloadSchema = initData.schema;
+    $scope.setupChannels(initData.chans);
+    $scope.setupDistributions(initData.dists);
+    $scope.channelSelect = initData.chans[0];
+  };
+  $scope.init();
 });

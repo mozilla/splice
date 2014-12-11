@@ -5,7 +5,7 @@ from mock import Mock
 from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_true
 from jsonschema.exceptions import ValidationError
 from tests.base import BaseTestCase
-from splice.ingest import ingest_links, generate_artifacts, IngestError, deploy
+from splice.ingest import ingest_links, generate_artifacts, IngestError, distribute
 from splice.models import Tile
 
 
@@ -15,13 +15,13 @@ class TestIngestLinks(BaseTestCase):
         """
         Invalid data is sent for ingestion
         """
-        assert_raises(ValidationError, ingest_links, {"invalid": {"data": 1}})
+        assert_raises(ValidationError, ingest_links, {"invalid": {"data": 1}}, self.channels[0].id)
 
     def test_empty_data(self):
         """
         Empty data input is not processed
         """
-        data = ingest_links({})
+        data = ingest_links({}, self.channels[0].id)
         assert_equal(data, {})
 
     def test_invalid_country_code(self):
@@ -36,7 +36,7 @@ class TestIngestLinks(BaseTestCase):
                 "type": "organic",
                 "bgColor": "#FFFFFF"
             }
-        ]})
+        ]}, self.channels[0].id)
 
     def test_invalid_locale(self):
         """
@@ -50,7 +50,7 @@ class TestIngestLinks(BaseTestCase):
                 "type": "organic",
                 "bgColor": "#FFFFFF"
             }
-        ]})
+        ]}, self.channels[0].id)
 
     def test_id_creation(self):
         """
@@ -63,7 +63,7 @@ class TestIngestLinks(BaseTestCase):
             "type": "organic",
             "bgColor": "#FFFFFF"
         }
-        data = ingest_links({"STAR/en-US": [tile]})
+        data = ingest_links({"STAR/en-US": [tile]}, self.channels[0].id)
         directory_id = data["STAR/en-US"][0]["directoryId"]
 
         # the biggest ID is 99 - next one should be 100
@@ -102,7 +102,7 @@ class TestIngestLinks(BaseTestCase):
         data = ingest_links({
             "STAR/en-US": tiles_star,
             "CA/en-US": tiles_ca,
-        })
+        }, self.channels[0].id)
         directory_id_star = data["STAR/en-US"][0]["directoryId"]
         directory_id_ca = data["CA/en-US"][0]["directoryId"]
         assert_equal(100, directory_id_star)
@@ -123,11 +123,11 @@ class TestIngestLinks(BaseTestCase):
             }
         ]
 
-        data = ingest_links({"STAR/en-US": tiles_star})
+        data = ingest_links({"STAR/en-US": tiles_star}, self.channels[0].id)
         directory_id = data["STAR/en-US"][0]["directoryId"]
         assert_equal(100, directory_id)
 
-        data = ingest_links({"STAR/en-US": tiles_star})
+        data = ingest_links({"STAR/en-US": tiles_star}, self.channels[0].id)
         directory_id = data["STAR/en-US"][0]["directoryId"]
         assert_equal(100, directory_id)
 
@@ -174,7 +174,7 @@ class TestIngestLinks(BaseTestCase):
         function_mock = Mock(side_effect=mock_ingest)
         splice.ingest.insert_tile = function_mock
 
-        ingest_links({"STAR/en-US": tiles_star})
+        ingest_links({"STAR/en-US": tiles_star}, self.channels[0].id)
         tile_count_after = self.env.db.session.query(Tile).count()
 
         # only one has been inserted out of two
@@ -189,7 +189,7 @@ class TestIngestLinks(BaseTestCase):
         """
         with open(self.get_fixture_path("2014-10-30.ja-pt.json"), 'r') as f:
             tiles = json.load(f)
-        ingest_links(tiles)
+        ingest_links(tiles, self.channels[0].id)
         num_tiles = self.env.db.session.query(Tile).count()
         assert(num_tiles > 30)
 
@@ -201,7 +201,7 @@ class TestIngestLinks(BaseTestCase):
             tiles = json.load(f)
 
         num_tiles = self.env.db.session.query(Tile).count()
-        ingest_links(tiles)
+        ingest_links(tiles, self.channels[0].id)
         new_num_tiles = self.env.db.session.query(Tile).count()
         assert_equal(num_tiles + 1, new_num_tiles)
 
@@ -217,16 +217,16 @@ class TestGenerateArtifacts(BaseTestCase):
 
         tile = fixture["STAR/en-US"][0]
 
-        data = ingest_links({"STAR/en-US": [tile]})
-        artifacts = generate_artifacts(data)
+        data = ingest_links({"STAR/en-US": [tile]}, self.channels[0].id)
+        artifacts = generate_artifacts(data, self.channels[0].name, True)
         # tile index, distribution and 2 image files are generated
         assert_equal(5, len(artifacts))
 
         data = ingest_links({
             "STAR/en-US": [tile],
             "CA/en-US": [tile]
-        })
-        artifacts = generate_artifacts(data)
+        }, self.channels[0].id)
+        artifacts = generate_artifacts(data, self.channels[0].name, True)
         # includes one more file: the locale data payload
         assert_equal(6, len(artifacts))
 
@@ -244,8 +244,8 @@ class TestGenerateArtifacts(BaseTestCase):
             }
         ]
 
-        data = ingest_links({"STAR/en-US": tiles_star})
-        assert_raises(IngestError, generate_artifacts, data)
+        data = ingest_links({"STAR/en-US": tiles_star}, self.channels[0].id)
+        assert_raises(IngestError, generate_artifacts, data, self.channels[0].name, True)
 
     def test_malformed_data_uri_meta(self):
         """
@@ -261,14 +261,14 @@ class TestGenerateArtifacts(BaseTestCase):
             }
         ]
 
-        data = ingest_links({"STAR/en-US": tiles_star})
-        assert_raises(IngestError, generate_artifacts, data)
+        data = ingest_links({"STAR/en-US": tiles_star}, self.channels[0].id)
+        assert_raises(IngestError, generate_artifacts, data, self.channels[0].name, True)
 
     def test_image_content(self):
         with open(self.get_fixture_path("valid_tile.json"), 'r') as f:
             tiles = json.load(f)
-        data = ingest_links(tiles)
-        artifacts = generate_artifacts(data)
+        data = ingest_links(tiles, self.channels[0].id)
+        artifacts = generate_artifacts(data, self.channels[0].name, True)
 
         found_image = False
         for file in artifacts:
@@ -294,8 +294,8 @@ class TestGenerateArtifacts(BaseTestCase):
         tile_3['title'] = 'Yet Another Title'
 
         tiles = {'STAR/en-US': [tile_1, tile_2, tile_3]}
-        data = ingest_links(tiles)
-        artifacts = generate_artifacts(data)
+        data = ingest_links(tiles, self.channels[0].id)
+        artifacts = generate_artifacts(data, self.channels[0].name, True)
 
         # even if there are 3 tiles, there should only be 2 images
         image_count = 0
@@ -307,7 +307,7 @@ class TestGenerateArtifacts(BaseTestCase):
         assert_equal(2, image_count)
 
 
-class TestDeploy(BaseTestCase):
+class TestDistribute(BaseTestCase):
 
     def setUp(self):
         import splice.ingest
@@ -319,9 +319,9 @@ class TestDeploy(BaseTestCase):
         splice.ingest.Key = Mock(side_effect=get_key_mock)
 
         self.env.s3.get_bucket = Mock(return_value=Mock())
-        super(TestDeploy, self).setUp()
+        super(TestDistribute, self).setUp()
 
-    def test_deploy(self):
+    def test_distribute(self):
         tiles_star = [
             {
                 "imageURI": "data:image/png;base64,somedata",
@@ -343,8 +343,8 @@ class TestDeploy(BaseTestCase):
             }
         ]
 
-        data = ingest_links({"STAR/en-US": tiles_star})
-        deploy(data)
+        data = ingest_links({"STAR/en-US": tiles_star}, self.channels[0].id)
+        distribute(data, self.channels[0].id, True)
         # 5 files are uploaded, mirrors generate artifactes
         assert_equal(5, self.key_mock.set_contents_from_string.call_count)
 
@@ -352,7 +352,7 @@ class TestDeploy(BaseTestCase):
         data = ingest_links({
             "STAR/en-US": tiles_star,
             "CA/en-US": tiles_ca,
-        })
-        deploy(data)
+        }, self.channels[0].id)
+        distribute(data, self.channels[0].id, True)
         #  includes one more upload: the locate data payload
         assert_equal(6, self.key_mock.set_contents_from_string.call_count)
