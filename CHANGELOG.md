@@ -1,3 +1,13 @@
+1.1.0
+=====
+
+* new feature: channels. the ability to have different distribution channels
+* new feature: ability to ingest tiles without deploying (new default behavior)
+
+__note__:
+* includes schema changes 
+* requires reconfiguration of onyx, because we now have different channels
+
 1.0.14
 ======
 
