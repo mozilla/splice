@@ -7,6 +7,7 @@ CREATE TABLE application_stats_daily
     week INT DEFAULT 0 NOT NULL,
     year INT DEFAULT 0 NOT NULL,
     locale VARCHAR(14) NOT NULL,
+    action VARCHAR(255) NOT NULL,
     country_code VARCHAR(5) NOT NULL,
     os VARCHAR(64) NOT NULL,
     browser VARCHAR(64) NOT NULL,
