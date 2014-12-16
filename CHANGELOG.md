@@ -1,3 +1,8 @@
+1.1.1
+=====
+
+* new table / migration: application_stats_daily is a Redshift table to track 'fetch' application events
+
 1.1.0
 =====
 
