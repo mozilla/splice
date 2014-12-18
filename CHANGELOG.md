@@ -1,3 +1,8 @@
+1.1.2
+=====
+
+* new table / migration: countries is a static dimension table containing countries and their iso codes
+
 1.1.1
 =====
 
