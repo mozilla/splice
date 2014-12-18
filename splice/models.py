@@ -104,6 +104,13 @@ application_stats_daily = db.Table(
 )
 
 
+countries = db.Table(
+    'countries',
+    db.Column('country_name', db.String(255), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+)
+
+
 newtab_stats_daily = db.Table(
     'newtab_stats_daily',
     db.Column('date', db.Date, nullable=False),
