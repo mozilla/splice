@@ -117,7 +117,12 @@ site_stats_daily = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(64), nullable=False),
-    db.Column('count', db.Integer, nullable=False),
+    db.Column('impressions', db.Integer, nullable=False, server_default="0"),
+    db.Column('clicks', db.Integer, nullable=False, server_default="0"),
+    db.Column('pinned', db.Integer, nullable=False, server_default="0"),
+    db.Column('blocked', db.Integer, nullable=False, server_default="0"),
+    db.Column('sponsored_link', db.Integer, nullable=False, server_default="0"),
+    db.Column('sponsored', db.Integer, nullable=False, server_default="0"),
 )
 
 
