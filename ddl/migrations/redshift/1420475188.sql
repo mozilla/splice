@@ -13,7 +13,12 @@ CREATE TABLE site_stats_daily
     browser VARCHAR(64) NOT NULL,
     version VARCHAR(64) NOT NULL,
     device VARCHAR(64) NOT NULL,
-    count INT DEFAULT 0 NOT NULL
+    impressions INTEGER DEFAULT '0' NOT NULL,
+    clicks INTEGER DEFAULT '0' NOT NULL,
+    pinned INTEGER DEFAULT '0' NOT NULL,
+    blocked INTEGER DEFAULT '0' NOT NULL,
+    sponsored_link INTEGER DEFAULT '0' NOT NULL,
+    sponsored INTEGER DEFAULT '0' NOT NULL
 );
 
 COMMIT;
