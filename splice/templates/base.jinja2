@@ -14,13 +14,18 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap-theme.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/spliceApp.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='vendor/angular-bootstrap-datetimepicker/css/datetimepicker.css') }}">
         <script src="{{ url_for('static', filename='vendor/modernizr-2.6.2.min.js') }}"></script>
         <script src="{{ url_for('static', filename='vendor/tv4.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendor/moment.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendor/jquery-2.1.3.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.min.js') }}"></script>
         <script src="{{ url_for('static', filename='vendor/angular/angular.min.js') }}"></script>
         <script src="{{ url_for('static', filename='vendor/angular/angular-sanitize.min.js') }}"></script>
         <script src="{{ url_for('static', filename='vendor/angular-ui/ui-bootstrap-tpls-0.11.0.min.js') }}"></script>
         <script src="{{ url_for('static', filename='vendor/angular-ui/angular-ui-router.min.js') }}"></script>
         <script src="{{ url_for('static', filename='vendor/angular-ui/ui-utils.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendor/angular-bootstrap-datetimepicker/js/datetimepicker.js') }}"></script>
     </head>
     <body {% block angular_mount %}ng-app="spliceApp"{% endblock %}>
         <!--[if lt IE 10]>
