@@ -320,6 +320,10 @@ def insert_distribution(url, channel_id, deployed, *args, **kwargs):
 
 
 def get_all_distributions(limit=100):
+    """
+    Obtain distributions, partitioned by channels with up to ``limit`` results
+    for each channel
+    """
     from splice.environment import Environment
 
     env = Environment.instance()
