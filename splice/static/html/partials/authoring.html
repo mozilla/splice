@@ -72,11 +72,6 @@
 </script>
 
 <div class="container-fluid">
-    <div class="alert-growl">
-        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert()">
-            <span ng-bind-html="alert.msg"></span>
-        </alert>
-    </div>
     <h1>Firefox Tiles Authoring</h1>
     <div>
         <form name="allTilesForm">
@@ -98,13 +93,13 @@
                     <input class="distribution-file-input" type="file" name="newTiles" ng-file-select>
                 </div>
             </div>
-            <div ng-show="downloadInProgress" class="form-group col-md-12">
+            <div ng-show="downloadInProgress && !fileErrorMsg" class="form-group col-md-12">
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped active" role="progressbar">
                     </div>
                 </div>
             </div>
-            <div ng-show="!tilesEmpty() && !downloadInProgress">
+            <div ng-show="!tilesEmpty() && !downloadInProgress && !fileErrorMsg">
                 <div class="row">
                     <div class="publish-bar col-md-12 tiles-info" bs-affix data-offset-top="150">
                         <div class="col-md-3">
@@ -152,6 +147,11 @@
                         </ul>
                     </li>
                 </ol>
+            </div>
+            <div ng-show="fileErrorMsg" class="text-danger">
+                <h2>File Input Error</h2>
+                <p ng-bind-html="fileErrorMsg"></p>
+                <p>Please try another file.</p>
             </div>
         </form>
     </div>

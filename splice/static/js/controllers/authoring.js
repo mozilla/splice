@@ -62,12 +62,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
 
   /** UI and tile data **/
 
-  /**
-   * Alerts is expected to be an array,
-   * even though we only show 1 alert at a time.
-   * This is due to how ui-bootstrap works
-   */
-  $scope.alerts = [];
+  $scope.fileErrorMsg = null;
   $scope.uploadMessage = {};
   $scope.cache = {};
   $scope.tiles = {};
@@ -101,13 +96,10 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
         $scope.tiles = data;
       }
       $scope.source = source;
-      $scope.alerts = [];
+      $scope.fileErrorMsg = null;
     }
     else {
-      $scope.alerts = [{
-        type: 'danger',
-        msg: '<strong>Error</strong>: Validation failed: ' + results.error.message + ' at ' + results.error.dataPath,
-      }];
+      $scope.fileErrorMsg = 'Validation failed: ' + results.error.message + ' at ' + results.error.dataPath;
       $scope.tiles = {};
     }
     return results.valid;
@@ -157,10 +149,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
             $scope.loadPayload(data, {origin: newValue.url, type: 'remote'}, cacheKey);
           }
           else {
-            $scope.alerts = [{
-              type: 'danger',
-              msg: '<strong>Error</strong>: Invalid file at <a href="' + newValue.url + '">' + newValue.url + '</a>',
-            }];
+            $scope.fileErrorMsg = 'Invalid file at <a href="' + newValue.url + '">' + newValue.url + '</a>';
             $scope.tiles = {};
           }
           $scope.downloadInProgress = false;
@@ -169,7 +158,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
       $scope.downloadInProgress = false;
       $scope.tiles = $scope.cache[cacheKey];
       $scope.source = {origin: newValue.url, type: 'remote'}
-      $scope.alerts = [];
+      $scope.fileErrorMsg = null;
     }
   });
 
@@ -186,17 +175,10 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
             $scope.versionSelect = null;
           }
         } catch(e) {
-          $scope.alerts = [{
-            type: 'danger',
-            msg: '<strong>Error</strong>: Unable to parse file ' + fileInput,
-          }];
+          $scope.fileErrorMsg = 'Unable to parse file ' + fileInput.name;
           $scope.tiles = {};
         }
       })
-  };
-
-  $scope.closeAlert = function(index) {
-    $scope.alerts = [];
   };
 
   $scope.clearScheduledDate = function() {
