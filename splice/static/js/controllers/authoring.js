@@ -11,6 +11,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
   $scope.source = {};
   $scope.deployConfig = {now: false, scheduled: null};
   $scope.channelSelect = null;
+  $scope.payloadSchema = null;
   $scope.scheduledDate = null;
   $scope.confirmationModal = $modal({scope: $scope, template: "template/confirmation.html", show: false});
   $scope.uploadModal = $modal({scope: $scope, template: "template/upload.html", show: false});
@@ -152,7 +153,14 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
             $scope.fileErrorMsg = 'Invalid file at <a href="' + newValue.url + '">' + newValue.url + '</a>';
             $scope.tiles = {};
           }
-          $scope.downloadInProgress = false;
+        })
+        .error(function(data, status, headers, config, statusText) {
+          $scope.fileErrorMsg = '<p>Could not download file at <a href="' + newValue.url + '">' + newValue.url + '</a></p>';
+          $scope.fileErrorMsg += '<p>HTTP Error: ' + status + ' ' + statusText + '</p>';
+          $scope.tiles = {};
+        })
+        .finally(function() {
+            $scope.downloadInProgress = false;
         });
     } else {
       $scope.downloadInProgress = false;
