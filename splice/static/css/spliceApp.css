@@ -100,8 +100,15 @@ ol.tiles-list > li:before {
     background-color: #FFF;
 }
 
-.distribution-select {
-    margin-right: 1em;
+.distribution-previous-select {
+    clear: both;
+    display:block;
+}
+
+.distribution-file-input {
+    border: 1px solid #DDD;
+    padding: 5px;
+    border-radius: 2px;
 }
 
 .modal-backdrop {
