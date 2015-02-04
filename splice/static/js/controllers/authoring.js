@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('spliceApp').controller('authoringController', function($scope, spliceData, fileReader, initData) {
+angular.module('spliceApp').controller('authoringController', function($scope, $modal, spliceData, fileReader, initData) {
 
   /** Distribution select/choice setup **/
 
@@ -11,6 +11,10 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
   $scope.source = {};
   $scope.deployFlag = false;
   $scope.channelSelect = null;
+  $scope.scheduledDate = null;
+  $scope.title = "awesome title";
+  $scope.content = "awesome content";
+  $scope.confirmationModal = $modal({scope: $scope, template: "template/confirmation.html", show: false});
 
   $scope.setupChannels = function(chans) {
     $scope.channels = chans;
@@ -69,6 +73,16 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
   $scope.tiles = {};
   $scope.downloadInProgress = false;
   $scope.versionSelect = null;
+
+  $scope.hidePastDatetimes = function($view, $dates, $leftDate, $upDate, $rightDate) {
+    for (var i=0; i< $dates.length; i++) {
+      var d = $dates[i];
+      var now = new Date();
+      if (d.dateValue < now) {
+        d.selectable = false;
+      }
+    }
+  };
 
   $scope.loadPayload = function(data, source, cacheKey) {
     /**
@@ -184,63 +198,68 @@ angular.module('spliceApp').controller('authoringController', function($scope, s
     $scope.alerts = [];
   };
 
+  $scope.showConfirmationModal = function() {
+    $scope.confirmationModal.$promise.then($scope.confirmationModal.show);
+  };
+
+  $scope.doConfirmPublish = function() {
+    $scope.publish($scope.tiles);
+    this.$hide();
+  };
+
   $scope.publish = function(tiles) {
     /**
      * Send tiles to backend for publication.
      * Assumes data is correct.
      */
-    var channel_name = $scope.channelIndex[$scope.channelSelect.id].name;
-    var confirmation = confirm("Achtung!\nYou are about to publish tiles to ALL Firefoxen in channel " + channel_name + ". Are you sure?");
-    if (confirmation) {
-      spliceData.postTiles(tiles, $scope.deployFlag, $scope.channelSelect.id)
-        .success(function(data) {
-          var deployed = data.deployed;
+    spliceData.postTiles(tiles, $scope.deployFlag, $scope.channelSelect.id)
+      .success(function(data) {
+        var deployed = data.deployed;
 
-          var msg;
-          if (deployed) {
-            msg = '<strong>Success!</strong><p>Tiles published and deployed:<ul>';
-          }
-          else {
-            msg = '<strong>Success!</strong><p>Tiles published but <strong>NOT</strong> deployed:<ul>';
-          }
+        var msg;
+        if (deployed) {
+          msg = '<strong>Success!</strong><p>Tiles published and deployed:<ul>';
+        }
+        else {
+          msg = '<strong>Success!</strong><p>Tiles published but <strong>NOT</strong> deployed:<ul>';
+        }
 
-          for (var url of data.urls) {
-            msg += '<li><a href="' + url + '">' + url + '</a></li>';
-          }
-          msg += '</ul></p>'
-          $scope.alerts = [{
-            type: 'success',
-            msg: msg
-          }];
-          var urls = data.urls;
-          $scope.deployFlag = false;
-          $scope.refreshDistributions();
-        })
-        .error(function(data, status, headers, config, statusText) {
-          var errors = data.err;
-          var msg = '<strong>Error</strong>: '+ status;
-          if (statusText) {
-            msg += ' ' + statusText;
-          }
-          if (errors != null) {
-            msg += "<ul>";
-            for (var error of errors) {
-              if (error.path) {
-                msg += "<li>In <strong>" + error.path + "</strong>: " + error.msg + "</li>";
-              }
-              else {
-                msg += "<li>" + error.msg + "</li>";
-              }
+        for (var url of data.urls) {
+          msg += '<li><a href="' + url + '">' + url + '</a></li>';
+        }
+        msg += '</ul></p>'
+        $scope.alerts = [{
+          type: 'success',
+          msg: msg
+        }];
+        var urls = data.urls;
+        $scope.deployFlag = false;
+        $scope.refreshDistributions();
+      })
+      .error(function(data, status, headers, config, statusText) {
+        var errors = data.err;
+        var msg = '<strong>Error</strong>: '+ status;
+        if (statusText) {
+          msg += ' ' + statusText;
+        }
+        if (errors != null) {
+          msg += "<ul>";
+          for (var error of errors) {
+            if (error.path) {
+              msg += "<li>In <strong>" + error.path + "</strong>: " + error.msg + "</li>";
             }
-            msg += "</ul>";
+            else {
+              msg += "<li>" + error.msg + "</li>";
+            }
           }
+          msg += "</ul>";
+        }
 
-          $scope.alerts = [{
-            type: 'danger',
-            msg: msg,
-          }];
-        });
-    }
+        $scope.alerts = [{
+          type: 'danger',
+          msg: msg,
+        }];
+      });
   };
 
   $scope.init = function() {

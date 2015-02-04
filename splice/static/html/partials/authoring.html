@@ -1,3 +1,39 @@
+<script type="text/ng-template" id="template/confirmation.html">
+    <div class="modal" tabindex="999" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" ng-show="title">
+                    <button type="button" class="close" ng-click="$hide()">&times;</button>
+                    <h4 class="modal-title text-danger">Warning!</h4>
+                </div>
+                <div class="modal-body" ng-show="content">
+                    <p>You are about to publish tiles to with parameters:</p>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Channel</th>
+                                <th>Schedule For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ channelIndex[channelSelect.id].name }}</td>
+                                <td>{{ scheduledDate ? scheduledDate.toUTCString() : "Now" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>Are you sure? Check the box below to deploy to channel {{ channelIndex[channelSelect.id].name }}.</p>
+                    <span><input type="checkbox" ng-model="deployFlag"> Deploy to <strong>ALL</strong> Firefox {{ channelIndex[channelSelect.id].name }} users</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="doConfirmPublish()">Publish</button>
+                    <button type="button" class="btn btn-primary" ng-click="$hide()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
 <div class="container-fluid">
     <div class="alert-growl">
         <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert()">
@@ -28,6 +64,26 @@
                 </div>
             </div>
             <div ng-show="!tilesEmpty() && !downloadInProgress">
+                <div class="row">
+                    <div class="publish-bar col-md-12 tiles-info" bs-affix data-offset-top="150">
+                        <div class="col-md-3">
+                            <span class="dropdown">
+                                <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
+                                    <span class="input-group">
+                                        <input type="text" class="form-control" data-ng-model="scheduledDate">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <datetimepicker data-ng-model="scheduledDate" datetimepicker-config="{minuteStep: 15, dropdownSelector: '.dropdown-toggle'}" data-before-render="hidePastDatetimes($view, $dates, $leftDate, $upDate, $rightDate)"/>
+                                </ul>
+                            </span>
+                        </div>
+                        <div class="col-md-4">
+                            <button ng-click="showConfirmationModal()" class="btn btn-primary">Publish</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group col-md-12 tiles-info">
                     <h2>Data Source</h2>
                     <dl class="dl-horizontal">
@@ -53,8 +109,6 @@
                 </ol>
             </div>
             <div ng-show="!tilesEmpty() && !downloadInProgress" class="col-md-12 publish-bar">
-                <button ng-click="publish(tiles)" class="btn btn-danger">Publish</button>
-                <span><input type="checkbox" ng-model="deployFlag"> Deploy to channel <strong>{{ channelIndex[channelSelect.id].name }}</strong></span>
             </div>
         </form>
     </div>
