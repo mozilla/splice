@@ -13,6 +13,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
   $scope.channelSelect = null;
   $scope.scheduledDate = null;
   $scope.confirmationModal = $modal({scope: $scope, template: "template/confirmation.html", show: false});
+  $scope.uploadModal = $modal({scope: $scope, template: "template/upload.html", show: false});
 
   $scope.setupChannels = function(chans) {
     $scope.channels = chans;
@@ -67,9 +68,11 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
    * This is due to how ui-bootstrap works
    */
   $scope.alerts = [];
+  $scope.uploadMessage = {};
   $scope.cache = {};
   $scope.tiles = {};
   $scope.downloadInProgress = false;
+  $scope.uploadInProgress = false;
   $scope.versionSelect = null;
 
   $scope.hidePastDatetimes = function($view, $dates, $leftDate, $upDate, $rightDate) {
@@ -201,8 +204,8 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
   };
 
   $scope.doConfirmPublish = function() {
-    $scope.publish($scope.tiles);
     this.$hide();
+    $scope.publish($scope.tiles);
   };
 
   $scope.publish = function(tiles) {
@@ -210,38 +213,30 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
      * Send tiles to backend for publication.
      * Assumes data is correct.
      */
+    $scope.uploadInProgress = true;
+    $scope.uploadModal.$promise.then($scope.uploadModal.show);
     spliceData.postTiles(tiles, $scope.deployFlag, $scope.channelSelect.id)
       .success(function(data) {
         var deployed = data.deployed;
-
-        var msg;
-        if (deployed) {
-          msg = '<strong>Success!</strong><p>Tiles published and deployed:<ul>';
-        }
-        else {
-          msg = '<strong>Success!</strong><p>Tiles published but <strong>NOT</strong> deployed:<ul>';
-        }
-
+        var msg = '<ol>';
         for (var url of data.urls) {
           msg += '<li><a href="' + url + '">' + url + '</a></li>';
         }
-        msg += '</ul></p>'
-        $scope.alerts = [{
-          type: 'success',
+        msg += '</ol>'
+        $scope.uploadMessage = {
+          success: true,
+          deployed: deployed,
           msg: msg
-        }];
+        };
+
         var urls = data.urls;
         $scope.deployFlag = false;
         $scope.refreshDistributions();
       })
       .error(function(data, status, headers, config, statusText) {
         var errors = data.err;
-        var msg = '<strong>Error</strong>: '+ status;
-        if (statusText) {
-          msg += ' ' + statusText;
-        }
+        var msg = '<ol>';
         if (errors != null) {
-          msg += "<ul>";
           for (var error of errors) {
             if (error.path) {
               msg += "<li>In <strong>" + error.path + "</strong>: " + error.msg + "</li>";
@@ -250,14 +245,24 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
               msg += "<li>" + error.msg + "</li>";
             }
           }
-          msg += "</ul>";
         }
-
-        $scope.alerts = [{
-          type: 'danger',
+        msg += "</ol>";
+        $scope.uploadMessage = {
+          success: false,
+          status: status,
+          statusText: statusText,
           msg: msg,
-        }];
+        };
+      }).finally(function() {
+        $scope.uploadInProgress = false;
+        $scope.uploadModal.$promise.then($scope.uploadModal.show);
       });
+  };
+
+  $scope.selectUploadResult = function() {
+    var e = document.querySelector('#uploadResultSelectable');
+    var selection = window.getSelection();
+    selection.selectAllChildren(e);
   };
 
   $scope.init = function() {

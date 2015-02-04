@@ -107,3 +107,9 @@ ol.tiles-list > li:before {
 .modal-backdrop {
     opacity: 0.7;
 }
+
+.modal-status-message {
+    word-wrap: break-word;
+    overflow-y: auto;
+    max-height: 700px;
+}
