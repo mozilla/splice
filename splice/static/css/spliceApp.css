@@ -128,3 +128,7 @@ ol.tiles-list > li:before {
     overflow-y: auto;
     max-height: 700px;
 }
+
+.preview-modal {
+    width: 100%;
+}

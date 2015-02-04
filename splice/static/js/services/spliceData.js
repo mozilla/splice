@@ -33,10 +33,17 @@
       });
     };
 
-    this.getInitialData = function() {
+    this.getAuthoringInitialData = function() {
       return $http({
         method: 'GET',
         url: '/api/authoring/init_data',
+      });
+    };
+
+    this.getUpcomingInitialData = function() {
+      return $http({
+        method: 'GET',
+        url: '/api/upcoming/init_data',
       });
     };
 

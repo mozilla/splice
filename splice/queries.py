@@ -292,8 +292,12 @@ def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri
         raise
 
 
-def insert_distribution(url, channel_id, deployed, *args, **kwargs):
+def insert_distribution(url, channel_id, deployed, scheduled_dt, *args, **kwargs):
     from splice.environment import Environment
+
+    # ensure that on insert, a distribution is either deployed or scheduled, not both
+    if scheduled_dt is not None:
+        deployed = False
 
     env = Environment.instance()
     conn = env.db.engine.connect()
@@ -302,15 +306,16 @@ def insert_distribution(url, channel_id, deployed, *args, **kwargs):
         conn.execute(
             text(
                 "INSERT INTO distributions ("
-                " url, channel_id, deployed, created_at"
+                " url, channel_id, deployed, scheduled_start_date, created_at"
                 ") "
                 "VALUES ("
-                " :url, :channel_id, :deployed, :created_at"
+                " :url, :channel_id, :deployed, :scheduled_start_date, :created_at"
                 ")"
             ),
             url=url,
             channel_id=channel_id,
             deployed=deployed,
+            scheduled_start_date=scheduled_dt,
             created_at=datetime.utcnow()
         )
         trans.commit()
@@ -358,6 +363,61 @@ def get_all_distributions(limit=100):
     for row in rows:
         c_dists = channels.setdefault(row.channel_id, [])
         c_dists.append({'url': row.url, 'created_at': row.created_at})
+
+    return channels
+
+
+def get_upcoming_distributions(limit=100, include_past=False):
+    """
+    Obtain distributions, partitioned by channels with up to ``limit`` results
+    for each channel
+    """
+    from splice.environment import Environment
+
+    env = Environment.instance()
+
+    # getting around PEP8 E712 warning. This is necessary for SQLAlchemy
+    false_value = False
+
+    dist_cte = (
+        env.db.session
+        .query(
+            Distribution.channel_id,
+            Distribution.url,
+            Distribution.created_at,
+            Distribution.scheduled_start_date,
+            func.row_number().over(
+                partition_by=Distribution.channel_id,
+                order_by=Distribution.scheduled_start_date.asc())
+            .label('row_num')
+        )
+        .filter(Distribution.deployed == false_value))
+
+    if not include_past:
+        dist_cte = (
+            dist_cte
+            .filter(Distribution.scheduled_start_date >= datetime.utcnow()))
+
+    dist_cte = dist_cte.cte()
+
+    stmt = (
+        env.db.session
+        .query(
+            dist_cte.c.channel_id,
+            dist_cte.c.url,
+            dist_cte.c.created_at,
+            dist_cte.c.scheduled_start_date)
+        .filter(dist_cte.c.row_num <= limit)
+        .order_by(dist_cte.c.scheduled_start_date.asc())
+    )
+
+    rows = stmt.all()
+
+    channels = {}
+
+    for row in rows:
+        c_dists = channels.setdefault(row.channel_id, [])
+        c_dists.append({'url': row.url, 'created_at': row.created_at, 'scheduled_at': row.scheduled_start_date})
 
     return channels
 
