@@ -199,6 +199,10 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
     $scope.alerts = [];
   };
 
+  $scope.clearScheduledDate = function() {
+    $scope.deployConfig.scheduled = null;
+  };
+
   $scope.showConfirmationModal = function() {
     $scope.confirmationModal.$promise.then($scope.confirmationModal.show);
   };
