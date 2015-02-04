@@ -11,6 +11,7 @@ angular.module('spliceApp').controller('upcomingController', function($scope, $m
   $scope.tiles = {};
   $scope.downloadInProgress = false;
   $scope.fileErrorMsg = null;
+  $scope.unscheduleErrorMsg = null;
   $scope.previewModal = $modal({scope: $scope, template: "template/preview.html", show: false});
 
   $scope.setupChannels = function(chans) {
@@ -75,8 +76,19 @@ angular.module('spliceApp').controller('upcomingController', function($scope, $m
     $scope.previewModal.$promise.then($scope.previewModal.show);
   };
 
-  $scope.unscheduleDist = function(url) {
-    console.log("unschedule for " + url);
+  $scope.unscheduleDist = function(id) {
+    spliceData.unscheduleDistribution(id)
+      .success(function(data) {
+        $scope.refreshDistributions();
+      })
+      .error(function(data, status, headers, config, statusText) {
+          $scope.unscheduleErrorMsg = '<p>Could not unschedule distribution ' + id + '</p>';
+          $scope.unscheduleErrorMsg += '<p>HTTP Error: ' + status + ' ' + statusText + '</p>';
+          $scope.unscheduleErrorMsg += '<p>HTTP Error: ' + status + ' ' + statusText + '</p>';
+          if (data && data.message) {
+            $scope.unscheduleErrorMsg += '<p>' + data.message + '</p>';
+          }
+      });
   };
 
   $scope.openRemoteDistribution = function(url) {
@@ -139,7 +151,7 @@ angular.module('spliceApp').controller('upcomingController', function($scope, $m
   };
 
   $scope.refreshDistributions = function() {
-    spliceData.getDistributions()
+    spliceData.getUpcomingDistributions()
       .success(function(data) {
         $scope.setupChannels(data.d.chans);
         $scope.setupDistributions(data.d.dists);

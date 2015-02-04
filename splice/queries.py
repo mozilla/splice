@@ -382,6 +382,7 @@ def get_upcoming_distributions(limit=100, include_past=False):
     dist_cte = (
         env.db.session
         .query(
+            Distribution.id,
             Distribution.channel_id,
             Distribution.url,
             Distribution.created_at,
@@ -403,6 +404,7 @@ def get_upcoming_distributions(limit=100, include_past=False):
     stmt = (
         env.db.session
         .query(
+            dist_cte.c.id,
             dist_cte.c.channel_id,
             dist_cte.c.url,
             dist_cte.c.created_at,
@@ -417,9 +419,32 @@ def get_upcoming_distributions(limit=100, include_past=False):
 
     for row in rows:
         c_dists = channels.setdefault(row.channel_id, [])
-        c_dists.append({'url': row.url, 'created_at': row.created_at, 'scheduled_at': row.scheduled_start_date})
+        c_dists.append({'id': row.id, 'url': row.url, 'created_at': row.created_at, 'scheduled_at': row.scheduled_start_date})
 
     return channels
+
+
+def unschedule_distribution(dist_id):
+    """
+    Remove a distribution id if it is scheduled but not deployed yet
+    """
+    from splice.environment import Environment
+
+    env = Environment.instance()
+
+    # getting around PEP8 E711 warning. This is necessary for SQLAlchemy
+    none_value = None
+
+    stmt = (
+        env.db.session
+        .query(Distribution)
+        .filter(Distribution.id == dist_id)
+        .filter(Distribution.scheduled_start_date != none_value)
+    )
+
+    dist = stmt.one()
+    dist.scheduled_start_date = None
+    env.db.session.commit()
 
 
 def get_channels(limit=100):

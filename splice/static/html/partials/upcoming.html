@@ -59,15 +59,17 @@
                     <table class="table table-condensed">
                         <thead>
                             <th>#</th>
+                            <th>id</th>
                             <th>schedule</th>
                             <th>actions</th>
                         </thead>
                         <tbody>
                             <tr ng-repeat="dist in choices">
                                 <td>{{ $index }}</td>
+                                <td>{{ dist.id }}</td>
                                 <td>{{ dist.scheduled_at }}</td>
                                 <td>
-                                    <button class="btn btn-link" ng-click="unscheduleDist(dist.url)">unschedule</button>
+                                    <button class="btn btn-link" ng-click="unscheduleDist(dist.id)">unschedule</button>
                                     <button class="btn btn-primary" ng-click="previewDist(dist.url)">preview</button>
                                 </td>
                             </tr>

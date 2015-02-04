@@ -33,6 +33,14 @@
       });
     };
 
+    this.getUpcomingDistributions = function(limit) {
+      return $http({
+        method: 'GET',
+        params: {limit: limit},
+        url: '/api/upcoming/distributions'
+      });
+    };
+
     this.getAuthoringInitialData = function() {
       return $http({
         method: 'GET',
@@ -44,6 +52,16 @@
       return $http({
         method: 'GET',
         url: '/api/upcoming/init_data',
+      });
+    };
+
+    this.unscheduleDistribution = function(distId) {
+      var csrfToken = document.querySelector('meta[name=csrf-token]').attributes['content'].value;
+      return $http({
+        method: 'POST',
+        url: '/api/upcoming/unschedule',
+        params: {'distId': distId},
+        headers: {'X-CSRFToken': csrfToken}
       });
     };
 
