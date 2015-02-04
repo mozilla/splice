@@ -9,7 +9,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
   $scope.channelIndex = {};
   $scope.choices = [];
   $scope.source = {};
-  $scope.deployFlag = false;
+  $scope.deployConfig = {now: false, scheduled: null};
   $scope.channelSelect = null;
   $scope.scheduledDate = null;
   $scope.confirmationModal = $modal({scope: $scope, template: "template/confirmation.html", show: false});
@@ -215,7 +215,7 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
      */
     $scope.uploadInProgress = true;
     $scope.uploadModal.$promise.then($scope.uploadModal.show);
-    spliceData.postTiles(tiles, $scope.deployFlag, $scope.channelSelect.id)
+    spliceData.postTiles(tiles, $scope.channelSelect.id, $scope.deployConfig)
       .success(function(data) {
         var deployed = data.deployed;
         var msg = '<ol>';
@@ -230,7 +230,8 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
         };
 
         var urls = data.urls;
-        $scope.deployFlag = false;
+        $scope.deployConfig.now = false;
+        $scope.deployConfig.schedule = null;
         $scope.refreshDistributions();
       })
       .error(function(data, status, headers, config, statusText) {

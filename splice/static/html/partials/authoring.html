@@ -18,12 +18,15 @@
                         <tbody>
                             <tr>
                                 <td>{{ channelIndex[channelSelect.id].name }}</td>
-                                <td>{{ scheduledDate ? scheduledDate.toString() : "Now" }}</td>
+                                <td>{{ deployConfig.scheduled ? deployConfig.scheduled.toString() : "Now" }}</td>
                             </tr>
                         </tbody>
                     </table>
-                    <p>Are you sure? Check the box below to deploy to channel {{ channelIndex[channelSelect.id].name }}.</p>
-                    <span><input type="checkbox" ng-model="deployFlag"> Deploy to <strong>ALL</strong> Firefox {{ channelIndex[channelSelect.id].name }} users</span>
+                    <p>Are you sure?</p>
+                    <span ng-hide="deployConfig.scheduled">
+                        <p>Check the box below to deploy <strong>immediately</strong></p>
+                        <input type="checkbox" ng-model="deployConfig.now"> Deploy to <strong>ALL</strong> Firefox {{ channelIndex[channelSelect.id].name }} users
+                    </span>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" ng-click="doConfirmPublish()">Publish</button>
@@ -104,12 +107,12 @@
                             <span class="dropdown">
                                 <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
                                     <span class="input-group">
-                                        <input type="text" class="form-control" data-ng-model="scheduledDate">
+                                        <input type="text" class="form-control" data-ng-model="deployConfig.scheduled">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                    <datetimepicker data-ng-model="scheduledDate" datetimepicker-config="{minuteStep: 15, dropdownSelector: '.dropdown-toggle'}" data-before-render="hidePastDatetimes($view, $dates, $leftDate, $upDate, $rightDate)"/>
+                                    <datetimepicker data-ng-model="deployConfig.scheduled" datetimepicker-config="{minuteStep: 15, dropdownSelector: '.dropdown-toggle'}" data-before-render="hidePastDatetimes($view, $dates, $leftDate, $upDate, $rightDate)"/>
                                 </ul>
                             </span>
                         </div>
