@@ -1,3 +1,13 @@
+1.1.2
+=====
+
+* new table / migration: countries is a static dimension table containing countries and their iso codes
+
+1.1.1
+=====
+
+* new table / migration: application_stats_daily is a Redshift table to track 'fetch' application events
+
 1.1.0
 =====
 
