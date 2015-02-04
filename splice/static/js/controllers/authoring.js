@@ -12,8 +12,6 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
   $scope.deployFlag = false;
   $scope.channelSelect = null;
   $scope.scheduledDate = null;
-  $scope.title = "awesome title";
-  $scope.content = "awesome content";
   $scope.confirmationModal = $modal({scope: $scope, template: "template/confirmation.html", show: false});
 
   $scope.setupChannels = function(chans) {
