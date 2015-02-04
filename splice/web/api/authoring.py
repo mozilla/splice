@@ -74,7 +74,7 @@ def distributions():
 @authoring.route('/init_data', methods=['GET'])
 def init_data():
     """
-    Initial data provided to a page
+    Initial data provided to the authoring page
     """
 
     channels = get_channels()
