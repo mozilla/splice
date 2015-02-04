@@ -1,11 +1,12 @@
 import sys
 import logging
+from datetime import datetime
 from flask import Blueprint, request, jsonify
 from werkzeug.exceptions import BadRequest
 from sqlalchemy.orm.exc import NoResultFound
 from splice.environment import Environment
 from splice.queries import get_channels, get_all_distributions
-from splice.ingest import IngestError, ingest_links, distribute, payload_schema as schema
+from splice.ingest import IngestError, ScheduleError, ingest_links, distribute, payload_schema as schema
 from jsonschema.exceptions import ValidationError
 
 authoring = Blueprint('api.authoring', __name__, url_prefix='/api/authoring')
@@ -16,6 +17,8 @@ env = Environment.instance()
 def all_tiles():
     deploy_flag = request.args.get('deploy')
     channel_id = request.args.get('channelId')
+    scheduled_ts = request.args.get('scheduledTS')
+    scheduled_dt = None
 
     deploy = deploy_flag == '1'
 
@@ -27,7 +30,11 @@ def all_tiles():
     try:
         data = request.get_json(force=True)
         new_data = ingest_links(data, channel_id)
-        urls = distribute(new_data, channel_id, deploy)
+        if scheduled_ts:
+            # scheduled_ts assumed to be in seconds
+            scheduled_dt = datetime.utcfromtimestamp(int(scheduled_ts))
+            deploy = False
+        urls = distribute(new_data, channel_id, deploy, scheduled_dt)
     except NoResultFound, e:
         msg = "channel_id {0} does not exist".format(channel_id)
         env.log("INGEST_ERROR msg: {0}".format(msg))
@@ -40,6 +47,9 @@ def all_tiles():
         return jsonify({"err": errors}), 400
     except IngestError, e:
         env.log("INGEST_ERROR msg:{0}".format(e.message), level=logging.ERROR, name="client_error")
+        return jsonify({"err": [{"msg": e.message}]}), 400
+    except ScheduleError, e:
+        env.log("SCHEDULE_ERROR msg:{0}".format(e.message), level=logging.ERROR, name="client_error")
         return jsonify({"err": [{"msg": e.message}]}), 400
     except BadRequest, e:
         env.log("PAYLOAD_ERROR msg:{0}".format(e.message), level=logging.ERROR, name="client_error")
