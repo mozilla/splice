@@ -100,6 +100,14 @@ ol.tiles-list > li:before {
     background-color: #FFF;
 }
 
+.channel-controls {
+    margin-bottom: 25px;
+}
+
+.distribution-controls {
+    margin-bottom: 25px;
+}
+
 .distribution-previous-select {
     clear: both;
     display:block;

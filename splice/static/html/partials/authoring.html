@@ -80,14 +80,15 @@
     <h1>Firefox Tiles Authoring</h1>
     <div>
         <form name="allTilesForm">
-            <div class="row">
+            <div class="row channel-controls">
                 <div class="col-md-12">
                     <span class="distribution-select">
                         <label for="channels">Channel:</label>
                         <select name="channels" ng-model="channelSelect" required="1" ng-options="channel.name for channel in channels"></select>
                     </span>
                 </div>
-
+            </div>
+            <div class="row distribution-controls">
                 <div class="col-md-2">
                     <label for="previousTiles">Previous distributions:</label>
                     <select class="distribution-previous-select" name="previousTiles" ng-model="versionSelect" ng-options="choice.created_at for choice in choices"></select>
@@ -127,14 +128,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-12 tiles-info">
-                    <h2>Data Source</h2>
-                    <dl class="dl-horizontal">
-                        <dt>Type</dt>
-                        <dd>{{ source.type }}</dd>
-                        <dt>Origin</dt>
-                        <dd>{{ source.origin }}</dd>
-                    </dl>
+                <div class="row">
+                    <div class="col-md-2">
+                        <h3>Data Source Type</h3>
+                        <p>{{ source.type}}</p>
+                    </div>
+                    <div class="col-md-8">
+                        <h3>Data Source origin</h3>
+                        <p>{{ source.origin}}</p>
+                    </div>
                 </div>
                 <ol class="row tiles-list">
                     <li ng-repeat="(locale, tileList) in tiles" class="col-md-12">
