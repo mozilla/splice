@@ -63,6 +63,7 @@ ul.tile-container li {
 ol.tiles-list {
     list-style-type: none;
     counter-reset: li-counter;
+    padding-bottom: 60px;
 }
 
 ol.tiles-list > li {
