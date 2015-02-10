@@ -1,75 +1,19 @@
 "use strict";
 
-angular.module('spliceApp').controller('authoringController', function($scope, $modal, spliceData, fileReader, initData) {
+angular.module('spliceApp').controller('authoringController', function($controller, $scope, $modal, spliceData, fileReader, initData) {
+  $controller('distributionController', {$scope: $scope});
 
   /** Distribution select/choice setup **/
-
-  $scope.distributions = null;
-  $scope.channels = null;
-  $scope.channelIndex = {};
-  $scope.choices = [];
   $scope.source = {};
   $scope.deployConfig = {now: false, scheduled: null};
-  $scope.channelSelect = null;
-  $scope.payloadSchema = null;
   $scope.scheduledDate = null;
   $scope.confirmationModal = $modal({scope: $scope, template: "template/confirmation.html", show: false});
   $scope.uploadModal = $modal({scope: $scope, template: "template/upload.html", show: false});
 
-  $scope.setupChannels = function(chans) {
-    $scope.channels = chans;
-    for (var i = 0; i < chans.length; i++) {
-      var chan = chans[i];
-      $scope.channelIndex[chan.id] = chan;
-    }
-  };
-
-  $scope.setupDistributions = function(dists) {
-    var choices = [];
-    $scope.distributions = dists;
-
-    if ($scope.channelSelect != null) {
-      // if already set, try to preserve the same selection
-      // while the values are the same, it isn't the same object
-
-      var oldId = $scope.channelSelect.id;
-      $scope.channelSelect = null;
-
-      for (var i = 0; i < $scope.channels.length; i++) {
-        if (oldId == $scope.channels[i].id) {
-          $scope.channelSelect = $scope.channels[i];
-          break;
-        }
-      }
-      // note that channelSelect could still be null after this
-    }
-
-    if ($scope.channelSelect == null) {
-      $scope.channelSelect = $scope.channels[0];
-    }
-
-    if ($scope.channelSelect.id in dists) {
-      $scope.choices = dists[$scope.channelSelect.id];
-    }
-  };
-
-  $scope.refreshDistributions = function() {
-    spliceData.getDistributions()
-      .success(function(data) {
-        $scope.setupChannels(data.d.chans);
-        $scope.setupDistributions(data.d.dists);
-      });
-  };
-
   /** UI and tile data **/
-
-  $scope.fileErrorMsg = null;
-  $scope.uploadMessage = {};
-  $scope.cache = {};
-  $scope.tiles = {};
-  $scope.downloadInProgress = false;
   $scope.uploadInProgress = false;
   $scope.versionSelect = null;
+  $scope.uploadMessage = {};
 
   $scope.hidePastDatetimes = function($view, $dates, $leftDate, $upDate, $rightDate) {
     for (var i=0; i< $dates.length; i++) {
@@ -80,55 +24,6 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
       }
     }
   };
-
-  $scope.loadPayload = function(data, source, cacheKey) {
-    /**
-     * Validate and load tiles payload
-     */
-    var cacheKey = cacheKey || false;
-    var results = tv4.validateResult(data, $scope.payloadSchema);
-
-    if (results.valid) {
-      if (cacheKey) {
-        $scope.cache[cacheKey] = data;
-        $scope.tiles = $scope.cache[cacheKey];
-      }
-      else {
-        $scope.tiles = data;
-      }
-      $scope.source = source;
-      $scope.fileErrorMsg = null;
-    }
-    else {
-      $scope.fileErrorMsg = 'Validation failed: ' + results.error.message + ' at ' + results.error.dataPath;
-      $scope.tiles = {};
-    }
-    return results.valid;
-  };
-
-  $scope.tilesEmpty = function() {
-    /**
-     * angular template expression test for empty tiles
-     */
-    return Object.keys($scope.tiles).length == 0;
-  };
-
-  $scope.$watch('channelSelect', function(newValue, oldValue) {
-    /**
-     * Event handler for Channel selection
-     */
-    if (newValue == null) {
-      return;
-    }
-
-    allTilesForm.newTiles.value = null;
-
-    $scope.downloadInProgress = false;
-    $scope.tiles = [];
-    $scope.source = {};
-    $scope.choices = $scope.distributions[newValue.id];
-    $scope.versionSelect = null;
-  });
 
   $scope.$watch('versionSelect', function(newValue, oldValue) {
     /**
@@ -260,11 +155,29 @@ angular.module('spliceApp').controller('authoringController', function($scope, $
     selection.selectAllChildren(e);
   };
 
-  $scope.init = function() {
-    $scope.payloadSchema = initData.schema;
-    $scope.setupChannels(initData.chans);
-    $scope.setupDistributions(initData.dists);
-    $scope.channelSelect = initData.chans[0];
+  $scope.refreshDistributions = function() {
+    spliceData.getDistributions()
+      .success(function(data) {
+        $scope.setupChannels(data.d.chans);
+        $scope.setupDistributions(data.d.dists);
+      });
   };
-  $scope.init();
+
+  $scope.$watch('channelSelect', function(newValue, oldValue) {
+    /**
+     * Event handler for Channel selection
+     */
+    if (newValue == null) {
+      return;
+    }
+
+    $scope.downloadInProgress = false;
+    $scope.tiles = [];
+    $scope.choices = $scope.distributions[newValue.id];
+    $scope.source = {};
+    allTilesForm.newTiles.value = null;
+    $scope.versionSelect = null;
+  });
+
+  $scope.init(initData);
 });
