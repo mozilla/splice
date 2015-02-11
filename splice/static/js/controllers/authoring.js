@@ -16,10 +16,26 @@ angular.module('spliceApp').controller('authoringController', function($controll
   $scope.uploadMessage = {};
 
   $scope.hidePastDatetimes = function($view, $dates, $leftDate, $upDate, $rightDate) {
+    var now;
+    if ($view == 'day') {
+      now = new Date();
+      now.setHours(0);
+      now.setMinutes(0);
+      now.setSeconds(0);
+      now.setMilliseconds(0);
+    }
+    else {
+      var realNow = new Date();
+      /*
+       * $dates don't have TZ factored in, i.e. they think they are UTC,
+       * but are local time. need to make comparator also TZ-agnostic
+       */
+      now = new Date(realNow.getTime() - realNow.getTimezoneOffset()*60000);
+    }
+
     for (var i=0; i< $dates.length; i++) {
       var d = $dates[i];
-      var now = new Date();
-      if (d.dateValue < now) {
+      if (d.dateValue < now.getTime()) {
         d.selectable = false;
       }
     }
