@@ -71,105 +71,85 @@
     </div>
 </script>
 
-<div class="container-fluid">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapse-bar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <span class="navbar-brand">Firefox Tiles</span>
+<div>
+    <form name="allTilesForm">
+        <div class="row channel-controls">
+            <div class="col-md-12">
+                <span class="distribution-select">
+                    <label for="channels">Channel:</label>
+                    <select name="channels" ng-model="channelSelect" required="1" ng-options="channel.name for channel in channels"></select>
+                </span>
             </div>
-            <div class="collapse navbar-collapse" id="collapse-bar">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a ui-sref="authoring">Authoring <span class="sr-only">(current)</span></a></li>
-                    <li><a ui-sref="upcoming">Upcoming</a></li>
-                </ul>
+        </div>
+        <div class="row distribution-controls">
+            <div class="col-md-2">
+                <label for="previousTiles">Previous distributions:</label>
+                <select class="distribution-previous-select" name="previousTiles" ng-model="versionSelect" ng-options="choice.created_at for choice in choices"></select>
             </div>
-    </nav>
-    <div>
-        <form name="allTilesForm">
-            <div class="row channel-controls">
-                <div class="col-md-12">
-                    <span class="distribution-select">
-                        <label for="channels">Channel:</label>
-                        <select name="channels" ng-model="channelSelect" required="1" ng-options="channel.name for channel in channels"></select>
-                    </span>
+            <div class="col-md-2">
+                <label for="newTiles">Load a new distribution from file:</label>
+                <input class="distribution-file-input" type="file" name="newTiles" ng-file-select>
+            </div>
+        </div>
+        <div ng-show="downloadInProgress && !fileErrorMsg" class="form-group col-md-12">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped active" role="progressbar">
                 </div>
             </div>
-            <div class="row distribution-controls">
+        </div>
+        <div ng-show="!tilesEmpty() && !downloadInProgress && !fileErrorMsg">
+            <div class="row">
+                <div class="publish-bar col-md-12 tiles-info" bs-affix data-offset-top="140">
+                    <div class="col-md-3">
+                        <span class="dropdown">
+                            <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
+                                <span class="input-group">
+                                    <input type="text" class="form-control" data-ng-model="deployConfig.scheduled">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <datetimepicker data-ng-model="deployConfig.scheduled" datetimepicker-config="{minuteStep: 15, dropdownSelector: '.dropdown-toggle'}" data-before-render="hidePastDatetimes($view, $dates, $leftDate, $upDate, $rightDate)"/>
+                            </ul>
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        <button ng-click="showConfirmationModal()" class="btn btn-primary">Publish</button>
+                        <span ng-show="deployConfig.scheduled">
+                            <button ng-click="clearScheduledDate()" class="btn btn-default">clear schedule</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-2">
-                    <label for="previousTiles">Previous distributions:</label>
-                    <select class="distribution-previous-select" name="previousTiles" ng-model="versionSelect" ng-options="choice.created_at for choice in choices"></select>
+                    <h3>Data Source Type</h3>
+                    <p>{{ source.type}}</p>
                 </div>
-                <div class="col-md-2">
-                    <label for="newTiles">Load a new distribution from file:</label>
-                    <input class="distribution-file-input" type="file" name="newTiles" ng-file-select>
-                </div>
-            </div>
-            <div ng-show="downloadInProgress && !fileErrorMsg" class="form-group col-md-12">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped active" role="progressbar">
-                    </div>
+                <div class="col-md-8">
+                    <h3>Data Source origin</h3>
+                    <p>{{ source.origin}}</p>
                 </div>
             </div>
-            <div ng-show="!tilesEmpty() && !downloadInProgress && !fileErrorMsg">
-                <div class="row">
-                    <div class="publish-bar col-md-12 tiles-info" bs-affix data-offset-top="140">
-                        <div class="col-md-3">
-                            <span class="dropdown">
-                                <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
-                                    <span class="input-group">
-                                        <input type="text" class="form-control" data-ng-model="deployConfig.scheduled">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                    <datetimepicker data-ng-model="deployConfig.scheduled" datetimepicker-config="{minuteStep: 15, dropdownSelector: '.dropdown-toggle'}" data-before-render="hidePastDatetimes($view, $dates, $leftDate, $upDate, $rightDate)"/>
-                                </ul>
-                            </span>
-                        </div>
-                        <div class="col-md-4">
-                            <button ng-click="showConfirmationModal()" class="btn btn-primary">Publish</button>
-                            <span ng-show="deployConfig.scheduled">
-                                <button ng-click="clearScheduledDate()" class="btn btn-default">clear schedule</button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2">
-                        <h3>Data Source Type</h3>
-                        <p>{{ source.type}}</p>
-                    </div>
-                    <div class="col-md-8">
-                        <h3>Data Source origin</h3>
-                        <p>{{ source.origin}}</p>
-                    </div>
-                </div>
-                <ol class="row tiles-list">
-                    <li ng-repeat="(locale, tileList) in tiles" class="col-md-12">
-                        <h2>{{ locale }}</h2>
-                        <ul ng-hide="downloadInProgress" class="tile-container">
-                            <li ng-repeat="tile in tileList">
-                                <ul class="tile">
-                                    <li><a href="{{ tile.url }}">{{ tile.title }} [ {{tile.type}} ]</a></li>
-                                    <li><div class="enhanced-content img" style="background-color: {{ tile.bgColor }}; background-image: url('{{ tile.imageURI }}')"></div></li>
-                                    <li><div class="enhanced-content enhanced-img" style=" background-color: {{ tile.enhancedImageURI ? tile.bgColor : 'inherit' }}; background-image: url('{{ tile.enhancedImageURI }}')"></div></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ol>
-            </div>
-            <div ng-show="fileErrorMsg" class="text-danger">
-                <h2>File Input Error</h2>
-                <p ng-bind-html="fileErrorMsg"></p>
-                <p>Please try another file.</p>
-            </div>
-        </form>
-    </div>
+            <ol class="row tiles-list">
+                <li ng-repeat="(locale, tileList) in tiles" class="col-md-12">
+                    <h2>{{ locale }}</h2>
+                    <ul ng-hide="downloadInProgress" class="tile-container">
+                        <li ng-repeat="tile in tileList">
+                            <ul class="tile">
+                                <li><a href="{{ tile.url }}">{{ tile.title }} [ {{tile.type}} ]</a></li>
+                                <li><div class="enhanced-content img" style="background-color: {{ tile.bgColor }}; background-image: url('{{ tile.imageURI }}')"></div></li>
+                                <li><div class="enhanced-content enhanced-img" style=" background-color: {{ tile.enhancedImageURI ? tile.bgColor : 'inherit' }}; background-image: url('{{ tile.enhancedImageURI }}')"></div></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+        <div ng-show="fileErrorMsg" class="text-danger">
+            <h2>File Input Error</h2>
+            <p ng-bind-html="fileErrorMsg"></p>
+            <p>Please try another file.</p>
+        </div>
+    </form>
 </div>

@@ -33,9 +33,29 @@
         <!--[if lt IE 10]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        {% block content %}
-        <div ui-view></div>
-        {% endblock %}
+        <div class="container-fluid" ng-controller="mainController">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapse-bar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <span class="navbar-brand">Firefox Tiles</span>
+                    </div>
+                    <div class="collapse navbar-collapse" id="collapse-bar">
+                        <ul class="nav navbar-nav">
+                            <li ng-class="{active: stateName.authoring}"><a ui-sref="authoring">Authoring<span ng-show="stateName.authoring" class="sr-only"> (current)</span></a></li>
+                            <li ng-class="{active: stateName.upcoming}"><a ui-sref="upcoming">Upcoming<span ng-show="stateName.upcoming" class="sr-only"> (current)</span></a></li>
+                        </ul>
+                    </div>
+            </nav>
+            {% block content %}
+            <div ui-view></div>
+            {% endblock %}
+        </div>
 
         {% block body_js %}
         <script src="{{ url_for('static', filename='js/splice.js') }}"></script>
@@ -43,6 +63,7 @@
         <script src="{{ url_for('static', filename='js/services/fileReader.js') }}"></script>
         <script src="{{ url_for('static', filename='js/services/spliceData.js') }}"></script>
         <script src="{{ url_for('static', filename='js/directives/fileSelect.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/controllers/main.js') }}"></script>
         <script src="{{ url_for('static', filename='js/controllers/distribution.js') }}"></script>
         <script src="{{ url_for('static', filename='js/controllers/authoring.js') }}"></script>
         <script src="{{ url_for('static', filename='js/controllers/upcoming.js') }}"></script>
