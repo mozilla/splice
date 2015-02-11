@@ -31,6 +31,13 @@ angular.module('spliceApp').controller('authoringController', function($controll
        * but are local time. need to make comparator also TZ-agnostic
        */
       now = new Date(realNow.getTime() - realNow.getTimezoneOffset()*60000);
+      if ($view == 'hour') {
+        /*
+         * Allow for time selection within the current hour
+         */
+        now.setMinutes(0);
+        now.setTime(now.getTime() - 60000)
+      }
     }
 
     for (var i=0; i< $dates.length; i++) {
