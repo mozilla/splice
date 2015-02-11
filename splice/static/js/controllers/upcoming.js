@@ -14,18 +14,20 @@ angular.module('spliceApp').controller('upcomingController', function($controlle
   };
 
   $scope.unscheduleDist = function(id) {
-    spliceData.unscheduleDistribution(id)
-      .success(function(data) {
-        $scope.refreshDistributions();
-      })
-      .error(function(data, status, headers, config, statusText) {
-          $scope.unscheduleErrorMsg = '<p>Could not unschedule distribution ' + id + '</p>';
-          $scope.unscheduleErrorMsg += '<p>HTTP Error: ' + status + ' ' + statusText + '</p>';
-          $scope.unscheduleErrorMsg += '<p>HTTP Error: ' + status + ' ' + statusText + '</p>';
-          if (data && data.message) {
-            $scope.unscheduleErrorMsg += '<p>' + data.message + '</p>';
-          }
-      });
+    if (window.confirm("Really unschedule distribution " + id + "?")) {
+      spliceData.unscheduleDistribution(id)
+        .success(function(data) {
+          $scope.refreshDistributions();
+        })
+        .error(function(data, status, headers, config, statusText) {
+            $scope.unscheduleErrorMsg = '<p>Could not unschedule distribution ' + id + '</p>';
+            $scope.unscheduleErrorMsg += '<p>HTTP Error: ' + status + ' ' + statusText + '</p>';
+            $scope.unscheduleErrorMsg += '<p>HTTP Error: ' + status + ' ' + statusText + '</p>';
+            if (data && data.message) {
+              $scope.unscheduleErrorMsg += '<p>' + data.message + '</p>';
+            }
+        });
+    }
   };
 
   $scope.openRemoteDistribution = function(url) {
