@@ -20,6 +20,10 @@
                                 <td>{{ channelIndex[channelSelect.id].name }}</td>
                                 <td>{{ deployConfig.scheduled ? deployConfig.scheduled.toString() : "Now" }}</td>
                             </tr>
+                            <tr ng-show="deployConfig.scheduled">
+                                <td></td>
+                                <td>{{ deployConfig.scheduled ? deployConfig.scheduled.toUTCString() : "" }}</td>
+                            </tr>
                         </tbody>
                     </table>
                     <p>Are you sure?</p>
