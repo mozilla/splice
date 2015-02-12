@@ -367,10 +367,11 @@ def get_all_distributions(limit=100):
     return channels
 
 
-def get_upcoming_distributions(limit=100, include_past=False):
+def get_upcoming_distributions(limit=100, leniency_minutes=15, include_past=False):
     """
     Obtain distributions, partitioned by channels with up to ``limit`` results
     for each channel
+    :leniency_minutes: have a leniency in minutes up to the present when looking for distributions
     """
     from splice.environment import Environment
 
@@ -395,9 +396,10 @@ def get_upcoming_distributions(limit=100, include_past=False):
         .filter(Distribution.deployed == false_value))
 
     if not include_past:
+        min_dt = datetime.utcnow() - timedelta(minutes=leniency_minutes)
         dist_cte = (
             dist_cte
-            .filter(Distribution.scheduled_start_date >= datetime.utcnow()))
+            .filter(Distribution.scheduled_start_date >= min_dt))
 
     dist_cte = dist_cte.cte()
 

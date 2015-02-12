@@ -255,7 +255,8 @@ def ingest_tiles(in_file, channel_id, out_path, console_out, deploy_flag, verbos
 
         if deploy_flag:
             logger.info("Distributing AND Deploying data")
-        logger.info("Distributing data (NO deploy)")
+        else:
+            logger.info("Distributing data (NO deploy)")
 
         distribute(new_data, channel_id, deploy_flag)
     except IngestError, e:
@@ -263,6 +264,59 @@ def ingest_tiles(in_file, channel_id, out_path, console_out, deploy_flag, verbos
     except:
         import traceback
         traceback.print_exc()
+
+
+@DataCommand.option("-v", "--verbose", action="store_true", dest="verbose", help="turns on verbose mode", default=False, required=False)
+@DataCommand.option("-q", "--quiet", action="store_true", dest="quiet", help="turns on quiet mode", default=False, required=False)
+@DataCommand.option("-l", "--leniency-minutes", type=int, dest="leniency", help="Leniency period in minutes for scheduling", default=15)
+@DataCommand.option("-d", "--deploy", action="store_true", dest="deploy_flag", help="Deploy to S3", required=False)
+@DataCommand.option("-c", "--console", action="store_true", dest="console_out", help="Enable console output", required=False)
+def deploy_scheduled(console_out, deploy_flag, leniency, verbose, quiet, *args, **kwargs):
+    """
+    Find scheduled distributions and deploy
+    """
+    if verbose:
+        logger = setup_command_logger(logging.DEBUG)
+    elif quiet:
+        logger = setup_command_logger(logging.ERROR)
+    else:
+        logger = setup_command_logger(logging.INFO)
+
+    from splice.queries import get_scheduled_distributions, unschedule_distribution
+    import requests
+
+    dt = datetime.utcnow()
+    distributions = get_scheduled_distributions(leniency, dt)
+    logger.info("{0} - found {1} distributions".format(dt, len(distributions)))
+
+    dist_data = []
+    for dist in distributions:
+        logger.info("fetching {0}".format(dist.url))
+        r = requests.get(dist.url)
+        if r.status_code == 200:
+            dist_data.append((r.json(), dist.channel_id, dist.id))
+        else:
+            logger.error("FETCH_ERROR status_code:{0} url:{1}".format(r.status_code, dist.url))
+
+    from splice.ingest import ingest_links, distribute, IngestError
+
+    if deploy_flag:
+        for rawdata, channel_id, dist_id in dist_data:
+            try:
+                new_data = ingest_links(rawdata, channel_id)
+
+                if console_out:
+                    print json.dumps(new_data, sort_keys=True, indent=2)
+
+                distribute(new_data, channel_id, deploy_flag)
+                unschedule_distribution(dist_id)
+            except IngestError, e:
+                raise InvalidCommand(e.message)
+            except:
+                import traceback
+                traceback.print_exc()
+    else:
+        logger.info("DRY_RUN_MODE. To deploy, use the -d option")
 
 
 RedshiftCommand = Manager(usage="Redshift utility commands")
