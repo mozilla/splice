@@ -285,6 +285,8 @@ def distribute(data, channel_id, deploy, scheduled_dt=None):
         now = datetime.utcnow()
         if now > scheduled_dt:
             raise ScheduleError("scheduled date needs to be in the future")
+        elif deploy:
+            raise ScheduleError("cannot specify deploy and schedule at the same time")
 
     channel = (
         env.db.session

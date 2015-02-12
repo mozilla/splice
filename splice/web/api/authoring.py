@@ -33,7 +33,6 @@ def all_tiles():
         if scheduled_ts:
             # scheduled_ts assumed to be in seconds
             scheduled_dt = datetime.utcfromtimestamp(int(scheduled_ts))
-            deploy = False
         urls = distribute(new_data, channel_id, deploy, scheduled_dt)
     except NoResultFound, e:
         msg = "channel_id {0} does not exist".format(channel_id)
@@ -53,6 +52,9 @@ def all_tiles():
         return jsonify({"err": [{"msg": e.message}]}), 400
     except BadRequest, e:
         env.log("PAYLOAD_ERROR msg:{0}".format(e.message), level=logging.ERROR, name="client_error")
+        return jsonify({"err": [{"msg": e.message}]}), 400
+    except ValueError, e:
+        env.log(e.message, level=logging.ERROR, exc_info=sys.exc_info(), name="application")
         return jsonify({"err": [{"msg": e.message}]}), 400
     except Exception, e:
         env.log(e.message, level=logging.ERROR, exc_info=sys.exc_info(), name="application")

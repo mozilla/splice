@@ -424,6 +424,51 @@ def get_upcoming_distributions(limit=100, include_past=False):
     return channels
 
 
+def get_scheduled_distributions(minutes, dt_query=None):
+    """
+    Returns distributions scheduled as from a point in time, up to a given number of minutes
+    As a regular task, it is intended to run at least once hourly.
+    :minutes: sets the closest fraction of an hour to select scheduled distributions
+    :dt_query: optionally set the date time to find schedules for
+    """
+    from splice.environment import Environment
+
+    env = Environment.instance()
+
+    if not minutes or 1 < minutes >= 60:
+        raise ValueError("minutes needs to be a number between 1..59 inclusive")
+
+    if dt_query is None:
+        dt_query = datetime.utcnow()
+
+    # getting around PEP8 E712 warning. This is necessary for SQLAlchemy
+    false_value = False
+
+    stmt = (
+        env.db.session
+        .query(Distribution)
+        .filter(Distribution.deployed == false_value)
+    )
+
+    # triggers a match, with the minimum time given by the closest
+    # chunk of the hour given by minute
+    minute_start = (dt_query.minute // minutes) * minutes
+    min_query_dt = datetime(dt_query.year, dt_query.month, dt_query.day, dt_query.hour, minute_start)
+
+    if (minute_start + minutes) >= 60:
+        # if the next chunk goes beyond the hour, limit the query to the next hour
+        max_query_dt = datetime(dt_query.year, dt_query.month, dt_query.day, dt_query.hour + 1, 0)
+    else:
+        max_query_dt = datetime(dt_query.year, dt_query.month, dt_query.day, dt_query.hour, minute_start + minutes)
+
+    stmt = stmt.filter(
+        Distribution.scheduled_start_date.between(min_query_dt, max_query_dt))
+
+    dists = stmt.all()
+
+    return dists
+
+
 def unschedule_distribution(dist_id):
     """
     Remove a distribution id if it is scheduled but not deployed yet
