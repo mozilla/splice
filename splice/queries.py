@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy.sql import text
 from splice.models import Channel, Distribution, Tile, impression_stats_daily, newtab_stats_daily
 from sqlalchemy.sql import select, func, and_
@@ -426,16 +426,17 @@ def get_upcoming_distributions(limit=100, include_past=False):
 
 def get_scheduled_distributions(minutes, dt_query=None):
     """
-    Returns distributions scheduled as from a point in time, up to a given number of minutes
+    Returns distributions scheduled from a point in time, and a leniency period
+    within which a tasks could've been scheduled closed to that point.
     As a regular task, it is intended to run at least once hourly.
-    :minutes: sets the closest fraction of an hour to select scheduled distributions
+    :minutes: amount of time in the past from the query time which is still viable
     :dt_query: optionally set the date time to find schedules for
     """
     from splice.environment import Environment
 
     env = Environment.instance()
 
-    if not minutes or 1 < minutes >= 60:
+    if not minutes or not (0 < minutes < 60):
         raise ValueError("minutes needs to be a number between 1..59 inclusive")
 
     if dt_query is None:
@@ -444,25 +445,14 @@ def get_scheduled_distributions(minutes, dt_query=None):
     # getting around PEP8 E712 warning. This is necessary for SQLAlchemy
     false_value = False
 
+    min_query_dt = dt_query - timedelta(minutes=minutes)
+
     stmt = (
         env.db.session
         .query(Distribution)
         .filter(Distribution.deployed == false_value)
+        .filter(Distribution.scheduled_start_date.between(min_query_dt, dt_query))
     )
-
-    # triggers a match, with the minimum time given by the closest
-    # chunk of the hour given by minute
-    minute_start = (dt_query.minute // minutes) * minutes
-    min_query_dt = datetime(dt_query.year, dt_query.month, dt_query.day, dt_query.hour, minute_start)
-
-    if (minute_start + minutes) >= 60:
-        # if the next chunk goes beyond the hour, limit the query to the next hour
-        max_query_dt = datetime(dt_query.year, dt_query.month, dt_query.day, dt_query.hour + 1, 0)
-    else:
-        max_query_dt = datetime(dt_query.year, dt_query.month, dt_query.day, dt_query.hour, minute_start + minutes)
-
-    stmt = stmt.filter(
-        Distribution.scheduled_start_date.between(min_query_dt, max_query_dt))
 
     dists = stmt.all()
 
