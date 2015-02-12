@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
-from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_true
+from nose.tools import assert_raises, assert_equal
 from tests.base import BaseTestCase
 from sqlalchemy.orm.exc import NoResultFound
-import splice
 from splice.queries import get_scheduled_distributions, unschedule_distribution, insert_distribution
+
 
 class ScheduleTest(BaseTestCase):
     def insert_distro(self, dt=None):
@@ -42,18 +42,18 @@ class TestGetSchedule(ScheduleTest):
         assert_equal(1, len(dists))
 
     def test_get_present(self):
-        dt = self.insert_distro(datetime.utcnow())
+        self.insert_distro(datetime.utcnow())
         dists = get_scheduled_distributions(1)
         assert_equal(1, len(dists))
 
     def test_invalid_minutes(self):
-        with assert_raises(ValueError) as e:
+        with assert_raises(ValueError):
             get_scheduled_distributions(0)
 
-        with assert_raises(ValueError) as e:
+        with assert_raises(ValueError):
             get_scheduled_distributions(-1)
 
-        with assert_raises(ValueError) as e:
+        with assert_raises(ValueError):
             get_scheduled_distributions(None)
 
 
