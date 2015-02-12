@@ -318,10 +318,15 @@ def distribute(data, channel_id, deploy, scheduled_dt=None):
             # default to JSON for artifacts
             headers['Content-Type'] = "application/json"
 
-        key = Key(bucket)
-        key.name = file["key"]
-        key.set_contents_from_string(file["data"], headers=headers)
-        key.set_acl("public-read")
+        key = bucket.get_key(file["key"])
+        uploaded = False
+
+        if key is None:
+            key = Key(bucket)
+            key.name = file["key"]
+            key.set_contents_from_string(file["data"], headers=headers)
+            key.set_acl("public-read")
+            uploaded = True
 
         url = key.generate_url(expires_in=0, query_auth=False)
 
@@ -334,7 +339,10 @@ def distribute(data, channel_id, deploy, scheduled_dt=None):
             pass
         url = uri.url
 
-        command_logger.info("Uploaded file at {0}".format(url))
+        if uploaded:
+            command_logger.info("UPLOADED {0}".format(url))
+        else:
+            command_logger.info("SKIPPED {0}".format(url))
         distributed.append(url)
 
         if file.get("dist", False):
