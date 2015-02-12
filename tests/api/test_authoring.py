@@ -51,6 +51,11 @@ class TestAuthoring(BaseTestCase):
         response = self.client.post(url, data="{")
         assert_equal(response.status_code, 400)
 
+    def test_publish_invalid_payload(self):
+        url = "{0}?deploy=1&channelId=1".format(url_for('api.authoring.all_tiles'))
+        response = self.client.post(url, data='{"invalid_data": 12345}')
+        assert_equal(response.status_code, 400)
+
     def test_publish_no_payload(self):
         response = self.client.post(url_for('api.authoring.all_tiles'))
         assert_equal(response.status_code, 400)
