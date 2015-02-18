@@ -54,7 +54,7 @@ ul.tile-container li {
 .publish-bar {
     border-top: 1px solid #DDD;
     height: 76px;
-    background-color: white;
+    background-color: #FFF;
     margin-bottom: 10px;
     z-index: 999;
     border-bottom: 1px solid #DDD;
