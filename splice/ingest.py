@@ -47,7 +47,7 @@ payload_schema = {
                         "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
                     },
                     "type": {
-                        "enum": ["affiliate", "organic", "sponsored"],
+                        "enum": ["affiliate", "organic", "sponsored", "related"],
                     },
                     "imageURI": {
                         "type": "string",
@@ -57,6 +57,12 @@ payload_schema = {
                         "type": "string",
                         "pattern": "^data:image/.*$|^https?://.*$",
                     },
+                    "related": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                        }
+                    }
                 },
                 "required": ["url", "title", "bgColor", "type", "imageURI"],
             }
@@ -128,6 +134,11 @@ def ingest_links(data, channel_id, *args, **kwargs):
             for t in tiles:
                 trans = conn.begin()
                 try:
+                    # must validate that if the type == related, the related field must exist
+                    if (t['type'] == 'related' and t.get('related') is None) or \
+                            (t.get('related') is not None and t['type'] != 'related'):
+                        raise IngestError("related tile '{0}' must have type=related and related=[...]".format(t['title']))
+
                     if not env.is_test:
                         conn.execute("LOCK TABLE tiles;")
 

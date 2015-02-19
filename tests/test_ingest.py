@@ -52,6 +52,36 @@ class TestIngestLinks(BaseTestCase):
             }
         ]}, self.channels[0].id)
 
+    def test_invalid_related(self):
+        """
+        Invalid related type is rejected
+        """
+        assert_raises(ValidationError, ingest_links, {"US/en-US": [
+            {
+                "imageURI": "data:image/png;base64,somedata",
+                "url": "https://somewhere.com",
+                "title": "Some Title",
+                "type": "related",
+                "bgColor": "#FFFFFF",
+                "related": "not an array, really"
+            }
+        ]}, self.channels[0].id)
+
+    def test_invalid_related_type(self):
+        """
+        Invalid related is rejected
+        """
+        tile = {
+                "imageURI": "data:image/png;base64,somedata",
+                "url": "https://somewhere.com",
+                "title": "Some Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF",
+                "related": ["abc.com", "xyz.com"]
+            }
+        data = ingest_links({"US/en-US": [tile]}, self.channels[0].id)
+        assert_equal(0, len(data["US/en-US"]))
+
     def test_id_creation(self):
         """
         Test an id is created for a valid tile
