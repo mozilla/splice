@@ -8,6 +8,9 @@ def setup_routes(app):
     import splice.web.api.authoring
     splice.web.api.authoring.register_routes(app)
 
+    import splice.web.api.upcoming
+    splice.web.api.upcoming.register_routes(app)
+
     import splice.web.api.reporting
     splice.web.api.reporting.register_routes(app)
 

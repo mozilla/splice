@@ -1,0 +1,88 @@
+<script type="text/ng-template" id="template/preview.html">
+    <div class="modal" tabindex="999" role="dialog">
+        <div class="modal-dialog preview-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="$hide()">&times;</button>
+                    <h2 class="modal-title">Tiles Preview</h2>
+                </div>
+                <div class="modal-body">
+                    <div ng-show="downloadInProgress && !fileErrorMsg">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped active" role="progressbar">
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="!tilesEmpty() && !downloadInProgress && !fileErrorMsg">
+                        <ol class="row tiles-list">
+                            <li ng-repeat="(locale, tileList) in tiles" class="col-md-12">
+                                <h2>{{ locale }}</h2>
+                                <ul ng-hide="downloadInProgress" class="tile-container">
+                                    <li ng-repeat="tile in tileList">
+                                        <ul class="tile">
+                                            <li><a href="{{ tile.url }}">{{ tile.title }} [ {{tile.type}} ]</a></li>
+                                            <li><div class="enhanced-content img" style="background-color: {{ tile.bgColor }}; background-image: url('{{ tile.imageURI }}')"></div></li>
+                                            <li><div class="enhanced-content enhanced-img" style=" background-color: {{ tile.enhancedImageURI ? tile.bgColor : 'inherit' }}; background-image: url('{{ tile.enhancedImageURI }}')"></div></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+                    <div ng-show="fileErrorMsg" class="text-danger">
+                        <h2>File Input Error</h2>
+                        <p ng-bind-html="fileErrorMsg"></p>
+                        <p>Please try another file.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="$hide()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<div>
+    <form name="upcomingForm">
+        <div class="row channel-controls" ng-hide="initErrorMsg">
+            <div class="col-md-12">
+                <span class="distribution-select">
+                    <label for="channels">Channel:</label>
+                    <select name="channels" ng-model="channelSelect" required="1" ng-options="channel.name for channel in channels"></select>
+                </span>
+            </div>
+        </div>
+        <div ng-hide="initErrorMsg">
+            <table class="table table-condensed">
+                <thead>
+                    <th>#</th>
+                    <th>id</th>
+                    <th>schedule</th>
+                    <th>actions</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="dist in choices">
+                    <td>{{ $index }}</td>
+                    <td>{{ dist.id }}</td>
+                    <td>{{ dist.scheduled_at }}</td>
+                    <td>
+                        <button class="btn btn-link" ng-click="unscheduleDist(dist.id)">unschedule</button>
+                        <button class="btn btn-primary" ng-click="previewDist(dist.url)">preview</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-show="fileErrorMsg" class="text-danger">
+            <h2>File Input Error</h2>
+            <p ng-bind-html="fileErrorMsg"></p>
+            <p>Please try another file.</p>
+        </div>
+        <div ng-show="initErrorMsg" class="text-danger">
+            <h2>Page Init Error</h2>
+            <p ng-bind-html="initErrorMsg"></p>
+            <p>Please reload the page or contact the server administrator.</p>
+        </div>
+    </form>
+</div>

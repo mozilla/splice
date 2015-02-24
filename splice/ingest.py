@@ -70,6 +70,10 @@ class IngestError(Exception):
     pass
 
 
+class ScheduleError(Exception):
+    pass
+
+
 def slice_image_uri(image_uri):
     """
     Turn an image uri into a sha1 hash, mime_type and data tuple
@@ -264,17 +268,25 @@ def generate_artifacts(data, channel_name, deploy):
     return artifacts
 
 
-def distribute(data, channel_id, deploy):
+def distribute(data, channel_id, deploy, scheduled_dt=None):
     """Upload tile data to S3
     :data: tile data
     :channel_id: channel id for which to distribute tile data
-    :deploy: whether to deploy tiles to firefox
+    :deploy: whether to deploy tiles to firefox immediately
+    :scheduled_dt: an optional scheduled date in the future for deploy. overrides deploy
     """
     command_logger.info("Generating Data")
 
     from splice.models import Channel
     from splice.environment import Environment
     env = Environment.instance()
+
+    if scheduled_dt:
+        now = datetime.utcnow()
+        if now > scheduled_dt:
+            raise ScheduleError("scheduled date needs to be in the future")
+        elif deploy:
+            raise ScheduleError("cannot specify deploy and schedule at the same time")
 
     channel = (
         env.db.session
@@ -306,10 +318,15 @@ def distribute(data, channel_id, deploy):
             # default to JSON for artifacts
             headers['Content-Type'] = "application/json"
 
-        key = Key(bucket)
-        key.name = file["key"]
-        key.set_contents_from_string(file["data"], headers=headers)
-        key.set_acl("public-read")
+        key = bucket.get_key(file["key"])
+        uploaded = False
+
+        if key is None:
+            key = Key(bucket)
+            key.name = file["key"]
+            key.set_contents_from_string(file["data"], headers=headers)
+            key.set_acl("public-read")
+            uploaded = True
 
         url = key.generate_url(expires_in=0, query_auth=False)
 
@@ -322,10 +339,13 @@ def distribute(data, channel_id, deploy):
             pass
         url = uri.url
 
-        command_logger.info("Uploaded file at {0}".format(url))
+        if uploaded:
+            command_logger.info("UPLOADED {0}".format(url))
+        else:
+            command_logger.info("SKIPPED {0}".format(url))
         distributed.append(url)
 
         if file.get("dist", False):
-            insert_distribution(url, channel_id, deploy)
+            insert_distribution(url, channel_id, deploy, scheduled_dt)
 
     return distributed

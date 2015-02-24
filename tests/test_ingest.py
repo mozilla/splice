@@ -313,12 +313,20 @@ class TestDistribute(BaseTestCase):
         import splice.ingest
 
         self.key_mock = Mock()
+        self.bucket_mock = Mock()
+
+        def bucket_get_key_mock(*args, **kwargs):
+            return None
+        self.bucket_mock.get_key = Mock(side_effect=bucket_get_key_mock)
 
         def get_key_mock(*args, **kwargs):
             return self.key_mock
         splice.ingest.Key = Mock(side_effect=get_key_mock)
 
-        self.env.s3.get_bucket = Mock(return_value=Mock())
+        def get_bucket_mock(*args, **kwargs):
+            return self.bucket_mock
+        self.env.s3.get_bucket = Mock(side_effect=get_bucket_mock)
+
         super(TestDistribute, self).setUp()
 
     def test_distribute(self):
