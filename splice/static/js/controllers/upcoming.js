@@ -30,39 +30,6 @@ angular.module('spliceApp').controller('upcomingController', function($controlle
     }
   };
 
-  $scope.openRemoteDistribution = function(url) {
-    /**
-     * Open a distribution file given a URL
-     */
-    var chanId = $scope.channelSelect;
-    var cacheKey = chanId + url;
-
-    if (!$scope.cache.hasOwnProperty(cacheKey)) {
-      $scope.downloadInProgress = true;
-      spliceData.getJSON(url)
-        .success(function(data) {
-          if (data != null && data instanceof Object) {
-            $scope.loadPayload(data, {origin: url, type: 'remote'}, cacheKey);
-          }
-          else {
-            $scope.fileErrorMsg = 'Invalid file at <a href="' + newValue.url + '">' + newValue.url + '</a>';
-            $scope.tiles = {};
-          }
-          $scope.downloadInProgress = false;
-        })
-        .error(function(data, status, headers, config, statusText) {
-          console.log("download failed");
-          $scope.fileErrorMsg = '<p>Could not download file at <a href="' + newValue.url + '">' + newValue.url + '</a></p>';
-          $scope.fileErrorMsg += '<p>HTTP Error: ' + status + ' ' + statusText + '</p>';
-          $scope.tiles = {};
-        });
-    } else {
-      $scope.downloadInProgress = false;
-      $scope.tiles = $scope.cache[cacheKey];
-      $scope.fileErrorMsg = null;
-    }
-  };
-
   $scope.refreshDistributions = function() {
     spliceData.getUpcomingDistributions()
       .success(function(data) {

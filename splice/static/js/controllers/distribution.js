@@ -83,6 +83,40 @@ angular.module('spliceApp').controller('distributionController', function($scope
     return results.valid;
   };
 
+  $scope.openRemoteDistribution = function(url) {
+    /**
+     * Open a distribution file given a URL
+     */
+    var chanId = $scope.channelSelect;
+    var cacheKey = chanId + url;
+
+    if (!$scope.cache.hasOwnProperty(cacheKey)) {
+      $scope.downloadInProgress = true;
+      spliceData.getJSON(url)
+        .success(function(data) {
+          if (data != null && data instanceof Object) {
+            $scope.loadPayload(data, {origin: url, type: 'remote'}, cacheKey);
+          }
+          else {
+            $scope.fileErrorMsg = 'Invalid file at <a href="' + newValue.url + '">' + newValue.url + '</a>';
+            $scope.tiles = {};
+          }
+        })
+        .error(function(data, status, headers, config, statusText) {
+          $scope.fileErrorMsg = '<p>Could not download file at <a href="' + newValue.url + '">' + newValue.url + '</a></p>';
+          $scope.fileErrorMsg += '<p>HTTP Error: ' + status + ' ' + statusText + '</p>';
+          $scope.tiles = {};
+        })
+        .finally(function() {
+            $scope.downloadInProgress = false;
+        });
+    } else {
+      $scope.downloadInProgress = false;
+      $scope.tiles = $scope.cache[cacheKey];
+      $scope.fileErrorMsg = null;
+    }
+  };
+
   $scope.init = function(initData) {
     if (initData.hasOwnProperty('chans') && initData.chans.length > 0) {
       $scope.channelSelect = initData.chans[0];
