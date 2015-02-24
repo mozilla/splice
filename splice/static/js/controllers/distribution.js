@@ -9,6 +9,7 @@ angular.module('spliceApp').controller('distributionController', function($scope
   $scope.payloadSchema = null;
   $scope.channelSelect = null;
   $scope.fileErrorMsg = null;
+  $scope.initErrorMsg = null;
   $scope.cache = {};
   $scope.tiles = {};
   $scope.downloadInProgress = false;
@@ -83,9 +84,14 @@ angular.module('spliceApp').controller('distributionController', function($scope
   };
 
   $scope.init = function(initData) {
-    $scope.payloadSchema = initData.schema;
-    $scope.setupChannels(initData.chans);
-    $scope.setupDistributions(initData.dists);
-    $scope.channelSelect = initData.chans[0];
+    if (initData.hasOwnProperty('chans') && initData.chans.length > 0) {
+      $scope.channelSelect = initData.chans[0];
+      $scope.payloadSchema = initData.schema;
+      $scope.setupChannels(initData.chans);
+      $scope.setupDistributions(initData.dists);
+    }
+    else {
+      $scope.initErrorMsg = 'Error: Cannot continue. No channel provided in data payload.';
+    }
   };
 });

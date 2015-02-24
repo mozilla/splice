@@ -45,7 +45,7 @@
 
 <div>
     <form name="upcomingForm">
-        <div class="row channel-controls">
+        <div class="row channel-controls" ng-hide="initErrorMsg">
             <div class="col-md-12">
                 <span class="distribution-select">
                     <label for="channels">Channel:</label>
@@ -53,31 +53,36 @@
                 </span>
             </div>
         </div>
-        <div>
-                <table class="table table-condensed">
-                    <thead>
-                        <th>#</th>
-                        <th>id</th>
-                        <th>schedule</th>
-                        <th>actions</th>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="dist in choices">
-                            <td>{{ $index }}</td>
-                            <td>{{ dist.id }}</td>
-                            <td>{{ dist.scheduled_at }}</td>
-                            <td>
-                                <button class="btn btn-link" ng-click="unscheduleDist(dist.id)">unschedule</button>
-                                <button class="btn btn-primary" ng-click="previewDist(dist.url)">preview</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div ng-hide="initErrorMsg">
+            <table class="table table-condensed">
+                <thead>
+                    <th>#</th>
+                    <th>id</th>
+                    <th>schedule</th>
+                    <th>actions</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="dist in choices">
+                    <td>{{ $index }}</td>
+                    <td>{{ dist.id }}</td>
+                    <td>{{ dist.scheduled_at }}</td>
+                    <td>
+                        <button class="btn btn-link" ng-click="unscheduleDist(dist.id)">unschedule</button>
+                        <button class="btn btn-primary" ng-click="previewDist(dist.url)">preview</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <div ng-show="fileErrorMsg" class="text-danger">
             <h2>File Input Error</h2>
             <p ng-bind-html="fileErrorMsg"></p>
             <p>Please try another file.</p>
+        </div>
+        <div ng-show="initErrorMsg" class="text-danger">
+            <h2>Page Init Error</h2>
+            <p ng-bind-html="initErrorMsg"></p>
+            <p>Please reload the page or contact the server administrator.</p>
         </div>
     </form>
 </div>

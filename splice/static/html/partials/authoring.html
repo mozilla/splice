@@ -77,7 +77,7 @@
 
 <div>
     <form name="allTilesForm">
-        <div class="row channel-controls">
+        <div class="row channel-controls" ng-hide="initErrorMsg">
             <div class="col-md-12">
                 <span class="distribution-select">
                     <label for="channels">Channel:</label>
@@ -85,7 +85,7 @@
                 </span>
             </div>
         </div>
-        <div class="row distribution-controls">
+        <div class="row distribution-controls" ng-hide="initErrorMsg">
             <div class="col-md-2">
                 <label for="previousTiles">Previous distributions:</label>
                 <select class="distribution-previous-select" name="previousTiles" ng-model="versionSelect" ng-options="choice.created_at for choice in choices"></select>
@@ -154,6 +154,11 @@
             <h2>File Input Error</h2>
             <p ng-bind-html="fileErrorMsg"></p>
             <p>Please try another file.</p>
+        </div>
+        <div ng-show="initErrorMsg" class="text-danger">
+            <h2>Page Init Error</h2>
+            <p ng-bind-html="initErrorMsg"></p>
+            <p>Please reload the page or contact the server administrator.</p>
         </div>
     </form>
 </div>
