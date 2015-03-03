@@ -1,3 +1,15 @@
+1.1.4
+=====
+
+* new authoring feature: ability to schedule tile distributions in the future
+* new authoring UI: upcoming, to be able to view and cancel scheduled deployments of distributions
+* requires a cron job to be created. The cronjob is to be run every 15 mins, starting as close as possible to the zeroth minute
+* model definitions for tables created in earlier version
+
+__note__:
+* includes schema change/migration. new column: scheduled_start_date added to table distributions
+* requires a cron job for scheduling feature to work
+
 1.1.2
 =====
 

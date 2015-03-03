@@ -1,61 +1,164 @@
-<div class="container-fluid">
-    <div class="alert-growl">
-        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert()">
-            <span ng-bind-html="alert.msg"></span>
-        </alert>
+<script type="text/ng-template" id="template/confirmation.html">
+    <div class="modal" tabindex="999" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="$hide()">&times;</button>
+                    <h2 class="modal-title text-danger">Warning!</h2>
+                </div>
+                <div class="modal-body">
+                    <p>You are about to publish tiles to with parameters:</p>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Channel</th>
+                                <th>Schedule For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ channelIndex[channelSelect.id].name }}</td>
+                                <td>{{ deployConfig.scheduled ? deployConfig.scheduled.toString() : "Now" }}</td>
+                            </tr>
+                            <tr ng-show="deployConfig.scheduled">
+                                <td></td>
+                                <td>{{ deployConfig.scheduled.toUTCString() }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>Are you sure?</p>
+                    <span ng-hide="deployConfig.scheduled">
+                        <p>Check the box below to deploy <strong>immediately</strong></p>
+                        <input type="checkbox" ng-model="deployConfig.now"> Deploy to <strong>ALL</strong> Firefox {{ channelIndex[channelSelect.id].name }} users
+                    </span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="doConfirmPublish()">Publish</button>
+                    <button type="button" class="btn btn-primary" ng-click="$hide()">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <h1>Firefox Tiles Authoring</h1>
-    <div>
-        <form name="allTilesForm">
-            <div class="form-group distribution-select">
+</script>
+
+<script type="text/ng-template" id="template/upload.html">
+    <div class="modal" tabindex="999" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="$hide()">&times;</button>
+                    <h2>Tiles upload</h2>
+                </div>
+                <div class="modal-body">
+                    <div ng-show="uploadInProgress">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped active" role="progressbar">
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-hide="uploadInProgress">
+                        <div ng-show="uploadMessage.success">
+                            <strong class="text-success">Success!</strong><p>Tiles published and <strong>{{ uploadMessage.deployed ? "" : "NOT" }}</strong> deployed</p>
+                        </div>
+                        <div ng-hide="uploadMessage.success">
+                            <strong class="text-danger">Error</strong>: {{ uploadMessage.status }} {{ uploadMessage.statusText }}
+                        </div>
+                        <div id="uploadResultSelectable" class="modal-status-message" ng-bind-html="uploadMessage.msg"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button ng-hide="uploadInProgress" type="button" class="btn btn-default" ng-click="selectUploadResult()">Select All</button>
+                    <button type="button" class="btn btn-primary" ng-click="$hide()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<div>
+    <form name="allTilesForm">
+        <div class="row channel-controls" ng-hide="initErrorMsg">
+            <div class="col-md-12">
                 <span class="distribution-select">
                     <label for="channels">Channel:</label>
                     <select name="channels" ng-model="channelSelect" required="1" ng-options="channel.name for channel in channels"></select>
                 </span>
-                <span class="distribution-select">
-                    <label for="previousTiles">Previous distributions:</label>
-                    <select name="previousTiles" ng-model="versionSelect" required="1" ng-options="choice.created_at for choice in choices"></select>
-                </span>
             </div>
-            <div class="form-group col-md-12">
+        </div>
+        <div class="row distribution-controls" ng-hide="initErrorMsg">
+            <div class="col-md-2">
+                <label for="previousTiles">Previous distributions:</label>
+                <select class="distribution-previous-select" name="previousTiles" ng-model="versionSelect" ng-options="choice.created_at for choice in choices"></select>
+            </div>
+            <div class="col-md-2">
                 <label for="newTiles">Load a new distribution from file:</label>
-                <input type="file" name="newTiles" ng-file-select>
+                <input class="distribution-file-input" type="file" name="newTiles" ng-file-select>
             </div>
-            <div ng-show="downloadInProgress" class="form-group col-md-12">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped active" role="progressbar">
+        </div>
+        <div ng-show="downloadInProgress && !fileErrorMsg" class="form-group col-md-12">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped active" role="progressbar">
+                </div>
+            </div>
+        </div>
+        <div ng-show="!tilesEmpty() && !downloadInProgress && !fileErrorMsg">
+            <div class="row">
+                <div class="publish-bar col-md-12 tiles-info" bs-affix data-offset-top="140">
+                    <div class="col-md-3">
+                        <span class="dropdown">
+                            <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
+                                <span class="input-group">
+                                    <input type="text" class="form-control" data-ng-model="deployConfig.scheduled">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <datetimepicker data-ng-model="deployConfig.scheduled" datetimepicker-config="{minuteStep: 15, dropdownSelector: '.dropdown-toggle'}" data-before-render="hidePastDatetimes($view, $dates, $leftDate, $upDate, $rightDate)"/>
+                            </ul>
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        <button ng-click="showConfirmationModal()" class="btn btn-primary">Publish</button>
+                        <span ng-show="deployConfig.scheduled">
+                            <button ng-click="clearScheduledDate()" class="btn btn-default">clear schedule</button>
+                        </span>
                     </div>
                 </div>
             </div>
-            <div ng-show="!tilesEmpty() && !downloadInProgress">
-                <div class="form-group col-md-12 tiles-info">
-                    <h2>Data Source</h2>
-                    <dl class="dl-horizontal">
-                        <dt>Type</dt>
-                        <dd>{{ source.type }}</dd>
-                        <dt>Origin</dt>
-                        <dd>{{ source.origin }}</dd>
-                    </dl>
+            <div class="row">
+                <div class="col-md-2">
+                    <h3>Data Source Type</h3>
+                    <p>{{ source.type}}</p>
                 </div>
-                <ol class="row tiles-list">
-                    <li ng-repeat="(locale, tileList) in tiles" class="col-md-12">
-                        <h2>{{ locale }}</h2>
-                        <ul ng-hide="downloadInProgress" class="tile-container">
-                            <li ng-repeat="tile in tileList">
-                                <ul class="tile">
-                                    <li><a href="{{ tile.url }}">{{ tile.title }} [ {{tile.type}} ]</a></li>
-                                    <li><div class="enhanced-content img" style="background-color: {{ tile.bgColor }}; background-image: url('{{ tile.imageURI }}')"></div></li>
-                                    <li><div class="enhanced-content enhanced-img" style=" background-color: {{ tile.enhancedImageURI ? tile.bgColor : 'inherit' }}; background-image: url('{{ tile.enhancedImageURI }}')"></div></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ol>
+                <div class="col-md-8">
+                    <h3>Data Source origin</h3>
+                    <p>{{ source.origin}}</p>
+                </div>
             </div>
-            <div ng-show="!tilesEmpty() && !downloadInProgress" class="col-md-12 publish-bar">
-                <button ng-click="publish(tiles)" class="btn btn-danger">Publish</button>
-                <span><input type="checkbox" ng-model="deployFlag"> Deploy to channel <strong>{{ channelIndex[channelSelect.id].name }}</strong></span>
-            </div>
-        </form>
-    </div>
+            <ol class="row tiles-list">
+                <li ng-repeat="(locale, tileList) in tiles" class="col-md-12">
+                    <h2>{{ locale }}</h2>
+                    <ul ng-hide="downloadInProgress" class="tile-container">
+                        <li ng-repeat="tile in tileList">
+                            <ul class="tile">
+                                <li><a href="{{ tile.url }}">{{ tile.title }} [ {{tile.type}} ]</a></li>
+                                <li><div class="enhanced-content img" style="background-color: {{ tile.bgColor }}; background-image: url('{{ tile.imageURI }}')"></div></li>
+                                <li><div class="enhanced-content enhanced-img" style=" background-color: {{ tile.enhancedImageURI ? tile.bgColor : 'inherit' }}; background-image: url('{{ tile.enhancedImageURI }}')"></div></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+        <div ng-show="fileErrorMsg" class="text-danger">
+            <h2>File Input Error</h2>
+            <p ng-bind-html="fileErrorMsg"></p>
+            <p>Please try another file.</p>
+        </div>
+        <div ng-show="initErrorMsg" class="text-danger">
+            <h2>Page Init Error</h2>
+            <p ng-bind-html="initErrorMsg"></p>
+            <p>Please reload the page or contact the server administrator.</p>
+        </div>
+    </form>
 </div>

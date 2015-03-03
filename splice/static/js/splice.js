@@ -1,5 +1,5 @@
 "use strict";
 
 (function() {
-  angular.module('spliceApp', ['ui.router', 'ui.bootstrap', 'ui.validate', 'ngSanitize']);
+  angular.module('spliceApp', ['ui.router', 'mgcrea.ngStrap', 'ui.validate', 'ngSanitize', 'ui.bootstrap.datetimepicker']);
 })();

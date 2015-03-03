@@ -12,6 +12,7 @@ Tiles project
   * pip
   * virtualenv
  * postgres
+ * libmagic
 
 ## Setup
 
