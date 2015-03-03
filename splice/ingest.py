@@ -26,49 +26,80 @@ mime_extensions = {
 
 payload_schema = {
     "type": "object",
-    "patternProperties": {
-        "^([A-Za-z]+)/([A-Za-z-]+)$": {
+    "properties": {
+        "additionalProperties": False,
+        "adgroups": {
+            "type": "object",
+            "patternProperties": {
+                # this is the ID name of the adgroup that the Tiles will reference the adgroup by
+                "^[A-Za-z-]+$": {
+                    "type": "object",
+                    "properties": {
+                        "sites": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "pattern": "^https?://.*$"
+                            }
+                        },
+                        "locale": {
+                            "type": "string",
+                            "pattern": "^[A-Za-z-]+$"
+                        },
+                        "country_code": {
+                            "type": "string",
+                            "pattern": "^[A-Z][A-Z]$"
+                        }
+                    },
+                    "additionalProperties": False,
+                },
+            },
+            "additionalProperties": False,
+        },
+        "tiles": {
             "type": "array",
             "items": {
                 "type": "object",
-                "properties": {
-                    "directoryId": {
-                        "type": "integer",
-                    },
-                    "url": {
-                        "type": "string",
-                        "pattern": "^https?://.*$",
-                    },
-                    "title": {
-                        "type": "string",
-                    },
-                    "bgColor": {
-                        "type": "string",
-                        "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
-                    },
-                    "type": {
-                        "enum": ["affiliate", "organic", "sponsored", "related"],
-                    },
-                    "imageURI": {
-                        "type": "string",
-                        "pattern": "^data:image/.*$|^https?://.*$",
-                    },
-                    "enhancedImageURI": {
-                        "type": "string",
-                        "pattern": "^data:image/.*$|^https?://.*$",
-                    },
-                    "related": {
+                "patternProperties": {
+                    "^([A-Za-z]+)/([A-Za-z-]+)$": {
                         "type": "array",
                         "items": {
-                            "type": "string",
+                            "type": "object",
+                            "properties": {
+                                "directoryId": {
+                                    "type": "integer",
+                                },
+                                "url": {
+                                    "type": "string",
+                                    "pattern": "^https?://.*$",
+                                },
+                                "title": {
+                                    "type": "string",
+                                },
+                                "bgColor": {
+                                    "type": "string",
+                                    "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
+                                },
+                                "type": {
+                                    "enum": ["affiliate", "organic", "sponsored"],
+                                },
+                                "imageURI": {
+                                    "type": "string",
+                                    "pattern": "^data:image/.*$|^https?://.*$",
+                                },
+                                "enhancedImageURI": {
+                                    "type": "string",
+                                    "pattern": "^data:image/.*$|^https?://.*$",
+                                },
+                            },
+                            "required": ["url", "title", "bgColor", "type", "imageURI", "adgroup"],
                         }
                     }
                 },
-                "required": ["url", "title", "bgColor", "type", "imageURI"],
+                "additionalProperties": False,
             }
         }
-    },
-    "additionalProperties": False,
+    }
 }
 
 
@@ -110,14 +141,28 @@ def ingest_links(data, channel_id, *args, **kwargs):
     env = Environment.instance()
     conn = env.db.engine.connect()
 
-    ingested_data = {}
+    # process adgroups
+    # from bug 1126191:
+    # 1. AdGroup supplied in ingest (remember adgroups contain locale and suggested sites).
+    # - the adgroup is created if it doesn't exist (using it's name for lookup).
+    # - if the adgroup does exist, we update the set of adgroup_sites associated:
+    #   - if the ingest lists an adgroup_site that doesn't exist in the db, it adds it
+    #   - if the ingest lists an adgroup_site that exists in the db, and the adgroup_site is 'inactive', then activate it
+    #   - if an adgroup_site exists that *isn't* listed in the ingest, then mark it as 'inactive'
 
-    country_locales = sorted(data.keys())
+    adgroups = data.get('adgroups', dict())
+    for adgroup_id, adgroup in adgroups.iteritems:
+        pass
+
+    # process tiles
+    tiles = data.get('tiles')
+    ingested_data = {}
+    country_locales = sorted(tiles.keys())
 
     try:
         for country_locale_str in country_locales:
 
-            tiles = data[country_locale_str]
+            tiles = tiles[country_locale_str]
             country_code, locale = country_locale_str.split("/")
             country_code = country_code.upper()
 
@@ -134,11 +179,6 @@ def ingest_links(data, channel_id, *args, **kwargs):
             for t in tiles:
                 trans = conn.begin()
                 try:
-                    # must validate that if the type == related, the related field must exist
-                    if (t['type'] == 'related' and t.get('related') is None) or \
-                            (t.get('related') is not None and t['type'] != 'related'):
-                        raise IngestError("related tile '{0}' must have type=related and related=[...]".format(t['title']))
-
                     if not env.is_test:
                         conn.execute("LOCK TABLE tiles;")
 

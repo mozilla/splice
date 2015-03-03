@@ -72,13 +72,13 @@ class TestIngestLinks(BaseTestCase):
         Invalid related is rejected
         """
         tile = {
-                "imageURI": "data:image/png;base64,somedata",
-                "url": "https://somewhere.com",
-                "title": "Some Title",
-                "type": "organic",
-                "bgColor": "#FFFFFF",
-                "related": ["abc.com", "xyz.com"]
-            }
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "related": ["abc.com", "xyz.com"]
+        }
         data = ingest_links({"US/en-US": [tile]}, self.channels[0].id)
         assert_equal(0, len(data["US/en-US"]))
 

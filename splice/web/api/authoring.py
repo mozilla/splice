@@ -36,7 +36,8 @@ def all_tiles():
         errors = []
         error = {"path": e.path[0], "msg": e.message}
         errors.append(error)
-        env.log("VALIDATION_ERROR path:{0} msg:{1}".format(e.path[0], e.message), level=logging.ERROR, name="client_error")
+        env.log("VALIDATION_ERROR path:{0} msg:{1}".format(e.path[0], e.message), level=logging.ERROR,
+                name="client_error")
         return jsonify({"err": errors}), 400
     except IngestError, e:
         env.log("INGEST_ERROR msg:{0}".format(e.message), level=logging.ERROR, name="client_error")
