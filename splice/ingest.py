@@ -12,7 +12,7 @@ from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
 import jsonschema
 from furl import furl
-from splice.queries import tile_exists, insert_tile, insert_distribution
+from splice.queries import tile_exists, insert_tile, insert_distribution, get_frecent_sites_for_tile
 from splice.environment import Environment
 
 command_logger = logging.getLogger("command")
@@ -26,80 +26,50 @@ mime_extensions = {
 
 payload_schema = {
     "type": "object",
-    "properties": {
-        "additionalProperties": False,
-        "adgroups": {
-            "type": "object",
-            "patternProperties": {
-                # this is the ID name of the adgroup that the Tiles will reference the adgroup by
-                "^[A-Za-z-]+$": {
-                    "type": "object",
-                    "properties": {
-                        "sites": {
-                            "type": "array",
-                            "items": {
-                                "type": "string",
-                                "pattern": "^https?://.*$"
-                            }
-                        },
-                        "locale": {
-                            "type": "string",
-                            "pattern": "^[A-Za-z-]+$"
-                        },
-                        "country_code": {
-                            "type": "string",
-                            "pattern": "^[A-Z][A-Z]$"
-                        }
-                    },
-                    "additionalProperties": False,
-                },
-            },
-            "additionalProperties": False,
-        },
-        "tiles": {
+    "patternProperties": {
+        "^([A-Za-z]+)/([A-Za-z-]+)$": {
             "type": "array",
             "items": {
                 "type": "object",
-                "patternProperties": {
-                    "^([A-Za-z]+)/([A-Za-z-]+)$": {
+                "properties": {
+                    "directoryId": {
+                        "type": "integer",
+                    },
+                    "url": {
+                        "type": "string",
+                        "pattern": "^https?://.*$",
+                    },
+                    "title": {
+                        "type": "string",
+                    },
+                    "bgColor": {
+                        "type": "string",
+                        "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
+                    },
+                    "type": {
+                        "enum": ["affiliate", "organic", "sponsored"],
+                    },
+                    "imageURI": {
+                        "type": "string",
+                        "pattern": "^data:image/.*$|^https?://.*$",
+                    },
+                    "enhancedImageURI": {
+                        "type": "string",
+                        "pattern": "^data:image/.*$|^https?://.*$",
+                    },
+                    "frecent_sites": {
                         "type": "array",
                         "items": {
-                            "type": "object",
-                            "properties": {
-                                "directoryId": {
-                                    "type": "integer",
-                                },
-                                "url": {
-                                    "type": "string",
-                                    "pattern": "^https?://.*$",
-                                },
-                                "title": {
-                                    "type": "string",
-                                },
-                                "bgColor": {
-                                    "type": "string",
-                                    "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
-                                },
-                                "type": {
-                                    "enum": ["affiliate", "organic", "sponsored"],
-                                },
-                                "imageURI": {
-                                    "type": "string",
-                                    "pattern": "^data:image/.*$|^https?://.*$",
-                                },
-                                "enhancedImageURI": {
-                                    "type": "string",
-                                    "pattern": "^data:image/.*$|^https?://.*$",
-                                },
-                            },
-                            "required": ["url", "title", "bgColor", "type", "imageURI", "adgroup"],
+                            "type": "string",
+                            "pattern": "^https?://.*$"
                         }
-                    }
+                    },
                 },
-                "additionalProperties": False,
+                "required": ["url", "title", "bgColor", "type", "imageURI"],
             }
         }
-    }
+    },
+    "additionalProperties": False,
 }
 
 
@@ -145,28 +115,14 @@ def ingest_links(data, channel_id, *args, **kwargs):
     env = Environment.instance()
     conn = env.db.engine.connect()
 
-    # process adgroups
-    # from bug 1126191:
-    # 1. AdGroup supplied in ingest (remember adgroups contain locale and suggested sites).
-    # - the adgroup is created if it doesn't exist (using it's name for lookup).
-    # - if the adgroup does exist, we update the set of adgroup_sites associated:
-    #   - if the ingest lists an adgroup_site that doesn't exist in the db, it adds it
-    #   - if the ingest lists an adgroup_site that exists in the db, and the adgroup_site is 'inactive', then activate it
-    #   - if an adgroup_site exists that *isn't* listed in the ingest, then mark it as 'inactive'
-
-    adgroups = data.get('adgroups', dict())
-    for adgroup_id, adgroup in adgroups.iteritems:
-        pass
-
-    # process tiles
-    tiles = data.get('tiles')
     ingested_data = {}
-    country_locales = sorted(tiles.keys())
+
+    country_locales = sorted(data.keys())
 
     try:
         for country_locale_str in country_locales:
 
-            tiles = tiles[country_locale_str]
+            tiles = data[country_locale_str]
             country_code, locale = country_locale_str.split("/")
             country_code = country_code.upper()
 
@@ -184,10 +140,11 @@ def ingest_links(data, channel_id, *args, **kwargs):
                 trans = conn.begin()
                 try:
                     if not env.is_test:
-                        conn.execute("LOCK TABLE tiles;")
+                        conn.execute("LOCK TABLE tiles; LOCK TABLE adgroups; LOCK TABLE adgroup_sites;")
 
                     image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
                     enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() if "enhancedImageURI" in t else None
+                    frecent_sites = set(t.get("frecent_sites", []))
 
                     columns = dict(
                         target_url=t["url"],
@@ -197,17 +154,19 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         image_uri=image_hash,
                         enhanced_image_uri=enhanced_image_hash,
                         locale=locale,
+                        country_code=country_code,
+                        frecent_sites=frecent_sites,
                         conn=conn
                     )
 
-                    db_tile_id = tile_exists(**columns)
+                    db_tile_id, ag_id = tile_exists(**columns)
                     f_tile_id = t.get("directoryId")
 
-                    if db_tile_id is None:
+                    if db_tile_id is None or ag_id is None:
                         """
                         Will generate a new id if not found in db
                         """
-                        db_tile_id = insert_tile(**columns)
+                        db_tile_id, ag_id = insert_tile(**columns)
                         t["directoryId"] = db_tile_id
                         new_tiles_list.append(t)
                         command_logger.info("INSERT: Creating id:{0}".format(db_tile_id))
@@ -224,9 +183,10 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         t["directoryId"] = db_tile_id
                         new_tiles_list.append(t)
                         command_logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))
-                except:
+
+                except Exception as e:
                     trans.rollback()
-                    command_logger.error("ERROR: Error inserting {0}".format(json.dumps(t, sort_keys=True)))
+                    command_logger.error("ERROR: {0}\nError inserting {1}.  ".format(e, json.dumps(t, sort_keys=True)))
                 else:
                     trans.commit()
 
@@ -330,6 +290,7 @@ def distribute(data, channel_id, deploy, scheduled_dt=None):
 
     from splice.models import Channel
     from splice.environment import Environment
+
     env = Environment.instance()
 
     if scheduled_dt:

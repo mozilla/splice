@@ -34,12 +34,34 @@ class Tile(db.Model):
     bg_color = db.Column(db.String(16), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(40), nullable=False)
+    adgroup_id = db.Column(db.Integer(), db.ForeignKey("adgroups.id"))
 
     image_uri = db.Column(db.Text(), nullable=False)
     enhanced_image_uri = db.Column(db.Text(), nullable=True)
 
     locale = db.Column(db.String(14), nullable=False)
 
+    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+
+
+class Adgroup(db.Model):
+    __tablename__ = "adgroups"
+
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
+    locale = db.Column(db.String(14), nullable=False)
+    description = db.Column(db.String(256), nullable=False)
+    country_code = db.Column(db.String(2), nullable=False)
+    name = db.Column(db.String(64), nullable=False)
+    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+
+
+class AdgroupSite(db.Model):
+    __tablename__ = "adgroup_sites"
+
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
+    adgroup_id = db.Column(db.Integer(), db.ForeignKey("adgroups.id"))
+    active = db.Column(db.Boolean(), default=True)
+    site = db.Column(db.String(1024), nullable=False)
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
 
