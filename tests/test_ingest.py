@@ -197,7 +197,7 @@ class TestIngestLinks(BaseTestCase):
         def mock_ingest(*args, **kwargs):
             counts['call'] += 1
             if counts['call'] < counts['exception_at']:
-                insert_function(*args, **kwargs)
+                return insert_function(*args, **kwargs)
             else:
                 raise Exception('Boom')
 
@@ -231,7 +231,7 @@ class TestIngestLinks(BaseTestCase):
             tiles = json.load(f)
 
         num_tiles = self.env.db.session.query(Tile).count()
-        ingest_links(tiles, self.channels[0].id)
+        data = ingest_links(tiles, self.channels[0].id)
         new_num_tiles = self.env.db.session.query(Tile).count()
         assert_equal(num_tiles + 1, new_num_tiles)
 

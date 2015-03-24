@@ -132,7 +132,8 @@ def ingest_links(data, channel_id, *args, **kwargs):
             if locale not in Environment.instance().fixtures["locales"]:
                 raise IngestError("locale '{0}' is invalid".format(locale))
 
-            command_logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1} CHANNEL:{2}".format(country_code, locale, channel_id))
+            command_logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1} CHANNEL:{2}".format(country_code, locale,
+                                                                                           channel_id))
 
             new_tiles_list = []
 
@@ -143,14 +144,15 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         conn.execute("LOCK TABLE tiles; LOCK TABLE adgroups; LOCK TABLE adgroup_sites;")
 
                     image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
-                    enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() if "enhancedImageURI" in t else None
+                    enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() \
+                        if "enhancedImageURI" in t else None
                     frecent_sites = set(t.get("frecent_sites", []))
 
                     columns = dict(
                         target_url=t["url"],
                         bg_color=t["bgColor"],
                         title=t["title"],
-                        type=t["type"],
+                        typ=t["type"],
                         image_uri=image_hash,
                         enhanced_image_uri=enhanced_image_hash,
                         locale=locale,

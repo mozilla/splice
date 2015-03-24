@@ -25,15 +25,27 @@ class BaseTestCase(TestCase):
             for line in fd:
                 row = [el.decode('utf-8') for el in line.split(',')]
                 yield dict(zip(
-                    ('id', 'target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'locale'),
+                    ('id', 'target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'adgroup_id'),
                     row))
 
-        from splice.models import Tile, Channel
+        def adgroup_values(fd):
+            for line in fd:
+                row = [el.decode('utf-8') for el in line.split(',')]
+                yield dict(zip(
+                    ('id', 'country_code', 'locale'),
+                    row))
+
+        from splice.models import Tile, Channel, Adgroup, AdgroupSite
         session = env.db.session
 
         with open(self.get_fixture_path('tiles.csv')) as fd:
             for row in tile_values(fd):
                 tile = Tile(**row)
+                session.add(tile)
+
+        with open(self.get_fixture_path('adgroups.csv')) as fd:
+            for row in adgroup_values(fd):
+                tile = Adgroup(**row)
                 session.add(tile)
 
         with open(self.get_fixture_path('channels.csv')) as fd:

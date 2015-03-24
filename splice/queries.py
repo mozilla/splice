@@ -15,10 +15,10 @@ def get_frecent_sites_for_tile(tile_id, conn=None):
     if result:
         vals = list(r[0] for r in result)
         return set(vals)
-    return None
+    return set([])
 
 
-def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale,
+def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
                 country_code, frecent_sites, conn=None, *args, **kwargs):
     """
     Return the id of a tile having the data provided
@@ -42,9 +42,12 @@ def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri
         .filter(Tile.title == title)
         .filter(Tile.image_uri == image_uri)
         .filter(Tile.enhanced_image_uri == enhanced_image_uri)
-        .filter(Tile.locale == locale)
+        .filter(Adgroup.locale == locale)
+        .join(Adgroup.tiles)
         .order_by(asc(Tile.id))
     )
+    if country_code != 'STAR':
+        results = results.filter(Adgroup.country_code == country_code)
 
     if results:
         for tile_id, adgroup_id in results:
@@ -267,7 +270,7 @@ def slot_summary(connection, start_date, period='week', country_code=None, local
     return _slot_summary_query(connection, start_date, period, country_code, locale)
 
 
-def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale,
+def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
                 country_code, frecent_sites, conn=None, *args, **kwargs):
 
     from splice.environment import Environment
@@ -282,14 +285,15 @@ def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri
         conn.execute(
             text(
                 "INSERT INTO adgroups ("
-                "country_code, locale"
+                "country_code, locale, created_at"
                 ") "
                 "VALUES ("
-                " :country_code, :locale"
+                " :country_code, :locale, :created_at"
                 ")"
             ),
             locale=locale,
             country_code=country_code,
+            created_at=datetime.utcnow(),
         )
         ag_id = conn.execute("SELECT MAX(id) FROM adgroups;").scalar()
 
@@ -301,19 +305,18 @@ def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri
         conn.execute(
             text(
                 "INSERT INTO tiles ("
-                " target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, created_at, adgroup_id"
+                " target_url, bg_color, title, type, image_uri, enhanced_image_uri, created_at, adgroup_id"
                 ") "
                 "VALUES ("
-                " :target_url, :bg_color, :title, :type, :image_uri, :enhanced_image_uri, :locale, :created_at, :adgroup_id"
+                " :target_url, :bg_color, :title, :type, :image_uri, :enhanced_image_uri, :created_at, :adgroup_id"
                 ")"
             ),
             target_url=target_url,
             bg_color=bg_color,
             title=title,
-            type=type,
+            type=typ,
             image_uri=image_uri,
             enhanced_image_uri=enhanced_image_uri,
-            locale=locale,
             created_at=datetime.utcnow(),
             adgroup_id=ag_id
         )

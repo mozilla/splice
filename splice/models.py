@@ -39,8 +39,6 @@ class Tile(db.Model):
     image_uri = db.Column(db.Text(), nullable=False)
     enhanced_image_uri = db.Column(db.Text(), nullable=True)
 
-    locale = db.Column(db.String(14), nullable=False)
-
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
 
@@ -49,10 +47,9 @@ class Adgroup(db.Model):
 
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     locale = db.Column(db.String(14), nullable=False)
-    description = db.Column(db.String(256), nullable=False)
     country_code = db.Column(db.String(2), nullable=False)
-    name = db.Column(db.String(64), nullable=False)
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+    tiles = db.relationship("Tile", backref="adgroup")
 
 
 class AdgroupSite(db.Model):
