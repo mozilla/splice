@@ -251,7 +251,8 @@ def generate_artifacts(data, channel_name, deploy):
         # include tile index if deployment is requested
         artifacts.append({
             "key": "{0}_{1}".format(safe_channel_name, env.config.S3["tile_index_key"]),
-            "data": json.dumps(tile_index, sort_keys=True)
+            "data": json.dumps(tile_index, sort_keys=True),
+            "force_upload": True,
         })
 
     # include data submission in artifacts
@@ -321,7 +322,7 @@ def distribute(data, channel_id, deploy, scheduled_dt=None):
         key = bucket.get_key(file["key"])
         uploaded = False
 
-        if key is None:
+        if key is None or file.get("force_upload"):
             key = Key(bucket)
             key.name = file["key"]
             key.set_contents_from_string(file["data"], headers=headers)
@@ -343,7 +344,7 @@ def distribute(data, channel_id, deploy, scheduled_dt=None):
             command_logger.info("UPLOADED {0}".format(url))
         else:
             command_logger.info("SKIPPED {0}".format(url))
-        distributed.append(url)
+        distributed.append([url, uploaded])
 
         if file.get("dist", False):
             insert_distribution(url, channel_id, deploy, scheduled_dt)

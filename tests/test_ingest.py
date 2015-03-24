@@ -1,7 +1,7 @@
 import json
 import magic
 import copy
-from mock import Mock
+from mock import Mock, PropertyMock
 from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_true
 from jsonschema.exceptions import ValidationError
 from tests.base import BaseTestCase
@@ -364,3 +364,28 @@ class TestDistribute(BaseTestCase):
         distribute(data, self.channels[0].id, True)
         #  includes one more upload: the locate data payload
         assert_equal(6, self.key_mock.set_contents_from_string.call_count)
+
+    def test_deploy_always_generates_tile_index(self):
+        """A tiles index file should always be generated"""
+
+        # this is a dict, because of a quirk in python's namespacing/scoping
+        # https://docs.python.org/2/tutorial/classes.html#python-scopes-and-namespaces
+        index_uploaded = {'count': 0}
+
+        def key_set_name(name):
+            if name == "{0}_tile_index.json".format(self.channels[0].name):
+                index_uploaded['count'] += 1
+        name_mock = PropertyMock(side_effect=key_set_name)
+        type(self.key_mock).name = name_mock
+
+        with open(self.get_fixture_path("mozilla-tiles.fennec.json"), 'r') as f:
+            tiles = json.load(f)
+
+        data = ingest_links(tiles, self.channels[0].id)
+        distribute(data, self.channels[0].id, True)
+        assert_equal(1, index_uploaded['count'])
+
+        data = ingest_links(tiles, self.channels[0].id)
+        distribute(data, self.channels[0].id, True)
+
+        assert_equal(2, index_uploaded['count'])
