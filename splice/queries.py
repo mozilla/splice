@@ -275,6 +275,7 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
 
     from splice.environment import Environment
     env = Environment.instance()
+    now = datetime.utcnow()
 
     trans = None
     if conn is None:
@@ -294,13 +295,13 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
                 ")"
             ),
             locale=locale,
-            created_at=datetime.utcnow(),
+            created_at=now,
         )
         ag_id = conn.execute("SELECT MAX(id) FROM adgroups;").scalar()
 
         if frecent_sites:
-            values = ','.join(["(%d, '%s')" % (ag_id, site) for site in frecent_sites])
-            stmt = "INSERT INTO adgroup_sites (adgroup_id, site)  VALUES %s" % values
+            values = ','.join(["(%d, '%s', '%s')" % (ag_id, site, now) for site in frecent_sites])
+            stmt = "INSERT INTO adgroup_sites (adgroup_id, site, created_at)  VALUES %s" % values
             conn.execute(stmt)
 
         conn.execute(
@@ -318,7 +319,7 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
             type=typ,
             image_uri=image_uri,
             enhanced_image_uri=enhanced_image_uri,
-            created_at=datetime.utcnow(),
+            created_at=now,
             adgroup_id=ag_id
         )
         tile_id = conn.execute("SELECT MAX(id) FROM tiles;").scalar()

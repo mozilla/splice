@@ -6,7 +6,7 @@ from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_tru
 from jsonschema.exceptions import ValidationError
 from tests.base import BaseTestCase
 from splice.ingest import ingest_links, generate_artifacts, IngestError, distribute
-from splice.models import Tile
+from splice.models import Tile, Adgroup, AdgroupSite
 
 
 class TestIngestLinks(BaseTestCase):
@@ -54,22 +54,22 @@ class TestIngestLinks(BaseTestCase):
 
     def test_invalid_related(self):
         """
-        Invalid related type is rejected
+        Invalid suggested type is rejected
         """
         assert_raises(ValidationError, ingest_links, {"US/en-US": [
             {
                 "imageURI": "data:image/png;base64,somedata",
                 "url": "https://somewhere.com",
                 "title": "Some Title",
-                "type": "related",
+                "type": "organic",
                 "bgColor": "#FFFFFF",
-                "related": "not an array, really"
+                "frecent_sites": "not an array, really"
             }
         ]}, self.channels[0].id)
 
-    def test_invalid_related_type(self):
+    def test_suggested_sites(self):
         """
-        Invalid related is rejected
+        just a simple suggested site tile
         """
         tile = {
             "imageURI": "data:image/png;base64,somedata",
@@ -79,8 +79,35 @@ class TestIngestLinks(BaseTestCase):
             "bgColor": "#FFFFFF",
             "frecent_sites": ["http://abc.com", "https://xyz.com"]
         }
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        c = self.env.db.session.query(AdgroupSite).count()
+        assert_equal(0, c)
         data = ingest_links({"US/en-US": [tile]}, self.channels[0].id)
-        assert_equal(0, len(data["US/en-US"]))
+        assert_equal(1, len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(31, c)
+        c = self.env.db.session.query(AdgroupSite).count()
+        assert_equal(2, c)
+
+    def test_ingest_suggested_sites(self):
+        """
+        Test that there is no duplication when ingesting tiles
+        """
+        with open(self.get_fixture_path("tiles_suggested.json"), 'r') as f:
+            tiles = json.load(f)
+
+        num_tiles = self.env.db.session.query(Tile).count()
+        data = ingest_links(tiles, self.channels[0].id)
+        assert_equal(len(data['STAR/en-US']), 5)
+        new_num_tiles = self.env.db.session.query(Tile).count()
+        assert_equal(num_tiles + 4, new_num_tiles)
+
+        # ingesting the same thing a second time should be idempotent
+        data = ingest_links(tiles, self.channels[0].id)
+        assert_equal(len(data['STAR/en-US']), 5)
+        new_num_tiles = self.env.db.session.query(Tile).count()
+        assert_equal(num_tiles + 4, new_num_tiles)
 
     def test_id_creation(self):
         """
