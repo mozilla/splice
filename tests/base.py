@@ -32,7 +32,7 @@ class BaseTestCase(TestCase):
             for line in fd:
                 row = [el.decode('utf-8') for el in line.split(',')]
                 yield dict(zip(
-                    ('id', 'country_code', 'locale'),
+                    ('id', 'locale'),
                     row))
 
         from splice.models import Tile, Channel, Adgroup, AdgroupSite

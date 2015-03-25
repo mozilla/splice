@@ -19,7 +19,7 @@ def upgrade():
     op.create_table('adgroups',
                     sa.Column('id', sa.Integer(), nullable=False),
                     sa.Column('created_at', sa.DateTime(), server_default=sa.func.now(), nullable=False),
-                    sa.Column('country_code', sa.String(length=2), nullable=False),
+                    # sa.Column('country_code', sa.String(length=2), nullable=False),
                     sa.Column('locale', sa.String(length=14), nullable=False),
                     sa.PrimaryKeyConstraint('id'))
 
@@ -27,13 +27,14 @@ def upgrade():
                     sa.Column('id', sa.Integer(), nullable=False),
                     sa.Column('site', sa.String(length=1024), nullable=False),
                     sa.Column('adgroup_id', sa.Integer(), nullable=False),
-                    sa.Column('active', sa.Boolean(), default=True),
+                    # sa.Column('active', sa.Boolean(), default=True),
                     sa.Column('created_at', sa.DateTime(), server_default=sa.func.now(), nullable=False),
                     sa.ForeignKeyConstraint(['adgroup_id'], ['adgroups.id']),
                     sa.PrimaryKeyConstraint('id'))
 
     op.add_column('tiles',
-                  sa.Column('adgroup_id', sa.Integer(), sa.ForeignKey('adgroups.id'), nullable=False))
+                  sa.Column('adgroup_id', sa.Integer(), sa.ForeignKey('adgroups.id')))
+    op.drop_column('tiles', 'locale')
 
     # end Alembic commands ###
 
@@ -43,4 +44,6 @@ def downgrade():
     op.drop_table('adgroup_sites')
     op.drop_column('tiles', 'adgroup_id')
     op.drop_table('adgroups')
+    op.add_column('tiles',
+                  sa.Column('locale', sa.String(length=14)))
     # end Alembic commands ###

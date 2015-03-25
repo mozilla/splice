@@ -77,7 +77,7 @@ class TestIngestLinks(BaseTestCase):
             "title": "Some Title",
             "type": "organic",
             "bgColor": "#FFFFFF",
-            "related": ["abc.com", "xyz.com"]
+            "frecent_sites": ["http://abc.com", "https://xyz.com"]
         }
         data = ingest_links({"US/en-US": [tile]}, self.channels[0].id)
         assert_equal(0, len(data["US/en-US"]))

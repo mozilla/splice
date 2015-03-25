@@ -46,8 +46,8 @@ def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
         .join(Adgroup.tiles)
         .order_by(asc(Tile.id))
     )
-    if country_code != 'STAR':
-        results = results.filter(Adgroup.country_code == country_code)
+    # if country_code != 'STAR':
+    #     results = results.filter(Adgroup.country_code == country_code)
 
     if results:
         for tile_id, adgroup_id in results:
@@ -285,14 +285,15 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
         conn.execute(
             text(
                 "INSERT INTO adgroups ("
-                "country_code, locale, created_at"
+                "locale, created_at"
+                # "country_code, locale, created_at"
                 ") "
                 "VALUES ("
-                " :country_code, :locale, :created_at"
+                ":locale, :created_at"
+                # " :country_code, :locale, :created_at"
                 ")"
             ),
             locale=locale,
-            country_code=country_code,
             created_at=datetime.utcnow(),
         )
         ag_id = conn.execute("SELECT MAX(id) FROM adgroups;").scalar()
