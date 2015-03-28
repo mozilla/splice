@@ -258,7 +258,7 @@ class TestIngestLinks(BaseTestCase):
             tiles = json.load(f)
 
         num_tiles = self.env.db.session.query(Tile).count()
-        data = ingest_links(tiles, self.channels[0].id)
+        ingest_links(tiles, self.channels[0].id)
         new_num_tiles = self.env.db.session.query(Tile).count()
         assert_equal(num_tiles + 1, new_num_tiles)
 

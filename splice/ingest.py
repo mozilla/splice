@@ -12,7 +12,7 @@ from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
 import jsonschema
 from furl import furl
-from splice.queries import tile_exists, insert_tile, insert_distribution, get_frecent_sites_for_tile
+from splice.queries import tile_exists, insert_tile, insert_distribution
 from splice.environment import Environment
 
 command_logger = logging.getLogger("command")

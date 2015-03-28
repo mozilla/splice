@@ -35,7 +35,7 @@ class BaseTestCase(TestCase):
                     ('id', 'locale'),
                     row))
 
-        from splice.models import Tile, Channel, Adgroup, AdgroupSite
+        from splice.models import Tile, Channel, Adgroup
         session = env.db.session
 
         with open(self.get_fixture_path('tiles.csv')) as fd:
