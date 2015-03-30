@@ -1,8 +1,11 @@
 sudo: false
 language: python
-cache: pip
 python:
   - "2.7"
+cache:
+    directories:
+        - .pip_download_cache
+        - "$HOME/virtualenv/python2.7.9"
 # command to install dependencies
 install: pip install -r requirements.txt -r requirements-dev.txt
 # command to run the build
