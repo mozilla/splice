@@ -1,3 +1,9 @@
+1.1.5
+=====
+
+* fix bug 1146028: old tiles being served
+* travis performance improvement: pypi packages are now cached
+
 1.1.4
 =====
 
