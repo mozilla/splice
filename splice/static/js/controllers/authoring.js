@@ -105,7 +105,16 @@ angular.module('spliceApp').controller('authoringController', function($controll
         var deployed = data.deployed;
         var msg = '<ol>';
         for (var url of data.urls) {
-          msg += '<li><a href="' + url + '">' + url + '</a></li>';
+
+          var uploadStatus = "cached";
+          var uploadClass = "text-muted";
+
+          if (url[1] == true) {
+            uploadStatus = "new";
+            uploadClass = "text-success";
+          }
+
+          msg += '<li><strong class="' + uploadClass + '">' + uploadStatus + '</strong> <a href="' + url[0] + '">' + url[0] + '</a> </li>';
         }
         msg += '</ol>'
         $scope.uploadMessage = {
