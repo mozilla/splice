@@ -1,3 +1,8 @@
+1.1.6
+=====
+
+* authoring publish success UI now with upload status
+
 1.1.5
 =====
 
