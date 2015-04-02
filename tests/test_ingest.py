@@ -269,23 +269,23 @@ class TestGenerateArtifacts(BaseTestCase):
         """
         Tests that the correct number of artifacts are generated
         """
-        with open(self.get_fixture_path("valid_tile.json"), 'r') as f:
+        with open(self.get_fixture_path("tiles_suggested.json"), 'r') as f:
             fixture = json.load(f)
 
-        tile = fixture["STAR/en-US"][0]
+        tile = fixture["STAR/en-US"][4]
 
         data = ingest_links({"STAR/en-US": [tile]}, self.channels[0].id)
         artifacts = generate_artifacts(data, self.channels[0].name, True)
-        # tile index, distribution and 2 image files are generated
-        assert_equal(5, len(artifacts))
+        # tile index, v2, v3 and 2 image files are generated
+        assert_equal(6, len(artifacts))
 
         data = ingest_links({
             "STAR/en-US": [tile],
             "CA/en-US": [tile]
         }, self.channels[0].id)
         artifacts = generate_artifacts(data, self.channels[0].name, True)
-        # includes one more file: the locale data payload
-        assert_equal(6, len(artifacts))
+        # includes two more file: the locale data payload for each version
+        assert_equal(8, len(artifacts))
 
     def test_unknown_mime_type(self):
         """
@@ -410,8 +410,8 @@ class TestDistribute(BaseTestCase):
 
         data = ingest_links({"STAR/en-US": tiles_star}, self.channels[0].id)
         distribute(data, self.channels[0].id, True)
-        # 5 files are uploaded, mirrors generate artifactes
-        assert_equal(5, self.key_mock.set_contents_from_string.call_count)
+        # 6 files are uploaded, mirrors generate artifacts
+        assert_equal(6, self.key_mock.set_contents_from_string.call_count)
 
         self.key_mock.set_contents_from_string = Mock()
         data = ingest_links({
@@ -419,8 +419,8 @@ class TestDistribute(BaseTestCase):
             "CA/en-US": tiles_ca,
         }, self.channels[0].id)
         distribute(data, self.channels[0].id, True)
-        #  includes one more upload: the locate data payload
-        assert_equal(6, self.key_mock.set_contents_from_string.call_count)
+        #  includes two more upload: the locate data payload (for both versions)
+        assert_equal(8, self.key_mock.set_contents_from_string.call_count)
 
     def test_deploy_always_generates_tile_index(self):
         """A tiles index file should always be generated"""

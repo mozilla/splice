@@ -234,6 +234,9 @@ def generate_artifacts(data, channel_name, deploy):
 
     safe_channel_name = urllib.quote(channel_name)
 
+    sug_tiles = []
+    dir_tiles = []
+
     for country_locale, tile_data in data.iteritems():
 
         country_code, locale = country_locale.split("/")
@@ -248,17 +251,34 @@ def generate_artifacts(data, channel_name, deploy):
             if 'enhancedImageURI' in tile:
                 url = image_add(*slice_image_uri(tile["enhancedImageURI"]), locale=locale, tile_id=tile["directoryId"])
                 tile["enhancedImageURI"] = url
+            if 'frecent_sites' in tile:
+                sug_tiles.append(tile)
+            else:
+                dir_tiles.append(tile)
 
+        # deploy both v2 and v3 versions
         if deploy:
-            serialized = json.dumps({locale: tile_data}, sort_keys=True)
-            hsh = hashlib.sha1(serialized).hexdigest()
-            s3_key = "{0}/{1}.{2}.json".format(safe_channel_name, country_locale, hsh)
+            # v2
+            legacy = json.dumps({locale: dir_tiles}, sort_keys=True)
+            legacy_hsh = hashlib.sha1(legacy).hexdigest()
+            legacy_key = "{0}/{1}.{2}.json".format(safe_channel_name, country_locale, legacy_hsh)
             artifacts.append({
-                "key": s3_key,
-                "data": serialized,
+                "key": legacy_key,
+                "data": legacy,
             })
 
-            tile_index[country_locale] = os.path.join(env.config.CLOUDFRONT_BASE_URL, s3_key)
+            # v3
+            ag = json.dumps({'suggested': sug_tiles, 'directory': dir_tiles}, sort_keys=True)
+            ag_hsh = hashlib.sha1(ag).hexdigest()
+            ag_key = "{0}/{1}.{2}.json".format(safe_channel_name, country_locale, ag_hsh)
+            artifacts.append({
+                "key": ag_key,
+                "data": ag,
+            })
+            tile_index[country_locale] = {
+                'legacy': os.path.join(env.config.CLOUDFRONT_BASE_URL, legacy_key),
+                'ag': os.path.join(env.config.CLOUDFRONT_BASE_URL, ag_key),
+            }
 
     if deploy:
         # include tile index if deployment is requested
@@ -269,7 +289,6 @@ def generate_artifacts(data, channel_name, deploy):
         })
 
     # include data submission in artifacts
-
     data_serialized = json.dumps(data, sort_keys=True)
     hsh = hashlib.sha1(data_serialized).hexdigest()
     dt_str = datetime.utcnow().isoformat().replace(":", "-")
