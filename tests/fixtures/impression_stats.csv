@@ -21,7 +21,6 @@
 18,2014-10-18,1,0,0,0,0,0,10,0,en-US,KR,Windows,Firefox,36.0,Other,10,42,2014,0
 20,2014-09-27,1,0,0,0,0,0,7,0,en-US,SG,Windows 7,Firefox,33.0,Other,9,39,2014,0
 18,2014-10-08,3,0,0,0,0,0,10,0,en-US,IR,Windows,Firefox,33.0,Other,10,41,2014,0
--1,2014-10-14,0,0,0,0,0,0,-1,0,de,AT,Mac OS X,Firefox,34.0,Other,10,42,2014,1
 17,2014-10-18,1,0,0,0,0,0,8,0,en-US,SA,Windows 8,Firefox,34.0,Other,10,42,2014,0
 16,2014-10-21,3,0,0,0,0,0,5,0,en-US,ID,Windows 7,Firefox,36.0,Other,10,43,2014,0
 12,2014-09-26,17,0,0,0,0,0,4,0,en-US,PK,Windows,Firefox,33.0,Other,9,39,2014,0
@@ -57,7 +56,6 @@
 16,2014-10-10,12,0,0,0,0,0,12,0,en-US,IR,Windows,Firefox,33.0,Other,10,41,2014,0
 12,2014-10-23,1,0,0,0,0,0,9,0,en-US,FR,Windows,Firefox,33.0,Other,10,43,2014,0
 19,2014-10-18,9,0,0,0,0,0,7,0,en-US,NG,Windows XP,Firefox,33.0,Other,10,42,2014,0
--1,2014-10-18,0,0,0,0,0,0,-1,0,en-US,FJ,Windows,Firefox,33.0,Other,10,42,2014,2
 19,2014-09-24,22,0,0,0,0,0,7,0,en-US,GB,Windows XP,Firefox,33.0,Other,9,39,2014,0
 18,2014-09-24,1,0,0,0,0,0,11,0,en-US,BR,Windows XP,Firefox,33.0,Other,9,39,2014,0
 18,2014-10-14,0,0,0,1,0,0,0,0,en-US,MY,Windows 7,Firefox,33.0,Other,10,42,2014,0
@@ -67,8 +65,6 @@
 19,2014-09-29,0,0,0,1,0,0,7,0,en-US,ZA,Windows,Firefox,33.0,Other,9,40,2014,0
 14,2014-09-26,1,0,0,0,0,0,10,0,en-US,CA,Windows Vista,Firefox,33.0,Other,9,39,2014,0
 19,2014-10-21,1,0,0,0,0,0,10,0,en-US,GH,Windows 7,Firefox,33.0,Other,10,43,2014,0
--1,2014-10-09,0,0,0,0,0,0,-1,0,en-US,TZ,Windows 7,Firefox,35.0,Other,10,41,2014,4
--1,2014-10-12,0,0,0,0,0,0,-1,0,ko,CN,Windows 7,Firefox,34.0,Other,10,41,2014,2
 17,2014-09-18,1,0,0,0,0,0,9,0,en-US,EG,Windows 7,Firefox,35.0,Other,9,38,2014,0
 15,2014-09-23,9,0,0,0,0,0,7,0,en-US,IN,Windows 7,Firefox,34.0,Other,9,39,2014,0
 13,2014-10-10,3,0,0,0,0,0,2,0,en-US,TH,Windows 7,Firefox,35.0,Other,10,41,2014,0
@@ -102,7 +98,6 @@
 16,2014-09-30,17,0,0,0,0,0,10,0,en-US,PH,Windows 8,Firefox,33.0,Other,9,40,2014,0
 17,2014-10-22,1,0,0,0,0,0,8,0,en-US,JP,Windows 7,Firefox,34.0,Other,10,43,2014,0
 12,2014-10-20,4,0,0,0,0,0,14,0,en-US,ET,Windows XP,Firefox,34.0,Other,10,43,2014,0
--1,2014-10-19,0,0,0,0,0,0,-1,0,lt,LT,Windows 7,Firefox,34.0,Other,10,42,2014,83
 15,2014-10-23,2,0,0,0,0,0,7,0,en-US,CO,Windows 8,Firefox,35.0,Other,10,43,2014,0
 16,2014-09-30,4,0,0,0,0,0,5,0,en-US,RU,Windows 7,Firefox,35.0,Other,9,40,2014,0
 12,2014-09-28,33,0,0,0,0,0,0,0,en-US,MY,Windows 8,Firefox,33.0,Other,9,39,2014,0
@@ -115,7 +110,6 @@
 13,2014-09-18,1,0,0,0,0,0,6,0,en-US,JP,Windows 7,Firefox,33.0,Other,9,38,2014,0
 14,2014-10-12,1,0,0,0,0,0,4,0,en-US,CA,Mac OS X,Firefox,35.0,Other,10,41,2014,0
 19,2014-09-24,7,0,0,0,0,0,9,0,en-US,DZ,Windows XP,Firefox,33.0,Other,9,39,2014,0
--1,2014-10-16,0,0,0,0,0,0,-1,0,en-US,DE,Mac OS X,Firefox,36.0,Other,10,42,2014,1
 15,2014-09-25,5,0,0,0,0,0,3,0,en-US,CL,Windows,Firefox,33.0,Other,9,39,2014,0
 14,2014-09-29,3,0,0,0,0,0,14,0,en-US,GR,Windows,Firefox,33.0,Other,9,40,2014,0
 14,2014-10-12,19,0,0,0,0,0,4,0,en-US,MY,Windows 7,Firefox,33.0,Other,10,41,2014,0
@@ -156,7 +150,6 @@
 12,2014-09-30,2,0,0,0,0,0,9,0,en-US,FR,Windows 7,Firefox,35.0,Other,9,40,2014,0
 16,2014-09-28,1,0,0,0,0,0,12,0,en-US,PY,Windows,Firefox,33.0,Other,9,39,2014,0
 12,2014-09-06,2,0,0,0,0,0,2,0,en-US,SI,Windows,Firefox,35.0,Other,9,36,2014,0
--1,2014-10-11,0,0,0,0,0,0,-1,0,en-US,UG,Windows XP,Firefox,34.0,Other,10,41,2014,1
 16,2014-10-11,1,0,0,0,0,0,10,0,en-US,BW,Windows,Firefox,33.0,Other,10,41,2014,0
 13,2014-10-02,4,0,0,0,0,0,3,0,en-US,AU,Windows,Firefox,34.0,Other,10,40,2014,0
 14,2014-09-19,79,0,0,0,0,0,6,0,en-US,PH,Windows 7,Firefox,33.0,Other,9,38,2014,0
@@ -169,7 +162,6 @@
 19,2014-10-22,4,0,0,0,0,0,7,0,en-US,US,Windows 7,Firefox,36.0,Other,10,43,2014,0
 15,2014-09-26,10,0,0,0,0,0,13,0,en-US,US,Windows 7,Firefox,35.0,Other,9,39,2014,0
 15,2014-09-29,1,0,0,0,0,0,11,0,en-US,LC,Windows 7,Firefox,33.0,Other,9,40,2014,0
--1,2014-10-17,0,0,0,0,0,0,-1,0,en-US,AZ,Windows 8,Firefox,34.0,Other,10,42,2014,1
 19,2014-09-27,2,0,0,0,0,0,6,0,en-US,GH,Windows 7,Firefox,33.0,Other,9,39,2014,0
 14,2014-09-19,1,0,0,0,0,0,6,0,en-US,HU,Windows,Firefox,35.0,Other,9,38,2014,0
 17,2014-09-24,1,0,0,0,0,0,5,0,en-US,SG,Mac OS X,Firefox,34.0,Other,9,39,2014,0
@@ -186,7 +178,6 @@
 15,2014-10-18,9,0,0,0,0,0,3,0,en-US,DE,Windows,Firefox,35.0,Other,10,42,2014,0
 14,2014-09-30,1,0,0,0,0,0,5,0,en-US,EE,Windows XP,Firefox,33.0,Other,9,40,2014,0
 20,2014-10-02,1,0,0,0,0,0,8,0,en-US,BE,Windows 7,Firefox,35.0,Other,10,40,2014,0
--1,2014-10-21,0,0,0,0,0,0,-1,0,en-US,PH,Windows Vista,Firefox,35.0,Other,10,43,2014,3
 19,2014-10-17,1,0,0,0,0,0,9,0,en-US,BG,Windows XP,Firefox,34.0,Other,10,42,2014,0
 13,2014-09-27,1,0,0,0,0,0,8,0,en-US,AL,Windows XP,Firefox,33.0,Other,9,39,2014,0
 12,2014-09-20,1,0,0,0,0,0,1,0,en-US,RO,Windows XP,Firefox,33.0,Other,9,38,2014,0
@@ -217,7 +208,6 @@
 16,2014-10-15,3,0,0,0,0,0,7,0,en-US,MN,Windows 7,Firefox,33.0,Other,10,42,2014,0
 19,2014-09-25,2,0,0,0,0,0,10,0,en-US,IQ,Windows 8,Firefox,33.0,Other,9,39,2014,0
 15,2014-09-30,3,0,0,0,0,0,14,0,en-US,IQ,Windows,Firefox,33.0,Other,9,40,2014,0
--1,2014-10-21,0,0,0,0,0,0,-1,0,en-US,GH,Windows 7,Firefox,35.0,Other,10,43,2014,9
 15,2014-10-23,2,0,0,0,0,0,3,0,en-US,IN,Windows,Firefox,35.0,Other,10,43,2014,0
 20,2014-10-16,1,0,0,0,0,0,12,0,en-US,FI,Windows 7,Firefox,33.0,Other,10,42,2014,0
 12,2014-10-22,2,0,0,0,0,0,13,0,en-US,PR,Windows 7,Firefox,34.0,Other,10,43,2014,0
@@ -232,7 +222,6 @@
 16,2014-10-08,6,0,0,0,0,0,7,0,en-US,DE,Windows 7,Firefox,35.0,Other,10,41,2014,0
 13,2014-10-06,5,0,0,0,0,0,11,0,en-US,SE,Windows,Firefox,35.0,Other,10,41,2014,0
 17,2014-10-15,1,0,0,0,0,0,8,0,en-US,AM,Windows 7,Firefox,33.0,Other,10,42,2014,0
--1,2014-10-13,0,0,0,0,0,0,-1,0,en-US,AF,Windows 8,Firefox,33.0,Other,10,42,2014,5
 18,2014-10-13,1,0,0,0,0,0,9,0,en-US,RU,Windows XP,Firefox,35.0,Other,10,42,2014,0
 19,2014-09-25,1,0,0,0,0,0,11,0,en-US,ES,Windows XP,Firefox,33.0,Other,9,39,2014,0
 20,2014-09-30,2,0,0,0,0,0,7,0,en-US,CA,Windows 7,Firefox,35.0,Other,9,40,2014,0
@@ -261,7 +250,6 @@
 19,2014-10-08,3,0,0,0,0,0,10,0,en-US,GT,Windows,Firefox,35.0,Other,10,41,2014,0
 12,2014-09-15,6,0,0,0,0,0,3,0,en-US,CH,Windows 7,Firefox,35.0,Other,9,38,2014,0
 14,2014-10-02,1,0,0,0,0,0,6,0,en-US,PS,Windows 7,Firefox,33.0,Other,10,40,2014,0
--1,2014-10-14,0,0,0,0,0,0,-1,0,ru,MD,Windows,Firefox,34.0,Other,10,42,2014,4
 15,2014-10-20,1,0,0,0,0,0,10,0,en-US,VN,Windows 7,Firefox,33.0,Other,10,43,2014,0
 15,2014-09-26,1,0,0,0,0,0,7,0,en-US,JM,Windows 7,Firefox,33.0,Other,9,39,2014,0
 15,2014-10-14,2,0,0,0,0,0,11,0,en-US,PH,Windows 7,Firefox,33.0,Other,10,42,2014,0
@@ -281,7 +269,6 @@
 19,2014-09-24,3,0,0,0,0,0,3,0,en-US,PH,Windows 8,Firefox,33.0,Other,9,39,2014,0
 15,2014-10-22,4,0,0,0,0,0,9,0,en-US,SG,Windows,Firefox,34.0,Other,10,43,2014,0
 15,2014-10-22,4,0,0,0,0,0,4,0,en-US,US,Linux,Iceweasel,35.0,Other,10,43,2014,0
--1,2014-10-14,0,0,0,0,0,0,-1,0,en-US,IT,Windows 7,Firefox,34.0,Other,10,42,2014,18
 16,2014-09-17,2,0,0,0,0,0,14,0,en-US,JM,Windows XP,Firefox,33.0,Other,9,38,2014,0
 19,2014-09-20,8,0,0,0,0,0,7,0,en-US,US,Windows 8,Firefox,34.0,Other,9,38,2014,0
 18,2014-09-25,10,0,0,0,0,0,8,0,en-US,EG,Windows,Firefox,33.0,Other,9,39,2014,0
@@ -299,7 +286,6 @@
 19,2014-09-17,1,0,0,0,0,0,10,0,en-US,MU,Windows 7,Firefox,33.0,Other,9,38,2014,0
 18,2014-10-03,20,0,0,0,0,0,12,0,en-US,DE,Mac OS X,Firefox,35.0,Other,10,40,2014,0
 15,2014-10-05,8,0,0,1,0,0,5,0,en-US,TN,Windows 8,Firefox,35.0,Other,10,40,2014,0
--1,2014-10-16,0,0,0,0,0,0,-1,0,en-GB,PK,Windows,Firefox,34.0,Other,10,42,2014,2
 17,2014-09-26,2,0,0,0,0,0,10,0,en-US,EC,Windows 8,Firefox,33.0,Other,9,39,2014,0
 15,2014-10-02,4,0,0,0,0,0,7,0,en-US,UG,Windows 7,Firefox,33.0,Other,10,40,2014,0
 19,2014-09-25,113,0,0,0,0,0,14,0,en-US,ID,Windows 7,Firefox,33.0,Other,9,39,2014,0
@@ -344,7 +330,6 @@
 18,2014-09-29,1,0,0,0,0,0,8,0,en-US,KR,Windows 7,Firefox,33.0,Other,9,40,2014,0
 20,2014-09-23,8,0,0,0,0,0,10,0,en-US,GM,Windows XP,Firefox,33.0,Other,9,39,2014,0
 16,2014-10-18,8,0,0,0,0,0,14,0,en-US,IR,Windows XP,Firefox,34.0,Other,10,42,2014,0
--1,2014-10-21,0,0,0,0,0,0,-1,0,en-US,PK,Windows XP,Firefox,34.0,Other,10,43,2014,2405
 18,2014-09-29,3,0,0,0,0,0,6,0,en-US,SA,Windows,Firefox,33.0,Other,9,40,2014,0
 18,2014-09-24,1,0,0,0,0,0,14,0,en-US,ZA,Windows,Firefox,33.0,Other,9,39,2014,0
 13,2014-10-11,3,0,0,0,0,0,1,0,en-US,ZW,Windows 7,Firefox,33.0,Other,10,41,2014,0
@@ -362,7 +347,6 @@
 13,2014-10-18,9,0,0,0,0,0,4,0,en-US,BD,Windows XP,Firefox,34.0,Other,10,42,2014,0
 13,2014-09-28,2,0,0,0,0,0,14,0,en-US,IT,Mac OS X,Firefox,33.0,Other,9,39,2014,0
 12,2014-10-22,1,0,0,0,0,0,0,0,en-US,AT,Windows 7,Firefox,36.0,Other,10,43,2014,0
--1,2014-10-13,0,0,0,0,0,0,-1,0,en-US,RO,Windows 7,Firefox,33.0,Other,10,42,2014,10
 18,2014-09-29,3,0,0,0,0,0,10,0,en-US,IT,Windows 7,Firefox,33.0,Other,9,40,2014,0
 19,2014-10-01,7,0,0,0,0,0,11,0,en-US,GB,Windows XP,Firefox,33.0,Other,10,40,2014,0
 13,2014-10-10,6,0,0,0,0,0,6,0,en-US,VN,Windows 7,Firefox,35.0,Other,10,41,2014,0
@@ -425,7 +409,6 @@
 17,2014-09-30,10,0,0,0,0,0,3,0,en-US,IN,Windows XP,Firefox,33.0,Other,9,40,2014,0
 16,2014-10-20,2,0,0,0,0,0,14,0,en-US,EE,Windows 7,Firefox,34.0,Other,10,43,2014,0
 15,2014-10-21,3,0,0,0,0,0,3,0,en-US,BH,Windows 7,Firefox,34.0,Other,10,43,2014,0
--1,2014-10-23,0,0,0,0,0,0,-1,0,en-US,LB,Mac OS X,Firefox,34.0,Other,10,43,2014,2
 14,2014-09-07,1,0,0,0,0,0,14,0,en-US,CR,Windows 7,Firefox,35.0,Other,9,36,2014,0
 17,2014-10-15,1,0,0,0,0,0,8,0,en-US,LK,Windows 8,Firefox,33.0,Other,10,42,2014,0
 20,2014-09-29,1,0,0,0,0,0,12,0,en-US,SG,Windows 7,Firefox,33.0,Other,9,40,2014,0
@@ -459,13 +442,11 @@
 12,2014-10-22,1,0,0,0,0,0,1,0,en-US,BG,Windows 7,Firefox,34.0,Other,10,43,2014,0
 14,2014-10-17,15,0,0,0,0,0,5,0,en-US,EG,Windows XP,Firefox,34.0,Other,10,42,2014,0
 13,2014-09-29,1,0,0,0,0,0,13,0,en-US,BB,Linux,Firefox,35.0,Other,9,40,2014,0
--1,2014-10-18,0,0,0,0,0,0,-1,0,en-US,BE,Mac OS X,Firefox,34.0,Other,10,42,2014,22
 12,2014-09-28,8,0,0,0,0,0,1,0,en-US,FR,Windows,Firefox,33.0,Other,9,39,2014,0
 19,2014-10-19,1,0,0,0,0,0,13,0,en-US,US,Windows,Firefox,35.0,Other,10,42,2014,0
 20,2014-10-13,1,0,0,0,0,0,14,0,en-US,RU,Windows 7,Firefox,35.0,Other,10,42,2014,0
 14,2014-09-24,57,0,0,0,0,0,8,0,en-US,IR,Windows 7,Firefox,33.0,Other,9,39,2014,0
 12,2014-10-21,76,0,0,0,0,0,1,0,en-US,MY,Windows 7,Firefox,34.0,Other,10,43,2014,0
--1,2014-10-10,0,0,0,0,0,0,-1,0,en-US,EG,Windows XP,Firefox,34.0,Other,10,41,2014,32
 13,2014-09-22,148,0,0,0,0,0,6,0,en-US,ID,Windows 7,Firefox,33.0,Other,9,39,2014,0
 15,2014-10-04,10,0,0,0,0,0,8,0,en-US,IL,Windows 7,Firefox,33.0,Other,10,40,2014,0
 16,2014-10-22,2,0,0,0,0,0,12,0,en-US,KE,Windows,Firefox,34.0,Other,10,43,2014,0
@@ -533,7 +514,6 @@
 15,2014-09-26,0,0,0,1,0,0,0,0,en-US,BA,Windows XP,Firefox,33.0,Other,9,39,2014,0
 13,2014-10-01,3,0,0,0,0,0,4,0,en-US,CD,Windows XP,Firefox,33.0,Other,10,40,2014,0
 18,2014-10-08,1,0,0,0,0,0,12,0,en-US,NG,Windows,Firefox,33.0,Other,10,41,2014,0
--1,2014-09-30,0,0,0,0,0,0,-1,0,en-GB,ES,Windows,Firefox,33.0,Other,9,40,2014,5
 20,2014-10-10,1,0,0,0,0,0,11,0,en-US,LY,Windows 7,Firefox,33.0,Other,10,41,2014,0
 20,2014-10-18,4,0,0,0,0,0,10,0,en-US,NP,Windows 7,Firefox,33.0,Other,10,42,2014,0
 15,2014-10-16,9,0,0,0,0,0,6,0,en-US,PK,Windows 8,Firefox,33.0,Other,10,42,2014,0
@@ -545,7 +525,6 @@
 16,2014-09-17,6,0,0,0,0,0,14,0,en-US,US,Mac OS X,Firefox,33.0,Other,9,38,2014,0
 20,2014-09-29,1,0,0,0,0,0,11,0,en-US,ZA,Windows 8,Firefox,33.0,Other,9,40,2014,0
 13,2014-09-29,2,0,0,0,0,0,10,0,en-US,GE,Windows 7,Firefox,33.0,Other,9,40,2014,0
--1,2014-10-01,0,0,0,0,0,0,-1,0,en-US,LK,Windows XP,Firefox,33.0,Other,10,40,2014,3615
 19,2014-10-15,1,0,0,0,0,0,10,0,en-US,GM,Windows 7,Firefox,33.0,Other,10,42,2014,0
 13,2014-10-14,1,0,0,0,0,0,5,0,en-US,RU,Windows 7,Firefox,33.0,Other,10,42,2014,0
 13,2014-10-12,1,0,0,0,0,0,1,0,en-US,IN,Windows 7,Firefox,33.0,Other,10,41,2014,0
@@ -562,7 +541,6 @@
 4,2014-09-05,5,0,0,0,0,0,5,0,en-US,US,Linux,Firefox,35.0,Other,9,36,2014,0
 20,2014-09-12,1,0,0,0,0,0,5,0,en-US,UA,Windows 7,Firefox,33.0,Other,9,37,2014,0
 19,2014-10-02,1,0,0,0,0,0,9,0,en-US,MY,Mac OS X,Firefox,34.0,Other,10,40,2014,0
--1,2014-10-12,0,0,0,0,0,0,-1,0,en-US,IM,Windows,Firefox,35.0,Other,10,41,2014,2
 13,2014-09-24,1,0,0,0,0,0,6,0,en-US,ET,Windows 8,Firefox,33.0,Other,9,39,2014,0
 17,2014-09-23,4,0,0,0,0,0,5,0,en-US,MG,Windows 7,Firefox,33.0,Other,9,39,2014,0
 15,2014-09-27,2,0,0,0,0,0,10,0,en-US,IT,Windows,Firefox,33.0,Other,9,39,2014,0
@@ -581,7 +559,6 @@
 18,2014-10-13,4,0,0,0,0,0,10,0,en-US,IQ,Windows 7,Firefox,33.0,Other,10,42,2014,0
 13,2014-09-28,8,0,0,0,0,0,5,0,en-US,MY,Windows XP,Firefox,33.0,Other,9,39,2014,0
 15,2014-10-18,1,0,0,0,0,0,13,0,en-US,MX,Windows 8,Firefox,34.0,Other,10,42,2014,0
--1,2014-10-19,0,0,0,0,0,0,-1,0,th,TH,Windows XP,Firefox,34.0,Other,10,42,2014,81
 13,2014-09-28,2,0,0,0,0,0,9,0,en-US,EG,Mac OS X,Firefox,33.0,Other,9,39,2014,0
 17,2014-10-13,1,0,0,0,0,0,6,0,en-US,PK,Windows Vista,Firefox,33.0,Other,10,42,2014,0
 15,2014-09-26,1,0,0,0,0,0,11,0,en-US,GB,Windows Vista,Firefox,33.0,Other,9,39,2014,0
@@ -591,7 +568,6 @@
 19,2014-10-02,2,0,0,0,0,0,13,0,en-US,MU,Windows 7,Firefox,33.0,Other,10,40,2014,0
 20,2014-10-20,1,0,0,1,0,0,3,0,en-US,EG,Windows XP,Firefox,33.0,Other,10,43,2014,0
 20,2014-10-13,2,0,0,0,0,0,8,0,en-US,VN,Windows 8,Firefox,33.0,Other,10,42,2014,0
--1,2014-10-14,0,0,0,0,0,0,-1,0,en-US,KZ,Linux,Iceweasel,33.0,Other,10,42,2014,3
 16,2014-10-21,13,0,0,0,0,0,11,0,en-US,PK,Windows 7,Firefox,34.0,Other,10,43,2014,0
 18,2014-10-08,13,0,0,0,0,0,6,0,en-US,NZ,Windows 7,Firefox,34.0,Other,10,41,2014,0
 12,2014-10-10,3,0,0,0,0,0,5,0,en-US,US,Ubuntu,Firefox,33.0,Other,10,41,2014,0
@@ -601,7 +577,6 @@
 17,2014-09-20,2,0,0,0,0,0,7,0,en-US,CN,Linux,Firefox,35.0,Other,9,38,2014,0
 19,2014-10-19,191,0,0,0,0,0,9,0,en-US,EG,Windows XP,Firefox,34.0,Other,10,42,2014,0
 13,2014-09-27,5,0,0,0,0,0,13,0,en-US,KH,Windows,Firefox,33.0,Other,9,39,2014,0
--1,2014-09-24,0,0,0,0,0,0,-1,0,en-US,BD,Windows Vista,Firefox,34.0,Other,9,39,2014,16
 17,2014-09-29,1,0,0,0,0,0,7,0,en-US,MV,Windows XP,Firefox,33.0,Other,9,40,2014,0
 15,2014-10-08,1,0,0,0,0,0,2,0,en-US,PH,Windows,Firefox,35.0,Other,10,41,2014,0
 15,2014-10-23,2,0,0,0,0,0,10,0,en-US,BE,Windows 7,Firefox,34.0,Other,10,43,2014,0
@@ -673,7 +648,6 @@
 13,2014-09-23,4,0,0,0,0,0,7,0,en-US,NA,Windows 8,Firefox,33.0,Other,9,39,2014,0
 13,2014-09-17,14,0,0,0,0,0,8,0,en-US,KH,Windows XP,Firefox,33.0,Other,9,38,2014,0
 17,2014-09-27,6,0,0,0,0,0,5,0,en-US,PL,Windows XP,Firefox,33.0,Other,9,39,2014,0
--1,2014-10-21,0,0,0,0,0,0,-1,0,en-US,US,Linux,Firefox,34.0,Other,10,43,2014,51
 16,2014-09-26,1,0,0,0,0,0,4,0,en-US,PK,Windows Vista,Firefox,33.0,Other,9,39,2014,0
 18,2014-10-15,1,0,0,0,0,0,11,0,en-US,ID,Windows XP,Firefox,34.0,Other,10,42,2014,0
 16,2014-09-17,11,0,0,0,0,0,13,0,en-US,AE,Windows 7,Firefox,33.0,Other,9,38,2014,0
@@ -691,16 +665,13 @@
 19,2014-10-09,2,0,0,0,0,0,0,0,en-US,ID,Windows 8,Firefox,34.0,Other,10,41,2014,0
 20,2014-10-07,14,0,0,0,0,0,11,0,en-US,IN,Windows 7,Firefox,33.0,Other,10,41,2014,0
 18,2014-09-17,1,0,0,0,0,0,13,0,en-US,ME,Windows 8,Firefox,33.0,Other,9,38,2014,0
--1,2014-10-21,0,0,0,0,0,0,-1,0,en-US,CA,Windows Vista,Firefox,34.0,Other,10,43,2014,77
 15,2014-10-15,6,0,0,0,0,0,12,0,en-US,IN,Windows 7,Firefox,34.0,Other,10,42,2014,0
--1,2014-10-09,0,0,0,0,0,0,-1,0,en-US,KW,Windows 7,Firefox,34.0,Other,10,41,2014,7
 16,2014-10-15,1,0,0,0,0,0,6,0,en-US,RS,Windows 7,Firefox,33.0,Other,10,42,2014,0
 12,2014-10-21,5,0,0,0,0,0,7,0,en-US,MY,Windows 7,Firefox,34.0,Other,10,43,2014,0
 15,2014-09-25,1,0,0,0,0,0,5,0,en-US,EG,Windows XP,Firefox,35.0,Other,9,39,2014,0
 17,2014-09-28,34,0,0,0,0,0,6,0,en-US,GB,Windows 7,Firefox,33.0,Other,9,39,2014,0
 18,2014-10-22,1,0,0,0,0,0,7,0,en-US,SI,Windows 8,Firefox,35.0,Other,10,43,2014,0
 13,2014-09-24,1,0,0,0,0,0,14,0,en-US,PT,Windows 7,Firefox,35.0,Other,9,39,2014,0
--1,2014-10-21,0,0,0,0,0,0,-1,0,es-CL,BE,Windows,Firefox,34.0,Other,10,43,2014,5
 12,2014-09-20,1,0,0,0,0,0,14,0,en-US,KH,Windows 8,Firefox,33.0,Other,9,38,2014,0
 14,2014-10-08,1,0,0,0,0,0,1,0,en-US,IN,Windows,Firefox,33.0,Other,10,41,2014,0
 12,2014-10-19,1,0,0,0,0,0,11,0,en-US,GB,Windows XP,Firefox,33.0,Other,10,42,2014,0
@@ -729,7 +700,6 @@
 12,2014-09-24,2,0,0,0,0,0,2,0,en-US,IR,Windows 8,Firefox,33.0,Other,9,39,2014,0
 14,2014-10-15,62,0,0,0,0,0,14,0,en-US,IN,Windows 7,Firefox,33.0,Other,10,42,2014,0
 13,2014-09-19,7,0,0,0,0,0,1,0,en-US,KH,Windows XP,Firefox,33.0,Other,9,38,2014,0
--1,2014-10-15,0,0,0,0,0,0,-1,0,ru,BY,Windows XP,Firefox,33.0,Other,10,42,2014,3
 17,2014-10-02,3,0,0,0,0,0,9,0,en-US,FR,Windows,Firefox,33.0,Other,10,40,2014,0
 19,2014-10-23,1,0,0,0,0,0,10,0,en-US,RS,Windows 8,Firefox,36.0,Other,10,43,2014,0
 13,2014-09-24,1,0,0,0,0,0,10,0,en-US,RU,Windows,Firefox,35.0,Other,9,39,2014,0
@@ -788,7 +758,6 @@
 12,2014-10-13,1,0,0,0,0,0,0,0,en-US,CN,Windows 7,Firefox,35.0,Other,10,42,2014,0
 12,2014-09-19,1,0,0,0,0,0,1,0,en-US,MA,Windows,Firefox,33.0,Other,9,38,2014,0
 17,2014-09-29,61,0,0,0,0,0,9,0,en-US,ID,Windows 8,Firefox,33.0,Other,9,40,2014,0
--1,2014-10-21,0,0,0,0,0,0,-1,0,ja,US,Windows 7,Firefox,34.0,Other,10,43,2014,116
 19,2014-09-23,3,0,0,0,0,0,12,0,en-US,MA,Windows XP,Firefox,33.0,Other,9,39,2014,0
 17,2014-10-21,2,0,0,0,0,0,11,0,en-US,YE,Windows 7,Firefox,34.0,Other,10,43,2014,0
 14,2014-09-26,1,0,0,0,0,0,3,0,en-US,VE,Windows 7,Firefox,35.0,Other,9,39,2014,0
