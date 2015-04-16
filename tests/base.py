@@ -19,6 +19,7 @@ class BaseTestCase(TestCase):
         return self.env.application
 
     def setUp(self):
+        self.env.db.drop_all()
         self.create_app()
         self.env.db.create_all()
 
@@ -26,7 +27,7 @@ class BaseTestCase(TestCase):
             for line in fd:
                 row = [el.decode('utf-8') for el in line.split(',')]
                 yield dict(zip(
-                    ('id', 'target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'locale'),
+                    ('target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'locale'),
                     row))
 
         from splice.models import Tile, Channel
