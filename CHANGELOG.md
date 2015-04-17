@@ -2,6 +2,7 @@
 =====
 
 * authoring publish success UI now with upload status
+* CI tests now on PostgresQL
 
 1.1.5
 =====

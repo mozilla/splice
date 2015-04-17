@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from sqlalchemy.exc import DataError
 from sqlalchemy.orm.exc import NoResultFound
 from splice.environment import Environment
 from splice.queries import get_channels, get_upcoming_distributions, unschedule_distribution
@@ -31,7 +32,7 @@ def unschedule():
         return jsonify({"err": [{"msg": msg}]}), 400
     try:
         unschedule_distribution(dist_id)
-    except NoResultFound:
+    except (NoResultFound, DataError):
         msg = "dist_id {0} does not exist".format(dist_id)
         env.log("UPCOMING_ERROR msg: {0}".format(msg))
         return jsonify({"err": [{"msg": msg}]}), 404
