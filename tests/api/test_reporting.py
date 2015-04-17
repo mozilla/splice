@@ -65,7 +65,7 @@ class TestReporting(BaseTestCase):
             elif id == (2014, 40, 15):
                 assert_equal(vals, (2162, 2, 0, 12, 0, 0))
                 f3 = True
-            elif id == (2014, 41, 99):
+            elif id == (2014, 41, 30):
                 assert_equal(row[3].decode('utf-8'), u'Firefox のカスタマイズ')
                 f4 = True
 
@@ -163,12 +163,12 @@ class TestReporting(BaseTestCase):
             id = tuple(row[:6])
             vals = tuple(row[6:])
             assert id[4] == 'US' and id[5] == 'en-US'
-            if id == ('2014', '2014-09-20', '19', "Firefox Marketplace", 'US', 'en-US'):
+            if id == ('2014', '2014-09-20', '19', "Mozilla", 'US', 'en-US'):
                 f1 = True
-            elif id == ('2014', '2014-10-20', '19', "Firefox Marketplace", 'US', 'en-US'):
+            elif id == ('2014', '2014-10-20', '19', "Mozilla", 'US', 'en-US'):
                 assert_equal(vals, ('20', '0', '0', '0', '0', '0'))
                 f2 = True
-            elif id == ('2014', '2014-10-22', '19', "Firefox Marketplace", 'US', 'en-US'):
+            elif id == ('2014', '2014-10-22', '19', "Mozilla", 'US', 'en-US'):
                 assert_equal(vals, ('4', '0', '0', '0', '0', '0'))
                 f3 = True
 
@@ -196,10 +196,10 @@ class TestReporting(BaseTestCase):
         for row in results:
             id = tuple(row[:6])
             vals = tuple(row[6:])
-            if id == ('2014', '9', '15', "Firefox for Android", 'PH', 'en-US'):
+            if id == ('2014', '9', '15', "Lightbeam", 'PH', 'en-US'):
                 assert_equal(vals, ('1651', '1', '0', '14', '0', '0'))
                 f1 = True
-            elif id == ('2014', '10', '15', "Firefox for Android", 'PH', 'en-US'):
+            elif id == ('2014', '10', '15', "Lightbeam", 'PH', 'en-US'):
                 f2 = True
 
         assert(f1)

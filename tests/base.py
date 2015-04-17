@@ -4,7 +4,8 @@ from splice.environment import Environment
 from splice.webapp import create_webapp
 from flask.ext.testing import TestCase
 
-env = Environment.instance(test=True)
+db_uri = os.environ.get('TEST_DB_URI') or 'sqlite://'
+env = Environment.instance(test=True, test_db_uri=db_uri)
 
 
 class BaseTestCase(TestCase):
@@ -18,6 +19,7 @@ class BaseTestCase(TestCase):
         return self.env.application
 
     def setUp(self):
+        self.env.db.drop_all()
         self.create_app()
         self.env.db.create_all()
 
@@ -25,7 +27,7 @@ class BaseTestCase(TestCase):
             for line in fd:
                 row = [el.decode('utf-8') for el in line.split(',')]
                 yield dict(zip(
-                    ('id', 'target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'locale'),
+                    ('target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'locale'),
                     row))
 
         from splice.models import Tile, Channel
