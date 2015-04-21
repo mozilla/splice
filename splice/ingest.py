@@ -285,11 +285,13 @@ def generate_artifacts(data, channel_name, deploy):
             }
 
     if deploy:
-        # include tile index if deployment is requested
+        # include tile index if deployment is requested.  'ver' allows us to make onyx
+        # backward compatible more easily
         artifacts.append({
             "key": "{0}_{1}".format(safe_channel_name, env.config.S3["tile_index_key"]),
             "data": json.dumps(tile_index, sort_keys=True),
             "force_upload": True,
+            "ver": 3,
         })
 
     # include data submission in artifacts
