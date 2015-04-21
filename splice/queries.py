@@ -10,12 +10,14 @@ from sqlalchemy.orm.session import sessionmaker
 def get_frecent_sites_for_tile(tile_id, conn=None):
 
     stmt = select([AdgroupSite.site]) \
-        .where(and_(AdgroupSite.adgroup_id == Adgroup.id, Adgroup.id == Tile.adgroup_id, Tile.id == tile_id))
+        .where(and_(AdgroupSite.adgroup_id == Adgroup.id,
+                    Adgroup.id == Tile.adgroup_id,
+                    Tile.id == tile_id))
     result = conn.execute(stmt)
     if result:
         vals = list(r[0] for r in result)
-        return set(vals)
-    return set([])
+        return sorted(set(vals))
+    return []
 
 
 def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
@@ -53,7 +55,7 @@ def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
         for tile_id, adgroup_id in results:
             # now check frecent sites for this tile
             db_frecents = get_frecent_sites_for_tile(tile_id, conn)
-            if db_frecents == set(frecent_sites):
+            if db_frecents == sorted(set(frecent_sites)):
                 return tile_id, adgroup_id
 
     return None, None

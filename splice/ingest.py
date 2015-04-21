@@ -146,7 +146,11 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
                     enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() \
                         if "enhancedImageURI" in t else None
-                    frecent_sites = set(t.get("frecent_sites", []))
+
+                    # deduplicate and sort frecent_sites
+                    frecent_sites = sorted(set(t.get("frecent_sites", [])))
+                    if frecent_sites:
+                        t['frecent_sites'] = frecent_sites
 
                     columns = dict(
                         target_url=t["url"],

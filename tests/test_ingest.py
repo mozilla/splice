@@ -90,6 +90,23 @@ class TestIngestLinks(BaseTestCase):
         c = self.env.db.session.query(AdgroupSite).count()
         assert_equal(2, c)
 
+    def test_sorted_suggested_sites(self):
+        """
+        ensure suggested sites are sorted
+        """
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frecent_sites": ["http://lmnop.org", "http://def.com", "http://abc.com", "http://def.com", "https://xyz.com"]
+        }
+        data = ingest_links({"CA/en-US": [tile]}, self.channels[0].id)
+        assert_equal(1, len(data["CA/en-US"]))
+        assert_equal(data["CA/en-US"][0]['frecent_sites'],
+                     ["http://abc.com", "http://def.com", "http://lmnop.org", "https://xyz.com"])
+
     def test_ingest_suggested_sites(self):
         """
         Test that there is no duplication when ingesting tiles
@@ -123,7 +140,7 @@ class TestIngestLinks(BaseTestCase):
         data = ingest_links({"STAR/en-US": [tile]}, self.channels[0].id)
         directory_id = data["STAR/en-US"][0]["directoryId"]
 
-        # the biggest ID is 30 - next one should be 100
+        # the biggest ID is 30 - next one should be 31
         assert_equal(31, directory_id)
 
     def test_id_not_duplicated(self):
