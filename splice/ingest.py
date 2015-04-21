@@ -211,7 +211,7 @@ def generate_artifacts(data, channel_name, deploy):
     :deploy: tells whether to deploy to the channels
     """
     artifacts = []
-    tile_index = {}
+    tile_index = {'__ver__': 3}
     image_index = {}
     env = Environment.instance()
 
@@ -291,7 +291,6 @@ def generate_artifacts(data, channel_name, deploy):
             "key": "{0}_{1}".format(safe_channel_name, env.config.S3["tile_index_key"]),
             "data": json.dumps(tile_index, sort_keys=True),
             "force_upload": True,
-            "ver": 3,
         })
 
     # include data submission in artifacts
