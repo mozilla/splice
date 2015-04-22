@@ -132,7 +132,8 @@ def ingest_links(data, channel_id, *args, **kwargs):
             if locale not in Environment.instance().fixtures["locales"]:
                 raise IngestError("locale '{0}' is invalid".format(locale))
 
-            command_logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1} CHANNEL:{2}".format(country_code, locale,
+            command_logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1} CHANNEL:{2}".format(country_code,
+                                                                                           locale,
                                                                                            channel_id))
 
             new_tiles_list = []
@@ -160,7 +161,6 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         image_uri=image_hash,
                         enhanced_image_uri=enhanced_image_hash,
                         locale=locale,
-                        country_code=country_code,
                         frecent_sites=frecent_sites,
                         conn=conn
                     )

@@ -8,11 +8,10 @@ from sqlalchemy.orm.session import sessionmaker
 
 
 def get_frecent_sites_for_tile(tile_id, conn=None):
-
-    stmt = select([AdgroupSite.site]) \
-        .where(and_(AdgroupSite.adgroup_id == Adgroup.id,
-                    Adgroup.id == Tile.adgroup_id,
-                    Tile.id == tile_id))
+    stmt = (select([AdgroupSite.site])
+            .where(and_(AdgroupSite.adgroup_id == Adgroup.id,
+                        Adgroup.id == Tile.adgroup_id,
+                        Tile.id == tile_id)))
     result = conn.execute(stmt)
     if result:
         vals = list(r[0] for r in result)
@@ -21,7 +20,7 @@ def get_frecent_sites_for_tile(tile_id, conn=None):
 
 
 def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                country_code, frecent_sites, conn=None, *args, **kwargs):
+                frecent_sites, conn=None, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
@@ -48,8 +47,6 @@ def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
         .join(Adgroup.tiles)
         .order_by(asc(Tile.id))
     )
-    # if country_code != 'STAR':
-    #     results = results.filter(Adgroup.country_code == country_code)
 
     if results:
         for tile_id, adgroup_id in results:
@@ -273,7 +270,7 @@ def slot_summary(connection, start_date, period='week', country_code=None, local
 
 
 def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                country_code, frecent_sites, conn=None, *args, **kwargs):
+                frecent_sites, conn=None, *args, **kwargs):
 
     from splice.environment import Environment
     env = Environment.instance()
@@ -289,11 +286,9 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
             text(
                 "INSERT INTO adgroups ("
                 "locale, created_at"
-                # "country_code, locale, created_at"
                 ") "
                 "VALUES ("
                 ":locale, :created_at"
-                # " :country_code, :locale, :created_at"
                 ")"
             ),
             locale=locale,
