@@ -1,10 +1,20 @@
 #!/usr/bin/env python
 from sqlalchemy.sql import text
-from splice.queries import get_tiles
-
 
 from splice.environment import Environment
 env = Environment.instance()
+
+
+def get_tiles(conn):
+    rows = conn.execute("SELECT id, locale FROM tiles")
+    # ensure items are a list of dicts
+    # KeyedTuples may serialize differently on other systems
+
+    return rows
+
+
+
+
 with env.application.app_context():
 
     session = env.db.session
@@ -17,7 +27,7 @@ with env.application.app_context():
         if has_rows:
             print "won't execute insert.  adgroups has %d non-empty rows" % has_rows
         else:
-            for tile in get_tiles():
+            for tile in get_tiles(conn):
                 conn.execute(
                     text("INSERT INTO adgroups (locale) VALUES (:locale)"),
                     locale=tile['locale'])
