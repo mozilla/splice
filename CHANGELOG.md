@@ -1,3 +1,9 @@
+1.1.7
+=====
+
+* added Related Tiles 
+* requires database migration 
+
 1.1.6
 =====
 
