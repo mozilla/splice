@@ -6,7 +6,7 @@ from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_tru
 from jsonschema.exceptions import ValidationError
 from tests.base import BaseTestCase
 from splice.ingest import ingest_links, generate_artifacts, IngestError, distribute
-from splice.models import Tile
+from splice.models import Tile, Adgroup, AdgroupSite
 
 
 class TestIngestLinks(BaseTestCase):
@@ -52,6 +52,80 @@ class TestIngestLinks(BaseTestCase):
             }
         ]}, self.channels[0].id)
 
+    def test_invalid_related(self):
+        """
+        Invalid suggested type is rejected
+        """
+        assert_raises(ValidationError, ingest_links, {"US/en-US": [
+            {
+                "imageURI": "data:image/png;base64,somedata",
+                "url": "https://somewhere.com",
+                "title": "Some Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF",
+                "frecent_sites": "not an array, really"
+            }
+        ]}, self.channels[0].id)
+
+    def test_suggested_sites(self):
+        """
+        just a simple suggested site tile
+        """
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frecent_sites": ["http://abc.com", "https://xyz.com"]
+        }
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        c = self.env.db.session.query(AdgroupSite).count()
+        assert_equal(0, c)
+        data = ingest_links({"US/en-US": [tile]}, self.channels[0].id)
+        assert_equal(1, len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(31, c)
+        c = self.env.db.session.query(AdgroupSite).count()
+        assert_equal(2, c)
+
+    def test_sorted_suggested_sites(self):
+        """
+        ensure suggested sites are sorted
+        """
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frecent_sites": ["http://lmnop.org", "http://def.com", "http://abc.com", "http://def.com", "https://xyz.com"]
+        }
+        data = ingest_links({"CA/en-US": [tile]}, self.channels[0].id)
+        assert_equal(1, len(data["CA/en-US"]))
+        assert_equal(data["CA/en-US"][0]['frecent_sites'],
+                     ["http://abc.com", "http://def.com", "http://lmnop.org", "https://xyz.com"])
+
+    def test_ingest_suggested_sites(self):
+        """
+        Test that there is no duplication when ingesting tiles
+        """
+        with open(self.get_fixture_path("tiles_suggested.json"), 'r') as f:
+            tiles = json.load(f)
+
+        num_tiles = self.env.db.session.query(Tile).count()
+        data = ingest_links(tiles, self.channels[0].id)
+        assert_equal(len(data['STAR/en-US']), 5)
+        new_num_tiles = self.env.db.session.query(Tile).count()
+        assert_equal(num_tiles + 4, new_num_tiles)
+
+        # ingesting the same thing a second time should be idempotent
+        data = ingest_links(tiles, self.channels[0].id)
+        assert_equal(len(data['STAR/en-US']), 5)
+        new_num_tiles = self.env.db.session.query(Tile).count()
+        assert_equal(num_tiles + 4, new_num_tiles)
+
     def test_id_creation(self):
         """
         Test an id is created for a valid tile
@@ -66,7 +140,7 @@ class TestIngestLinks(BaseTestCase):
         data = ingest_links({"STAR/en-US": [tile]}, self.channels[0].id)
         directory_id = data["STAR/en-US"][0]["directoryId"]
 
-        # the biggest ID is 30 - next one should be 100
+        # the biggest ID is 30 - next one should be 31
         assert_equal(31, directory_id)
 
     def test_id_not_duplicated(self):
@@ -167,7 +241,7 @@ class TestIngestLinks(BaseTestCase):
         def mock_ingest(*args, **kwargs):
             counts['call'] += 1
             if counts['call'] < counts['exception_at']:
-                insert_function(*args, **kwargs)
+                return insert_function(*args, **kwargs)
             else:
                 raise Exception('Boom')
 
@@ -212,23 +286,23 @@ class TestGenerateArtifacts(BaseTestCase):
         """
         Tests that the correct number of artifacts are generated
         """
-        with open(self.get_fixture_path("valid_tile.json"), 'r') as f:
+        with open(self.get_fixture_path("tiles_suggested.json"), 'r') as f:
             fixture = json.load(f)
 
-        tile = fixture["STAR/en-US"][0]
+        tile = fixture["STAR/en-US"][4]
 
         data = ingest_links({"STAR/en-US": [tile]}, self.channels[0].id)
         artifacts = generate_artifacts(data, self.channels[0].name, True)
-        # tile index, distribution and 2 image files are generated
-        assert_equal(5, len(artifacts))
+        # tile index, v2, v3 and 2 image files are generated
+        assert_equal(6, len(artifacts))
 
         data = ingest_links({
             "STAR/en-US": [tile],
             "CA/en-US": [tile]
         }, self.channels[0].id)
         artifacts = generate_artifacts(data, self.channels[0].name, True)
-        # includes one more file: the locale data payload
-        assert_equal(6, len(artifacts))
+        # includes two more file: the locale data payload for each version
+        assert_equal(8, len(artifacts))
 
     def test_unknown_mime_type(self):
         """
@@ -353,8 +427,8 @@ class TestDistribute(BaseTestCase):
 
         data = ingest_links({"STAR/en-US": tiles_star}, self.channels[0].id)
         distribute(data, self.channels[0].id, True)
-        # 5 files are uploaded, mirrors generate artifactes
-        assert_equal(5, self.key_mock.set_contents_from_string.call_count)
+        # 6 files are uploaded, mirrors generate artifacts
+        assert_equal(6, self.key_mock.set_contents_from_string.call_count)
 
         self.key_mock.set_contents_from_string = Mock()
         data = ingest_links({
@@ -362,8 +436,42 @@ class TestDistribute(BaseTestCase):
             "CA/en-US": tiles_ca,
         }, self.channels[0].id)
         distribute(data, self.channels[0].id, True)
-        #  includes one more upload: the locate data payload
-        assert_equal(6, self.key_mock.set_contents_from_string.call_count)
+        #  includes two more upload: the locate data payload (for both versions)
+        assert_equal(8, self.key_mock.set_contents_from_string.call_count)
+
+    def test_distribute_suggested(self):
+        tiles_star = [
+            {
+                "imageURI": "data:image/png;base64,somedata",
+                "enhancedImageURI": "data:image/png;base64,somemoredata",
+                "url": "https://somewhere.com",
+                "title": "Some Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF",
+                "frecent_sites": ['http://xyz.com', 'http://abc.com']
+            }
+        ]
+
+        tiles_ca = [
+            {
+                "imageURI": "data:image/png;base64,somedata",
+                "url": "https://somewhere.com",
+                "title": "Some Other Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF"
+            }
+        ]
+
+        self.key_mock.set_contents_from_string = Mock()
+        data = ingest_links({
+            "STAR/en-US": tiles_star,
+            "CA/en-US": tiles_ca,
+        }, self.channels[0].id)
+        distribute(data, self.channels[0].id, True)
+
+        # in this case, the fifth element should be the mock of the s3 upload for the 'ag' index
+        frecents = json.loads(self.key_mock.set_contents_from_string.mock_calls[5][1][0])['suggested'][0]['frecent_sites']
+        assert_equal(frecents, ['http://abc.com', 'http://xyz.com'])
 
     def test_deploy_always_generates_tile_index(self):
         """A tiles index file should always be generated"""
@@ -373,7 +481,7 @@ class TestDistribute(BaseTestCase):
         index_uploaded = {'count': 0}
 
         def key_set_name(name):
-            if name == "{0}_tile_index.json".format(self.channels[0].name):
+            if name == "{0}_tile_index.v3.json".format(self.channels[0].name):
                 index_uploaded['count'] += 1
         name_mock = PropertyMock(side_effect=key_set_name)
         type(self.key_mock).name = name_mock

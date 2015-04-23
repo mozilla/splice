@@ -1,12 +1,26 @@
 from datetime import datetime, timedelta
 from sqlalchemy.sql import text
-from splice.models import Channel, Distribution, Tile, impression_stats_daily, newtab_stats_daily
+from splice.models import Channel, Distribution, Tile, Adgroup, AdgroupSite
+from splice.models import impression_stats_daily, newtab_stats_daily
 from sqlalchemy.sql import select, func, and_
 from sqlalchemy.sql.expression import asc
 from sqlalchemy.orm.session import sessionmaker
 
 
-def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, conn=None, *args, **kwargs):
+def get_frecent_sites_for_tile(tile_id, conn=None):
+    stmt = (select([AdgroupSite.site])
+            .where(and_(AdgroupSite.adgroup_id == Adgroup.id,
+                        Adgroup.id == Tile.adgroup_id,
+                        Tile.id == tile_id)))
+    result = conn.execute(stmt)
+    if result:
+        vals = list(r[0] for r in result)
+        return sorted(set(vals))
+    return []
+
+
+def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
+                frecent_sites, conn=None, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
@@ -23,21 +37,25 @@ def tile_exists(target_url, bg_color, title, type, image_uri, enhanced_image_uri
     # this is because of a previous bug where duplicate tiles could be created
     results = (
         session
-        .query(Tile.id)
+        .query(Tile.id, Tile.adgroup_id)
         .filter(Tile.target_url == target_url)
         .filter(Tile.bg_color == bg_color)
         .filter(Tile.title == title)
         .filter(Tile.image_uri == image_uri)
         .filter(Tile.enhanced_image_uri == enhanced_image_uri)
-        .filter(Tile.locale == locale)
+        .filter(Adgroup.locale == locale)
+        .join(Adgroup.tiles)
         .order_by(asc(Tile.id))
-        .first()
     )
 
     if results:
-        return results[0]
+        for tile_id, adgroup_id in results:
+            # now check frecent sites for this tile
+            db_frecents = get_frecent_sites_for_tile(tile_id, conn)
+            if db_frecents == sorted(set(frecent_sites)):
+                return tile_id, adgroup_id
 
-    return results
+    return None, None
 
 
 def _parse_date(start_date, date_window):
@@ -251,10 +269,12 @@ def slot_summary(connection, start_date, period='week', country_code=None, local
     return _slot_summary_query(connection, start_date, period, country_code, locale)
 
 
-def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, conn=None, *args, **kwargs):
+def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
+                frecent_sites, conn=None, *args, **kwargs):
 
     from splice.environment import Environment
     env = Environment.instance()
+    now = datetime.utcnow()
 
     trans = None
     if conn is None:
@@ -263,33 +283,51 @@ def insert_tile(target_url, bg_color, title, type, image_uri, enhanced_image_uri
 
     try:
         conn.execute(
-
             text(
-                "INSERT INTO tiles ("
-                " target_url, bg_color, title, type, image_uri, enhanced_image_uri, locale, created_at"
+                "INSERT INTO adgroups ("
+                "locale, created_at"
                 ") "
                 "VALUES ("
-                " :target_url, :bg_color, :title, :type, :image_uri, :enhanced_image_uri, :locale, :created_at"
+                ":locale, :created_at"
+                ")"
+            ),
+            locale=locale,
+            created_at=now,
+        )
+        ag_id = conn.execute("SELECT MAX(id) FROM adgroups;").scalar()
+
+        if frecent_sites:
+            values = ','.join(["(%d, '%s', '%s')" % (ag_id, site, now) for site in frecent_sites])
+            stmt = "INSERT INTO adgroup_sites (adgroup_id, site, created_at)  VALUES %s" % values
+            conn.execute(stmt)
+
+        conn.execute(
+            text(
+                "INSERT INTO tiles ("
+                " target_url, bg_color, title, type, image_uri, enhanced_image_uri, created_at, adgroup_id"
+                ") "
+                "VALUES ("
+                " :target_url, :bg_color, :title, :type, :image_uri, :enhanced_image_uri, :created_at, :adgroup_id"
                 ")"
             ),
             target_url=target_url,
             bg_color=bg_color,
             title=title,
-            type=type,
+            type=typ,
             image_uri=image_uri,
             enhanced_image_uri=enhanced_image_uri,
-            locale=locale,
-            created_at=datetime.utcnow()
+            created_at=now,
+            adgroup_id=ag_id
         )
+        tile_id = conn.execute("SELECT MAX(id) FROM tiles;").scalar()
 
-        result = conn.execute("SELECT MAX(id) FROM tiles;").scalar()
         if trans is not None:
             trans.commit()
-        return result
-    except:
+        return tile_id, ag_id
+    except Exception as e:
         if trans is not None:
             trans.rollback()
-        raise
+        raise e
 
 
 def insert_distribution(url, channel_id, deployed, scheduled_dt, *args, **kwargs):
@@ -494,6 +532,44 @@ def get_channels(limit=100):
         .query(Channel.id, Channel.name, Channel.created_at)
         .order_by(Channel.id.asc())
         .limit(limit)
+        .all()
+    )
+
+    # ensure items are a list of dicts
+    # KeyedTuples may serialize differently on other systems
+    output = [d._asdict() for d in rows]
+
+    return output
+
+
+def get_tiles():
+    from splice.environment import Environment
+
+    env = Environment.instance()
+
+    rows = (
+        env.db.session
+        .query(Tile.id, Tile.adgroup_id, Tile.title, Tile.type, Tile.bg_color, Tile.target_url)
+        .order_by(Tile.id.asc())
+        .all()
+    )
+
+    # ensure items are a list of dicts
+    # KeyedTuples may serialize differently on other systems
+    output = [d._asdict() for d in rows]
+
+    return output
+
+
+def get_adgroups():
+    from splice.environment import Environment
+
+    env = Environment.instance()
+
+    rows = (
+        env.db.session
+        .query(Adgroup.id, Adgroup.locale)
+        .order_by(Adgroup.id)
         .all()
     )
 

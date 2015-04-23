@@ -57,6 +57,13 @@ payload_schema = {
                         "type": "string",
                         "pattern": "^data:image/.*$|^https?://.*$",
                     },
+                    "frecent_sites": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "pattern": "^https?://.*$"
+                        }
+                    },
                 },
                 "required": ["url", "title", "bgColor", "type", "imageURI"],
             }
@@ -125,7 +132,9 @@ def ingest_links(data, channel_id, *args, **kwargs):
             if locale not in Environment.instance().fixtures["locales"]:
                 raise IngestError("locale '{0}' is invalid".format(locale))
 
-            command_logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1} CHANNEL:{2}".format(country_code, locale, channel_id))
+            command_logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1} CHANNEL:{2}".format(country_code,
+                                                                                           locale,
+                                                                                           channel_id))
 
             new_tiles_list = []
 
@@ -133,30 +142,37 @@ def ingest_links(data, channel_id, *args, **kwargs):
                 trans = conn.begin()
                 try:
                     if not env.is_test:
-                        conn.execute("LOCK TABLE tiles;")
+                        conn.execute("LOCK TABLE tiles; LOCK TABLE adgroups; LOCK TABLE adgroup_sites;")
 
                     image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
-                    enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() if "enhancedImageURI" in t else None
+                    enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() \
+                        if "enhancedImageURI" in t else None
+
+                    # deduplicate and sort frecent_sites
+                    frecent_sites = sorted(set(t.get("frecent_sites", [])))
+                    if frecent_sites:
+                        t['frecent_sites'] = frecent_sites
 
                     columns = dict(
                         target_url=t["url"],
                         bg_color=t["bgColor"],
                         title=t["title"],
-                        type=t["type"],
+                        typ=t["type"],
                         image_uri=image_hash,
                         enhanced_image_uri=enhanced_image_hash,
                         locale=locale,
+                        frecent_sites=frecent_sites,
                         conn=conn
                     )
 
-                    db_tile_id = tile_exists(**columns)
+                    db_tile_id, ag_id = tile_exists(**columns)
                     f_tile_id = t.get("directoryId")
 
-                    if db_tile_id is None:
+                    if db_tile_id is None or ag_id is None:
                         """
                         Will generate a new id if not found in db
                         """
-                        db_tile_id = insert_tile(**columns)
+                        db_tile_id, ag_id = insert_tile(**columns)
                         t["directoryId"] = db_tile_id
                         new_tiles_list.append(t)
                         command_logger.info("INSERT: Creating id:{0}".format(db_tile_id))
@@ -173,9 +189,10 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         t["directoryId"] = db_tile_id
                         new_tiles_list.append(t)
                         command_logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))
-                except:
+
+                except Exception as e:
                     trans.rollback()
-                    command_logger.error("ERROR: Error inserting {0}".format(json.dumps(t, sort_keys=True)))
+                    command_logger.error("ERROR: {0}\nError inserting {1}.  ".format(e, json.dumps(t, sort_keys=True)))
                 else:
                     trans.commit()
 
@@ -194,7 +211,7 @@ def generate_artifacts(data, channel_name, deploy):
     :deploy: tells whether to deploy to the channels
     """
     artifacts = []
-    tile_index = {}
+    tile_index = {'__ver__': 3}
     image_index = {}
     env = Environment.instance()
 
@@ -221,6 +238,9 @@ def generate_artifacts(data, channel_name, deploy):
 
     safe_channel_name = urllib.quote(channel_name)
 
+    sug_tiles = []
+    dir_tiles = []
+
     for country_locale, tile_data in data.iteritems():
 
         country_code, locale = country_locale.split("/")
@@ -235,20 +255,38 @@ def generate_artifacts(data, channel_name, deploy):
             if 'enhancedImageURI' in tile:
                 url = image_add(*slice_image_uri(tile["enhancedImageURI"]), locale=locale, tile_id=tile["directoryId"])
                 tile["enhancedImageURI"] = url
+            if 'frecent_sites' in tile:
+                sug_tiles.append(tile)
+            else:
+                dir_tiles.append(tile)
 
+        # deploy both v2 and v3 versions
         if deploy:
-            serialized = json.dumps({locale: tile_data}, sort_keys=True)
-            hsh = hashlib.sha1(serialized).hexdigest()
-            s3_key = "{0}/{1}.{2}.json".format(safe_channel_name, country_locale, hsh)
+            # v2
+            legacy = json.dumps({locale: dir_tiles}, sort_keys=True)
+            legacy_hsh = hashlib.sha1(legacy).hexdigest()
+            legacy_key = "{0}/{1}.{2}.json".format(safe_channel_name, country_locale, legacy_hsh)
             artifacts.append({
-                "key": s3_key,
-                "data": serialized,
+                "key": legacy_key,
+                "data": legacy,
             })
 
-            tile_index[country_locale] = os.path.join(env.config.CLOUDFRONT_BASE_URL, s3_key)
+            # v3
+            ag = json.dumps({'suggested': sug_tiles, 'directory': dir_tiles}, sort_keys=True)
+            ag_hsh = hashlib.sha1(ag).hexdigest()
+            ag_key = "{0}/{1}.{2}.ag.json".format(safe_channel_name, country_locale, ag_hsh)
+            artifacts.append({
+                "key": ag_key,
+                "data": ag,
+            })
+            tile_index[country_locale] = {
+                'legacy': os.path.join(env.config.CLOUDFRONT_BASE_URL, legacy_key),
+                'ag': os.path.join(env.config.CLOUDFRONT_BASE_URL, ag_key),
+            }
 
     if deploy:
-        # include tile index if deployment is requested
+        # include tile index if deployment is requested.  'ver' allows us to make onyx
+        # backward compatible more easily
         artifacts.append({
             "key": "{0}_{1}".format(safe_channel_name, env.config.S3["tile_index_key"]),
             "data": json.dumps(tile_index, sort_keys=True),
@@ -256,7 +294,6 @@ def generate_artifacts(data, channel_name, deploy):
         })
 
     # include data submission in artifacts
-
     data_serialized = json.dumps(data, sort_keys=True)
     hsh = hashlib.sha1(data_serialized).hexdigest()
     dt_str = datetime.utcnow().isoformat().replace(":", "-")
@@ -280,6 +317,7 @@ def distribute(data, channel_id, deploy, scheduled_dt=None):
 
     from splice.models import Channel
     from splice.environment import Environment
+
     env = Environment.instance()
 
     if scheduled_dt:
