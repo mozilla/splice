@@ -274,7 +274,7 @@ def generate_artifacts(data, channel_name, deploy):
             # v3
             ag = json.dumps({'suggested': sug_tiles, 'directory': dir_tiles}, sort_keys=True)
             ag_hsh = hashlib.sha1(ag).hexdigest()
-            ag_key = "{0}/{1}.{2}.json".format(safe_channel_name, country_locale, ag_hsh)
+            ag_key = "{0}/{1}.{2}.ag.json".format(safe_channel_name, country_locale, ag_hsh)
             artifacts.append({
                 "key": ag_key,
                 "data": ag,

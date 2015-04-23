@@ -439,6 +439,40 @@ class TestDistribute(BaseTestCase):
         #  includes two more upload: the locate data payload (for both versions)
         assert_equal(8, self.key_mock.set_contents_from_string.call_count)
 
+    def test_distribute_suggested(self):
+        tiles_star = [
+            {
+                "imageURI": "data:image/png;base64,somedata",
+                "enhancedImageURI": "data:image/png;base64,somemoredata",
+                "url": "https://somewhere.com",
+                "title": "Some Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF",
+                "frecent_sites": ['http://xyz.com', 'http://abc.com']
+            }
+        ]
+
+        tiles_ca = [
+            {
+                "imageURI": "data:image/png;base64,somedata",
+                "url": "https://somewhere.com",
+                "title": "Some Other Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF"
+            }
+        ]
+
+        self.key_mock.set_contents_from_string = Mock()
+        data = ingest_links({
+            "STAR/en-US": tiles_star,
+            "CA/en-US": tiles_ca,
+        }, self.channels[0].id)
+        distribute(data, self.channels[0].id, True)
+
+        # in this case, the fifth element should be the mock of the s3 upload for the 'ag' index
+        frecents = json.loads(self.key_mock.set_contents_from_string.mock_calls[5][1][0])['suggested'][0]['frecent_sites']
+        assert_equal(frecents, ['http://abc.com', 'http://xyz.com'])
+
     def test_deploy_always_generates_tile_index(self):
         """A tiles index file should always be generated"""
 
@@ -447,7 +481,7 @@ class TestDistribute(BaseTestCase):
         index_uploaded = {'count': 0}
 
         def key_set_name(name):
-            if name == "{0}_tile_index.json".format(self.channels[0].name):
+            if name == "{0}_tile_index.v3.json".format(self.channels[0].name):
                 index_uploaded['count'] += 1
         name_mock = PropertyMock(side_effect=key_set_name)
         type(self.key_mock).name = name_mock
