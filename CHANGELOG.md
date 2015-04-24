@@ -1,3 +1,13 @@
+1.1.10
+======
+
+* lose scheme in JSON schema for frecent sites
+
+1.1.9
+=====
+
+* keep locales in Tiles table
+
 1.1.8
 =====
 
