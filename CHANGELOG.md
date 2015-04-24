@@ -1,3 +1,8 @@
+1.1.8
+=====
+
+* added Related Tiles database migration for RedShift
+
 1.1.7
 =====
 
