@@ -304,10 +304,10 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
         conn.execute(
             text(
                 "INSERT INTO tiles ("
-                " target_url, bg_color, title, type, image_uri, enhanced_image_uri, created_at, adgroup_id"
+                " target_url, bg_color, title, type, image_uri, enhanced_image_uri, created_at, locale, adgroup_id"
                 ") "
                 "VALUES ("
-                " :target_url, :bg_color, :title, :type, :image_uri, :enhanced_image_uri, :created_at, :adgroup_id"
+                " :target_url, :bg_color, :title, :type, :image_uri, :enhanced_image_uri, :created_at, :locale, :adgroup_id"
                 ")"
             ),
             target_url=target_url,
@@ -317,6 +317,7 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
             image_uri=image_uri,
             enhanced_image_uri=enhanced_image_uri,
             created_at=now,
+            locale=locale,
             adgroup_id=ag_id
         )
         tile_id = conn.execute("SELECT MAX(id) FROM tiles;").scalar()

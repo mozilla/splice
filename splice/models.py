@@ -34,6 +34,7 @@ class Tile(db.Model):
     bg_color = db.Column(db.String(16), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(40), nullable=False)
+    locale = db.Column(db.String(14), nullable=False)
     adgroup_id = db.Column(db.Integer(), db.ForeignKey("adgroups.id"))
 
     image_uri = db.Column(db.Text(), nullable=False)
