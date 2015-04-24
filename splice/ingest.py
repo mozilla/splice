@@ -61,7 +61,7 @@ payload_schema = {
                         "type": "array",
                         "items": {
                             "type": "string",
-                            "pattern": "^https?://.*$"
+                            "pattern": "^.*$"
                         }
                     },
                 },
