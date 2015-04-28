@@ -100,7 +100,7 @@ angular.module('spliceApp').controller('authoringController', function($controll
      */
     $scope.uploadInProgress = true;
     $scope.uploadModal.$promise.then($scope.uploadModal.show);
-    spliceData.postTiles(tiles, $scope.channelSelect.id, $scope.deployConfig)
+    spliceData.postTiles(tiles.raw, $scope.channelSelect.id, $scope.deployConfig)
       .success(function(data) {
         var deployed = data.deployed;
         var msg = '<ol>';
@@ -125,7 +125,7 @@ angular.module('spliceApp').controller('authoringController', function($controll
 
         var urls = data.urls;
         $scope.deployConfig.now = false;
-        $scope.deployConfig.schedule = null;
+        $scope.clearScheduledDate();
         $scope.refreshDistributions();
       })
       .error(function(data, status, headers, config, statusText) {

@@ -67,11 +67,11 @@ angular.module('spliceApp').controller('distributionController', function($scope
 
     if (results.valid) {
       if (cacheKey) {
-        $scope.cache[cacheKey] = data;
+        $scope.cache[cacheKey] = $scope.separateTilesTypes(data);
         $scope.tiles = $scope.cache[cacheKey];
       }
       else {
-        $scope.tiles = data;
+        $scope.tiles = $scope.separateTilesTypes(data);
       }
       $scope.source = source;
       $scope.fileErrorMsg = null;
@@ -81,6 +81,44 @@ angular.module('spliceApp').controller('distributionController', function($scope
       $scope.tiles = {};
     }
     return results.valid;
+  };
+
+  $scope.separateTilesTypes = function(data) {
+    /**
+     * Separate Tiles types from a list of tiles in 2 groups:
+     * adgroups and default
+     */
+    var output = {raw: data, ui: {}};
+    for (var locale in output.raw) {
+      var tiles = data[locale];
+
+      output.ui[locale] = {
+        frecentSites: {},
+        defaultTiles: [],
+        frecentCount: 0,
+        defaultCount: 0,
+      };
+
+      for (var i = 0; i < tiles.length; i++) {
+        var tile = tiles[i];
+        if (tile.frecent_sites) {
+          tile.frecent_sites.sort();
+          var label = JSON.stringify(tile.frecent_sites);
+          if (!output.ui[locale].frecentSites[label]) {
+            output.ui[locale].frecentSites[label] = [];
+          }
+          output.ui[locale].frecentSites[label].push(tile);
+          output.ui[locale].frecentCount += 1;
+        }
+        else {
+          output.ui[locale].defaultTiles.push(tile);
+          output.ui[locale].defaultCount += 1;
+        }
+      }
+    }
+
+    console.dir(output);
+    return output;
   };
 
   $scope.openRemoteDistribution = function(url) {
