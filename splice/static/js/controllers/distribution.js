@@ -117,7 +117,6 @@ angular.module('spliceApp').controller('distributionController', function($scope
       }
     }
 
-    console.dir(output);
     return output;
   };
 
