@@ -152,3 +152,11 @@ ol.tiles-list > li:before {
     clear: both;
     padding: 10px 0 0 30px;
 }
+
+.toggle-control {
+    text-align: right;
+}
+
+.toggle-control .btn-group {
+    margin-left: 20px;
+}
