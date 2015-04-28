@@ -1,0 +1,32 @@
+<ol class="row tiles-list">
+    <li ng-repeat="(locale, tileTypes) in tiles.ui" class="col-md-12">
+        <h2>{{ locale }}</h2>
+        <div ng-hide="tileTypes.frecentCount==0" class="tile-listing">
+            <h3>Frecent Sites</h3>
+            <div ng-repeat="(label, tiles) in tileTypes.frecentSites" ng-hide="tiles.length == 0" class="tile-listing">
+                <h4>{{ label }}</h4>
+                <ul ng-hide="downloadInProgress" class="tile-container">
+                    <li ng-repeat="tile in tiles">
+                        <ul class="tile">
+                            <li><a href="{{ tile.url }}">{{ tile.title }} [ {{tile.type}} ]</a></li>
+                            <li><div class="enhanced-content img" style="background-color: {{ tile.bgColor }}; background-image: url('{{ tile.imageURI }}')"></div></li>
+                            <li><div class="enhanced-content enhanced-img" ng-class="{'enhanced-img-absent': tile.enhancedImageURI==null}" style=" background-color: {{ tile.enhancedImageURI ? tile.bgColor : 'inherit' }}; background-image: url('{{ tile.enhancedImageURI }}')"></div></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div ng-hide="tileTypes.defaultCount==0" class="tile-listing">
+            <h3>Default Tiles</h3>
+            <ul ng-hide="downloadInProgress" class="tile-container">
+                <li ng-repeat="tile in tileTypes.defaultTiles">
+                    <ul class="tile">
+                        <li><a href="{{ tile.url }}">{{ tile.title }} [ {{tile.type}} ]</a></li>
+                        <li><div class="enhanced-content img" style="background-color: {{ tile.bgColor }}; background-image: url('{{ tile.imageURI }}')"></div></li>
+                        <li><div class="enhanced-content enhanced-img" ng-class="{'enhanced-img-absent': tile.enhancedImageURI==null}" style=" background-color: {{ tile.enhancedImageURI ? tile.bgColor : 'inherit' }}; background-image: url('{{ tile.enhancedImageURI }}')"></div></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ol>
