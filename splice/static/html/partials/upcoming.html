@@ -14,20 +14,8 @@
                         </div>
                     </div>
                     <div ng-show="!tilesEmpty() && !downloadInProgress && !fileErrorMsg">
-                        <ol class="row tiles-list">
-                            <li ng-repeat="(locale, tileList) in tiles" class="col-md-12">
-                                <h2>{{ locale }}</h2>
-                                <ul ng-hide="downloadInProgress" class="tile-container">
-                                    <li ng-repeat="tile in tileList">
-                                        <ul class="tile">
-                                            <li><a href="{{ tile.url }}">{{ tile.title }} [ {{tile.type}} ]</a></li>
-                                            <li><div class="enhanced-content img" style="background-color: {{ tile.bgColor }}; background-image: url('{{ tile.imageURI }}')"></div></li>
-                                            <li><div class="enhanced-content enhanced-img" style=" background-color: {{ tile.enhancedImageURI ? tile.bgColor : 'inherit' }}; background-image: url('{{ tile.enhancedImageURI }}')"></div></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ol>
+                        <tiles-toggle></tiles-toggle>
+                        <tiles-list data="tiles"></tiles-list>
                     </div>
                     <div ng-show="fileErrorMsg" class="text-danger">
                         <h2>File Input Error</h2>

@@ -3,6 +3,11 @@
     background-repeat: no-repeat;
     width: 290px;
     height: 180px;
+    border: 1px solid transparent;
+}
+
+.enhanced-img-absent {
+    border: 1px dashed #CCC;
 }
 
 .tile {
@@ -141,4 +146,17 @@ ol.tiles-list > li:before {
     border-radius: 0;
     background-image: none;
     background-color: inherit;
+}
+
+.tile-listing {
+    clear: both;
+    padding: 10px 0 0 30px;
+}
+
+.toggle-control {
+    text-align: right;
+}
+
+.toggle-control .btn-group {
+    margin-left: 20px;
 }
