@@ -2,6 +2,7 @@
 ======
 
 * UI to preview Adgroups
+* Index crawl script
 
 1.1.10
 ======

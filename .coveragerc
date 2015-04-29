@@ -2,7 +2,7 @@
 branch = True
 source = splice
 include = splice/*
-omit = splice/tests/*
+omit = splice/tests/*,scripts/*
 
 [report]
 show_missing = True

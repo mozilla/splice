@@ -11,3 +11,4 @@ ujson==1.33
 mock==1.0.1
 jsonschema==2.4.0
 furl==0.3.95
+grequests==0.2.0

@@ -8,5 +8,5 @@ setup(
     author="Mozilla",
     packages=find_packages(),
     include_package_data=True,
-    scripts=["scripts/manage.py"],
+    scripts=["scripts/manage.py", "scripts/tile_index_crawl.py"],
 )
