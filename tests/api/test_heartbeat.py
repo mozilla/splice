@@ -1,7 +1,7 @@
 from flask import url_for
 from nose.tools import assert_equal
 from tests.base import BaseTestCase
-from mock import Mock, PropertyMock
+from mock import Mock
 
 
 class TestHeartbeat(BaseTestCase):
@@ -27,4 +27,3 @@ class TestHeartbeat(BaseTestCase):
         url = url_for('api.heartbeat.root')
         response = self.client.get(url)
         assert_equal(response.status_code, 200)
-

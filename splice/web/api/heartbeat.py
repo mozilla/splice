@@ -12,7 +12,7 @@ heartbeat = Blueprint('api.heartbeat', __name__, url_prefix='/')
 def root():
     try:
         conn = Environment.instance().db.engine.connect()
-        stmt = select([Tile.id])
+        stmt = select([Tile.id]).limit(1)
         res = conn.execute(stmt)
         assert res is not None
     except Exception as e:
