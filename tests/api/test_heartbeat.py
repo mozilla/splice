@@ -27,3 +27,17 @@ class TestHeartbeat(BaseTestCase):
         url = url_for('api.heartbeat.root')
         response = self.client.get(url)
         assert_equal(response.status_code, 200)
+
+    def test_fail_db_heartbeat(self):
+        """
+        /__heartbeat__
+        """
+        url = url_for('api.heartbeat.root')
+
+        def get_connect_mock(*args, **kwargs):
+            raise Exception()
+        connect = self.env.db.engine.connect
+        self.env.db.engine.connect = Mock(side_effect=get_connect_mock)
+        response = self.client.get(url)
+        self.env.db.engine.connect = connect
+        assert_equal(response.status_code, 500)
