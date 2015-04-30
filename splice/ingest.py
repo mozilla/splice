@@ -238,10 +238,9 @@ def generate_artifacts(data, channel_name, deploy):
 
     safe_channel_name = urllib.quote(channel_name)
 
-    sug_tiles = []
-    dir_tiles = []
-
     for country_locale, tile_data in data.iteritems():
+        sug_tiles = []
+        dir_tiles = []
 
         country_code, locale = country_locale.split("/")
         # copy data to modify inplace
