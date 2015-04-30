@@ -41,3 +41,20 @@ class TestHeartbeat(BaseTestCase):
         response = self.client.get(url)
         self.env.db.engine.connect = connect
         assert_equal(response.status_code, 500)
+
+    def test_fail_s3_heartbeat(self):
+        import splice.web.api.heartbeat
+        """
+        /__heartbeat__
+        """
+        url = url_for('api.heartbeat.root')
+
+        def get_s3_key_mock(*args, **kwargs):
+            raise Exception()
+        connect = self.env.db.engine.connect
+        key = splice.web.api.heartbeat.Key
+        splice.web.api.heartbeat.Key = Mock(side_effect=get_s3_key_mock)
+        response = self.client.get(url)
+        self.env.db.engine.connect = connect
+        splice.web.api.heartbeat.key = key
+        assert_equal(response.status_code, 500)
