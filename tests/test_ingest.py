@@ -1,12 +1,16 @@
 import json
 import magic
 import copy
+import re
 from mock import Mock, PropertyMock
 from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_true
 from jsonschema.exceptions import ValidationError
 from tests.base import BaseTestCase
 from splice.ingest import ingest_links, generate_artifacts, IngestError, distribute
 from splice.models import Tile, Adgroup, AdgroupSite
+
+
+desktop_locale_distro_pattern = re.compile(r'desktop/(.*)\..*.ag.json')
 
 
 class TestIngestLinks(BaseTestCase):
@@ -380,6 +384,28 @@ class TestGenerateArtifacts(BaseTestCase):
 
         assert_equal(2, image_count)
 
+    def test_generate_artifacts_tile_count(self):
+        """
+        Tests that the correct number of tiles are produced
+        """
+
+        with open(self.get_fixture_path('mozilla-tiles.fennec.sg.json'), 'r') as f:
+            tiles = json.load(f)
+
+        data = ingest_links(tiles, self.channels[0].id)
+        artifacts = generate_artifacts(data, self.channels[0].name, True)
+
+        assertions_run = False
+        for a in artifacts:
+            m = desktop_locale_distro_pattern.match(a['key'])
+            if m:
+                country_locale = m.groups()[0]
+                distro_data = json.loads(a['data'])
+                assert_equal(len(tiles[country_locale]) - 1, len(distro_data['directory']))
+                assert_equal(1, len(distro_data['suggested']))
+                assertions_run = True
+        assert(assertions_run)
+
 
 class TestDistribute(BaseTestCase):
 
@@ -469,8 +495,8 @@ class TestDistribute(BaseTestCase):
         }, self.channels[0].id)
         distribute(data, self.channels[0].id, True)
 
-        # in this case, the fifth element should be the mock of the s3 upload for the 'ag' index
-        frecents = json.loads(self.key_mock.set_contents_from_string.mock_calls[5][1][0])['suggested'][0]['frecent_sites']
+        # in this case, the 3rd element should be the mock of the s3 upload for the 'ag' index
+        frecents = json.loads(self.key_mock.set_contents_from_string.mock_calls[3][1][0])['suggested'][0]['frecent_sites']
         assert_equal(frecents, ['http://abc.com', 'http://xyz.com'])
 
     def test_deploy_always_generates_tile_index(self):
