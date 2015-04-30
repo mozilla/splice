@@ -1,3 +1,8 @@
+1.1.12
+======
+
+* Fix scoping bug in generate_artifacts
+
 1.1.11
 ======
 
