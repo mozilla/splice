@@ -495,8 +495,8 @@ class TestDistribute(BaseTestCase):
         }, self.channels[0].id)
         distribute(data, self.channels[0].id, True)
 
-        # in this case, the fifth element should be the mock of the s3 upload for the 'ag' index
-        frecents = json.loads(self.key_mock.set_contents_from_string.mock_calls[5][1][0])['suggested'][0]['frecent_sites']
+        # in this case, the 3rd element should be the mock of the s3 upload for the 'ag' index
+        frecents = json.loads(self.key_mock.set_contents_from_string.mock_calls[3][1][0])['suggested'][0]['frecent_sites']
         assert_equal(frecents, ['http://abc.com', 'http://xyz.com'])
 
     def test_deploy_always_generates_tile_index(self):
