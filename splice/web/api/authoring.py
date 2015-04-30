@@ -83,7 +83,7 @@ def init_data():
     channels = get_channels()
     dists = get_all_distributions()
 
-    return jsonify({'d': {'dists': dists, 'chans': channels, 'schema': schema}})
+    return jsonify({'d': {'dists': dists, 'chans': channels, 'schema': schema, 'env': env.config.ENVIRONMENT}})
 
 
 def register_routes(app):
