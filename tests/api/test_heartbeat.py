@@ -22,7 +22,7 @@ class TestHeartbeat(BaseTestCase):
 
     def test_heartbeat(self):
         """
-        /__heartbeat__
+        /__heartbeat__  test success path
         """
         url = url_for('api.heartbeat.root')
         response = self.client.get(url)
@@ -30,7 +30,7 @@ class TestHeartbeat(BaseTestCase):
 
     def test_fail_db_heartbeat(self):
         """
-        /__heartbeat__
+        /__heartbeat__ test for DB Failure
         """
         url = url_for('api.heartbeat.root')
 
@@ -45,7 +45,7 @@ class TestHeartbeat(BaseTestCase):
     def test_fail_s3_heartbeat(self):
         import splice.web.api.heartbeat
         """
-        /__heartbeat__
+        /__heartbeat__ test s3 failure
         """
         url = url_for('api.heartbeat.root')
 
