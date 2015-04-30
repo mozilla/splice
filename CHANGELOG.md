@@ -1,3 +1,8 @@
+1.1.13
+======
+
+* adds __heartbeat__ verification
+
 1.1.12
 ======
 
