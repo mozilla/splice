@@ -1,0 +1,1 @@
+<div class="alert" ng-class="{'alert-danger': env.prod, 'alert-warning': env.stage, 'alert-info': env.dev || env.test}"><strong>Environment: </strong>{{ env.prod ? "Production" : (env.stage ? "Staging" : "Development") }}</div>
