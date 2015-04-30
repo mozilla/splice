@@ -75,6 +75,7 @@
     </div>
 </script>
 
+<div ng-show="env.prod || env.stage" class="alert" ng-class="{'alert-danger': env.prod, 'alert-warning': env.stage}"><strong>Warning:</strong> {{ env.prod ? "Production" : "Staging" }} Environment</div>
 <div>
     <form name="allTilesForm">
         <div class="row channel-controls" ng-hide="initErrorMsg">

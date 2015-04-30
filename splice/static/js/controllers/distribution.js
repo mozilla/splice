@@ -2,6 +2,12 @@
 
 angular.module('spliceApp').controller('distributionController', function($scope, spliceData, fileReader) {
 
+  $scope.env = {
+    prod: false,
+    stage: false,
+    dev: false,
+    test: false,
+  };
   $scope.distributions = null;
   $scope.channels = null;
   $scope.channelIndex = {};
@@ -156,6 +162,11 @@ angular.module('spliceApp').controller('distributionController', function($scope
 
   $scope.init = function(initData) {
     if (initData.hasOwnProperty('chans') && initData.chans.length > 0) {
+      $scope.env.prod = initData.env == 'prod';
+      $scope.env.stage = initData.env == 'stage';
+      $scope.env.dev = initData.env == 'dev';
+      $scope.env.test = initData.env == 'test';
+
       $scope.channelSelect = initData.chans[0];
       $scope.payloadSchema = initData.schema;
       $scope.setupChannels(initData.chans);
