@@ -24,6 +24,18 @@ mime_extensions = {
     "image/svg+xml": "svg",
 }
 
+ISO_8061_pattern = (
+    '^' + '(?P<year>[\+-]?\d{4})'
+    '(?:' + '(?P<datesep>-?)' + '(?P<month>0[1-9]|1[0-2])'
+    '(?:' + '(?P=datesep)' + '(?P<day>0[1-9]|[12]\d|3[0-1])' + ')?' + ')?'
+    '(?:T' + '(?P<hour>[01]\d|2[0-4])'
+    '(?:' + '(?P<timesep>:?)' + '(?P<minute>[0-5]\d)'
+    '(?:' + '(?P=timesep)' + '(?P<second>[0-5]\d|60)'
+    '(?:' + '(?P<microsecond>\.\d+)' + ')?' + ')?' + ')?' + ')?'
+    '(?P<timezone>Z|[\+-]\d{2}(:?\d{2})?)' + '?'
+    '$'
+)
+
 payload_schema = {
     "type": "object",
     "patternProperties": {
@@ -63,6 +75,16 @@ payload_schema = {
                             "type": "string",
                             "pattern": "^.*$"
                         }
+                    },
+                    "time_limits": {
+                        "start": {
+                            "type": "string",
+                            "pattern": ISO_8061_pattern
+                        },
+                        "end": {
+                            "type": "string",
+                            "pattern": ISO_8061_pattern
+                        },
                     },
                 },
                 "required": ["url", "title", "bgColor", "type", "imageURI"],

@@ -3,7 +3,11 @@ import magic
 import copy
 import re
 from mock import Mock, PropertyMock
-from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_true
+from nose.tools import (
+    assert_raises,
+    assert_equal,
+    assert_not_equal,
+    assert_true)
 from jsonschema.exceptions import ValidationError
 from tests.base import BaseTestCase
 from splice.ingest import ingest_links, generate_artifacts, IngestError, distribute
@@ -523,3 +527,49 @@ class TestDistribute(BaseTestCase):
         distribute(data, self.channels[0].id, True)
 
         assert_equal(2, index_uploaded['count'])
+
+
+class TestISOPattern(BaseTestCase):
+
+    def test_relative_time_str(self):
+        """
+        Verify a relative ISO8061 time string validates
+        """
+        from splice.ingest import ISO_8061_pattern
+        pat = re.compile(ISO_8061_pattern)
+        date_str = '2014-01-12T00:00:00.000'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal(None, m.groupdict().get('timezone'))
+
+    def test_absolute_time_str(self):
+        """
+        Verify a ISO8061 time string with Z time string validates
+        """
+        from splice.ingest import ISO_8061_pattern
+        pat = re.compile(ISO_8061_pattern)
+        date_str = '2014-01-12T00:00:00.000Z'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal('Z', m.groupdict()['timezone'])
+
+    def test_timezone_str(self):
+        """
+        Verify a ISO8061 time string with timezone time string validates
+        """
+        from splice.ingest import ISO_8061_pattern
+        pat = re.compile(ISO_8061_pattern)
+        date_str = '2015-05-05T14:19:58.359981-05:00'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal('-05:00', m.groupdict()['timezone'])
+
+        date_str = '2015-05-05T14:19:58.359981-05'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal('-05', m.groupdict()['timezone'])
+
+        date_str = '2015-05-05T14:19:58.359981-0500'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal('-0500', m.groupdict()['timezone'])
