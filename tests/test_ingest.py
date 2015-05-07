@@ -130,6 +130,39 @@ class TestIngestLinks(BaseTestCase):
         new_num_tiles = self.env.db.session.query(Tile).count()
         assert_equal(num_tiles + 4, new_num_tiles)
 
+    def test_frequency_caps(self):
+        """
+        A simple test of frequency caps
+        """
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frequency_caps": {
+                "daily": 3,
+                "total": 10
+            }
+        }
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links({"US/en-US": [tile]}, self.channels[0].id)
+        assert_equal(1, len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(31, c)
+
+        tile = self.env.db.session.query(Tile).filter(Tile.id == 31).one()
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
+        assert_equal(tile.adgroup_id, ag.id)
+        assert_equal(ag.frequency_cap_daily, 3)
+        assert_equal(ag.frequency_cap_total, 10)
+
+        """
+        TODO:
+        * test distribution output
+        """
+
     def test_id_creation(self):
         """
         Test an id is created for a valid tile

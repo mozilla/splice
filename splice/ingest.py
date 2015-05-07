@@ -57,6 +57,18 @@ payload_schema = {
                         "type": "string",
                         "pattern": "^data:image/.*$|^https?://.*$",
                     },
+                    "frequency_caps": {
+                        "type": "object",
+                        "properties": {
+                            "daily": {
+                                "type": "integer"
+                            },
+                            "total": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": ["daily", "total"]
+                    },
                     "frecent_sites": {
                         "type": "array",
                         "items": {
@@ -153,6 +165,8 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     if frecent_sites:
                         t['frecent_sites'] = frecent_sites
 
+                    frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+
                     columns = dict(
                         target_url=t["url"],
                         bg_color=t["bgColor"],
@@ -162,6 +176,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         enhanced_image_uri=enhanced_image_hash,
                         locale=locale,
                         frecent_sites=frecent_sites,
+                        frequency_caps=frequency_caps,
                         conn=conn
                     )
 
