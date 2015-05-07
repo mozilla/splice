@@ -12,6 +12,7 @@ from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
 import jsonschema
 from furl import furl
+from dateutil.parser import parse as du_parse
 from splice.queries import tile_exists, insert_tile, insert_distribution
 from splice.environment import Environment
 
@@ -179,6 +180,15 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     if frecent_sites:
                         t['frecent_sites'] = frecent_sites
 
+                    time_limits = t.get("time_limits", {'start': None, 'end': None})
+                    if time_limits['start'] and time_limits['end']:
+                        start_date = du_parse(time_limits['start'])
+                        end_date = du_parse(time_limits['end'])
+                        time_limits = {
+                            'start': start_date,
+                            'end': end_date,
+                        }
+
                     columns = dict(
                         target_url=t["url"],
                         bg_color=t["bgColor"],
@@ -188,6 +198,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         enhanced_image_uri=enhanced_image_hash,
                         locale=locale,
                         frecent_sites=frecent_sites,
+                        time_limits=time_limits,
                         conn=conn
                     )
 
