@@ -77,14 +77,18 @@ payload_schema = {
                         }
                     },
                     "time_limits": {
-                        "start": {
-                            "type": "string",
-                            "pattern": ISO_8061_pattern
+                        "type": "object",
+                        "properties": {
+                            "start": {
+                                "type": "string",
+                                "pattern": ISO_8061_pattern
+                            },
+                            "end": {
+                                "type": "string",
+                                "pattern": ISO_8061_pattern
+                            },
                         },
-                        "end": {
-                            "type": "string",
-                            "pattern": ISO_8061_pattern
-                        },
+                        "required": ["start", "end"],
                     },
                 },
                 "required": ["url", "title", "bgColor", "type", "imageURI"],
