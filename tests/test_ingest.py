@@ -481,11 +481,13 @@ class TestDistribute(BaseTestCase):
         self.env.s3.get_bucket = Mock(side_effect=get_bucket_mock)
 
         self.key_names = []
+
         def key_set_name(name):
             self.key_names.append(name)
         type(self.key_mock).name = PropertyMock(side_effect=key_set_name)
 
         self.key_contents = []
+
         def key_set_contents(data, **kwargs):
             self.key_contents.append(data)
         self.key_mock.set_contents_from_string = Mock(side_effect=key_set_contents)
@@ -638,7 +640,6 @@ class TestDistribute(BaseTestCase):
                 num_tiles_checked += 1
 
         assert_equal(7, num_tiles_checked)
-
 
     def test_deploy_always_generates_tile_index(self):
         """A tiles index file should always be generated"""
