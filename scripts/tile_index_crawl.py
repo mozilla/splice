@@ -50,7 +50,7 @@ def main():
     try:
         from splice.environment import Environment
         config = Environment.instance().config
-        cdn = config.CLOUDFRONT_BASE_URL
+        cdn = 'https://%s.s3.amazonaws.com' % config.S3['bucket']
         tile_index_key = config.S3['tile_index_key']
     except Exception:
         cdn = 'https://tiles.cdn.mozilla.net'
