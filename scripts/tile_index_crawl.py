@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
-import grequests
 from optparse import OptionParser
+import grequests
+import requests
+requests.packages.urllib3.disable_warnings()
 
 
 def validate(results, verbose):
