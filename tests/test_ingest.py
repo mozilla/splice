@@ -636,7 +636,7 @@ class TestDistribute(BaseTestCase):
                 data = json.loads(self.key_contents[i])
                 assert_equal(1, len(data[locale]))
                 tile = data[locale][0]
-                assert_equal(distribution[country_locale][0]['frequency_caps'], tile.get('frequency_caps'))
+                assert_equal(None, tile.get('frequency_caps'))
                 num_tiles_checked += 1
 
         assert_equal(7, num_tiles_checked)

@@ -277,7 +277,14 @@ def generate_artifacts(data, channel_name, deploy):
         # deploy both v2 and v3 versions
         if deploy:
             # v2
-            legacy = json.dumps({locale: dir_tiles}, sort_keys=True)
+
+            legacy_tiles = copy.deepcopy(dir_tiles)
+            for tile in legacy_tiles:
+                # remove extra metadata
+                if tile.has_key('frequency_caps'):
+                    del tile['frequency_caps']
+
+            legacy = json.dumps({locale: legacy_tiles}, sort_keys=True)
             legacy_hsh = hashlib.sha1(legacy).hexdigest()
             legacy_key = "{0}/{1}.{2}.json".format(safe_channel_name, country_locale, legacy_hsh)
             artifacts.append({
