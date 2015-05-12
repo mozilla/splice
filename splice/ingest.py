@@ -281,7 +281,7 @@ def generate_artifacts(data, channel_name, deploy):
             legacy_tiles = copy.deepcopy(dir_tiles)
             for tile in legacy_tiles:
                 # remove extra metadata
-                if tile.has_key('frequency_caps'):
+                if 'frequency_caps' in tile:
                     del tile['frequency_caps']
 
             legacy = json.dumps({locale: legacy_tiles}, sort_keys=True)
