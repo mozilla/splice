@@ -62,6 +62,13 @@ class AdgroupSite(db.Model):
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
 
+class BlacklistedIP(db.Model):
+    __tablename__ = "blacklisted_ips"
+
+    ip = db.Column(db.String(1024), nullable=False)
+    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+
+
 class UniqueCountsDaily(db.Model):
     __tablename__ = "unique_counts_daily"
 
@@ -103,6 +110,20 @@ impression_stats_daily = db.Table(
     db.Column('month', db.Integer, nullable=False),
     db.Column('week', db.Integer, nullable=False),
     db.Column('year', db.Integer, nullable=False),
+)
+
+
+blacklist_stats_daily = db.Table(
+    'blacklist_stats_daily',
+    db.Column('ip', db.String(16), nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('impressions', db.Integer, nullable=False, server_default="0"),
+    db.Column('clicks', db.Integer, nullable=False, server_default="0"),
+    db.Column('pinned', db.Integer, nullable=False, server_default="0"),
+    db.Column('blocked', db.Integer, nullable=False, server_default="0"),
+    db.Column('sponsored_link', db.Integer, nullable=False, server_default="0"),
+    db.Column('sponsored', db.Integer, nullable=False, server_default="0"),
+    db.Column('newtabs', db.Integer, nullable=False, server_default="0"),
 )
 
 
