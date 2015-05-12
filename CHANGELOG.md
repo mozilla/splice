@@ -1,3 +1,8 @@
+1.1.14
+======
+ * disable urllib3 warnings in tile_index_crawl.py
+ * fix tile_index_crawl.py default cdn
+
 1.1.13
 ======
 
