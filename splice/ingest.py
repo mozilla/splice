@@ -12,6 +12,7 @@ from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
 import jsonschema
 from furl import furl
+from dateutil.parser import parse as du_parse
 from splice.queries import tile_exists, insert_tile, insert_distribution
 from splice.environment import Environment
 
@@ -23,6 +24,18 @@ mime_extensions = {
     "image/jpeg": "jpg",
     "image/svg+xml": "svg",
 }
+
+ISO_8061_pattern = (
+    '^' + '(?P<year>[\+-]?\d{4})'
+    '(?:' + '(?P<datesep>-?)' + '(?P<month>0[1-9]|1[0-2])'
+    '(?:' + '(?P=datesep)' + '(?P<day>0[1-9]|[12]\d|3[0-1])' + ')?' + ')?'
+    '(?:T' + '(?P<hour>[01]\d|2[0-4])'
+    '(?:' + '(?P<timesep>:?)' + '(?P<minute>[0-5]\d)'
+    '(?:' + '(?P=timesep)' + '(?P<second>[0-5]\d|60)'
+    '(?:' + '(?P<microsecond>\.\d+)' + ')?' + ')?' + ')?' + ')?'
+    '(?P<timezone>Z|[\+-]\d{2}(:?\d{2})?)' + '?'
+    '$'
+)
 
 payload_schema = {
     "type": "object",
@@ -63,6 +76,20 @@ payload_schema = {
                             "type": "string",
                             "pattern": "^.*$"
                         }
+                    },
+                    "time_limits": {
+                        "type": "object",
+                        "properties": {
+                            "start": {
+                                "type": "string",
+                                "pattern": ISO_8061_pattern
+                            },
+                            "end": {
+                                "type": "string",
+                                "pattern": ISO_8061_pattern
+                            },
+                        },
+                        "required": ["start", "end"],
                     },
                 },
                 "required": ["url", "title", "bgColor", "type", "imageURI"],
@@ -153,6 +180,15 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     if frecent_sites:
                         t['frecent_sites'] = frecent_sites
 
+                    time_limits = t.get("time_limits", {'start': None, 'end': None})
+                    if time_limits['start'] and time_limits['end']:
+                        start_date = du_parse(time_limits['start'])
+                        end_date = du_parse(time_limits['end'])
+                        time_limits = {
+                            'start': start_date,
+                            'end': end_date,
+                        }
+
                     columns = dict(
                         target_url=t["url"],
                         bg_color=t["bgColor"],
@@ -162,6 +198,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         enhanced_image_uri=enhanced_image_hash,
                         locale=locale,
                         frecent_sites=frecent_sites,
+                        time_limits=time_limits,
                         conn=conn
                     )
 

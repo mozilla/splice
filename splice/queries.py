@@ -270,7 +270,7 @@ def slot_summary(connection, start_date, period='week', country_code=None, local
 
 
 def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                frecent_sites, conn=None, *args, **kwargs):
+                frecent_sites, time_limits, conn=None, *args, **kwargs):
 
     from splice.environment import Environment
     env = Environment.instance()
@@ -285,13 +285,15 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
         conn.execute(
             text(
                 "INSERT INTO adgroups ("
-                "locale, created_at"
+                "locale, start_date, end_date, created_at"
                 ") "
                 "VALUES ("
-                ":locale, :created_at"
+                ":locale, :start_date, :end_date, :created_at"
                 ")"
             ),
             locale=locale,
+            start_date=time_limits.get('start'),
+            end_date=time_limits.get('end'),
             created_at=now,
         )
         ag_id = conn.execute("SELECT MAX(id) FROM adgroups;").scalar()

@@ -3,8 +3,13 @@ import magic
 import copy
 import re
 from mock import Mock, PropertyMock
-from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_true
+from nose.tools import (
+    assert_raises,
+    assert_equal,
+    assert_not_equal,
+    assert_true)
 from jsonschema.exceptions import ValidationError
+import dateutil.parser as du_parser
 from tests.base import BaseTestCase
 from splice.ingest import ingest_links, generate_artifacts, IngestError, distribute
 from splice.models import Tile, Adgroup, AdgroupSite
@@ -129,6 +134,41 @@ class TestIngestLinks(BaseTestCase):
         assert_equal(len(data['STAR/en-US']), 5)
         new_num_tiles = self.env.db.session.query(Tile).count()
         assert_equal(num_tiles + 4, new_num_tiles)
+
+    def test_start_end_dates(self):
+        """
+        a simple start/end date tile
+        """
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links({"US/en-US": [tile]}, self.channels[0].id)
+        assert_equal(1, len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(31, c)
+
+        tile = self.env.db.session.query(Tile).filter(Tile.id == 31).one()
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
+        assert_equal(tile.adgroup_id, ag.id)
+        assert_equal(ag.start_date, du_parser.parse("2014-01-12T00:00:00.000"))
+        assert_equal(ag.end_date, du_parser.parse("2014-01-31T00:00:00.000"))
+
+        """
+        TODO:
+        * test that either or both of start/end is missing
+        * test timezone setting
+        * test file output
+        """
 
     def test_id_creation(self):
         """
@@ -523,3 +563,49 @@ class TestDistribute(BaseTestCase):
         distribute(data, self.channels[0].id, True)
 
         assert_equal(2, index_uploaded['count'])
+
+
+class TestISOPattern(BaseTestCase):
+
+    def test_relative_time_str(self):
+        """
+        Verify a relative ISO8061 time string validates
+        """
+        from splice.ingest import ISO_8061_pattern
+        pat = re.compile(ISO_8061_pattern)
+        date_str = '2014-01-12T00:00:00.000'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal(None, m.groupdict().get('timezone'))
+
+    def test_absolute_time_str(self):
+        """
+        Verify a ISO8061 time string with Z time string validates
+        """
+        from splice.ingest import ISO_8061_pattern
+        pat = re.compile(ISO_8061_pattern)
+        date_str = '2014-01-12T00:00:00.000Z'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal('Z', m.groupdict()['timezone'])
+
+    def test_timezone_str(self):
+        """
+        Verify a ISO8061 time string with timezone time string validates
+        """
+        from splice.ingest import ISO_8061_pattern
+        pat = re.compile(ISO_8061_pattern)
+        date_str = '2015-05-05T14:19:58.359981-05:00'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal('-05:00', m.groupdict()['timezone'])
+
+        date_str = '2015-05-05T14:19:58.359981-05'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal('-05', m.groupdict()['timezone'])
+
+        date_str = '2015-05-05T14:19:58.359981-0500'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal('-0500', m.groupdict()['timezone'])
