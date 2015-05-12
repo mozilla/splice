@@ -564,6 +564,9 @@ class TestDistribute(BaseTestCase):
         assert_equal(frecents, ['http://abc.com', 'http://xyz.com'])
 
     def test_distribute_frequency_cap(self):
+        """
+        Tests if frequency cap makes it in distributions
+        """
         tile_en_gb = {
             "imageURI": "data:image/png;base64,somedata",
             "url": "https://somewhere.com",
