@@ -57,6 +57,9 @@ payload_schema = {
                         "type": "string",
                         "pattern": "^data:image/.*$|^https?://.*$",
                     },
+                    "check_blacklist": {
+                        "type": "boolean",
+                    },
                     "frequency_caps": {
                         "type": "object",
                         "properties": {
@@ -283,6 +286,8 @@ def generate_artifacts(data, channel_name, deploy):
                 # remove extra metadata
                 if 'frequency_caps' in tile:
                     del tile['frequency_caps']
+                if 'check_blacklist' in tile:
+                    del tile['check_blacklist']
 
             legacy = json.dumps({locale: legacy_tiles}, sort_keys=True)
             legacy_hsh = hashlib.sha1(legacy).hexdigest()
