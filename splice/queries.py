@@ -270,7 +270,7 @@ def slot_summary(connection, start_date, period='week', country_code=None, local
 
 
 def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                frecent_sites, frequency_caps, conn=None, *args, **kwargs):
+                frecent_sites, frequency_caps, check_blacklist, conn=None, *args, **kwargs):
 
     from splice.environment import Environment
     env = Environment.instance()
@@ -288,18 +288,21 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
                 "locale, "
                 "frequency_cap_daily, "
                 "frequency_cap_total, "
+                "check_blacklist, "
                 "created_at"
                 ") "
                 "VALUES ("
                 ":locale, "
                 ":frequency_cap_daily, "
                 ":frequency_cap_total, "
+                ":check_blacklist, "
                 ":created_at"
                 ")"
             ),
             locale=locale,
             frequency_cap_daily=frequency_caps['daily'],
             frequency_cap_total=frequency_caps['total'],
+            check_blacklist=check_blacklist,
             created_at=now,
         )
         ag_id = conn.execute("SELECT MAX(id) FROM adgroups;").scalar()

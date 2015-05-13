@@ -2,6 +2,7 @@ import json
 import magic
 import copy
 import re
+from sqlalchemy import or_
 from mock import Mock, PropertyMock
 from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_true
 from jsonschema.exceptions import ValidationError
@@ -214,6 +215,13 @@ class TestIngestLinks(BaseTestCase):
         assert_equal(2, len(data["US/en-US"]))
         c = self.env.db.session.query(Adgroup).count()
         assert_equal(32, c)
+        ag = self.env.db.session.query(Adgroup).filter(or_(Adgroup.id == 31, Adgroup.id == 32)).all()
+
+        asserted = 0
+        for a in ag:
+            assert(a.check_blacklist)
+            asserted += 1
+        assert_equal(2, asserted)
 
     def test_check_blacklist_invalid(self):
         tile = {
