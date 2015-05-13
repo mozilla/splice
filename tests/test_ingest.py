@@ -2,6 +2,7 @@ import json
 import magic
 import copy
 import re
+from sqlalchemy import or_
 from mock import Mock, PropertyMock
 from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_true
 from jsonschema.exceptions import ValidationError
@@ -10,7 +11,9 @@ from splice.ingest import ingest_links, generate_artifacts, IngestError, distrib
 from splice.models import Tile, Adgroup, AdgroupSite
 
 
-desktop_locale_distro_pattern = re.compile(r'desktop/(.*)\..*.ag.json')
+DESKTOP_LOCALE_DISTRO_PATTERN = re.compile(r'desktop/(.*)\..*.ag.json')
+AG_DIST_PATHNAME = re.compile('desktop/([A-Z]{2}/([a-z]{2}-[A-Z]{2}))\.[a-z0-9]+\.ag\.json')
+LEGACY_DIST_PATHNAME = re.compile('desktop/([A-Z]{2}/([a-z]{2}-[A-Z]{2}))\.[a-z0-9]+\.json')
 
 
 class TestIngestLinks(BaseTestCase):
@@ -129,6 +132,112 @@ class TestIngestLinks(BaseTestCase):
         assert_equal(len(data['STAR/en-US']), 5)
         new_num_tiles = self.env.db.session.query(Tile).count()
         assert_equal(num_tiles + 4, new_num_tiles)
+
+    def test_frequency_caps(self):
+        """
+        A simple test of frequency caps
+        """
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frequency_caps": {
+                "daily": 3,
+                "total": 10
+            }
+        }
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links({"US/en-US": [tile]}, self.channels[0].id)
+        assert_equal(1, len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(31, c)
+
+        tile = self.env.db.session.query(Tile).filter(Tile.id == 31).one()
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
+        assert_equal(tile.adgroup_id, ag.id)
+        assert_equal(ag.frequency_cap_daily, 3)
+        assert_equal(ag.frequency_cap_total, 10)
+
+    def test_frequency_cap_missing_data(self):
+        """
+        Test caps with details missing
+        """
+
+        def make_dist(caps):
+            tile = {
+                "imageURI": "data:image/png;base64,somedata",
+                "url": "https://somewhere.com",
+                "title": "Some Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF",
+                "frequency_caps": caps
+            }
+            return {"US/en-US": [tile]}
+
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        assert_raises(ValidationError, ingest_links, make_dist({}), self.channels[0].id)
+        assert_raises(ValidationError, ingest_links, make_dist({'daily': 3}), self.channels[0].id)
+        assert_raises(ValidationError, ingest_links, make_dist({'total': 10}), self.channels[0].id)
+        assert_raises(ValidationError, ingest_links, make_dist({'daily': "a number"}), self.channels[0].id)
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+
+    def test_check_blacklist(self):
+        """
+        Simple blacklist flag test
+        """
+        suggested_tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title Suggested",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frecent_sites": ["http://lmnop.org", "http://def.com", "http://abc.com", "http://def.com", "https://xyz.com"],
+            "check_blacklist": True
+        }
+
+        directory_tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere-else.com",
+            "title": "Some Title Directory",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "check_blacklist": True
+        }
+
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links({"US/en-US": [suggested_tile, directory_tile]}, self.channels[0].id)
+        assert_equal(2, len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(32, c)
+        ag = self.env.db.session.query(Adgroup).filter(or_(Adgroup.id == 31, Adgroup.id == 32)).all()
+
+        asserted = 0
+        for a in ag:
+            assert(a.check_blacklist)
+            asserted += 1
+        assert_equal(2, asserted)
+
+    def test_check_blacklist_invalid(self):
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title Suggested",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frecent_sites": ["http://lmnop.org", "http://def.com", "http://abc.com", "http://def.com", "https://xyz.com"],
+            "check_blacklist": "True"
+        }
+        dist = {"US/en-US": [tile]}
+        c = self.env.db.session.query(Adgroup).count()
+        assert_raises(ValidationError, ingest_links, dist, self.channels[0].id)
+        c2 = self.env.db.session.query(Adgroup).count()
+        assert_equal(c, c2)
 
     def test_id_creation(self):
         """
@@ -397,7 +506,7 @@ class TestGenerateArtifacts(BaseTestCase):
 
         assertions_run = False
         for a in artifacts:
-            m = desktop_locale_distro_pattern.match(a['key'])
+            m = DESKTOP_LOCALE_DISTRO_PATTERN.match(a['key'])
             if m:
                 country_locale = m.groups()[0]
                 distro_data = json.loads(a['data'])
@@ -426,6 +535,18 @@ class TestDistribute(BaseTestCase):
         def get_bucket_mock(*args, **kwargs):
             return self.bucket_mock
         self.env.s3.get_bucket = Mock(side_effect=get_bucket_mock)
+
+        self.key_names = []
+
+        def key_set_name(name):
+            self.key_names.append(name)
+        type(self.key_mock).name = PropertyMock(side_effect=key_set_name)
+
+        self.key_contents = []
+
+        def key_set_contents(data, **kwargs):
+            self.key_contents.append(data)
+        self.key_mock.set_contents_from_string = Mock(side_effect=key_set_contents)
 
         super(TestDistribute, self).setUp()
 
@@ -488,7 +609,6 @@ class TestDistribute(BaseTestCase):
             }
         ]
 
-        self.key_mock.set_contents_from_string = Mock()
         data = ingest_links({
             "STAR/en-US": tiles_star,
             "CA/en-US": tiles_ca,
@@ -498,6 +618,157 @@ class TestDistribute(BaseTestCase):
         # in this case, the 3rd element should be the mock of the s3 upload for the 'ag' index
         frecents = json.loads(self.key_mock.set_contents_from_string.mock_calls[3][1][0])['suggested'][0]['frecent_sites']
         assert_equal(frecents, ['http://abc.com', 'http://xyz.com'])
+
+    def test_distribute_frequency_cap(self):
+        """
+        Tests if frequency cap makes it in distributions
+        """
+        tile_en_gb = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title CA",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frequency_caps": {
+                "daily": 3,
+                "total": 10
+            }
+        }
+
+        tile_en_us = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere_else.com",
+            "title": "Some Title US",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frequency_caps": {
+                "daily": 5,
+                "total": 15
+            }
+        }
+
+        tiles_en_us_suggested = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title US Suggested",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frecent_sites": ['http://xyz.com', 'http://abc.com'],
+            "frequency_caps": {
+                "daily": 7,
+                "total": 20
+            }
+        }
+
+        distribution = {
+            "US/en-US": [tile_en_us, tiles_en_us_suggested],
+            "GB/en-US": [tile_en_us],
+            "GB/en-GB": [tile_en_gb]
+        }
+
+        data = ingest_links(distribution, self.channels[0].id)
+        distribute(data, self.channels[0].id, True)
+        # one image, 3 AG distributions, 3 legacy distributions, one index, one input distribution
+        assert_equal(9, self.key_mock.set_contents_from_string.call_count)
+
+        num_tiles_checked = 0
+        for i, key in enumerate(self.key_names):
+            ag = AG_DIST_PATHNAME.match(key)
+            leg = LEGACY_DIST_PATHNAME.match(key)
+            if ag:
+                country_locale, locale = ag.groups()
+                data = json.loads(self.key_contents[i])
+                for tile in data['directory']:
+                    # index 0 expected, only for US/en-US
+                    assert_equal(distribution[country_locale][0]['frequency_caps'], tile.get('frequency_caps'))
+                    num_tiles_checked += 1
+                for tile in data['suggested']:
+                    # index 1 expected, only for US/en-US
+                    assert_equal(distribution[country_locale][1]['frequency_caps'], tile.get('frequency_caps'))
+                    num_tiles_checked += 1
+
+            elif leg:
+                country_locale, locale = leg.groups()
+                data = json.loads(self.key_contents[i])
+                assert_equal(1, len(data[locale]))
+                tile = data[locale][0]
+                assert_equal(None, tile.get('frequency_caps'))
+                num_tiles_checked += 1
+
+        assert_equal(7, num_tiles_checked)
+
+    def test_distribute_blacklist_check(self):
+        """
+        Test if check_blacklist makes it in distributions
+        """
+        tile_en_gb = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title CA",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "check_blacklist": True
+        }
+
+        tile_en_us = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere_else.com",
+            "title": "Some Title US",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "check_blacklist": True
+        }
+
+        tiles_en_us_suggested = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title US Suggested",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frecent_sites": ['http://xyz.com', 'http://abc.com'],
+            "check_blacklist": True,
+            "frequency_caps": {
+                "daily": 7,
+                "total": 20
+            }
+        }
+
+        distribution = {
+            "US/en-US": [tile_en_us, tiles_en_us_suggested],
+            "GB/en-US": [tile_en_us],
+            "GB/en-GB": [tile_en_gb]
+        }
+
+        data = ingest_links(distribution, self.channels[0].id)
+        distribute(data, self.channels[0].id, True)
+        # one image, 3 AG distributions, 3 legacy distributions, one index, one input distribution
+        assert_equal(9, self.key_mock.set_contents_from_string.call_count)
+
+        num_tiles_checked = 0
+        for i, key in enumerate(self.key_names):
+            ag = AG_DIST_PATHNAME.match(key)
+            leg = LEGACY_DIST_PATHNAME.match(key)
+            if ag:
+                country_locale, locale = ag.groups()
+                data = json.loads(self.key_contents[i])
+                for tile in data['directory']:
+                    # index 0 expected, only for US/en-US
+                    assert_equal(distribution[country_locale][0]['check_blacklist'], tile.get('check_blacklist'))
+                    num_tiles_checked += 1
+                for tile in data['suggested']:
+                    # index 1 expected, only for US/en-US
+                    assert_equal(distribution[country_locale][1]['check_blacklist'], tile.get('check_blacklist'))
+                    num_tiles_checked += 1
+
+            elif leg:
+                country_locale, locale = leg.groups()
+                data = json.loads(self.key_contents[i])
+                assert_equal(1, len(data[locale]))
+                tile = data[locale][0]
+                assert_equal(None, tile.get('check_blacklist'))
+                num_tiles_checked += 1
+
+        assert_equal(7, num_tiles_checked)
 
     def test_deploy_always_generates_tile_index(self):
         """A tiles index file should always be generated"""

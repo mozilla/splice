@@ -57,6 +57,21 @@ payload_schema = {
                         "type": "string",
                         "pattern": "^data:image/.*$|^https?://.*$",
                     },
+                    "check_blacklist": {
+                        "type": "boolean",
+                    },
+                    "frequency_caps": {
+                        "type": "object",
+                        "properties": {
+                            "daily": {
+                                "type": "integer"
+                            },
+                            "total": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": ["daily", "total"]
+                    },
                     "frecent_sites": {
                         "type": "array",
                         "items": {
@@ -152,6 +167,11 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     frecent_sites = sorted(set(t.get("frecent_sites", [])))
                     if frecent_sites:
                         t['frecent_sites'] = frecent_sites
+                    frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+
+                    check_blacklist = False
+                    if 'check_blacklist' in t:
+                        check_blacklist = t['check_blacklist']
 
                     columns = dict(
                         target_url=t["url"],
@@ -162,6 +182,8 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         enhanced_image_uri=enhanced_image_hash,
                         locale=locale,
                         frecent_sites=frecent_sites,
+                        frequency_caps=frequency_caps,
+                        check_blacklist=check_blacklist,
                         conn=conn
                     )
 
@@ -262,7 +284,16 @@ def generate_artifacts(data, channel_name, deploy):
         # deploy both v2 and v3 versions
         if deploy:
             # v2
-            legacy = json.dumps({locale: dir_tiles}, sort_keys=True)
+
+            legacy_tiles = copy.deepcopy(dir_tiles)
+            for tile in legacy_tiles:
+                # remove extra metadata
+                if 'frequency_caps' in tile:
+                    del tile['frequency_caps']
+                if 'check_blacklist' in tile:
+                    del tile['check_blacklist']
+
+            legacy = json.dumps({locale: legacy_tiles}, sort_keys=True)
             legacy_hsh = hashlib.sha1(legacy).hexdigest()
             legacy_key = "{0}/{1}.{2}.json".format(safe_channel_name, country_locale, legacy_hsh)
             artifacts.append({
