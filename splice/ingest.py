@@ -167,8 +167,11 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     frecent_sites = sorted(set(t.get("frecent_sites", [])))
                     if frecent_sites:
                         t['frecent_sites'] = frecent_sites
-
                     frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+
+                    check_blacklist = False
+                    if 'check_blacklist' in t:
+                        check_blacklist = t['check_blacklist']
 
                     columns = dict(
                         target_url=t["url"],
@@ -180,6 +183,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         locale=locale,
                         frecent_sites=frecent_sites,
                         frequency_caps=frequency_caps,
+                        check_blacklist=check_blacklist,
                         conn=conn
                     )
 
