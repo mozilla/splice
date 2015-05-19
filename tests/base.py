@@ -32,10 +32,10 @@ class BaseTestCase(TestCase):
 
         def adgroup_values(fd):
             for line in fd:
-                row = [el.decode('utf-8') for el in line.split(',')]
+                locale, check_blacklist_str = [el.decode('utf-8') for el in line.split(',')]
                 yield dict(zip(
-                    ('locale',),
-                    row))
+                    ('locale', 'check_blacklist'),
+                    (locale, True if check_blacklist_str == 'true' else False)))
 
         from splice.models import Tile, Channel, Adgroup
         session = env.db.session
