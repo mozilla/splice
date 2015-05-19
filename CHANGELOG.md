@@ -1,3 +1,11 @@
+1.1.15
+======
+ * Bug 1161192 - Implement frequency cap in splice
+
+__note__:
+* includes schema change/migration
+ * ddl/migrations/redshift/1431479872.sql
+
 1.1.14
 ======
  * disable urllib3 warnings in tile_index_crawl.py
