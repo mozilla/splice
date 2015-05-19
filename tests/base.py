@@ -35,7 +35,7 @@ class BaseTestCase(TestCase):
                 locale, check_inadjacency_str = [el.decode('utf-8') for el in line.split(',')]
                 yield dict(zip(
                     ('locale', 'check_inadjacency'),
-                    (locale, True if check_inadjacency_str == 'true' else False)))
+                    (locale, check_inadjacency_str == 'true')))
 
         from splice.models import Tile, Channel, Adgroup
         session = env.db.session
