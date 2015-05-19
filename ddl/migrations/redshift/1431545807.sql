@@ -1,1 +1,1 @@
-ALTER TABLE adgroups ADD COLUMN check_blacklist BOOLEAN DEFAULT 'false' NOT NULL;
+ALTER TABLE adgroups ADD COLUMN check_inadjacency BOOLEAN DEFAULT 'false' NOT NULL;

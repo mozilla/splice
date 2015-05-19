@@ -186,9 +186,9 @@ class TestIngestLinks(BaseTestCase):
         c = self.env.db.session.query(Adgroup).count()
         assert_equal(30, c)
 
-    def test_check_blacklist(self):
+    def test_check_inadjacency(self):
         """
-        Simple blacklist flag test
+        Simple inadjacency flag test
         """
         suggested_tile = {
             "imageURI": "data:image/png;base64,somedata",
@@ -197,7 +197,7 @@ class TestIngestLinks(BaseTestCase):
             "type": "organic",
             "bgColor": "#FFFFFF",
             "frecent_sites": ["http://lmnop.org", "http://def.com", "http://abc.com", "http://def.com", "https://xyz.com"],
-            "check_blacklist": True
+            "check_inadjacency": True
         }
 
         directory_tile = {
@@ -206,7 +206,7 @@ class TestIngestLinks(BaseTestCase):
             "title": "Some Title Directory",
             "type": "organic",
             "bgColor": "#FFFFFF",
-            "check_blacklist": True
+            "check_inadjacency": True
         }
 
         c = self.env.db.session.query(Adgroup).count()
@@ -219,11 +219,11 @@ class TestIngestLinks(BaseTestCase):
 
         asserted = 0
         for a in ag:
-            assert(a.check_blacklist)
+            assert(a.check_inadjacency)
             asserted += 1
         assert_equal(2, asserted)
 
-    def test_check_blacklist_invalid(self):
+    def test_check_inadjacency_invalid(self):
         tile = {
             "imageURI": "data:image/png;base64,somedata",
             "url": "https://somewhere.com",
@@ -231,7 +231,7 @@ class TestIngestLinks(BaseTestCase):
             "type": "organic",
             "bgColor": "#FFFFFF",
             "frecent_sites": ["http://lmnop.org", "http://def.com", "http://abc.com", "http://def.com", "https://xyz.com"],
-            "check_blacklist": "True"
+            "check_inadjacency": "True"
         }
         dist = {"US/en-US": [tile]}
         c = self.env.db.session.query(Adgroup).count()
@@ -697,9 +697,9 @@ class TestDistribute(BaseTestCase):
 
         assert_equal(7, num_tiles_checked)
 
-    def test_distribute_blacklist_check(self):
+    def test_distribute_inadjacency_check(self):
         """
-        Test if check_blacklist makes it in distributions
+        Test if check_inadjacency makes it in distributions
         """
         tile_en_gb = {
             "imageURI": "data:image/png;base64,somedata",
@@ -707,7 +707,7 @@ class TestDistribute(BaseTestCase):
             "title": "Some Title CA",
             "type": "organic",
             "bgColor": "#FFFFFF",
-            "check_blacklist": True
+            "check_inadjacency": True
         }
 
         tile_en_us = {
@@ -716,7 +716,7 @@ class TestDistribute(BaseTestCase):
             "title": "Some Title US",
             "type": "organic",
             "bgColor": "#FFFFFF",
-            "check_blacklist": True
+            "check_inadjacency": True
         }
 
         tiles_en_us_suggested = {
@@ -726,7 +726,7 @@ class TestDistribute(BaseTestCase):
             "type": "organic",
             "bgColor": "#FFFFFF",
             "frecent_sites": ['http://xyz.com', 'http://abc.com'],
-            "check_blacklist": True,
+            "check_inadjacency": True,
             "frequency_caps": {
                 "daily": 7,
                 "total": 20
@@ -753,11 +753,11 @@ class TestDistribute(BaseTestCase):
                 data = json.loads(self.key_contents[i])
                 for tile in data['directory']:
                     # index 0 expected, only for US/en-US
-                    assert_equal(distribution[country_locale][0]['check_blacklist'], tile.get('check_blacklist'))
+                    assert_equal(distribution[country_locale][0]['check_inadjacency'], tile.get('check_inadjacency'))
                     num_tiles_checked += 1
                 for tile in data['suggested']:
                     # index 1 expected, only for US/en-US
-                    assert_equal(distribution[country_locale][1]['check_blacklist'], tile.get('check_blacklist'))
+                    assert_equal(distribution[country_locale][1]['check_inadjacency'], tile.get('check_inadjacency'))
                     num_tiles_checked += 1
 
             elif leg:
@@ -765,7 +765,7 @@ class TestDistribute(BaseTestCase):
                 data = json.loads(self.key_contents[i])
                 assert_equal(1, len(data[locale]))
                 tile = data[locale][0]
-                assert_equal(None, tile.get('check_blacklist'))
+                assert_equal(None, tile.get('check_inadjacency'))
                 num_tiles_checked += 1
 
         assert_equal(7, num_tiles_checked)
