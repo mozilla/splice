@@ -1,4 +1,5 @@
 from datetime import datetime
+from sqlalchemy import text
 from sqlalchemy.sql.functions import current_date
 from splice.environment import Environment
 
@@ -52,6 +53,7 @@ class Adgroup(db.Model):
     end_date = db.Column(db.DateTime(timezone=False), nullable=True)
     frequency_cap_daily = db.Column(db.Integer())
     frequency_cap_total = db.Column(db.Integer())
+    check_inadjacency = db.Column(db.Boolean(), nullable=False, server_default=text('false'))
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
     tiles = db.relationship("Tile", backref="adgroup")
 
