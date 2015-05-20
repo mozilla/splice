@@ -3,7 +3,7 @@ BEGIN;
 CREATE TABLE blacklisted_ips
 (
     ip VARCHAR(64) NOT NULL,
-    created_at TIMESTAMP DEFAULT SYSDATE NOT NULL
+    date DATE NOT NULL
 );
 
 CREATE TABLE blacklist_stats_daily

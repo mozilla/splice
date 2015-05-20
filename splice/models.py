@@ -77,7 +77,7 @@ class UniqueCountsDaily(db.Model):
 blacklisted_ips = db.Table(
     'blacklisted_ips',
     db.Column('ip', db.String(64), nullable=False),
-    db.Column('created_at', db.DateTime(), nullable=False, default=datetime.utcnow)
+    db.Column('date', db.Date(), nullable=False)
 )
 
 

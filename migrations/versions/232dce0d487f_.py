@@ -19,7 +19,7 @@ def upgrade():
     # blacklisted_ips is an OLTP table
     op.create_table('blacklisted_ips',
                     sa.Column('ip', sa.String(length=64), nullable=False),
-                    sa.Column('created_at', sa.Date(), server_default=sa.func.sysdate(), nullable=False))
+                    sa.Column('date', sa.Date(), nullable=False))
 
     # blacklist_stats_daily is an OLAP table
     op.create_table('blacklist_stats_daily',
