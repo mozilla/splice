@@ -9,3 +9,4 @@ colorlog==2.0.0
 coverage==3.7.1
 coveralls==0.4.4
 python-magic==0.4.6
+bleach==1.4.1

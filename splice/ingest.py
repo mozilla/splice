@@ -7,6 +7,7 @@ import base64
 import urllib
 import copy
 import re
+import bleach
 from datetime import datetime
 from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
@@ -76,6 +77,18 @@ payload_schema = {
                             "pattern": "^.*$"
                         }
                     },
+                    "adgroup_name": {
+                        "type": "string",
+                        "maxLength": 255,
+                    },
+                    "explanation": {
+                        # e.g: "Suggested for %1$S enthusiasts who visit sites
+                        # like %2$S". adgroup_name and site_name are not be
+                        # order sensitive.
+                        "type": "string",
+                        "pattern": "^.*%1\$S.*%2\$S.*$|^.*%2\$S.*%1\$S.*$",
+                        "maxLength": 255,
+                    }
                 },
                 "required": ["url", "title", "bgColor", "type", "imageURI"],
             }
@@ -166,6 +179,8 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         t['frecent_sites'] = frecent_sites
 
                     frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+                    adgroup_name = bleach.clean(t.get("adgroup_name", ""), strip=True) or None
+                    explanation = bleach.clean(t.get("explanation", ""), strip=True) or None
 
                     columns = dict(
                         target_url=t["url"],
@@ -177,6 +192,8 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         locale=locale,
                         frecent_sites=frecent_sites,
                         frequency_caps=frequency_caps,
+                        adgroup_name=adgroup_name,
+                        explanation=explanation,
                         conn=conn
                     )
 
@@ -281,8 +298,9 @@ def generate_artifacts(data, channel_name, deploy):
             legacy_tiles = copy.deepcopy(dir_tiles)
             for tile in legacy_tiles:
                 # remove extra metadata
-                if 'frequency_caps' in tile:
-                    del tile['frequency_caps']
+                tile.pop('frequency_caps', None)
+                tile.pop('adgroup_name', None)
+                tile.pop('explanation', None)
 
             legacy = json.dumps({locale: legacy_tiles}, sort_keys=True)
             legacy_hsh = hashlib.sha1(legacy).hexdigest()

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 import magic
 import copy
@@ -182,6 +183,58 @@ class TestIngestLinks(BaseTestCase):
         assert_raises(ValidationError, ingest_links, make_dist({'daily': "a number"}), self.channels[0].id)
         c = self.env.db.session.query(Adgroup).count()
         assert_equal(30, c)
+
+    def test_explanation(self):
+        explanation = "Suggested for %1$S fans who visit site %2$S"
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "adgroup_name": "Technology",
+            "explanation": explanation,
+        }
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links({"US/en-US": [tile]}, self.channels[0].id)
+        assert_equal(1, len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(31, c)
+
+        tile = self.env.db.session.query(Tile).filter(Tile.id == 31).one()
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
+        assert_equal(tile.adgroup_id, ag.id)
+        assert_equal(ag.adgroup_name, "Technology")
+        assert_equal(ag.explanation, explanation)
+
+    def test_explanation_invalid_data(self):
+        def make_dist(parts):
+            tile = {
+                "imageURI": "data:image/png;base64,somedata",
+                "url": "https://somewhere.com",
+                "title": "Some Title",
+                "type": "organic",
+                "bgColor": "#FFFFFF",
+                "adgroup_name": "Technology",
+                "explanation": "Suggested for %1$S fans who visit site %2$S",
+            }
+            tile.update(parts)
+            return {"US/en-US": [tile]}
+
+        # tests invalid templates
+        tile = make_dist({"explanation": "An incomplete explanation %1$S"})
+        assert_raises(ValidationError, ingest_links, tile, self.channels[0].id)
+        tile = make_dist({"explanation": "A huge template %1$S, %2$S" * 100})
+        assert_raises(ValidationError, ingest_links, tile, self.channels[0].id)
+
+        # test templates with html tags
+        tile = make_dist({"adgroup_name": "<script>Technology</script>",
+                          "explanation": "<br/>Suggested for %1$S, %2$S<br/>"})
+        ingest_links(tile, self.channels[0].id)
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
+        assert_equal(ag.adgroup_name, "Technology")
+        assert_equal(ag.explanation, "Suggested for %1$S, %2$S")
 
     def test_id_creation(self):
         """
@@ -643,6 +696,70 @@ class TestDistribute(BaseTestCase):
                 num_tiles_checked += 1
 
         assert_equal(7, num_tiles_checked)
+
+    def test_distribute_adgroup_explanation(self):
+        tile_en_us = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere_else.com",
+            "title": "Some Title US",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "adgroup_name": "Teçhnology".decode('utf-8'),
+            "explanation": "推荐 for %1$S fans who also like %2$S".decode('utf-8')
+        }
+
+        tiles_en_us_suggested = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title US Suggested",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frecent_sites": ['http://xyz.com', 'http://abc.com'],
+            "adgroup_name": "Technology",
+            "explanation": "Suggested for %1$S fans who also like %2$S"
+        }
+
+        distribution = {
+            "US/en-US": [tile_en_us, tiles_en_us_suggested],
+            "GB/en-US": [tile_en_us],
+        }
+
+        data = ingest_links(distribution, self.channels[0].id)
+        distribute(data, self.channels[0].id, True)
+        # one image, 2 AG distributions, 2 legacy distributions, one index, one input distribution
+        assert_equal(7, self.key_mock.set_contents_from_string.call_count)
+
+        ag_dist_pathname = re.compile('desktop/([A-Z]{2}/([a-z]{2}-[A-Z]{2}))\.[a-z0-9]+\.ag\.json')
+        legacy_dist_pathname = re.compile('desktop/([A-Z]{2}/([a-z]{2}-[A-Z]{2}))\.[a-z0-9]+\.json')
+
+        num_tiles_checked = 0
+        for i, key in enumerate(self.key_names):
+            ag = ag_dist_pathname.match(key)
+            leg = legacy_dist_pathname.match(key)
+            if ag:
+                country_locale, locale = ag.groups()
+                data = json.loads(self.key_contents[i])
+                for tile in data['directory']:
+                    # index 0 expected, only for US/en-US
+                    assert_equal(distribution[country_locale][0]['adgroup_name'], tile.get('adgroup_name'))
+                    assert_equal(distribution[country_locale][0]['explanation'], tile.get('explanation'))
+                    num_tiles_checked += 1
+                for tile in data['suggested']:
+                    # index 1 expected, only for US/en-US
+                    assert_equal(distribution[country_locale][1]['adgroup_name'], tile.get('adgroup_name'))
+                    assert_equal(distribution[country_locale][1]['explanation'], tile.get('explanation'))
+                    num_tiles_checked += 1
+
+            elif leg:
+                country_locale, locale = leg.groups()
+                data = json.loads(self.key_contents[i])
+                assert_equal(1, len(data[locale]))
+                tile = data[locale][0]
+                assert_equal(None, tile.get('adgroup_name'))
+                assert_equal(None, tile.get('explanation'))
+                num_tiles_checked += 1
+
+        assert_equal(5, num_tiles_checked)
 
     def test_deploy_always_generates_tile_index(self):
         """A tiles index file should always be generated"""
