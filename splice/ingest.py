@@ -57,6 +57,9 @@ payload_schema = {
                         "type": "string",
                         "pattern": "^data:image/.*$|^https?://.*$",
                     },
+                    "check_inadjacency": {
+                        "type": "boolean",
+                    },
                     "frequency_caps": {
                         "type": "object",
                         "properties": {
@@ -164,8 +167,11 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     frecent_sites = sorted(set(t.get("frecent_sites", [])))
                     if frecent_sites:
                         t['frecent_sites'] = frecent_sites
-
                     frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+
+                    check_inadjacency = False
+                    if 'check_inadjacency' in t:
+                        check_inadjacency = t['check_inadjacency']
 
                     columns = dict(
                         target_url=t["url"],
@@ -177,6 +183,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         locale=locale,
                         frecent_sites=frecent_sites,
                         frequency_caps=frequency_caps,
+                        check_inadjacency=check_inadjacency,
                         conn=conn
                     )
 
@@ -283,6 +290,8 @@ def generate_artifacts(data, channel_name, deploy):
                 # remove extra metadata
                 if 'frequency_caps' in tile:
                     del tile['frequency_caps']
+                if 'check_inadjacency' in tile:
+                    del tile['check_inadjacency']
 
             legacy = json.dumps({locale: legacy_tiles}, sort_keys=True)
             legacy_hsh = hashlib.sha1(legacy).hexdigest()
