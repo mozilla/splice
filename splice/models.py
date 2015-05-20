@@ -50,6 +50,8 @@ class Adgroup(db.Model):
     locale = db.Column(db.String(14), nullable=False)
     start_date = db.Column(db.DateTime(timezone=False), nullable=True)
     end_date = db.Column(db.DateTime(timezone=False), nullable=True)
+    frequency_cap_daily = db.Column(db.Integer())
+    frequency_cap_total = db.Column(db.Integer())
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
     tiles = db.relationship("Tile", backref="adgroup")
 
