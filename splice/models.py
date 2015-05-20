@@ -62,13 +62,6 @@ class AdgroupSite(db.Model):
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
 
-class BlacklistedIP(db.Model):
-    __tablename__ = "blacklisted_ips"
-
-    ip = db.Column(db.String(1024), nullable=False)
-    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
-
-
 class UniqueCountsDaily(db.Model):
     __tablename__ = "unique_counts_daily"
 
@@ -79,6 +72,13 @@ class UniqueCountsDaily(db.Model):
     impression = db.Column(db.Boolean(), nullable=False, default=True)
     locale = db.Column(db.String(14), nullable=False, default="en-US")
     country_code = db.Column(db.String(5), nullable=False, default="US")
+
+
+blacklisted_ips = db.Table(
+    'blacklisted_ips',
+    db.Column('ip', db.String(64), nullable=False),
+    db.Column('created_at', db.DateTime(), nullable=False, default=datetime.utcnow)
+)
 
 
 unique_hlls = db.Table(
@@ -115,7 +115,7 @@ impression_stats_daily = db.Table(
 
 blacklist_stats_daily = db.Table(
     'blacklist_stats_daily',
-    db.Column('ip', db.String(16), nullable=False),
+    db.Column('ip', db.String(64)),
     db.Column('date', db.Date, nullable=False),
     db.Column('impressions', db.Integer, nullable=False, server_default="0"),
     db.Column('clicks', db.Integer, nullable=False, server_default="0"),
