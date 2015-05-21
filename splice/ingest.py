@@ -86,8 +86,8 @@ payload_schema = {
                     },
                     "explanation": {
                         # e.g: "Suggested for %1$S enthusiasts who visit sites
-                        # like %2$S". adgroup_name and site_name are not be
-                        # order sensitive.
+                        # like %2$S". adgroup_name and site_name are not order
+                        # sensitive.
                         "type": "string",
                         "pattern": "^.*%1\$S.*%2\$S.*$|^.*%2\$S.*%1\$S.*$",
                         "maxLength": 255,
