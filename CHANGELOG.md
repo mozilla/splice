@@ -3,7 +3,6 @@
  * Bug 1161192 - Implement frequency cap in splice
  * Bug 1161201 - Accept input of negative adjacency inclusion in Splice
  * Fix FK issue in distributions table for alembic migrations
- * Bug 1161196 - Add custom explanation in splice
 
 __note__:
 * includes schema change/migration
@@ -49,8 +48,8 @@ __note__:
 1.1.7
 =====
 
-* added Related Tiles
-* requires database migration
+* added Related Tiles 
+* requires database migration 
 
 1.1.6
 =====
@@ -93,7 +92,7 @@ __note__:
 * new feature: ability to ingest tiles without deploying (new default behavior)
 
 __note__:
-* includes schema changes
+* includes schema changes 
 * requires reconfiguration of onyx, because we now have different channels
 
 1.0.14
