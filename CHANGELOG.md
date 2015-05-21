@@ -3,6 +3,8 @@
  * Bug 1161192 - Implement frequency cap in splice
  * Bug 1161201 - Accept input of negative adjacency inclusion in Splice
  * Fix FK issue in distributions table for alembic migrations
+ * set exit non-zero on errors for tile_index_crawl.py
+ * fix index crawl channels for tile_index_crawl.py
 
 __note__:
 * includes schema change/migration
