@@ -1,10 +1,13 @@
 1.1.15
 ======
  * Bug 1161192 - Implement frequency cap in splice
+ * Bug 1161201 - Accept input of negative adjacency inclusion in Splice
+ * Fix FK issue in distributions table for alembic migrations
 
 __note__:
 * includes schema change/migration
  * ddl/migrations/redshift/1431479872.sql
+ * ddl/migrations/redshift/1431545807.sql
 
 1.1.14
 ======

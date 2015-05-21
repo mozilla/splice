@@ -58,6 +58,9 @@ payload_schema = {
                         "type": "string",
                         "pattern": "^data:image/.*$|^https?://.*$",
                     },
+                    "check_inadjacency": {
+                        "type": "boolean",
+                    },
                     "frequency_caps": {
                         "type": "object",
                         "properties": {
@@ -177,10 +180,13 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     frecent_sites = sorted(set(t.get("frecent_sites", [])))
                     if frecent_sites:
                         t['frecent_sites'] = frecent_sites
-
                     frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
                     adgroup_name = bleach.clean(t.get("adgroup_name", ""), strip=True) or None
                     explanation = bleach.clean(t.get("explanation", ""), strip=True) or None
+
+                    check_inadjacency = False
+                    if 'check_inadjacency' in t:
+                        check_inadjacency = t['check_inadjacency']
 
                     columns = dict(
                         target_url=t["url"],
@@ -194,6 +200,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         frequency_caps=frequency_caps,
                         adgroup_name=adgroup_name,
                         explanation=explanation,
+                        check_inadjacency=check_inadjacency,
                         conn=conn
                     )
 
@@ -298,9 +305,8 @@ def generate_artifacts(data, channel_name, deploy):
             legacy_tiles = copy.deepcopy(dir_tiles)
             for tile in legacy_tiles:
                 # remove extra metadata
-                tile.pop('frequency_caps', None)
-                tile.pop('adgroup_name', None)
-                tile.pop('explanation', None)
+                for key in ('frequency_caps', 'adgroup_name', 'explanation', 'check_inadjacency'):
+                    tile.pop(key, None)
 
             legacy = json.dumps({locale: legacy_tiles}, sort_keys=True)
             legacy_hsh = hashlib.sha1(legacy).hexdigest()
