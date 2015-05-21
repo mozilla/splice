@@ -211,33 +211,46 @@ class TestIngestLinks(BaseTestCase):
         assert_equal(ag.name, "Technology")
         assert_equal(ag.explanation, explanation)
 
+    @staticmethod
+    def _make_dist(parts):
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "adgroup_name": "Technology",
+            "explanation": "Suggested for %1$S fans who visit site %2$S",
+        }
+        tile.update(parts)
+        return {"US/en-US": [tile]}
+
     def test_explanation_invalid_data(self):
-        def make_dist(parts):
-            tile = {
-                "imageURI": "data:image/png;base64,somedata",
-                "url": "https://somewhere.com",
-                "title": "Some Title",
-                "type": "organic",
-                "bgColor": "#FFFFFF",
-                "adgroup_name": "Technology",
-                "explanation": "Suggested for %1$S fans who visit site %2$S",
-            }
-            tile.update(parts)
-            return {"US/en-US": [tile]}
-
         # tests invalid templates
-        tile = make_dist({"explanation": "An incomplete explanation %1$S"})
+        tile = self._make_dist({"explanation": "An incomplete explanation %1$S"})
         assert_raises(ValidationError, ingest_links, tile, self.channels[0].id)
-        tile = make_dist({"explanation": "A huge template %1$S, %2$S" * 100})
+        tile = self._make_dist({"explanation": "A huge template %1$S, %2$S" * 100})
         assert_raises(ValidationError, ingest_links, tile, self.channels[0].id)
 
+    def test_explanation_template_sanity_check(self):
         # test templates with html tags
-        tile = make_dist({"adgroup_name": "<script>Technology</script>",
-                          "explanation": "<br/>Suggested for %1$S, %2$S<br/>"})
+        tile = self._make_dist({
+            "adgroup_name": "<script>Technology</script>",
+            "explanation": "<br/>Suggested for %1$S, %2$S<br/>"})
         ingest_links(tile, self.channels[0].id)
         ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
         assert_equal(ag.name, "Technology")
         assert_equal(ag.explanation, "Suggested for %1$S, %2$S")
+
+        # test templates with tags only and special characters
+        tile = self._make_dist({
+            "title": "Some Another Title",
+            "adgroup_name": "<script><script/>",
+            "explanation": "< Suggested for %1$S, %2$S >"})
+        ingest_links(tile, self.channels[0].id)
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 32).one()
+        assert_equal(ag.name, None)
+        assert_equal(ag.explanation, "&lt; Suggested for %1$S, %2$S &gt;")
 
     def test_check_inadjacency(self):
         """
