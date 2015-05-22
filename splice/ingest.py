@@ -85,11 +85,10 @@ payload_schema = {
                         "maxLength": 255,
                     },
                     "explanation": {
-                        # e.g: "Suggested for %1$S enthusiasts who visit sites
-                        # like %2$S". adgroup_name and site_name are not order
-                        # sensitive.
+                        # example: "Suggested for %1$S enthusiasts who visit
+                        # sites like %2$S". Both adgroup_name and site_name
+                        # are optiobal
                         "type": "string",
-                        "pattern": "^.*%1\$S.*%2\$S.*$|^.*%2\$S.*%1\$S.*$",
                         "maxLength": 255,
                     }
                 },

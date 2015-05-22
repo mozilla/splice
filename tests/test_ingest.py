@@ -226,13 +226,10 @@ class TestIngestLinks(BaseTestCase):
         return {"US/en-US": [tile]}
 
     def test_explanation_invalid_data(self):
-        # tests invalid templates
-        tile = self._make_dist({"explanation": "An incomplete explanation %1$S"})
-        assert_raises(ValidationError, ingest_links, tile, self.channels[0].id)
         tile = self._make_dist({"explanation": "A huge template %1$S, %2$S" * 100})
         assert_raises(ValidationError, ingest_links, tile, self.channels[0].id)
 
-    def test_explanation_template_sanity_check(self):
+    def test_explanation_template_sanitization(self):
         # test templates with html tags
         tile = self._make_dist({
             "adgroup_name": "<script>Technology</script>",
