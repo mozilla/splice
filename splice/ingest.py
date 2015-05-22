@@ -85,7 +85,7 @@ payload_schema = {
                         "maxLength": 255,
                     },
                     "explanation": {
-                        # example: "Suggested for %1$S enthusiasts who visit 
+                        # example: "Suggested for %1$S enthusiasts who visit
                         # sites like %2$S". Both adgroup_name and site_name
                         # are optiobal
                         "type": "string",
