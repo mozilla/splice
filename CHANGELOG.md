@@ -1,3 +1,7 @@
+1.1.16
+======
+ * Bug 1167404 - Allow for custom explanation with optional replacement targets
+
 1.1.15
 ======
  * Bug 1161192 - Implement frequency cap in splice
