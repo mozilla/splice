@@ -8,6 +8,7 @@ import urllib
 import copy
 import re
 import bleach
+import pytz
 from datetime import datetime
 from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
@@ -214,14 +215,22 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     if 'check_inadjacency' in t:
                         check_inadjacency = t['check_inadjacency']
 
-                    time_limits = t.get("time_limits", {'start': None, 'end': None})
-                    if time_limits['start'] and time_limits['end']:
-                        start_date = du_parse(time_limits['start'])
-                        end_date = du_parse(time_limits['end'])
-                        time_limits = {
-                            'start': start_date,
-                            'end': end_date,
-                        }
+                    # we have both the string and datetime objects to allow for optional timezones on the client
+                    time_limits = t.get("time_limits", {
+                        'start': None, 'end': None,
+                        'start_dt': None, 'end_dt': None
+                    })
+                    if time_limits.get('start') or time_limits.get('end'):
+                        time_limits.update({
+                            'start_dt': du_parse(time_limits['start']) if time_limits.get('start') else None,
+                            'end_dt': du_parse(time_limits['end']) if time_limits.get('end') else None
+                        })
+                        for dt_name in ('start_dt', 'end_dt'):
+                            dt = time_limits[dt_name]
+                            if dt and dt.tzinfo:
+                                # capture the datetime as UTC, but without the Timezone info
+                                # check because input may be TZ-unaware
+                                time_limits[dt_name] = dt.astimezone(pytz.utc).replace(tzinfo=None)
 
                     frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
 

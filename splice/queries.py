@@ -20,7 +20,7 @@ def get_frecent_sites_for_tile(tile_id, conn=None):
 
 
 def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                frecent_sites, conn=None, *args, **kwargs):
+                frecent_sites, time_limits, conn=None, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
@@ -289,6 +289,8 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
                 "locale, "
                 "start_date, "
                 "end_date, "
+                "start_date_dt, "
+                "end_date_dt, "
                 "name, "
                 "explanation, "
                 "frequency_cap_daily, "
@@ -300,6 +302,8 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
                 ":locale, "
                 ":start_date, "
                 ":end_date, "
+                ":start_date_dt, "
+                ":end_date_dt, "
                 ":adgroup_name, "
                 ":explanation, "
                 ":frequency_cap_daily, "
@@ -311,6 +315,8 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
             locale=locale,
             start_date=time_limits.get('start'),
             end_date=time_limits.get('end'),
+            start_date_dt=time_limits.get('start_dt'),
+            end_date_dt=time_limits.get('end_dt'),
             adgroup_name=adgroup_name,
             explanation=explanation,
             frequency_cap_daily=frequency_caps['daily'],

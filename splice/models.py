@@ -49,8 +49,14 @@ class Adgroup(db.Model):
 
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     locale = db.Column(db.String(14), nullable=False)
-    start_date = db.Column(db.DateTime(timezone=False), nullable=True)
-    end_date = db.Column(db.DateTime(timezone=False), nullable=True)
+
+    # we have both the string and datetime objects to allow for optional timezones on the client
+    # the datetime objects are always UTC
+    start_date = db.Column(db.String(30), nullable=True)
+    end_date = db.Column(db.String(30), nullable=True)
+    start_date_dt = db.Column(db.DateTime(timezone=False), nullable=True)
+    end_date_dt = db.Column(db.DateTime(timezone=False), nullable=True)
+
     frequency_cap_daily = db.Column(db.Integer())
     frequency_cap_total = db.Column(db.Integer())
     name = db.Column(db.String(255))
