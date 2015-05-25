@@ -307,6 +307,61 @@ class TestIngestLinks(BaseTestCase):
         # one tile not tested because it has neither start or end dates
         assert_equal(len(dist["US/en-US"]) - 1, tile_tested)
 
+    def test_start_end_dates_uniqueness(self):
+        """
+        Test that start/end are part of what make tiles unique
+        """
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        tile_no_start = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        tile_no_end = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+            }
+        }
+
+        tile_empty_limits = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Tile",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {}
+        }
+
+        dist = {"US/en-US": [tile, tile_no_start, tile_no_end, tile_empty_limits]}
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links(dist, self.channels[0].id)
+        assert_equal(len(dist["US/en-US"]), len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30 + len(dist["US/en-US"]), c)
+
     def test_frequency_caps(self):
         """
         A simple test of frequency caps
