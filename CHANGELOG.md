@@ -1,3 +1,11 @@
+1.1.17
+======
+ * Bug 1161197 - Accept inputs of start/stop times in Splice
+
+__note__:
+* includes schema change/migration
+ * ddl/migrations/redshift/1432589405.sql
+
 1.1.16
 ======
  * Bug 1167404 - Allow for custom explanation with optional replacement targets
