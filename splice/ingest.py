@@ -105,8 +105,7 @@ payload_schema = {
                                 "type": "string",
                                 "pattern": ISO_8061_pattern
                             },
-                        },
-                        "required": ["start", "end"],
+                        }
                     },
                     "adgroup_name": {
                         "type": "string",

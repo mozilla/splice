@@ -246,12 +246,66 @@ class TestIngestLinks(BaseTestCase):
 
         assert_equal(len(dist["US/en-US"]), tile_tested)
 
+    def test_start_end_dates_optional(self):
         """
-        TODO:
-        * test that either or both of start/end is missing
-        * test timezone setting
-        * test file output
+        Ensure that start/end dates are optional
         """
+        tile_no_start = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        tile_no_end = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhereelse.com",
+            "title": "Some Other Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+            }
+        }
+
+        tile_empty_limits = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://yetsomewhereelse.com",
+            "title": "Yet Some Other Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {}
+        }
+
+        dist = {"US/en-US": [tile_no_start, tile_no_end, tile_empty_limits]}
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links(dist, self.channels[0].id)
+        assert_equal(len(dist["US/en-US"]), len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30 + len(dist["US/en-US"]), c)
+
+        tile_tested = 0
+        for i, tile_def in enumerate(dist["US/en-US"]):
+            obj_id = 30 + 1 + i
+            tile = self.env.db.session.query(Tile).filter(Tile.id == obj_id).one()
+            ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == obj_id).one()
+            assert_equal(tile.adgroup_id, ag.id)
+
+            if ag.start_date:
+                assert_equal(ag.start_date, tile_def['time_limits']['start'])
+                tile_tested += 1
+
+            if ag.end_date:
+                assert_equal(ag.end_date, tile_def['time_limits']['end'])
+                tile_tested += 1
+
+        # one tile not tested because it has neither start or end dates
+        assert_equal(len(dist["US/en-US"]) - 1, tile_tested)
 
     def test_frequency_caps(self):
         """
