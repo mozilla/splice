@@ -1122,6 +1122,89 @@ class TestDistribute(BaseTestCase):
 
         assert_equal(7, num_tiles_checked)
 
+    def test_distribute_time_limits(self):
+        """
+        Test if time limits make it in distributions
+        """
+        tile_en_gb = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title CA",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        tile_en_us = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere_else.com",
+            "title": "Some Title US",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        tiles_en_us_suggested = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title US Suggested",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frecent_sites": ['http://xyz.com', 'http://abc.com'],
+            "check_inadjacency": True,
+            "frequency_caps": {
+                "daily": 7,
+                "total": 20
+            },
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        distribution = {
+            "US/en-US": [tile_en_us, tiles_en_us_suggested],
+            "GB/en-US": [tile_en_us],
+            "GB/en-GB": [tile_en_gb]
+        }
+
+        data = ingest_links(distribution, self.channels[0].id)
+        distribute(data, self.channels[0].id, True)
+        # one image, 3 AG distributions, 3 legacy distributions, one index, one input distribution
+        assert_equal(9, self.key_mock.set_contents_from_string.call_count)
+
+        num_tiles_checked = 0
+        for i, key in enumerate(self.key_names):
+            ag = AG_DIST_PATHNAME.match(key)
+            leg = LEGACY_DIST_PATHNAME.match(key)
+            if ag:
+                country_locale, locale = ag.groups()
+                data = json.loads(self.key_contents[i])
+                for tile in data['directory']:
+                    # index 0 expected, only for US/en-US
+                    assert_equal(distribution[country_locale][0]['time_limits'], tile.get('time_limits'))
+                    num_tiles_checked += 1
+                for tile in data['suggested']:
+                    # index 1 expected, only for US/en-US
+                    assert_equal(distribution[country_locale][1]['time_limits'], tile.get('time_limits'))
+                    num_tiles_checked += 1
+
+            elif leg:
+                country_locale, locale = leg.groups()
+                data = json.loads(self.key_contents[i])
+                assert_equal(1, len(data[locale]))
+                tile = data[locale][0]
+                assert_equal(None, tile.get('time_limits'))
+                num_tiles_checked += 1
+
+        assert_equal(7, num_tiles_checked)
+
     def test_deploy_always_generates_tile_index(self):
         """A tiles index file should always be generated"""
 

@@ -173,6 +173,14 @@ def ingest_links(data, channel_id, *args, **kwargs):
 
     country_locales = sorted(data.keys())
 
+    def remove_unserializable_data(tile):
+        if 'time_limits' in tile:
+            limits = tile['time_limits']
+            for dt_name in ('start_dt', 'end_dt'):
+                if dt_name in limits:
+                    limits.pop(dt_name)
+        return tile
+
     try:
         for country_locale_str in country_locales:
 
@@ -259,11 +267,11 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         """
                         db_tile_id, ag_id = insert_tile(**columns)
                         t["directoryId"] = db_tile_id
-                        new_tiles_list.append(t)
+                        new_tiles_list.append(remove_unserializable_data(t))
                         command_logger.info("INSERT: Creating id:{0}".format(db_tile_id))
 
                     elif db_tile_id == f_tile_id:
-                        new_tiles_list.append(t)
+                        new_tiles_list.append(remove_unserializable_data(t))
                         command_logger.info("NOOP: id:{0} already exists".format(f_tile_id))
 
                     else:
@@ -272,7 +280,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         the id's provided differ
                         """
                         t["directoryId"] = db_tile_id
-                        new_tiles_list.append(t)
+                        new_tiles_list.append(remove_unserializable_data(t))
                         command_logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))
 
                 except Exception as e:
@@ -295,6 +303,7 @@ def generate_artifacts(data, channel_name, deploy):
     :channel_name: distribution channel name
     :deploy: tells whether to deploy to the channels
     """
+
     artifacts = []
     tile_index = {'__ver__': 3}
     image_index = {}
@@ -351,7 +360,7 @@ def generate_artifacts(data, channel_name, deploy):
             legacy_tiles = copy.deepcopy(dir_tiles)
             for tile in legacy_tiles:
                 # remove extra metadata
-                for key in ('frequency_caps', 'adgroup_name', 'explanation', 'check_inadjacency'):
+                for key in ('frequency_caps', 'adgroup_name', 'explanation', 'check_inadjacency', 'time_limits'):
                     tile.pop(key, None)
 
             legacy = json.dumps({locale: legacy_tiles}, sort_keys=True)
