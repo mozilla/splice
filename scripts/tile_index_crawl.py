@@ -3,20 +3,26 @@
 from optparse import OptionParser
 import grequests
 import requests
+import traceback
 requests.packages.urllib3.disable_warnings()
 
 
-def validate(results, verbose):
+def validate(results, verbose, errors):
     for r in results:
         try:
             if r.status_code != 200:
-                print('ERROR: %s %s' % (r.url, r.status_code))
+                msg = 'ERROR: %s %s' % (r.url, r.status_code)
+                print(msg)
+                errors.append(msg)
                 continue
             elif verbose:
                 print('SUCCESS: %s %s' % (r.url, r.status_code))
             yield r
         except Exception as e:
-            print('ERROR: %s' % e)
+            msg = 'ERROR: %s' % e
+            print(msg)
+            print(traceback.format_exc())
+            errors.append(msg)
 
 
 def main():
@@ -56,7 +62,7 @@ def main():
         cdn = 'https://tiles.cdn.mozilla.net'
         tile_index_key = 'tile_index_v3.json'
 
-    channels = ['desktop', 'android']
+    channels = ['desktop']
 
     if len(args) == 1:
         cdn = args.pop()
@@ -69,6 +75,8 @@ def main():
             (cdn, tuple(channels), tile_index_key)
         )
         print('NOTICE: calculating tiles urls')
+
+    errors = []
 
     # extract tiles urls from tile index
     tiles_urls = set([
@@ -83,6 +91,7 @@ def main():
                 for channel in channels
             ),
             options.verbose,
+            errors,
         )
         for key, value in index.json().iteritems()
         if '/' in key
@@ -102,6 +111,7 @@ def main():
                 for tiles_url in tiles_urls
             ),
             options.verbose,
+            errors,
         )
         for value_x in tiles.json().values()
         for value_y in value_x
@@ -125,8 +135,12 @@ def main():
                 for image_url in image_urls
             ),
             options.verbose,
+            errors,
         )
     ]
+
+    if errors:
+        exit(1)
 
 
 if __name__ == '__main__':
