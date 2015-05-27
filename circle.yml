@@ -9,5 +9,7 @@ dependencies:
 test:
     override:
         - fab build
+        - coverage html -d $CIRCLE_ARTIFACTS
     post:
         - coveralls
+        - codecov
