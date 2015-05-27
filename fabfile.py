@@ -64,7 +64,7 @@ def test(config="setup.cfg", debug_errors=False, debug_failures=False):
     If debug_failures is provided as a truey value, will drop on debug prompt
     as soon as an assertion fails.
     """
-    command = "nosetests --config={}".format(config)
+    command = "nosetests --nologcapture --config={}".format(config)
     if to_bool(debug_errors):
         command += " --ipdb"
     if to_bool(debug_failures):

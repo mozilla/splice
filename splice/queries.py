@@ -20,7 +20,7 @@ def get_frecent_sites_for_tile(tile_id, conn=None):
 
 
 def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                frecent_sites, conn=None, *args, **kwargs):
+                frecent_sites, time_limits, conn=None, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
@@ -44,6 +44,10 @@ def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
         .filter(Tile.image_uri == image_uri)
         .filter(Tile.enhanced_image_uri == enhanced_image_uri)
         .filter(Adgroup.locale == locale)
+        .filter(Adgroup.start_date == time_limits.get('start'))
+        .filter(Adgroup.end_date == time_limits.get('end'))
+        .filter(Adgroup.start_date_dt == time_limits.get('start_dt'))
+        .filter(Adgroup.end_date_dt == time_limits.get('end_dt'))
         .join(Adgroup.tiles)
         .order_by(asc(Tile.id))
     )
@@ -270,7 +274,7 @@ def slot_summary(connection, start_date, period='week', country_code=None, local
 
 
 def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                frecent_sites, frequency_caps, adgroup_name, explanation,
+                frecent_sites, time_limits, frequency_caps, adgroup_name, explanation,
                 check_inadjacency, conn=None, *args, **kwargs):
 
     from splice.environment import Environment
@@ -287,6 +291,10 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
             text(
                 "INSERT INTO adgroups ("
                 "locale, "
+                "start_date, "
+                "end_date, "
+                "start_date_dt, "
+                "end_date_dt, "
                 "name, "
                 "explanation, "
                 "frequency_cap_daily, "
@@ -296,6 +304,10 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
                 ") "
                 "VALUES ("
                 ":locale, "
+                ":start_date, "
+                ":end_date, "
+                ":start_date_dt, "
+                ":end_date_dt, "
                 ":adgroup_name, "
                 ":explanation, "
                 ":frequency_cap_daily, "
@@ -305,6 +317,10 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
                 ")"
             ),
             locale=locale,
+            start_date=time_limits.get('start'),
+            end_date=time_limits.get('end'),
+            start_date_dt=time_limits.get('start_dt'),
+            end_date_dt=time_limits.get('end_dt'),
             adgroup_name=adgroup_name,
             explanation=explanation,
             frequency_cap_daily=frequency_caps['daily'],

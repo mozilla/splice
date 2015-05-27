@@ -3,10 +3,16 @@ import json
 import magic
 import copy
 import re
+import pytz
 from sqlalchemy import or_
 from mock import Mock, PropertyMock
-from nose.tools import assert_raises, assert_equal, assert_not_equal, assert_true
+from nose.tools import (
+    assert_raises,
+    assert_equal,
+    assert_not_equal,
+    assert_true)
 from jsonschema.exceptions import ValidationError
+from dateutil.parser import parse as du_parse
 from tests.base import BaseTestCase
 from splice.ingest import ingest_links, generate_artifacts, IngestError, distribute
 from splice.models import Tile, Adgroup, AdgroupSite
@@ -133,6 +139,228 @@ class TestIngestLinks(BaseTestCase):
         assert_equal(len(data['STAR/en-US']), 5)
         new_num_tiles = self.env.db.session.query(Tile).count()
         assert_equal(num_tiles + 4, new_num_tiles)
+
+    def test_start_end_dates(self):
+        """
+        a simple start/end date tile
+        """
+        tile_no_tz = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        dist = {"US/en-US": [tile_no_tz]}
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links(dist, self.channels[0].id)
+        assert_equal(1, len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(31, c)
+
+        tile = self.env.db.session.query(Tile).filter(Tile.id == 31).one()
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
+        assert_equal(tile.adgroup_id, ag.id)
+
+        assert_equal(ag.start_date, dist["US/en-US"][0]['time_limits']['start'])
+        assert_equal(ag.end_date, dist["US/en-US"][0]['time_limits']['end'])
+        assert_equal(ag.start_date_dt, du_parse(dist["US/en-US"][0]['time_limits']['start']))
+        assert_equal(ag.end_date_dt, du_parse(dist["US/en-US"][0]['time_limits']['end']))
+
+    def test_start_end_dates_timezones(self):
+        """
+        test start/end dates with timezones
+        """
+        def parse_to_utc_notz(dt_str):
+            """
+            Return a TZ unaware dt in UTC
+            """
+            dt = du_parse(dt_str)
+            if dt.tzinfo:
+                dt = dt.astimezone(pytz.utc).replace(tzinfo=None)
+
+            return dt
+
+        tile_no_tz = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        tile_with_tz = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhereelse.com",
+            "title": "Some Other Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000Z",
+                "end": "2014-01-31T00:00:00.000Z"
+            }
+        }
+
+        tile_with_mixed_tz = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhereelseyet.com",
+            "title": "Yet Some Other Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+                "end": "2014-01-31T00:00:00.000Z"
+            }
+        }
+
+        dist = {"US/en-US": [tile_no_tz, tile_with_tz, tile_with_mixed_tz]}
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links(dist, self.channels[0].id)
+        assert_equal(len(dist["US/en-US"]), len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30 + len(dist["US/en-US"]), c)
+
+        tile_tested = 0
+        for i, tile_def in enumerate(dist["US/en-US"]):
+            obj_id = 30 + 1 + i
+            tile = self.env.db.session.query(Tile).filter(Tile.id == obj_id).one()
+            ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == obj_id).one()
+            assert_equal(tile.adgroup_id, ag.id)
+
+            assert_equal(ag.start_date, tile_def['time_limits']['start'])
+            assert_equal(ag.end_date, tile_def['time_limits']['end'])
+            assert_equal(ag.start_date_dt, parse_to_utc_notz(tile_def['time_limits']['start']))
+            assert_equal(ag.end_date_dt, parse_to_utc_notz(tile_def['time_limits']['end']))
+            tile_tested += 1
+
+        assert_equal(len(dist["US/en-US"]), tile_tested)
+
+    def test_start_end_dates_optional(self):
+        """
+        Ensure that start/end dates are optional
+        """
+        tile_no_start = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        tile_no_end = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhereelse.com",
+            "title": "Some Other Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+            }
+        }
+
+        tile_empty_limits = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://yetsomewhereelse.com",
+            "title": "Yet Some Other Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {}
+        }
+
+        dist = {"US/en-US": [tile_no_start, tile_no_end, tile_empty_limits]}
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links(dist, self.channels[0].id)
+        assert_equal(len(dist["US/en-US"]), len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30 + len(dist["US/en-US"]), c)
+
+        tile_tested = 0
+        for i, tile_def in enumerate(dist["US/en-US"]):
+            obj_id = 30 + 1 + i
+            tile = self.env.db.session.query(Tile).filter(Tile.id == obj_id).one()
+            ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == obj_id).one()
+            assert_equal(tile.adgroup_id, ag.id)
+
+            if ag.start_date:
+                assert_equal(ag.start_date, tile_def['time_limits']['start'])
+                tile_tested += 1
+
+            if ag.end_date:
+                assert_equal(ag.end_date, tile_def['time_limits']['end'])
+                tile_tested += 1
+
+        # one tile not tested because it has neither start or end dates
+        assert_equal(len(dist["US/en-US"]) - 1, tile_tested)
+
+    def test_start_end_dates_uniqueness(self):
+        """
+        Test that start/end are part of what make tiles unique
+        """
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        tile_no_start = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        tile_no_end = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+            }
+        }
+
+        tile_empty_limits = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Tile",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {}
+        }
+
+        dist = {"US/en-US": [tile, tile_no_start, tile_no_end, tile_empty_limits]}
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links(dist, self.channels[0].id)
+        assert_equal(len(dist["US/en-US"]), len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30 + len(dist["US/en-US"]), c)
 
     def test_frequency_caps(self):
         """
@@ -894,6 +1122,89 @@ class TestDistribute(BaseTestCase):
 
         assert_equal(7, num_tiles_checked)
 
+    def test_distribute_time_limits(self):
+        """
+        Test if time limits make it in distributions
+        """
+        tile_en_gb = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title CA",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        tile_en_us = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere_else.com",
+            "title": "Some Title US",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        tiles_en_us_suggested = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title US Suggested",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frecent_sites": ['http://xyz.com', 'http://abc.com'],
+            "check_inadjacency": True,
+            "frequency_caps": {
+                "daily": 7,
+                "total": 20
+            },
+            "time_limits": {
+                "start": "2014-01-12T00:00:00.000",
+                "end": "2014-01-31T00:00:00.000"
+            }
+        }
+
+        distribution = {
+            "US/en-US": [tile_en_us, tiles_en_us_suggested],
+            "GB/en-US": [tile_en_us],
+            "GB/en-GB": [tile_en_gb]
+        }
+
+        data = ingest_links(distribution, self.channels[0].id)
+        distribute(data, self.channels[0].id, True)
+        # one image, 3 AG distributions, 3 legacy distributions, one index, one input distribution
+        assert_equal(9, self.key_mock.set_contents_from_string.call_count)
+
+        num_tiles_checked = 0
+        for i, key in enumerate(self.key_names):
+            ag = AG_DIST_PATHNAME.match(key)
+            leg = LEGACY_DIST_PATHNAME.match(key)
+            if ag:
+                country_locale, locale = ag.groups()
+                data = json.loads(self.key_contents[i])
+                for tile in data['directory']:
+                    # index 0 expected, only for US/en-US
+                    assert_equal(distribution[country_locale][0]['time_limits'], tile.get('time_limits'))
+                    num_tiles_checked += 1
+                for tile in data['suggested']:
+                    # index 1 expected, only for US/en-US
+                    assert_equal(distribution[country_locale][1]['time_limits'], tile.get('time_limits'))
+                    num_tiles_checked += 1
+
+            elif leg:
+                country_locale, locale = leg.groups()
+                data = json.loads(self.key_contents[i])
+                assert_equal(1, len(data[locale]))
+                tile = data[locale][0]
+                assert_equal(None, tile.get('time_limits'))
+                num_tiles_checked += 1
+
+        assert_equal(7, num_tiles_checked)
+
     def test_deploy_always_generates_tile_index(self):
         """A tiles index file should always be generated"""
 
@@ -918,3 +1229,49 @@ class TestDistribute(BaseTestCase):
         distribute(data, self.channels[0].id, True)
 
         assert_equal(2, index_uploaded['count'])
+
+
+class TestISOPattern(BaseTestCase):
+
+    def test_relative_time_str(self):
+        """
+        Verify a relative ISO8061 time string validates
+        """
+        from splice.ingest import ISO_8061_pattern
+        pat = re.compile(ISO_8061_pattern)
+        date_str = '2014-01-12T00:00:00.000'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal(None, m.groupdict().get('timezone'))
+
+    def test_absolute_time_str(self):
+        """
+        Verify a ISO8061 time string with Z time string validates
+        """
+        from splice.ingest import ISO_8061_pattern
+        pat = re.compile(ISO_8061_pattern)
+        date_str = '2014-01-12T00:00:00.000Z'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal('Z', m.groupdict()['timezone'])
+
+    def test_timezone_str(self):
+        """
+        Verify a ISO8061 time string with timezone time string validates
+        """
+        from splice.ingest import ISO_8061_pattern
+        pat = re.compile(ISO_8061_pattern)
+        date_str = '2015-05-05T14:19:58.359981-05:00'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal('-05:00', m.groupdict()['timezone'])
+
+        date_str = '2015-05-05T14:19:58.359981-05'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal('-05', m.groupdict()['timezone'])
+
+        date_str = '2015-05-05T14:19:58.359981-0500'
+        m = pat.match(date_str)
+        assert(m)
+        assert_equal('-0500', m.groupdict()['timezone'])

@@ -8,11 +8,13 @@ import urllib
 import copy
 import re
 import bleach
+import pytz
 from datetime import datetime
 from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
 import jsonschema
 from furl import furl
+from dateutil.parser import parse as du_parse
 from splice.queries import tile_exists, insert_tile, insert_distribution
 from splice.environment import Environment
 
@@ -24,6 +26,18 @@ mime_extensions = {
     "image/jpeg": "jpg",
     "image/svg+xml": "svg",
 }
+
+ISO_8061_pattern = (
+    '^' + '(?P<year>[\+-]?\d{4})'
+    '(?:' + '(?P<datesep>-?)' + '(?P<month>0[1-9]|1[0-2])'
+    '(?:' + '(?P=datesep)' + '(?P<day>0[1-9]|[12]\d|3[0-1])' + ')?' + ')?'
+    '(?:T' + '(?P<hour>[01]\d|2[0-4])'
+    '(?:' + '(?P<timesep>:?)' + '(?P<minute>[0-5]\d)'
+    '(?:' + '(?P=timesep)' + '(?P<second>[0-5]\d|60)'
+    '(?:' + '(?P<microsecond>\.\d+)' + ')?' + ')?' + ')?' + ')?'
+    '(?P<timezone>Z|[\+-]\d{2}(:?\d{2})?)' + '?'
+    '$'
+)
 
 payload_schema = {
     "type": "object",
@@ -78,6 +92,19 @@ payload_schema = {
                         "items": {
                             "type": "string",
                             "pattern": "^.*$"
+                        }
+                    },
+                    "time_limits": {
+                        "type": "object",
+                        "properties": {
+                            "start": {
+                                "type": "string",
+                                "pattern": ISO_8061_pattern
+                            },
+                            "end": {
+                                "type": "string",
+                                "pattern": ISO_8061_pattern
+                            },
                         }
                     },
                     "adgroup_name": {
@@ -146,6 +173,13 @@ def ingest_links(data, channel_id, *args, **kwargs):
 
     country_locales = sorted(data.keys())
 
+    def remove_unserializable_data(tile):
+        if 'time_limits' in tile:
+            limits = tile['time_limits']
+            limits.pop('start_dt', None)
+            limits.pop('end_dt', None)
+        return tile
+
     try:
         for country_locale_str in country_locales:
 
@@ -187,6 +221,25 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     if 'check_inadjacency' in t:
                         check_inadjacency = t['check_inadjacency']
 
+                    # we have both the string and datetime objects to allow for optional timezones on the client
+                    time_limits = t.get("time_limits", {
+                        'start': None, 'end': None,
+                        'start_dt': None, 'end_dt': None
+                    })
+                    if time_limits.get('start') or time_limits.get('end'):
+                        time_limits.update({
+                            'start_dt': du_parse(time_limits['start']) if time_limits.get('start') else None,
+                            'end_dt': du_parse(time_limits['end']) if time_limits.get('end') else None
+                        })
+                        for dt_name in ('start_dt', 'end_dt'):
+                            dt = time_limits[dt_name]
+                            if dt and dt.tzinfo:
+                                # capture the datetime as UTC, but without the Timezone info
+                                # check because input may be TZ-unaware
+                                time_limits[dt_name] = dt.astimezone(pytz.utc).replace(tzinfo=None)
+
+                    frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+
                     columns = dict(
                         target_url=t["url"],
                         bg_color=t["bgColor"],
@@ -196,6 +249,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         enhanced_image_uri=enhanced_image_hash,
                         locale=locale,
                         frecent_sites=frecent_sites,
+                        time_limits=time_limits,
                         frequency_caps=frequency_caps,
                         adgroup_name=adgroup_name,
                         explanation=explanation,
@@ -212,11 +266,11 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         """
                         db_tile_id, ag_id = insert_tile(**columns)
                         t["directoryId"] = db_tile_id
-                        new_tiles_list.append(t)
+                        new_tiles_list.append(remove_unserializable_data(t))
                         command_logger.info("INSERT: Creating id:{0}".format(db_tile_id))
 
                     elif db_tile_id == f_tile_id:
-                        new_tiles_list.append(t)
+                        new_tiles_list.append(remove_unserializable_data(t))
                         command_logger.info("NOOP: id:{0} already exists".format(f_tile_id))
 
                     else:
@@ -225,7 +279,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         the id's provided differ
                         """
                         t["directoryId"] = db_tile_id
-                        new_tiles_list.append(t)
+                        new_tiles_list.append(remove_unserializable_data(t))
                         command_logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))
 
                 except Exception as e:
@@ -248,6 +302,7 @@ def generate_artifacts(data, channel_name, deploy):
     :channel_name: distribution channel name
     :deploy: tells whether to deploy to the channels
     """
+
     artifacts = []
     tile_index = {'__ver__': 3}
     image_index = {}
@@ -304,7 +359,7 @@ def generate_artifacts(data, channel_name, deploy):
             legacy_tiles = copy.deepcopy(dir_tiles)
             for tile in legacy_tiles:
                 # remove extra metadata
-                for key in ('frequency_caps', 'adgroup_name', 'explanation', 'check_inadjacency'):
+                for key in ('frequency_caps', 'adgroup_name', 'explanation', 'check_inadjacency', 'time_limits'):
                     tile.pop(key, None)
 
             legacy = json.dumps({locale: legacy_tiles}, sort_keys=True)
