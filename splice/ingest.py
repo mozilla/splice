@@ -176,9 +176,8 @@ def ingest_links(data, channel_id, *args, **kwargs):
     def remove_unserializable_data(tile):
         if 'time_limits' in tile:
             limits = tile['time_limits']
-            for dt_name in ('start_dt', 'end_dt'):
-                if dt_name in limits:
-                    limits.pop(dt_name)
+            limits.pop('start_dt', None)
+            limits.pop('end_dt', None)
         return tile
 
     try:
