@@ -110,20 +110,7 @@ impression_stats_daily = db.Table(
     db.Column('month', db.Integer, nullable=False),
     db.Column('week', db.Integer, nullable=False),
     db.Column('year', db.Integer, nullable=False),
-)
-
-
-blacklist_stats_daily = db.Table(
-    'blacklist_stats_daily',
-    db.Column('ip', db.String(64)),
-    db.Column('date', db.Date, nullable=False),
-    db.Column('impressions', db.Integer, nullable=False, server_default="0"),
-    db.Column('clicks', db.Integer, nullable=False, server_default="0"),
-    db.Column('pinned', db.Integer, nullable=False, server_default="0"),
-    db.Column('blocked', db.Integer, nullable=False, server_default="0"),
-    db.Column('sponsored_link', db.Integer, nullable=False, server_default="0"),
-    db.Column('sponsored', db.Integer, nullable=False, server_default="0"),
-    db.Column('newtabs', db.Integer, nullable=False, server_default="0"),
+    db.Column('blacklisted', db.Boolean, nullable=False, server_default="false"),
 )
 
 
