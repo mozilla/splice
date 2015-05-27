@@ -12,3 +12,4 @@ test:
         - coverage html -d $CIRCLE_ARTIFACTS
     post:
         - coveralls
+        - codecov
