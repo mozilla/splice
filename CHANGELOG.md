@@ -1,3 +1,8 @@
+1.1.18
+======
+
+* migrations to support IP blacklist / fraud detection
+
 1.1.17
 ======
  * Bug 1161197 - Accept inputs of start/stop times in Splice
@@ -64,8 +69,8 @@ __note__:
 1.1.7
 =====
 
-* added Related Tiles
-* requires database migration
+* added Related Tiles 
+* requires database migration 
 
 1.1.6
 =====
@@ -108,7 +113,7 @@ __note__:
 * new feature: ability to ingest tiles without deploying (new default behavior)
 
 __note__:
-* includes schema changes
+* includes schema changes 
 * requires reconfiguration of onyx, because we now have different channels
 
 1.0.14

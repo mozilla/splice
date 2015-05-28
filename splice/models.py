@@ -88,6 +88,13 @@ class UniqueCountsDaily(db.Model):
     country_code = db.Column(db.String(5), nullable=False, default="US")
 
 
+blacklisted_ips = db.Table(
+    'blacklisted_ips',
+    db.Column('ip', db.String(64), nullable=False),
+    db.Column('date', db.Date(), nullable=False)
+)
+
+
 unique_hlls = db.Table(
     'unique_hlls',
     db.Column('unique_counts_daily_id', db.Integer, db.ForeignKey('unique_counts_daily.id')),
@@ -117,6 +124,7 @@ impression_stats_daily = db.Table(
     db.Column('month', db.Integer, nullable=False),
     db.Column('week', db.Integer, nullable=False),
     db.Column('year', db.Integer, nullable=False),
+    db.Column('blacklisted', db.Boolean, nullable=False, server_default="false"),
 )
 
 
