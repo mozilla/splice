@@ -1242,7 +1242,7 @@ class TestISOPattern(BaseTestCase):
         date_str = '2014-01-12T00:00:00.000'
         m = pat.match(date_str)
         assert(m)
-        assert_equal(None, m.groupdict().get('timezone'))
+        assert_equal(None, m.groups()[-2])
 
     def test_absolute_time_str(self):
         """
@@ -1253,7 +1253,7 @@ class TestISOPattern(BaseTestCase):
         date_str = '2014-01-12T00:00:00.000Z'
         m = pat.match(date_str)
         assert(m)
-        assert_equal('Z', m.groupdict()['timezone'])
+        assert_equal('Z', m.groups()[-2])
 
     def test_timezone_str(self):
         """
@@ -1264,14 +1264,14 @@ class TestISOPattern(BaseTestCase):
         date_str = '2015-05-05T14:19:58.359981-05:00'
         m = pat.match(date_str)
         assert(m)
-        assert_equal('-05:00', m.groupdict()['timezone'])
+        assert_equal('-05:00', m.groups()[-2])
 
         date_str = '2015-05-05T14:19:58.359981-05'
         m = pat.match(date_str)
         assert(m)
-        assert_equal('-05', m.groupdict()['timezone'])
+        assert_equal('-05', m.groups()[-2])
 
         date_str = '2015-05-05T14:19:58.359981-0500'
         m = pat.match(date_str)
         assert(m)
-        assert_equal('-0500', m.groupdict()['timezone'])
+        assert_equal('-0500', m.groups()[-2])
