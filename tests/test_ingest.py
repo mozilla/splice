@@ -1237,8 +1237,8 @@ class TestISOPattern(BaseTestCase):
         """
         Verify a relative ISO8061 time string validates
         """
-        from splice.ingest import ISO_8061_pattern
-        pat = re.compile(ISO_8061_pattern)
+        from splice.ingest import ISO_8061_pattern_py
+        pat = re.compile(ISO_8061_pattern_py)
         date_str = '2014-01-12T00:00:00.000'
         m = pat.match(date_str)
         assert(m)
@@ -1248,8 +1248,8 @@ class TestISOPattern(BaseTestCase):
         """
         Verify a ISO8061 time string with Z time string validates
         """
-        from splice.ingest import ISO_8061_pattern
-        pat = re.compile(ISO_8061_pattern)
+        from splice.ingest import ISO_8061_pattern_py
+        pat = re.compile(ISO_8061_pattern_py)
         date_str = '2014-01-12T00:00:00.000Z'
         m = pat.match(date_str)
         assert(m)
@@ -1264,14 +1264,14 @@ class TestISOPattern(BaseTestCase):
         date_str = '2015-05-05T14:19:58.359981-05:00'
         m = pat.match(date_str)
         assert(m)
-        assert_equal('-05:00', m.groupdict()['timezone'])
+        assert_equal('-05:00', m.groups()[-2])
 
         date_str = '2015-05-05T14:19:58.359981-05'
         m = pat.match(date_str)
         assert(m)
-        assert_equal('-05', m.groupdict()['timezone'])
+        assert_equal('-05', m.groups()[-2])
 
         date_str = '2015-05-05T14:19:58.359981-0500'
         m = pat.match(date_str)
         assert(m)
-        assert_equal('-0500', m.groupdict()['timezone'])
+        assert_equal('-0500', m.groups()[-2])
