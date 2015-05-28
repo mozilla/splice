@@ -1237,23 +1237,23 @@ class TestISOPattern(BaseTestCase):
         """
         Verify a relative ISO8061 time string validates
         """
-        from splice.ingest import ISO_8061_pattern_py
-        pat = re.compile(ISO_8061_pattern_py)
+        from splice.ingest import ISO_8061_pattern
+        pat = re.compile(ISO_8061_pattern)
         date_str = '2014-01-12T00:00:00.000'
         m = pat.match(date_str)
         assert(m)
-        assert_equal(None, m.groupdict().get('timezone'))
+        assert_equal(None, m.groups()[-2])
 
     def test_absolute_time_str(self):
         """
         Verify a ISO8061 time string with Z time string validates
         """
-        from splice.ingest import ISO_8061_pattern_py
-        pat = re.compile(ISO_8061_pattern_py)
+        from splice.ingest import ISO_8061_pattern
+        pat = re.compile(ISO_8061_pattern)
         date_str = '2014-01-12T00:00:00.000Z'
         m = pat.match(date_str)
         assert(m)
-        assert_equal('Z', m.groupdict()['timezone'])
+        assert_equal('Z', m.groups()[-2])
 
     def test_timezone_str(self):
         """
