@@ -4,6 +4,7 @@ import magic
 import copy
 import re
 import pytz
+import hashlib
 from sqlalchemy import or_
 from mock import Mock, PropertyMock
 from nose.tools import (
@@ -139,6 +140,101 @@ class TestIngestLinks(BaseTestCase):
         assert_equal(len(data['STAR/en-US']), 5)
         new_num_tiles = self.env.db.session.query(Tile).count()
         assert_equal(num_tiles + 4, new_num_tiles)
+
+    def test_ingest_compact_payload(self):
+        """ Test compact payload for ingest link
+        """
+        image_uri = "data:image/png;base64,somedata foo"
+        enhanced_uri = "data:image/png;base64,somedata bar"
+        assets = {
+            "image 0": image_uri,
+            "enhanced image 0": enhanced_uri,
+        }
+        tile_us = {
+            "imageURI": "image 0",
+            "enhancedImageURI": "enhanced image 0",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+        }
+        tile_ca = {
+            "imageURI": "image 0",
+            "url": "https://somewhere.ca",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+        }
+        dist = {
+            "assets": assets,
+            "distributions": {
+                    "US/en-US": [tile_us],
+                    "CA/en-US": [tile_ca]
+                }
+        }
+
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links(dist, self.channels[0].id)
+        assert_equal(1, len(data["US/en-US"]))
+        assert_equal(1, len(data["CA/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(32, c)
+
+        # test tile for CA/en-US
+        tile = self.env.db.session.query(Tile).filter(Tile.id == 31).one()
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
+        assert_equal(tile.adgroup_id, ag.id)
+        assert_equal(tile.image_uri,
+                hashlib.sha1(image_uri).hexdigest())
+
+        # test tile for US/en-US
+        tile = self.env.db.session.query(Tile).filter(Tile.id == 32).one()
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 32).one()
+        assert_equal(tile.adgroup_id, ag.id)
+        assert_equal(tile.image_uri,
+                hashlib.sha1(image_uri).hexdigest())
+        assert_equal(tile.enhanced_image_uri,
+                hashlib.sha1(enhanced_uri).hexdigest())
+
+    def test_ingest_invalid_compact_payload(self):
+        """ Test invalid compact payload for ingest link
+        """
+        image_uri = "data:image/png;base64,somedata foo"
+        assets = {
+            "image 0": image_uri,
+        }
+        tile_us = {
+            "imageURI": "image missing",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+        }
+        invalid_dist_assets_missing = {
+            "distributions": {
+                    "US/en-US": [tile_us],
+            }
+        }
+        invalid_dist_distributions_missing = {
+            "assets": {
+                "image 0": image_uri,
+            }
+        }
+        invalid_dist_uri_missing = {
+            "assets": {
+                "image 0": image_uri,
+            },
+            "distributions": {
+                "US/en-US": [tile_us]
+            }
+        }
+        assert_raises(ValidationError, ingest_links,
+                invalid_dist_assets_missing, self.channels[0].id)
+        assert_raises(ValidationError, ingest_links,
+                invalid_dist_distributions_missing, self.channels[0].id)
+        tiles = ingest_links(invalid_dist_uri_missing, self.channels[0].id)
+        assert_equal(len(tiles["US/en-US"]), 0)
 
     def test_start_end_dates(self):
         """
@@ -1237,7 +1333,7 @@ class TestISOPattern(BaseTestCase):
         """
         Verify a relative ISO8061 time string validates
         """
-        from splice.ingest import ISO_8061_pattern
+        from splice.schemas import ISO_8061_pattern
         pat = re.compile(ISO_8061_pattern)
         date_str = '2014-01-12T00:00:00.000'
         m = pat.match(date_str)
@@ -1248,7 +1344,7 @@ class TestISOPattern(BaseTestCase):
         """
         Verify a ISO8061 time string with Z time string validates
         """
-        from splice.ingest import ISO_8061_pattern
+        from splice.schemas import ISO_8061_pattern
         pat = re.compile(ISO_8061_pattern)
         date_str = '2014-01-12T00:00:00.000Z'
         m = pat.match(date_str)
@@ -1259,7 +1355,7 @@ class TestISOPattern(BaseTestCase):
         """
         Verify a ISO8061 time string with timezone time string validates
         """
-        from splice.ingest import ISO_8061_pattern
+        from splice.schemas import ISO_8061_pattern
         pat = re.compile(ISO_8061_pattern)
         date_str = '2015-05-05T14:19:58.359981-05:00'
         m = pat.match(date_str)

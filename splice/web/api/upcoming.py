@@ -3,7 +3,7 @@ from sqlalchemy.exc import DataError
 from sqlalchemy.orm.exc import NoResultFound
 from splice.environment import Environment
 from splice.queries import get_channels, get_upcoming_distributions, unschedule_distribution
-from splice.ingest import payload_schema as schema
+from splice.ingest import get_payload_schema
 
 upcoming = Blueprint('api.upcoming', __name__, url_prefix='/api/upcoming')
 env = Environment.instance()
@@ -17,7 +17,9 @@ def init_data():
     dists = get_upcoming_distributions()
     chans = get_channels()
 
-    return jsonify({'d': {'dists': dists, 'chans': chans, 'schema': schema, 'env': env.config.ENVIRONMENT}})
+    return jsonify({'d': {'dists': dists, 'chans': chans,
+        'schema': {"default": get_payload_schema(compact=False), "compact": get_payload_schema(compact=True)},
+        'env': env.config.ENVIRONMENT}})
 
 
 @upcoming.route('/unschedule', methods=['POST'])
