@@ -1,3 +1,8 @@
+1.1.19
+======
+
+* Make time limits JS regex friendly (json-schema)
+
 1.1.18
 ======
 
