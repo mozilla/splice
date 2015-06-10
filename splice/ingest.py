@@ -80,7 +80,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                 tile["enhancedImageURI"] = assets[tile["enhancedImageURI"]]
         except KeyError as e:
             command_logger.error("Failed to find key: {0} for enhanced/imageURI"
-                    " when inserting {1}.".format(e, json.dumps(tile, sort_keys=True)))
+                                 " when inserting {1}.".format(e, json.dumps(tile, sort_keys=True)))
             return False
         return True
 

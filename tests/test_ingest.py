@@ -168,9 +168,9 @@ class TestIngestLinks(BaseTestCase):
         dist = {
             "assets": assets,
             "distributions": {
-                    "US/en-US": [tile_us],
-                    "CA/en-US": [tile_ca]
-                }
+                "US/en-US": [tile_us],
+                "CA/en-US": [tile_ca]
+            }
         }
 
         c = self.env.db.session.query(Adgroup).count()
@@ -185,25 +185,19 @@ class TestIngestLinks(BaseTestCase):
         tile = self.env.db.session.query(Tile).filter(Tile.id == 31).one()
         ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
         assert_equal(tile.adgroup_id, ag.id)
-        assert_equal(tile.image_uri,
-                hashlib.sha1(image_uri).hexdigest())
+        assert_equal(tile.image_uri, hashlib.sha1(image_uri).hexdigest())
 
         # test tile for US/en-US
         tile = self.env.db.session.query(Tile).filter(Tile.id == 32).one()
         ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 32).one()
         assert_equal(tile.adgroup_id, ag.id)
-        assert_equal(tile.image_uri,
-                hashlib.sha1(image_uri).hexdigest())
-        assert_equal(tile.enhanced_image_uri,
-                hashlib.sha1(enhanced_uri).hexdigest())
+        assert_equal(tile.image_uri, hashlib.sha1(image_uri).hexdigest())
+        assert_equal(tile.enhanced_image_uri, hashlib.sha1(enhanced_uri).hexdigest())
 
     def test_ingest_invalid_compact_payload(self):
         """ Test invalid compact payload for ingest link
         """
         image_uri = "data:image/png;base64,somedata foo"
-        assets = {
-            "image 0": image_uri,
-        }
         tile_us = {
             "imageURI": "image missing",
             "url": "https://somewhere.com",
@@ -213,7 +207,7 @@ class TestIngestLinks(BaseTestCase):
         }
         invalid_dist_assets_missing = {
             "distributions": {
-                    "US/en-US": [tile_us],
+                "US/en-US": [tile_us],
             }
         }
         invalid_dist_distributions_missing = {
@@ -230,9 +224,9 @@ class TestIngestLinks(BaseTestCase):
             }
         }
         assert_raises(ValidationError, ingest_links,
-                invalid_dist_assets_missing, self.channels[0].id)
+                      invalid_dist_assets_missing, self.channels[0].id)
         assert_raises(ValidationError, ingest_links,
-                invalid_dist_distributions_missing, self.channels[0].id)
+                      invalid_dist_distributions_missing, self.channels[0].id)
         tiles = ingest_links(invalid_dist_uri_missing, self.channels[0].id)
         assert_equal(len(tiles["US/en-US"]), 0)
 

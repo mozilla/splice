@@ -17,9 +17,10 @@ def init_data():
     dists = get_upcoming_distributions()
     chans = get_channels()
 
-    return jsonify({'d': {'dists': dists, 'chans': chans,
-        'schema': {"default": get_payload_schema(compact=False), "compact": get_payload_schema(compact=True)},
-        'env': env.config.ENVIRONMENT}})
+    return jsonify({
+        'd': {'dists': dists, 'chans': chans,
+              'schema': {"default": get_payload_schema(compact=False), "compact": get_payload_schema(compact=True)},
+              'env': env.config.ENVIRONMENT}})
 
 
 @upcoming.route('/unschedule', methods=['POST'])

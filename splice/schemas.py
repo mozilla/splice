@@ -28,89 +28,89 @@ def _make_common_schema():
     schema.
     """
     return {
-    "type": "object",
-    "patternProperties": {
-        "^([A-Za-z]+)/([A-Za-z-]+)$": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "directoryId": {
-                        "type": "integer",
-                    },
-                    "url": {
-                        "type": "string",
-                        "pattern": "^https?://.*$",
-                    },
-                    "title": {
-                        "type": "string",
-                    },
-                    "bgColor": {
-                        "type": "string",
-                        "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
-                    },
-                    "type": {
-                        "enum": ["affiliate", "organic", "sponsored"],
-                    },
-                    "imageURI": {
-                        "type": "string",
-                    },
-                    "enhancedImageURI": {
-                        "type": "string",
-                    },
-                    "check_inadjacency": {
-                        "type": "boolean",
-                    },
-                    "frequency_caps": {
-                        "type": "object",
-                        "properties": {
-                            "daily": {
-                                "type": "integer"
+        "type": "object",
+        "patternProperties": {
+            "^([A-Za-z]+)/([A-Za-z-]+)$": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "directoryId": {
+                            "type": "integer",
+                        },
+                        "url": {
+                            "type": "string",
+                            "pattern": "^https?://.*$",
+                        },
+                        "title": {
+                            "type": "string",
+                        },
+                        "bgColor": {
+                            "type": "string",
+                            "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
+                        },
+                        "type": {
+                            "enum": ["affiliate", "organic", "sponsored"],
+                        },
+                        "imageURI": {
+                            "type": "string",
+                        },
+                        "enhancedImageURI": {
+                            "type": "string",
+                        },
+                        "check_inadjacency": {
+                            "type": "boolean",
+                        },
+                        "frequency_caps": {
+                            "type": "object",
+                            "properties": {
+                                "daily": {
+                                    "type": "integer"
+                                },
+                                "total": {
+                                    "type": "integer"
+                                }
                             },
-                            "total": {
-                                "type": "integer"
+                            "required": ["daily", "total"]
+                        },
+                        "frecent_sites": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "pattern": "^.*$"
                             }
                         },
-                        "required": ["daily", "total"]
-                    },
-                    "frecent_sites": {
-                        "type": "array",
-                        "items": {
+                        "time_limits": {
+                            "type": "object",
+                            "properties": {
+                                "start": {
+                                    "type": "string",
+                                    "pattern": ISO_8061_pattern
+                                },
+                                "end": {
+                                    "type": "string",
+                                    "pattern": ISO_8061_pattern
+                                },
+                            }
+                        },
+                        "adgroup_name": {
                             "type": "string",
-                            "pattern": "^.*$"
+                            "maxLength": 255,
+                        },
+                        "explanation": {
+                            # example: "Suggested for %1$S enthusiasts who visit
+                            # sites like %2$S". Both adgroup_name and site_name
+                            # are optiobal
+                            "type": "string",
+                            "maxLength": 255,
                         }
                     },
-                    "time_limits": {
-                        "type": "object",
-                        "properties": {
-                            "start": {
-                                "type": "string",
-                                "pattern": ISO_8061_pattern
-                            },
-                            "end": {
-                                "type": "string",
-                                "pattern": ISO_8061_pattern
-                            },
-                        }
-                    },
-                    "adgroup_name": {
-                        "type": "string",
-                        "maxLength": 255,
-                    },
-                    "explanation": {
-                        # example: "Suggested for %1$S enthusiasts who visit
-                        # sites like %2$S". Both adgroup_name and site_name
-                        # are optiobal
-                        "type": "string",
-                        "maxLength": 255,
-                    }
-                },
-                "required": ["url", "title", "bgColor", "type", "imageURI"],
+                    "required": ["url", "title", "bgColor", "type", "imageURI"],
+                }
             }
-        }
-    },
-    "additionalProperties": False,
-}
+        },
+        "additionalProperties": False,
+    }
 
 
 # create the default schema
