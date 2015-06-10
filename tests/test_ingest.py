@@ -362,6 +362,26 @@ class TestIngestLinks(BaseTestCase):
         c = self.env.db.session.query(Adgroup).count()
         assert_equal(30 + len(dist["US/en-US"]), c)
 
+    def test_adgroups_channel_id_uniqueness(self):
+        """
+        Test that channel_ids in adgroups are part of what makes Tiles unique
+        """
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+        }
+
+        dist = {"US/en-US": [tile]}
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        ingest_links(dist, self.channels[0].id)
+        ingest_links(dist, self.channels[1].id)
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(32, c)
+
     def test_frequency_caps(self):
         """
         A simple test of frequency caps
