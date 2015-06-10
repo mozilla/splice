@@ -798,6 +798,49 @@ class TestGenerateArtifacts(BaseTestCase):
         # includes two more file: the locale data payload for each version
         assert_equal(8, len(artifacts))
 
+    def test_generate_artifacts_compact(self):
+        """
+        Tests that the correct number of artifacts are generated for compact
+        payload
+        """
+        image_uri = "data:image/png;base64,QSBwcmV0dHkgaW1hZ2UgOik="
+        enhanced_uri = "data:image/png;base64,WWV0IGFub3RoZXIgcHJldHR5IGltYWdlIDop"
+        assets = {
+            "image 0": image_uri,
+            "enhanced image 0": enhanced_uri,
+        }
+        tile_us = {
+            "imageURI": "image 0",
+            "enhancedImageURI": "enhanced image 0",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+        }
+        dist_us = {
+            "assets": assets,
+            "distributions": {
+                "US/en-US": [copy.deepcopy(tile_us)]
+            }
+        }
+        dist_us_ca = {
+            "assets": assets,
+            "distributions": {
+                "US/en-US": [copy.deepcopy(tile_us)],
+                "CA/en-US": [copy.deepcopy(tile_us)]
+            }
+        }
+
+        data = ingest_links(dist_us, self.channels[0].id)
+        artifacts = generate_artifacts(data, self.channels[0].name, True)
+        # tile index, v2, v3 and 2 image files are generated
+        assert_equal(6, len(artifacts))
+
+        data = ingest_links(dist_us_ca, self.channels[0].id)
+        artifacts = generate_artifacts(data, self.channels[0].name, True)
+        # includes two more file: the locale data payload for each version
+        assert_equal(8, len(artifacts))
+
     def test_unknown_mime_type(self):
         """
         Tests that an unknown mime type is rejected
@@ -999,6 +1042,32 @@ class TestDistribute(BaseTestCase):
         # in this case, the 3rd element should be the mock of the s3 upload for the 'ag' index
         frecents = json.loads(self.key_mock.set_contents_from_string.mock_calls[3][1][0])['suggested'][0]['frecent_sites']
         assert_equal(frecents, ['http://abc.com', 'http://xyz.com'])
+
+    def test_distribute_compact(self):
+        image_uri = "data:image/png;base64,QSBwcmV0dHkgaW1hZ2UgOik="
+        enhanced_uri = "data:image/png;base64,WWV0IGFub3RoZXIgcHJldHR5IGltYWdlIDop"
+        assets = {
+            "image 0": image_uri,
+            "enhanced image 0": enhanced_uri,
+        }
+        tile_us = {
+            "imageURI": "image 0",
+            "enhancedImageURI": "enhanced image 0",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+        }
+        dist_ca_us = {
+            "assets": assets,
+            "distributions": {
+                "US/en-US": [copy.deepcopy(tile_us)],
+                "CA/en-US": [copy.deepcopy(tile_us)]
+            }
+        }
+        data = ingest_links(dist_ca_us, self.channels[0].id)
+        distribute(data, self.channels[0].id, True)
+        assert_equal(8, self.key_mock.set_contents_from_string.call_count)
 
     def test_distribute_frequency_cap(self):
         """
