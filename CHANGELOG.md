@@ -1,3 +1,12 @@
+1.1.20
+======
+
+* Bug 1171116 - Add Firefox prerelease channel and add tracking per channel
+
+__note__:
+* includes schema change/migration
+ * ddl/migrations/redshift/1433974555.sql
+
 1.1.19
 ======
 

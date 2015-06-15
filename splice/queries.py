@@ -20,7 +20,7 @@ def get_frecent_sites_for_tile(tile_id, conn=None):
 
 
 def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                frecent_sites, time_limits, conn=None, *args, **kwargs):
+                frecent_sites, time_limits, channel_id, conn=None, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
@@ -48,6 +48,7 @@ def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
         .filter(Adgroup.end_date == time_limits.get('end'))
         .filter(Adgroup.start_date_dt == time_limits.get('start_dt'))
         .filter(Adgroup.end_date_dt == time_limits.get('end_dt'))
+        .filter(Adgroup.channel_id == channel_id)
         .join(Adgroup.tiles)
         .order_by(asc(Tile.id))
     )
@@ -275,7 +276,7 @@ def slot_summary(connection, start_date, period='week', country_code=None, local
 
 def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
                 frecent_sites, time_limits, frequency_caps, adgroup_name, explanation,
-                check_inadjacency, conn=None, *args, **kwargs):
+                check_inadjacency, channel_id, conn=None, *args, **kwargs):
 
     from splice.environment import Environment
     env = Environment.instance()
@@ -300,6 +301,7 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
                 "frequency_cap_daily, "
                 "frequency_cap_total, "
                 "check_inadjacency, "
+                "channel_id, "
                 "created_at"
                 ") "
                 "VALUES ("
@@ -313,6 +315,7 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
                 ":frequency_cap_daily, "
                 ":frequency_cap_total, "
                 ":check_inadjacency, "
+                ":channel_id, "
                 ":created_at"
                 ")"
             ),
@@ -326,6 +329,7 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
             frequency_cap_daily=frequency_caps['daily'],
             frequency_cap_total=frequency_caps['total'],
             check_inadjacency=check_inadjacency,
+            channel_id=channel_id,
             created_at=now,
         )
         ag_id = conn.execute("SELECT MAX(id) FROM adgroups;").scalar()

@@ -254,6 +254,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         adgroup_name=adgroup_name,
                         explanation=explanation,
                         check_inadjacency=check_inadjacency,
+                        channel_id=channel_id,
                         conn=conn
                     )
 
