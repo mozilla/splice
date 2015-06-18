@@ -43,7 +43,7 @@ def slice_image_uri(image_uri):
     Turn an image uri into a sha1 hash, mime_type and data tuple
     """
     try:
-        meta, data = image_uri.split(',')
+        meta, data = image_uri.split(',', 1)
         mime_type = metadata_pattern.match(meta).groups()[0]
     except:
         raise IngestError("Unexpected image data")
@@ -73,7 +73,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
             limits.pop('end_dt', None)
         return tile
 
-    def populate_image_urls(tile, assets):
+    def populate_image_uris(tile, assets):
         try:
             tile["imageURI"] = assets[tile["imageURI"]]
             if "enhancedImageURI" in tile:
@@ -129,7 +129,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     if not env.is_test:
                         conn.execute("LOCK TABLE tiles; LOCK TABLE adgroups; LOCK TABLE adgroup_sites;")
 
-                    if is_compact and not populate_image_urls(t, assets):
+                    if is_compact and not populate_image_uris(t, assets):
                         continue
                     image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
                     enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() \
@@ -319,7 +319,7 @@ def generate_artifacts(data, channel_name, deploy):
         })
 
     # include data submission in artifacts
-    data_serialized = json.dumps(data, sort_keys=True)
+    data_serialized = json.dumps(compress_payload(data), sort_keys=True)
     hsh = hashlib.sha1(data_serialized).hexdigest()
     dt_str = datetime.utcnow().isoformat().replace(":", "-")
     artifacts.append({
@@ -413,3 +413,59 @@ def distribute(data, channel_id, deploy, scheduled_dt=None):
             insert_distribution(url, channel_id, deploy, scheduled_dt)
 
     return distributed
+
+
+def compress_payload(payload):
+    """ Compress payload by re-using image uri and enhanced image uri. Note
+    it'll modify payload in place instead of making a clone.
+
+    params:
+        payload: a tile dictionary of format as:
+            {
+                "US/en": [tile 0, ..., tile n],
+                ...,
+                "CA/en": [tile 0, ..., tile n]
+            }
+
+    output:
+        a dictionary with "assets" amd "distributions" fields:
+            {
+                "assets": {
+                    "0": "uri 0",
+                    ...,
+                    "N": "uri n",
+                }
+                "distributions": {
+                    "US/en": [tile 0, ..., tile n],
+                    ...,
+                    "CA/en": [tile 0, ..., tile n]
+                }
+            }
+        where each value of imageURI or enhancedImageURI in the tile is just a
+        key in the "assets" dictionary.
+
+    """
+    clone = dict(payload)
+    id = 0
+    assets = dict()
+    uri2id = dict()
+    for locale, tiles in clone.iteritems():
+        for tile in tiles:
+            uri = tile["imageURI"]
+            enhanced_uri = tile.get("enhancedImageURI")
+            if uri in uri2id:
+                tile["imageURI"] = uri2id[uri]
+            else:
+                tile["imageURI"] = uri2id[uri] = "%d" % id
+                id += 1
+            if enhanced_uri is not None:
+                if enhanced_uri in uri2id:
+                    tile["enhancedImageURI"] = uri2id[enhanced_uri]
+                else:
+                    tile["enhancedImageURI"] = uri2id[enhanced_uri] = "%d" % id
+                    id += 1
+
+    for uri, id in uri2id.iteritems():
+        assets[id] = uri
+
+    return {"assets": assets, "distributions": payload}
