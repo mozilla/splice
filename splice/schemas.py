@@ -2,7 +2,7 @@
 
 * default schema:
     the imageURI and enhancedImageURI are not re-used, Splice versions prior to
-    1.1.19 use this schema
+    1.1.21 use this schema
 * compact schema:
     the imageURI and enhancedImageURI are re-used, a "URI id" to "URI" mapping
     is stored in the "assets" property

@@ -785,9 +785,7 @@ class TestGenerateArtifacts(BaseTestCase):
 
         tile = fixture["STAR/en-US"][4]
 
-        # making a copy for tiles because distribute will attempt to compress
-        # it in place. That will affect the following tests
-        data = ingest_links({"STAR/en-US": [copy.deepcopy(tile)]}, self.channels[0].id)
+        data = ingest_links({"STAR/en-US": [tile]}, self.channels[0].id)
         artifacts = generate_artifacts(data, self.channels[0].name, True)
         # tile index, v2, v3 and 2 image files are generated
         assert_equal(6, len(artifacts))
@@ -1010,8 +1008,7 @@ class TestDistribute(BaseTestCase):
             }
         ]
 
-        # making a clone because distribute will attempt to compress the tiles
-        data = ingest_links({"STAR/en-US": copy.deepcopy(tiles_star)}, self.channels[0].id)
+        data = ingest_links({"STAR/en-US": tiles_star}, self.channels[0].id)
         distribute(data, self.channels[0].id, True)
         # 6 files are uploaded, mirrors generate artifacts
         assert_equal(6, self.key_mock.set_contents_from_string.call_count)
@@ -1395,9 +1392,7 @@ class TestDistribute(BaseTestCase):
         with open(self.get_fixture_path("mozilla-tiles.fennec.json"), 'r') as f:
             tiles = json.load(f)
 
-        # making a copy for tiles because distribute will attempt to compress
-        # it in place. That will affect the following tests
-        data = ingest_links(copy.deepcopy(tiles), self.channels[0].id)
+        data = ingest_links(tiles, self.channels[0].id)
         distribute(data, self.channels[0].id, True)
         assert_equal(1, index_uploaded['count'])
 

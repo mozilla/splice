@@ -99,25 +99,14 @@ angular.module('spliceApp').controller('authoringController', function($controll
      * Assumes data is correct.
      */
     var cloneTile = function (tile) {
-      if (null === tile || "object" !== typeof tile) return tile;
-
-      var copy = tile.constructor();
-      for (var attr in tile) {
-        if (tile.hasOwnProperty(attr)) {
-          if (attr === "imageURI" || attr === "enhancedImageURI") {
-            copy[attr] = "";
-          } else {
-            copy[attr] = tile[attr];
-          }
-        }
-      }
+      var copy = JSON.parse(JSON.stringify(tile));
       return copy;
     };
 
     var compressPayload = function (tiles) {
       /* *
        * compress the payload for publishing. Note that the tiles might be cached,
-       * therefore we create a cheap (all imageURIs won't be cloned) copy here
+       * therefore we create a copy here
        */
       var copies = {};
       var uri2id = {};
@@ -125,29 +114,27 @@ angular.module('spliceApp').controller('authoringController', function($controll
       var id = 0;
 
       for (var locale in tiles) {
-        if (tiles.hasOwnProperty(locale)) {
-          copies[locale] = [];
-          var locale_tiles = tiles[locale];
-          for (var i = 0, len = locale_tiles.length; i < len; i++) {
-            var tile = locale_tiles[i];
-            var imageURI = tile.imageURI;
-            var copy = cloneTile(tile);
+        copies[locale] = [];
+        var locale_tiles = tiles[locale];
+        for (var i = 0, len = locale_tiles.length; i < len; i++) {
+          var tile = locale_tiles[i];
+          var imageURI = tile.imageURI;
+          var copy = cloneTile(tile);
 
-            copies[locale].push(copy);
+          copies[locale].push(copy);
+          if (imageURI in uri2id) {
+            copy.imageURI = uri2id[imageURI];
+          } else {
+            uri2id[imageURI] = copy.imageURI = id.toString();
+            id++;
+          }
+          if (tile.hasOwnProperty("enhancedImageURI")) {
+            imageURI = tile.enhancedImageURI;
             if (imageURI in uri2id) {
-              copy.imageURI = uri2id[imageURI];
+              copy.enhancedImageURI = uri2id[imageURI];
             } else {
-              uri2id[imageURI] = copy.imageURI = id.toString();
+              uri2id[imageURI] = copy.enhancedImageURI = id.toString();
               id++;
-            }
-            if (tile.hasOwnProperty("enhancedImageURI")) {
-              imageURI = tile.enhancedImageURI;
-              if (imageURI in uri2id) {
-                copy.enhancedImageURI = uri2id[imageURI];
-              } else {
-                uri2id[imageURI] = copy.enhancedImageURI = id.toString();
-                id++;
-              }
             }
           }
         }

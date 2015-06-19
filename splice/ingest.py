@@ -61,7 +61,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
 
     Params:
         data: JSON payload with multiple schema versions. For versions prior to
-        1.1.19, the JSON schema does NOT re-use data for imageURI and
+        1.1.21, the JSON schema does NOT re-use data for imageURI and
         enhancedImageURI. Otherwise, there is a "assets" property, in which
         stores a "URI id" to "URI" mapping. This function will use the correct
         schema for both types of payloads
@@ -74,16 +74,22 @@ def ingest_links(data, channel_id, *args, **kwargs):
         return tile
 
     def populate_image_uris(tile, assets):
+        """ Replace imageURI ID by image in place"""
         try:
-            tile["imageURI"] = assets[tile["imageURI"]]
+            image_uri_id = tile["imageURI"]
+            tile["imageURI"] = assets[image_uri_id]
             if "enhancedImageURI" in tile:
-                tile["enhancedImageURI"] = assets[tile["enhancedImageURI"]]
+                enhanced_image_uri_id = tile["enhancedImageURI"]
+                tile["enhancedImageURI"] = assets[enhanced_image_uri_id]
         except KeyError as e:
-            command_logger.error("Failed to find key: {0} for enhanced/imageURI"
-                                 " when inserting {1}.".format(e, json.dumps(tile, sort_keys=True)))
+            command_logger.error("Failed to find base64-encoded image for key: {0}, "
+                                 "when inserting tile: {1}.".format(e, tile["title"]))
             return False
         return True
 
+    # copy data to modify inplace, do NOT mutate the original input, cause
+    # memory is much cheaper than people's mind
+    data = copy.deepcopy(data)
     is_compact = "assets" in data
     try:
         jsonschema.validate(data, get_payload_schema(is_compact))
@@ -129,6 +135,8 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     if not env.is_test:
                         conn.execute("LOCK TABLE tiles; LOCK TABLE adgroups; LOCK TABLE adgroup_sites;")
 
+                    # TODO: (najiang@mozilla.com), collect and return tile
+                    # ingestion errors - Bug 1169302
                     if is_compact and not populate_image_uris(t, assets):
                         continue
                     image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
@@ -416,8 +424,9 @@ def distribute(data, channel_id, deploy, scheduled_dt=None):
 
 
 def compress_payload(payload):
-    """ Compress payload by re-using image uri and enhanced image uri. Note
-    it'll modify payload in place instead of making a clone.
+    """ Make an inplace modification to the payload that compresses it by
+    creating an asset dictionary and referring to the assets by ID in the
+    payload
 
     params:
         payload: a tile dictionary of format as:
