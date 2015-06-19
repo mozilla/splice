@@ -1,3 +1,8 @@
+1.1.21
+======
+
+* fix cache key to include channel id in distribution.js
+
 1.1.20
 ======
 
