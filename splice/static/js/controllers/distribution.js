@@ -130,7 +130,7 @@ angular.module('spliceApp').controller('distributionController', function($scope
     /**
      * Open a distribution file given a URL
      */
-    var chanId = $scope.channelSelect;
+    var chanId = $scope.channelSelect.id;
     var cacheKey = chanId + url;
 
     if (!$scope.cache.hasOwnProperty(cacheKey)) {
