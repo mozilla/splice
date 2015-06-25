@@ -820,14 +820,14 @@ class TestGenerateArtifacts(BaseTestCase):
         dist_us = {
             "assets": assets,
             "distributions": {
-                "US/en-US": [copy.deepcopy(tile_us)]
+                "US/en-US": [tile_us]
             }
         }
         dist_us_ca = {
             "assets": assets,
             "distributions": {
-                "US/en-US": [copy.deepcopy(tile_us)],
-                "CA/en-US": [copy.deepcopy(tile_us)]
+                "US/en-US": [tile_us],
+                "CA/en-US": [tile_us]
             }
         }
 
@@ -1015,8 +1015,8 @@ class TestDistribute(BaseTestCase):
 
         self.key_mock.set_contents_from_string = Mock()
         data = ingest_links({
-            "STAR/en-US": copy.deepcopy(tiles_star),
-            "CA/en-US": copy.deepcopy(tiles_ca),
+            "STAR/en-US": tiles_star,
+            "CA/en-US": tiles_ca,
         }, self.channels[0].id)
         distribute(data, self.channels[0].id, True)
         #  includes two more upload: the locate data payload (for both versions)
@@ -1073,8 +1073,8 @@ class TestDistribute(BaseTestCase):
         dist_ca_us = {
             "assets": assets,
             "distributions": {
-                "US/en-US": [copy.deepcopy(tile_us)],
-                "CA/en-US": [copy.deepcopy(tile_us)]
+                "US/en-US": [tile_us],
+                "CA/en-US": [tile_us]
             }
         }
         data = ingest_links(dist_ca_us, self.channels[0].id)
