@@ -83,7 +83,12 @@ def ingest_links(data, channel_id, *args, **kwargs):
                 tile["enhancedImageURI"] = assets[enhanced_image_uri_id]
         except KeyError as e:
             command_logger.error("Failed to find base64-encoded image for key: {0}, "
-                                 "when inserting tile: {1}.".format(e, tile["title"]))
+                                 "when inserting tile with title: {1}, locale: "
+                                 "{2}, type: {3}, url: {4}".format(e,
+                                                                   tile["title"],
+                                                                   country_locale_str,
+                                                                   tile["type"],
+                                                                   tile["url"]))
             return False
         return True
 
