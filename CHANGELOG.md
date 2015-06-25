@@ -1,3 +1,12 @@
+1.1.22
+======
+
+* fix redshift migration sql script for schema changes
+
+__note__:
+* modifies the existing schema change/migration
+ * ddl/migrations/redshift/1433974555.sql
+
 1.1.21
 ======
 
