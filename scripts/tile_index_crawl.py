@@ -62,7 +62,11 @@ def main():
         cdn = 'https://tiles.cdn.mozilla.net'
         tile_index_key = 'tile_index_v3.json'
 
-    channels = ['desktop']
+    channels = [
+        'desktop',
+        'android',
+        'desktop-prerelease',
+    ]
 
     if len(args) == 1:
         cdn = args.pop()
