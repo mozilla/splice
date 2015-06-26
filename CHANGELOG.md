@@ -1,3 +1,8 @@
+1.1.23
+======
+
+* update default channels to index crawl
+
 1.1.22
 ======
 
