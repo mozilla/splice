@@ -1,3 +1,8 @@
+1.1.24
+======
+
+* Bug 1167761 - Implement asset re-use in ingestion format for splice
+
 1.1.23
 ======
 
