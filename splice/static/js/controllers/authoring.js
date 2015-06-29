@@ -36,7 +36,7 @@ angular.module('spliceApp').controller('authoringController', function($controll
          * Allow for time selection within the current hour
          */
         now.setMinutes(0);
-        now.setTime(now.getTime() - 60000)
+        now.setTime(now.getTime() - 60000);
       }
     }
 
@@ -58,7 +58,7 @@ angular.module('spliceApp').controller('authoringController', function($controll
 
     allTilesForm.newTiles.value = null;
     $scope.openRemoteDistribution(newValue.url);
-    $scope.source = {origin: newValue.url, type: 'remote'}
+    $scope.source = {origin: newValue.url, type: 'remote'};
   });
 
   $scope.readFile = function(fileInput) {
@@ -77,7 +77,7 @@ angular.module('spliceApp').controller('authoringController', function($controll
           $scope.fileErrorMsg = 'Unable to parse file ' + fileInput.name;
           $scope.tiles = {};
         }
-      })
+      });
   };
 
   $scope.clearScheduledDate = function() {
@@ -98,9 +98,60 @@ angular.module('spliceApp').controller('authoringController', function($controll
      * Send tiles to backend for publication.
      * Assumes data is correct.
      */
+    var cloneTile = function (tile) {
+      var copy = JSON.parse(JSON.stringify(tile));
+      return copy;
+    };
+
+    var compressPayload = function (tiles) {
+      /* *
+       * compress the payload for publishing. Note that the tiles might be cached,
+       * therefore we create a copy here
+       */
+      var copies = {};
+      var uri2id = {};
+      var assets = {};
+      var id = 0;
+
+      for (var locale in tiles) {
+        copies[locale] = [];
+        var locale_tiles = tiles[locale];
+        for (var i = 0, len = locale_tiles.length; i < len; i++) {
+          var tile = locale_tiles[i];
+          var imageURI = tile.imageURI;
+          var copy = cloneTile(tile);
+
+          copies[locale].push(copy);
+          if (imageURI in uri2id) {
+            copy.imageURI = uri2id[imageURI];
+          } else {
+            uri2id[imageURI] = copy.imageURI = id.toString();
+            id++;
+          }
+          if (tile.hasOwnProperty("enhancedImageURI")) {
+            imageURI = tile.enhancedImageURI;
+            if (imageURI in uri2id) {
+              copy.enhancedImageURI = uri2id[imageURI];
+            } else {
+              uri2id[imageURI] = copy.enhancedImageURI = id.toString();
+              id++;
+            }
+          }
+        }
+      }
+
+      for (var uri in uri2id) {
+        if (uri2id.hasOwnProperty(uri)) {
+          assets[uri2id[uri]] = uri;
+        }
+      }
+
+      return {"assets": assets, "distributions": copies};
+    };
+
     $scope.uploadInProgress = true;
     $scope.uploadModal.$promise.then($scope.uploadModal.show);
-    spliceData.postTiles(tiles.raw, $scope.channelSelect.id, $scope.deployConfig)
+    spliceData.postTiles(compressPayload(tiles.raw), $scope.channelSelect.id, $scope.deployConfig)
       .success(function(data) {
         var deployed = data.deployed;
         var msg = '<ol>';
@@ -116,7 +167,7 @@ angular.module('spliceApp').controller('authoringController', function($controll
 
           msg += '<li><strong class="' + uploadClass + '">' + uploadStatus + '</strong> <a href="' + url[0] + '">' + url[0] + '</a> </li>';
         }
-        msg += '</ol>'
+        msg += '</ol>';
         $scope.uploadMessage = {
           success: true,
           deployed: deployed,

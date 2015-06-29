@@ -6,8 +6,9 @@ from werkzeug.exceptions import BadRequest
 from sqlalchemy.orm.exc import NoResultFound
 from splice.environment import Environment
 from splice.queries import get_channels, get_all_distributions
-from splice.ingest import IngestError, ScheduleError, ingest_links, distribute, payload_schema as schema
+from splice.ingest import IngestError, ScheduleError, ingest_links, distribute, get_payload_schema
 from jsonschema.exceptions import ValidationError
+
 
 authoring = Blueprint('api.authoring', __name__, url_prefix='/api/authoring')
 env = Environment.instance()
@@ -83,7 +84,11 @@ def init_data():
     channels = get_channels()
     dists = get_all_distributions()
 
-    return jsonify({'d': {'dists': dists, 'chans': channels, 'schema': schema, 'env': env.config.ENVIRONMENT}})
+    return jsonify({
+        'd': {
+            'dists': dists, 'chans': channels,
+            'schema': {"default": get_payload_schema(compact=False), "compact": get_payload_schema(compact=True)},
+            'env': env.config.ENVIRONMENT}})
 
 
 def register_routes(app):
