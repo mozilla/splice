@@ -1,3 +1,36 @@
+1.1.24
+======
+
+* re-use assets in the tile payload
+
+1.1.23
+======
+
+* update default channels to index crawl
+
+1.1.22
+======
+
+* fix redshift migration sql script for schema changes
+
+__note__:
+* modifies the existing schema change/migration
+ * ddl/migrations/redshift/1433974555.sql
+
+1.1.21
+======
+
+* fix cache key to include channel id in distribution.js
+
+1.1.20
+======
+
+* Bug 1171116 - Add Firefox prerelease channel and add tracking per channel
+
+__note__:
+* includes schema change/migration
+ * ddl/migrations/redshift/1433974555.sql
+
 1.1.19
 ======
 

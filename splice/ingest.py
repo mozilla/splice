@@ -61,7 +61,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
 
     Params:
         data: JSON payload with multiple schema versions. For versions prior to
-        1.1.21, the JSON schema does NOT re-use data for imageURI and
+        1.1.23, the JSON schema does NOT re-use data for imageURI and
         enhancedImageURI. Otherwise, there is a "assets" property, in which
         stores a "URI id" to "URI" mapping. This function will use the correct
         schema for both types of payloads
