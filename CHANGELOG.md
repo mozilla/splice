@@ -1,8 +1,3 @@
-1.1.24
-======
-
-* re-use assets in the tile payload
-
 1.1.23
 ======
 
