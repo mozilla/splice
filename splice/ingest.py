@@ -17,6 +17,8 @@ from furl import furl
 from dateutil.parser import parse as du_parse
 from splice.queries import tile_exists, insert_tile, insert_distribution
 from splice.environment import Environment
+from splice.schemas import get_payload_schema
+
 
 command_logger = logging.getLogger("command")
 metadata_pattern = re.compile("data:(.+);base64")
@@ -25,105 +27,6 @@ mime_extensions = {
     "image/gif": "gif",
     "image/jpeg": "jpg",
     "image/svg+xml": "svg",
-}
-
-ISO_8061_pattern = (
-    '^' + '([\+-]?\d{4})'  # year
-    '(' + '-?' + '(0[1-9]|1[0-2])'  # month
-    '(' + '-' + '(0[1-9]|[12]\d|3[0-1])' + ')?' + ')?'  # day
-    '(T' + '([01]\d|2[0-4])'  # hour
-    '(' + ':?' + '([0-5]\d)'  # minute
-    '(' + ':' + '([0-5]\d|60)'  # second
-    '(' + '(\.\d+)' + ')?' + ')?' + ')?' + ')?'  # microsecond
-    '(Z|[\+-]\d{2}(:?\d{2})?)' + '?'  # timezone
-    '$'
-)
-
-payload_schema = {
-    "type": "object",
-    "patternProperties": {
-        "^([A-Za-z]+)/([A-Za-z-]+)$": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "directoryId": {
-                        "type": "integer",
-                    },
-                    "url": {
-                        "type": "string",
-                        "pattern": "^https?://.*$",
-                    },
-                    "title": {
-                        "type": "string",
-                    },
-                    "bgColor": {
-                        "type": "string",
-                        "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
-                    },
-                    "type": {
-                        "enum": ["affiliate", "organic", "sponsored"],
-                    },
-                    "imageURI": {
-                        "type": "string",
-                        "pattern": "^data:image/.*$|^https?://.*$",
-                    },
-                    "enhancedImageURI": {
-                        "type": "string",
-                        "pattern": "^data:image/.*$|^https?://.*$",
-                    },
-                    "check_inadjacency": {
-                        "type": "boolean",
-                    },
-                    "frequency_caps": {
-                        "type": "object",
-                        "properties": {
-                            "daily": {
-                                "type": "integer"
-                            },
-                            "total": {
-                                "type": "integer"
-                            }
-                        },
-                        "required": ["daily", "total"]
-                    },
-                    "frecent_sites": {
-                        "type": "array",
-                        "items": {
-                            "type": "string",
-                            "pattern": "^.*$"
-                        }
-                    },
-                    "time_limits": {
-                        "type": "object",
-                        "properties": {
-                            "start": {
-                                "type": "string",
-                                "pattern": ISO_8061_pattern
-                            },
-                            "end": {
-                                "type": "string",
-                                "pattern": ISO_8061_pattern
-                            },
-                        }
-                    },
-                    "adgroup_name": {
-                        "type": "string",
-                        "maxLength": 255,
-                    },
-                    "explanation": {
-                        # example: "Suggested for %1$S enthusiasts who visit
-                        # sites like %2$S". Both adgroup_name and site_name
-                        # are optiobal
-                        "type": "string",
-                        "maxLength": 255,
-                    }
-                },
-                "required": ["url", "title", "bgColor", "type", "imageURI"],
-            }
-        }
-    },
-    "additionalProperties": False,
 }
 
 
@@ -140,7 +43,7 @@ def slice_image_uri(image_uri):
     Turn an image uri into a sha1 hash, mime_type and data tuple
     """
     try:
-        meta, data = image_uri.split(',')
+        meta, data = image_uri.split(',', 1)
         mime_type = metadata_pattern.match(meta).groups()[0]
     except:
         raise IngestError("Unexpected image data")
@@ -154,12 +57,47 @@ def slice_image_uri(image_uri):
 
 
 def ingest_links(data, channel_id, *args, **kwargs):
-    """
-    Obtain links, insert in data warehouse
-    """
+    """ Obtain links, insert in data warehouse
 
+    Params:
+        data: JSON payload with multiple schema versions. For versions prior to
+        1.1.23, the JSON schema does NOT re-use data for imageURI and
+        enhancedImageURI. Otherwise, there is a "assets" property, in which
+        stores a "URI id" to "URI" mapping. This function will use the correct
+        schema for both types of payloads
+    """
+    def remove_unserializable_data(tile):
+        if 'time_limits' in tile:
+            limits = tile['time_limits']
+            limits.pop('start_dt', None)
+            limits.pop('end_dt', None)
+        return tile
+
+    def populate_image_uris(tile, assets):
+        """ Replace imageURI ID by image in place"""
+        try:
+            image_uri_id = tile["imageURI"]
+            tile["imageURI"] = assets[image_uri_id]
+            if "enhancedImageURI" in tile:
+                enhanced_image_uri_id = tile["enhancedImageURI"]
+                tile["enhancedImageURI"] = assets[enhanced_image_uri_id]
+        except KeyError as e:
+            command_logger.error("Failed to find base64-encoded image for key: {0}, "
+                                 "when inserting tile with title: {1}, locale: "
+                                 "{2}, type: {3}, url: {4}".format(e,
+                                                                   tile["title"],
+                                                                   country_locale_str,
+                                                                   tile["type"],
+                                                                   tile["url"]))
+            return False
+        return True
+
+    # copy data to modify inplace, do NOT mutate the original input, cause
+    # memory is much cheaper than people's mind
+    data = copy.deepcopy(data)
+    is_compact = "assets" in data
     try:
-        jsonschema.validate(data, payload_schema)
+        jsonschema.validate(data, get_payload_schema(is_compact))
     except jsonschema.exceptions.ValidationError, e:
         command_logger.error("ERROR: cannot validate JSON: {0}".format(e.message))
         exc_class, exc, tb = sys.exc_info()
@@ -169,21 +107,18 @@ def ingest_links(data, channel_id, *args, **kwargs):
     env = Environment.instance()
     conn = env.db.engine.connect()
 
+    if is_compact:
+        assets, distributions = data["assets"], data["distributions"]
+    else:
+        assets, distributions = None, data
+
     ingested_data = {}
-
-    country_locales = sorted(data.keys())
-
-    def remove_unserializable_data(tile):
-        if 'time_limits' in tile:
-            limits = tile['time_limits']
-            limits.pop('start_dt', None)
-            limits.pop('end_dt', None)
-        return tile
+    country_locales = sorted(distributions.keys())
 
     try:
         for country_locale_str in country_locales:
 
-            tiles = data[country_locale_str]
+            tiles = distributions[country_locale_str]
             country_code, locale = country_locale_str.split("/")
             country_code = country_code.upper()
 
@@ -205,6 +140,10 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     if not env.is_test:
                         conn.execute("LOCK TABLE tiles; LOCK TABLE adgroups; LOCK TABLE adgroup_sites;")
 
+                    # TODO: (najiang@mozilla.com), collect and return tile
+                    # ingestion errors - Bug 1169302
+                    if is_compact and not populate_image_uris(t, assets):
+                        continue
                     image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
                     enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() \
                         if "enhancedImageURI" in t else None
@@ -394,7 +333,7 @@ def generate_artifacts(data, channel_name, deploy):
         })
 
     # include data submission in artifacts
-    data_serialized = json.dumps(data, sort_keys=True)
+    data_serialized = json.dumps(compress_payload(data), sort_keys=True)
     hsh = hashlib.sha1(data_serialized).hexdigest()
     dt_str = datetime.utcnow().isoformat().replace(":", "-")
     artifacts.append({
@@ -488,3 +427,60 @@ def distribute(data, channel_id, deploy, scheduled_dt=None):
             insert_distribution(url, channel_id, deploy, scheduled_dt)
 
     return distributed
+
+
+def compress_payload(payload):
+    """ Make an inplace modification to the payload that compresses it by
+    creating an asset dictionary and referring to the assets by ID in the
+    payload
+
+    params:
+        payload: a tile dictionary of format as:
+            {
+                "US/en": [tile 0, ..., tile n],
+                ...,
+                "CA/en": [tile 0, ..., tile n]
+            }
+
+    output:
+        a dictionary with "assets" amd "distributions" fields:
+            {
+                "assets": {
+                    "0": "uri 0",
+                    ...,
+                    "N": "uri n",
+                }
+                "distributions": {
+                    "US/en": [tile 0, ..., tile n],
+                    ...,
+                    "CA/en": [tile 0, ..., tile n]
+                }
+            }
+        where each value of imageURI or enhancedImageURI in the tile is just a
+        key in the "assets" dictionary.
+
+    """
+    clone = dict(payload)
+    id = 0
+    assets = dict()
+    uri2id = dict()
+    for locale, tiles in clone.iteritems():
+        for tile in tiles:
+            uri = tile["imageURI"]
+            enhanced_uri = tile.get("enhancedImageURI")
+            if uri in uri2id:
+                tile["imageURI"] = uri2id[uri]
+            else:
+                tile["imageURI"] = uri2id[uri] = "%d" % id
+                id += 1
+            if enhanced_uri is not None:
+                if enhanced_uri in uri2id:
+                    tile["enhancedImageURI"] = uri2id[enhanced_uri]
+                else:
+                    tile["enhancedImageURI"] = uri2id[enhanced_uri] = "%d" % id
+                    id += 1
+
+    for uri, id in uri2id.iteritems():
+        assets[id] = uri
+
+    return {"assets": assets, "distributions": payload}

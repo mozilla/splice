@@ -69,15 +69,25 @@ angular.module('spliceApp').controller('distributionController', function($scope
      * Validate and load tiles payload
      */
     var cacheKey = cacheKey || false;
-    var results = tv4.validateResult(data, $scope.payloadSchema);
+    var payloadSchema, distributions, assets;
+
+    if (data.hasOwnProperty("assets")) {
+        payloadSchema = $scope.payloadSchema.compact;
+        distributions = data.distributions;
+        assets = data.assets;
+    } else {
+        payloadSchema = $scope.payloadSchema.default;
+        distributions = data;
+        assets = {};
+    }
+    var results = tv4.validateResult(data, payloadSchema);
 
     if (results.valid) {
       if (cacheKey) {
-        $scope.cache[cacheKey] = $scope.separateTilesTypes(data);
+        $scope.cache[cacheKey] = $scope.separateTilesTypes(distributions, assets);
         $scope.tiles = $scope.cache[cacheKey];
-      }
-      else {
-        $scope.tiles = $scope.separateTilesTypes(data);
+      } else {
+        $scope.tiles = $scope.separateTilesTypes(distributions, assets);
       }
       $scope.source = source;
       $scope.fileErrorMsg = null;
@@ -89,7 +99,7 @@ angular.module('spliceApp').controller('distributionController', function($scope
     return results.valid;
   };
 
-  $scope.separateTilesTypes = function(data) {
+  $scope.separateTilesTypes = function(data, assets) {
     /**
      * Separate Tiles types from a list of tiles in 2 groups:
      * adgroups and default
@@ -107,6 +117,14 @@ angular.module('spliceApp').controller('distributionController', function($scope
 
       for (var i = 0; i < tiles.length; i++) {
         var tile = tiles[i];
+
+        // populate the imageURI and enhancedImageURI if tile is in compact format
+        if (tile.hasOwnProperty("imageURI") && assets.hasOwnProperty(tile.imageURI)) {
+          tile.imageURI = assets[tile.imageURI];
+        }
+        if (tile.hasOwnProperty("enhancedImageURI") && assets.hasOwnProperty(tile.enhancedImageURI)) {
+          tile.enhancedImageURI = assets[tile.enhancedImageURI];
+        }
         if (tile.frecent_sites) {
           tile.frecent_sites.sort();
           var label = JSON.stringify(tile.frecent_sites);
