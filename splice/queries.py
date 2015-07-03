@@ -20,7 +20,7 @@ def get_frecent_sites_for_tile(tile_id, conn=None):
 
 
 def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                frecent_sites, time_limits, channel_id, conn=None, *args, **kwargs):
+                frecent_sites, time_limits, frequency_caps, adgroup_name, explanation, check_inadjacency, channel_id, conn=None, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
@@ -41,6 +41,7 @@ def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
         .filter(Tile.target_url == target_url)
         .filter(Tile.bg_color == bg_color)
         .filter(Tile.title == title)
+        .filter(Tile.type == typ)
         .filter(Tile.image_uri == image_uri)
         .filter(Tile.enhanced_image_uri == enhanced_image_uri)
         .filter(Adgroup.locale == locale)
@@ -48,6 +49,11 @@ def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
         .filter(Adgroup.end_date == time_limits.get('end'))
         .filter(Adgroup.start_date_dt == time_limits.get('start_dt'))
         .filter(Adgroup.end_date_dt == time_limits.get('end_dt'))
+        .filter(Adgroup.frequency_cap_daily == frequency_caps['daily'])
+        .filter(Adgroup.frequency_cap_total == frequency_caps['total'])
+        .filter(Adgroup.name == adgroup_name)
+        .filter(Adgroup.explanation == explanation)
+        .filter(Adgroup.check_inadjacency == check_inadjacency)
         .filter(Adgroup.channel_id == channel_id)
         .join(Adgroup.tiles)
         .order_by(asc(Tile.id))
