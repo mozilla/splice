@@ -109,8 +109,7 @@ class TestIngestLinks(BaseTestCase):
         data = ingest_links(dist, self.channels[0].id)
         assert_equal(len(dist['US/en-US']), len(data['US/en-US']))
         c = self.env.db.session.query(Adgroup).count()
-        assert_equal(30 + len(dist['US/en-US'])-1, c)
-
+        assert_equal(30 + len(dist['US/en-US']) - 1, c)
 
     def test_suggested_sites(self):
         """
@@ -599,7 +598,7 @@ class TestIngestLinks(BaseTestCase):
         data = ingest_links(dist, self.channels[0].id)
         assert_equal(len(dist['US/en-US']), len(data['US/en-US']))
         c = self.env.db.session.query(Adgroup).count()
-        assert_equal(30 + len(dist['US/en-US'])-1, c)
+        assert_equal(30 + len(dist['US/en-US']) - 1, c)
 
     def test_explanation(self):
         explanation = "Suggested for %1$S fans who visit site %2$S"
@@ -701,7 +700,7 @@ class TestIngestLinks(BaseTestCase):
         data = ingest_links(dist, self.channels[0].id)
         assert_equal(len(dist['US/en-US']), len(data['US/en-US']))
         c = self.env.db.session.query(Adgroup).count()
-        assert_equal(30 + len(dist['US/en-US'])-1, c)
+        assert_equal(30 + len(dist['US/en-US']) - 1, c)
 
     def test_check_inadjacency(self):
         """
@@ -783,7 +782,7 @@ class TestIngestLinks(BaseTestCase):
         data = ingest_links(dist, self.channels[0].id)
         assert_equal(len(dist['US/en-US']), len(data['US/en-US']))
         c = self.env.db.session.query(Adgroup).count()
-        assert_equal(30 + len(dist['US/en-US'])-1, c)
+        assert_equal(30 + len(dist['US/en-US']) - 1, c)
 
     def test_id_creation(self):
         """
