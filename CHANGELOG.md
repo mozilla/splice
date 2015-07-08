@@ -1,3 +1,8 @@
+1.1.25
+======
+
+* Bug 1169300 - Ensure Tile immutability for table stakes features
+
 1.1.24
 ======
 
