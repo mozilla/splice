@@ -82,6 +82,35 @@ class TestIngestLinks(BaseTestCase):
             }
         ]}, self.channels[0].id)
 
+    def test_check_type_uniqueness(self):
+        """
+        A test of type uniqueness
+        """
+        tile_1 = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "type": "affiliate"
+        }
+        tile_2 = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "type": "sponsored"
+        }
+
+        dist = {"US/en-US": [tile_1, tile_1, tile_2]}
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links(dist, self.channels[0].id)
+        assert_equal(len(dist['US/en-US']), len(data['US/en-US']))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30 + len(dist['US/en-US']) - 1, c)
+
     def test_suggested_sites(self):
         """
         just a simple suggested site tile
@@ -525,6 +554,52 @@ class TestIngestLinks(BaseTestCase):
         c = self.env.db.session.query(Adgroup).count()
         assert_equal(30, c)
 
+    def test_frequency_caps_uniqueness(self):
+        """
+        A test of frequency caps uniqueness
+        """
+        tile_1 = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frequency_caps": {
+                "daily": 3,
+                "total": 10
+            }
+        }
+        tile_2 = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frequency_caps": {
+                "daily": 4,
+                "total": 10
+            }
+        }
+        tile_3 = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "frequency_caps": {
+                "daily": 3,
+                "total": 11
+            }
+        }
+
+        dist = {"US/en-US": [tile_1, tile_1, tile_2, tile_3]}
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links(dist, self.channels[0].id)
+        assert_equal(len(dist['US/en-US']), len(data['US/en-US']))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30 + len(dist['US/en-US']) - 1, c)
+
     def test_explanation(self):
         explanation = "Suggested for %1$S fans who visit site %2$S"
         tile = {
@@ -587,6 +662,46 @@ class TestIngestLinks(BaseTestCase):
         assert_equal(ag.name, None)
         assert_equal(ag.explanation, "&lt; Suggested for %1$S, %2$S &gt;")
 
+    def test_explanation_uniqueness(self):
+        """
+        A test of explanation uniqueness
+        """
+        tile_1 = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "adgroup_name": "A",
+            "explanation": "B",
+        }
+        tile_2 = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "adgroup_name": "A",
+            "explanation": "C",
+        }
+        tile_3 = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "adgroup_name": "D",
+            "explanation": "B",
+        }
+
+        dist = {"US/en-US": [tile_1, tile_1, tile_2, tile_3]}
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links(dist, self.channels[0].id)
+        assert_equal(len(dist['US/en-US']), len(data['US/en-US']))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30 + len(dist['US/en-US']) - 1, c)
+
     def test_check_inadjacency(self):
         """
         Simple inadjacency flag test
@@ -639,6 +754,35 @@ class TestIngestLinks(BaseTestCase):
         assert_raises(ValidationError, ingest_links, dist, self.channels[0].id)
         c2 = self.env.db.session.query(Adgroup).count()
         assert_equal(c, c2)
+
+    def test_check_inadjacency_uniqueness(self):
+        """
+        A test of inadjacency uniqueness
+        """
+        tile_1 = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "check_inadjacency": True
+        }
+        tile_2 = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "check_inadjacency": False
+        }
+
+        dist = {"US/en-US": [tile_1, tile_1, tile_2]}
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links(dist, self.channels[0].id)
+        assert_equal(len(dist['US/en-US']), len(data['US/en-US']))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30 + len(dist['US/en-US']) - 1, c)
 
     def test_id_creation(self):
         """

@@ -224,7 +224,9 @@ def ingest_links(data, channel_id, *args, **kwargs):
 
                 except Exception as e:
                     trans.rollback()
-                    command_logger.error("ERROR: {0}\nError inserting {1}.  ".format(e, json.dumps(t, sort_keys=True)))
+                    command_logger.error("ERROR: {0}\nError inserting {1}.  ".format(e, json.dumps(
+                        remove_unserializable_data(t),
+                        sort_keys=True)))
                 else:
                     trans.commit()
 
