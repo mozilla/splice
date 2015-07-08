@@ -86,7 +86,7 @@ blacklisted_ips = db.Table(
 
 impression_stats_daily = db.Table(
     'impression_stats_daily',
-    db.Column('tile_id', db.Integer, db.ForeignKey('tiles.id')),
+    db.Column('tile_id', db.Integer),
     db.Column('date', db.Date, nullable=False),
     db.Column('impressions', db.Integer, nullable=False, server_default="0"),
     db.Column('clicks', db.Integer, nullable=False, server_default="0"),
