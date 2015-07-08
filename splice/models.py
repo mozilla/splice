@@ -1,6 +1,5 @@
 from datetime import datetime
 from sqlalchemy import text
-from sqlalchemy.sql.functions import current_date
 from splice.environment import Environment
 
 db = Environment.instance().db
@@ -77,30 +76,10 @@ class AdgroupSite(db.Model):
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
 
-class UniqueCountsDaily(db.Model):
-    __tablename__ = "unique_counts_daily"
-
-    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
-    tile_id = db.Column(db.Integer(), db.ForeignKey("tiles.id"))
-
-    date = db.Column(db.Date(), nullable=False, default=current_date)
-    impression = db.Column(db.Boolean(), nullable=False, default=True)
-    locale = db.Column(db.String(14), nullable=False, default="en-US")
-    country_code = db.Column(db.String(5), nullable=False, default="US")
-
-
 blacklisted_ips = db.Table(
     'blacklisted_ips',
     db.Column('ip', db.String(64), nullable=False),
     db.Column('date', db.Date(), nullable=False)
-)
-
-
-unique_hlls = db.Table(
-    'unique_hlls',
-    db.Column('unique_counts_daily_id', db.Integer, db.ForeignKey('unique_counts_daily.id')),
-    db.Column('index', db.SmallInteger, nullable=False, server_default="0"),
-    db.Column('value', db.SmallInteger, nullable=False, server_default="0"),
 )
 
 
