@@ -56,6 +56,7 @@ class Environment(object):
         if test:
             config_obj.ENVIRONMENT = 'test'
             config_obj.SQLALCHEMY_DATABASE_URI = test_db_uri
+            config_obj.SQLALCHEMY_BINDS = {'stats': test_db_uri}
             config_obj.SQLALCHEMY_POOL_SIZE = None
             config_obj.SQLALCHEMY_POOL_TIMEOUT = None
             self.log = Mock()

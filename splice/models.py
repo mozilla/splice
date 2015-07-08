@@ -79,7 +79,8 @@ class AdgroupSite(db.Model):
 blacklisted_ips = db.Table(
     'blacklisted_ips',
     db.Column('ip', db.String(64), nullable=False),
-    db.Column('date', db.Date(), nullable=False)
+    db.Column('date', db.Date(), nullable=False),
+    info={'bind_key': 'stats'}
 )
 
 
@@ -105,6 +106,7 @@ impression_stats_daily = db.Table(
     db.Column('week', db.Integer, nullable=False),
     db.Column('year', db.Integer, nullable=False),
     db.Column('blacklisted', db.Boolean, nullable=False, server_default="false"),
+    info={'bind_key': 'stats'}
 )
 
 
@@ -123,6 +125,7 @@ application_stats_daily = db.Table(
     db.Column('device', db.String(64), nullable=False),
     db.Column('ver', db.String(16), nullable=False),
     db.Column('count', db.Integer, nullable=False),
+    info={'bind_key': 'stats'}
 )
 
 
@@ -145,6 +148,7 @@ site_stats_daily = db.Table(
     db.Column('blocked', db.Integer, nullable=False, server_default="0"),
     db.Column('sponsored_link', db.Integer, nullable=False, server_default="0"),
     db.Column('sponsored', db.Integer, nullable=False, server_default="0"),
+    info={'bind_key': 'stats'}
 )
 
 
@@ -161,4 +165,5 @@ newtab_stats_daily = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(64), nullable=False),
+    info={'bind_key': 'stats'}
 )
