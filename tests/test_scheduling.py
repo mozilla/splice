@@ -22,6 +22,9 @@ class ScheduleTest(BaseTestCase):
 class TestGetSchedule(ScheduleTest):
 
     def test_range(self):
+        """
+        Test scheduling range
+        """
         scheduled_dt = self.insert_distro()
 
         # found when queried at exactly the same time
@@ -39,18 +42,24 @@ class TestGetSchedule(ScheduleTest):
         # larger range check
         base_dt = datetime(2015, 1, 1, 0, 0)
         schedule_dt = base_dt - timedelta(minutes=5)
-        self.insert_distro(schedule_dt)
+        self.insert_distro(dt=schedule_dt)
 
         # ran looking for distributions from 23:50 up until 00:05
         dists = get_scheduled_distributions(15, base_dt + timedelta(minutes=5))
         assert_equal(1, len(dists))
 
     def test_get_present(self):
-        self.insert_distro(datetime.utcnow())
+        """
+        Test scheduled within 1 minute
+        """
+        self.insert_distro(dt=datetime.utcnow())
         dists = get_scheduled_distributions(1)
         assert_equal(1, len(dists))
 
     def test_invalid_minutes(self):
+        """
+        Test scheduled invalid
+        """
         with assert_raises(ValueError):
             get_scheduled_distributions(0)
 
@@ -131,6 +140,9 @@ class TestUpcomingDistributions(ScheduleTest):
 class TestUnscheduling(ScheduleTest):
 
     def test_unschedule(self):
+        """
+        Simple Unschedule
+        """
         dt = self.insert_distro()
         dist = get_scheduled_distributions(1, dt)[0]
         unschedule_distribution(dist.id)
@@ -138,5 +150,6 @@ class TestUnscheduling(ScheduleTest):
         assert_equal(0, len(dists))
 
     def test_unschedule_inexistent(self):
+        "Unschedule something that doesn't exist"
         with assert_raises(NoResultFound):
             unschedule_distribution(5)
