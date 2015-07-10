@@ -131,7 +131,7 @@ class TestGetDistributions(ScheduleTest):
 
         assert_equal(expected, response.json)
 
-    def test_empty(self):
+    def test_simple(self):
         """
         Simple distribution test
         """
