@@ -243,6 +243,7 @@ def get_upcoming_distributions(limit=100, leniency_minutes=15, include_past=Fals
     Obtain distributions, partitioned by channels with up to ``limit`` results
     for each channel
     :leniency_minutes: have a leniency in minutes up to the present when looking for distributions
+    :include_past: always return all past distributions
     """
     from splice.environment import Environment
 

@@ -2,16 +2,20 @@ from datetime import datetime, timedelta
 from nose.tools import assert_raises, assert_equal
 from tests.base import BaseTestCase
 from sqlalchemy.orm.exc import NoResultFound
-from splice.queries import get_scheduled_distributions, unschedule_distribution, insert_distribution
+from splice.queries import (
+    get_scheduled_distributions,
+    unschedule_distribution,
+    insert_distribution,
+    get_upcoming_distributions)
 
 
 class ScheduleTest(BaseTestCase):
-    def insert_distro(self, dt=None):
+    def insert_distro(self, channel_id=1, deployed=False, dt=None):
         if dt is None:
             dt = datetime.utcnow() + timedelta(hours=5)
         elif dt == -1:
             dt = None
-        insert_distribution('http://some_url', 1, False, dt)
+        insert_distribution('http://some_url', channel_id, deployed, dt)
         return dt
 
 
@@ -55,6 +59,73 @@ class TestGetSchedule(ScheduleTest):
 
         with assert_raises(ValueError):
             get_scheduled_distributions(None)
+
+
+class TestUpcomingDistributions(ScheduleTest):
+
+    def test_upcoming_limits(self):
+        """
+        Test limits
+        """
+        distro_times = [self.insert_distro() for i in range(5)]
+
+        dists = get_upcoming_distributions()
+        assert_equal(5, len(dists[1]))
+
+        dists = get_upcoming_distributions(limit=1)
+        assert_equal(1, len(dists[1]))
+        assert_equal(distro_times[0], dists[1][0]['scheduled_at'])
+
+    def test_upcoming_empty(self):
+        """
+        Test when there is nothing to return
+        """
+        dists = get_upcoming_distributions()
+        assert_equal({}, dists)
+
+    def test_upcoming_leniency(self):
+        """
+        Tests fetching a distribution from the recent past using leniency
+        """
+        schedule = datetime.utcnow() - timedelta(minutes=14)
+        self.insert_distro(dt=schedule)
+
+        # within leniency bounds
+        dists = get_upcoming_distributions(leniency_minutes=15)
+        assert_equal(1, len(dists[1]))
+        assert_equal(schedule, dists[1][0]['scheduled_at'])
+
+        # just outside of leniency bounds
+        dists = get_upcoming_distributions(leniency_minutes=14)
+        assert_equal({}, dists)
+
+        # test multiple dists
+        self.insert_distro()
+        dists = get_upcoming_distributions(leniency_minutes=15)
+        assert_equal(2, len(dists[1]))
+        dists = get_upcoming_distributions(leniency_minutes=14)
+        assert_equal(1, len(dists[1]))
+
+        # leniency overriden if include_past is given
+        dists = get_upcoming_distributions(leniency_minutes=1, include_past=True)
+        assert_equal(2, len(dists[1]))
+
+    def test_channels(self):
+        """
+        Test results with multiple channels
+        """
+        schedule = datetime.utcnow() - timedelta(minutes=14)
+
+        dist_scheds = {
+            1: self.insert_distro(channel_id=1, dt=schedule),
+            2: self.insert_distro(channel_id=2)
+        }
+
+        dists = get_upcoming_distributions(leniency_minutes=15)
+        assert_equal(2, len(dists.keys()))
+        for dist_id, c_dists in dists.iteritems():
+            assert_equal(1, len(c_dists))
+            assert_equal(dist_scheds[dist_id], c_dists[0]['scheduled_at'])
 
 
 class TestUnscheduling(ScheduleTest):
