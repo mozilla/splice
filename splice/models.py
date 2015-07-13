@@ -1,6 +1,5 @@
 from datetime import datetime
 from sqlalchemy import text
-from sqlalchemy.sql.functions import current_date
 from splice.environment import Environment
 
 db = Environment.instance().db
@@ -77,36 +76,17 @@ class AdgroupSite(db.Model):
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
 
-class UniqueCountsDaily(db.Model):
-    __tablename__ = "unique_counts_daily"
-
-    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
-    tile_id = db.Column(db.Integer(), db.ForeignKey("tiles.id"))
-
-    date = db.Column(db.Date(), nullable=False, default=current_date)
-    impression = db.Column(db.Boolean(), nullable=False, default=True)
-    locale = db.Column(db.String(14), nullable=False, default="en-US")
-    country_code = db.Column(db.String(5), nullable=False, default="US")
-
-
 blacklisted_ips = db.Table(
     'blacklisted_ips',
     db.Column('ip', db.String(64), nullable=False),
-    db.Column('date', db.Date(), nullable=False)
-)
-
-
-unique_hlls = db.Table(
-    'unique_hlls',
-    db.Column('unique_counts_daily_id', db.Integer, db.ForeignKey('unique_counts_daily.id')),
-    db.Column('index', db.SmallInteger, nullable=False, server_default="0"),
-    db.Column('value', db.SmallInteger, nullable=False, server_default="0"),
+    db.Column('date', db.Date(), nullable=False),
+    info={'bind_key': 'stats'}
 )
 
 
 impression_stats_daily = db.Table(
     'impression_stats_daily',
-    db.Column('tile_id', db.Integer, db.ForeignKey('tiles.id')),
+    db.Column('tile_id', db.Integer),
     db.Column('date', db.Date, nullable=False),
     db.Column('impressions', db.Integer, nullable=False, server_default="0"),
     db.Column('clicks', db.Integer, nullable=False, server_default="0"),
@@ -126,6 +106,7 @@ impression_stats_daily = db.Table(
     db.Column('week', db.Integer, nullable=False),
     db.Column('year', db.Integer, nullable=False),
     db.Column('blacklisted', db.Boolean, nullable=False, server_default="false"),
+    info={'bind_key': 'stats'}
 )
 
 
@@ -144,6 +125,7 @@ application_stats_daily = db.Table(
     db.Column('device', db.String(64), nullable=False),
     db.Column('ver', db.String(16), nullable=False),
     db.Column('count', db.Integer, nullable=False),
+    info={'bind_key': 'stats'}
 )
 
 
@@ -166,13 +148,7 @@ site_stats_daily = db.Table(
     db.Column('blocked', db.Integer, nullable=False, server_default="0"),
     db.Column('sponsored_link', db.Integer, nullable=False, server_default="0"),
     db.Column('sponsored', db.Integer, nullable=False, server_default="0"),
-)
-
-
-countries = db.Table(
-    'countries',
-    db.Column('country_name', db.String(255), nullable=False),
-    db.Column('country_code', db.String(5), nullable=False),
+    info={'bind_key': 'stats'}
 )
 
 
@@ -189,4 +165,5 @@ newtab_stats_daily = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(64), nullable=False),
+    info={'bind_key': 'stats'}
 )

@@ -26,7 +26,7 @@ class Environment(object):
     _instance = None
 
     @classmethod
-    def instance(cls, config=None, test=False, test_db_uri="sqlite://"):
+    def instance(cls, config=None, test=False, test_db_uri=None):
         if cls._instance is None:
             cls._instance = cls(config, test, test_db_uri)
         return cls._instance
@@ -56,6 +56,7 @@ class Environment(object):
         if test:
             config_obj.ENVIRONMENT = 'test'
             config_obj.SQLALCHEMY_DATABASE_URI = test_db_uri
+            config_obj.SQLALCHEMY_BINDS = {'stats': test_db_uri}
             config_obj.SQLALCHEMY_POOL_SIZE = None
             config_obj.SQLALCHEMY_POOL_TIMEOUT = None
             self.log = Mock()

@@ -4,7 +4,7 @@ from splice.environment import Environment
 from splice.webapp import create_webapp
 from flask.ext.testing import TestCase
 
-db_uri = os.environ.get('TEST_DB_URI') or 'sqlite://'
+db_uri = os.environ.get('TEST_DB_URI') or 'postgres://localhost/splice_test'
 env = Environment.instance(test=True, test_db_uri=db_uri)
 
 

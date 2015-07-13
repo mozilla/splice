@@ -1,11 +1,15 @@
 import calendar
 from datetime import datetime, timedelta
 from nose.tools import assert_equal
-from flask import url_for
+from flask import url_for, json
 from mock import Mock, PropertyMock
 from tests.base import BaseTestCase
+from tests.test_scheduling import ScheduleTest
 import splice.ingest
-from splice.queries import get_scheduled_distributions
+from splice.queries import (
+    get_scheduled_distributions,
+    get_all_distributions,
+    get_channels)
 from splice.environment import Environment
 
 env = Environment.instance()
@@ -108,3 +112,38 @@ class TestAuthoring(BaseTestCase):
 
         response = self.client.post(url, data=self.sample_tile_data)
         assert_equal(response.status_code, 400)
+
+
+class TestGetDistributions(ScheduleTest):
+
+    def test_empty(self):
+        """
+        Test when there is no deployed distributions
+        """
+        response = self.client.get(url_for('api.authoring.distributions'))
+        chans = get_channels()
+        expected = json.loads(json.dumps({
+            'd': {
+                'dists': {},
+                'chans': chans
+            }
+        }))
+
+        assert_equal(expected, response.json)
+
+    def test_simple(self):
+        """
+        Simple distribution test
+        """
+        self.insert_distro()
+        response = self.client.get(url_for('api.authoring.distributions'))
+        chans = get_channels()
+        dists = get_all_distributions()
+        expected = json.loads(json.dumps({
+            'd': {
+                'dists': dists,
+                'chans': chans
+            }
+        }))
+
+        assert_equal(expected, response.json)
