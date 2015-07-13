@@ -1,3 +1,8 @@
+1.1.26
+======
+
+* Bug 1181652 - Splice changes to support dual (reporting, campaign) databases
+
 1.1.25
 ======
 
