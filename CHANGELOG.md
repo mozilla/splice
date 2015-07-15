@@ -1,3 +1,8 @@
+1.1.27
+======
+
+* Bug 1181659 - Create Alembic migrations for new RDS campaign database (postgres)
+
 1.1.26
 ======
 
