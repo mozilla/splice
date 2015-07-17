@@ -66,6 +66,7 @@ def main():
         'desktop',
         'android',
         'desktop-prerelease',
+        'hello'
     ]
 
     if len(args) == 1:
