@@ -1,3 +1,8 @@
+1.1.27
+=====
+
+* Bug 1185264 - Tiles monitoring server is failing due to buggy splice index check
+
 1.1.26
 =====
 
