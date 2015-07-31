@@ -53,7 +53,7 @@ class Adgroup(db.Model):
 
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     locale = db.Column(db.String(14), nullable=False)
-    type = db.Coulumn(db.string(16))
+    type = db.Column(db.String(16))
 
     # we have both the string and datetime objects to allow for optional timezones on the client
     # the datetime objects are always UTC
@@ -88,7 +88,7 @@ class Account(db.Model):
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     name = db.Column(db.String(255), nullable=False, unique=True)
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
-    # TODO (najiang@mozilla.com), support for multi-contacts? 
+    # TODO (najiang@mozilla.com), support for multi-contacts?
     email = db.Column(db.String(64))
     phone = db.Column(db.String(32))
     campaigns = db.relationship('Campaign', backref='account')
@@ -106,9 +106,9 @@ class Campaign(db.Model):
     city = db.Column(db.String(64))
     region = db.Column(db.String(64))
     dma = db.Column(db.Integer)
-    postal_code = db.Column(db.string(16))
-    locale = db.Column(db.string(16))
-    type = db.Coulumn(db.string(16))
+    postal_code = db.Column(db.String(16))
+    locale = db.Column(db.String(16))
+    type = db.Column(db.String(16))
     # TODO (najiang@mozilla.com), missing budget, customize currency type here
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
     start_date = db.Column(db.String(30), nullable=True)
