@@ -49,8 +49,11 @@ class Tile(db.Model):
 class Adgroup(db.Model):
     __tablename__ = "adgroups"
 
+    TYPE = {"directory", "suggested"}
+
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     locale = db.Column(db.String(14), nullable=False)
+    type = db.Coulumn(db.string(16))
 
     # we have both the string and datetime objects to allow for optional timezones on the client
     # the datetime objects are always UTC
@@ -77,6 +80,45 @@ class AdgroupSite(db.Model):
     active = db.Column(db.Boolean(), default=True)
     site = db.Column(db.String(1024), nullable=False)
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+
+
+class Account(db.Model):
+    __tablename__ = "accounts"
+
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
+    name = db.Column(db.String(255), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+    # TODO (najiang@mozilla.com), support for multi-contacts? 
+    email = db.Column(db.String(64))
+    phone = db.Column(db.String(32))
+    campaigns = db.relationship('Campaign', backref='account')
+
+
+class Campaign(db.Model):
+    __tablename__ = "campaigns"
+
+    STATUS = {"active", "inactive"}  # expect more options, e.g. "paused"
+    TYPE = {"sponsored", "unsponsored"}
+
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
+    name = db.Column(db.String(255), nullable=False)
+    country = db.Column(db.String(64))
+    city = db.Column(db.String(64))
+    region = db.Column(db.String(64))
+    dma = db.Column(db.Integer)
+    postal_code = db.Column(db.string(16))
+    locale = db.Column(db.string(16))
+    type = db.Coulumn(db.string(16))
+    # TODO (najiang@mozilla.com), missing budget, customize currency type here
+    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+    start_date = db.Column(db.String(30), nullable=True)
+    end_date = db.Column(db.String(30), nullable=True)
+    start_date_dt = db.Column(db.DateTime(timezone=False), nullable=True)
+    end_date_dt = db.Column(db.DateTime(timezone=False), nullable=True)
+    status = db.Column(db.String(16), nullable=False)
+    channel_id = db.Column(db.Integer(), db.ForeignKey('channels.id'), nullable=False)
+    account_id = db.Column(db.Integer(), db.ForeignKey("accounts.id"), nullable=False)
+
 
 # Table definitions for the stats database (hosted in redshift)
 # *NOTE* that it uses db_stats other than db, in order to
