@@ -135,49 +135,49 @@ def ingest_links(data, channel_id, *args, **kwargs):
             new_tiles_list = []
 
             for t in tiles:
+                # TODO: (najiang@mozilla.com), collect and return tile
+                # ingestion errors - Bug 1169302
+                if is_compact and not populate_image_uris(t, assets):
+                    continue
+                image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
+                enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() \
+                    if "enhancedImageURI" in t else None
+
+                # deduplicate and sort frecent_sites
+                frecent_sites = sorted(set(t.get("frecent_sites", [])))
+                if frecent_sites:
+                    t['frecent_sites'] = frecent_sites
+                frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+                adgroup_name = bleach.clean(t.get("adgroup_name", ""), strip=True) or None
+                explanation = bleach.clean(t.get("explanation", ""), strip=True) or None
+
+                check_inadjacency = False
+                if 'check_inadjacency' in t:
+                    check_inadjacency = t['check_inadjacency']
+
+                # we have both the string and datetime objects to allow for optional timezones on the client
+                time_limits = t.get("time_limits", {
+                    'start': None, 'end': None,
+                    'start_dt': None, 'end_dt': None
+                })
+                if time_limits.get('start') or time_limits.get('end'):
+                    time_limits.update({
+                        'start_dt': du_parse(time_limits['start']) if time_limits.get('start') else None,
+                        'end_dt': du_parse(time_limits['end']) if time_limits.get('end') else None
+                    })
+                    for dt_name in ('start_dt', 'end_dt'):
+                        dt = time_limits[dt_name]
+                        if dt and dt.tzinfo:
+                            # capture the datetime as UTC, but without the Timezone info
+                            # check because input may be TZ-unaware
+                            time_limits[dt_name] = dt.astimezone(pytz.utc).replace(tzinfo=None)
+
+                frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+
                 trans = conn.begin()
                 try:
                     if not env.is_test:
                         conn.execute("LOCK TABLE tiles; LOCK TABLE adgroups; LOCK TABLE adgroup_sites;")
-
-                    # TODO: (najiang@mozilla.com), collect and return tile
-                    # ingestion errors - Bug 1169302
-                    if is_compact and not populate_image_uris(t, assets):
-                        continue
-                    image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
-                    enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() \
-                        if "enhancedImageURI" in t else None
-
-                    # deduplicate and sort frecent_sites
-                    frecent_sites = sorted(set(t.get("frecent_sites", [])))
-                    if frecent_sites:
-                        t['frecent_sites'] = frecent_sites
-                    frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
-                    adgroup_name = bleach.clean(t.get("adgroup_name", ""), strip=True) or None
-                    explanation = bleach.clean(t.get("explanation", ""), strip=True) or None
-
-                    check_inadjacency = False
-                    if 'check_inadjacency' in t:
-                        check_inadjacency = t['check_inadjacency']
-
-                    # we have both the string and datetime objects to allow for optional timezones on the client
-                    time_limits = t.get("time_limits", {
-                        'start': None, 'end': None,
-                        'start_dt': None, 'end_dt': None
-                    })
-                    if time_limits.get('start') or time_limits.get('end'):
-                        time_limits.update({
-                            'start_dt': du_parse(time_limits['start']) if time_limits.get('start') else None,
-                            'end_dt': du_parse(time_limits['end']) if time_limits.get('end') else None
-                        })
-                        for dt_name in ('start_dt', 'end_dt'):
-                            dt = time_limits[dt_name]
-                            if dt and dt.tzinfo:
-                                # capture the datetime as UTC, but without the Timezone info
-                                # check because input may be TZ-unaware
-                                time_limits[dt_name] = dt.astimezone(pytz.utc).replace(tzinfo=None)
-
-                    frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
 
                     columns = dict(
                         target_url=t["url"],
