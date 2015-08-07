@@ -68,11 +68,9 @@ def main():
         print "Good, well done, excellent."
         target_connection.commit()
         connection.commit()
-
     finally:
         connection.close()
         target_connection.close()
 
 if __name__ == '__main__':
     main()
-
