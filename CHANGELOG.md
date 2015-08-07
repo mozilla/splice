@@ -1,3 +1,8 @@
+1.1.28
+======
+
+* Bug 1181640 - Move campaign data to RDS (postgres)
+
 1.1.27
 ======
 
