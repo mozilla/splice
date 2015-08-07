@@ -11,9 +11,11 @@ from StringIO import StringIO
 TABLES = (
     ('channels', ('id', 'name', 'created_at')),
     ('distributions', ('id', 'url', 'channel_id', 'deployed', 'scheduled_start_date', 'created_at')),
-    ('adgroups', ('id', 'created_at', 'locale', 'frequency_cap_daily', 'frequency_cap_total', 'check_inadjacency', 'explanation', 'name', 'end_date', 'end_date_dt', 'start_date', 'start_date_dt')),
+    ('adgroups', ('id', 'created_at', 'locale', 'frequency_cap_daily', 'frequency_cap_total', 'check_inadjacency',
+                  'explanation', 'name', 'end_date', 'end_date_dt', 'start_date', 'start_date_dt', 'channel_id')),
     ('adgroup_sites', ('id', 'site', 'adgroup_id', 'created_at')),
-    ('tiles', ('id', 'target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'created_at', 'adgroup_id', 'locale')),
+    ('tiles', ('id', 'target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'created_at',
+               'adgroup_id', 'locale')),
 )
 
 
