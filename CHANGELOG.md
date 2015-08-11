@@ -1,3 +1,8 @@
+1.1.29
+======
+
+* changing setup.py to install rs_to_pg script
+
 1.1.28
 ======
 
