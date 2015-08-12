@@ -72,7 +72,7 @@ class Environment(object):
             app.config['STATIC_FOLDER'] = None
         self.__application = app
 
-        if not test:
+        if not test:  # pragma: no cover
             self.csrf = CsrfProtect()
             self.csrf.init_app(app)
 
@@ -150,7 +150,7 @@ class Environment(object):
             "countries": countries,
         }
 
-    def __setup_loggers(self, config):
+    def __setup_loggers(self, config):  # pragma: no cover
         """
         Setup and return loggers
         """
@@ -169,7 +169,7 @@ class Environment(object):
 
         return loggers
 
-    def log(self, msg, name='console', **kwargs):
+    def log(self, msg, name='console', **kwargs):  # pragma: no cover
         """
         Log messages via defined outputs
         """
