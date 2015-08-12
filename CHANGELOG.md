@@ -1,3 +1,8 @@
+1.1.30
+======
+
+* upgrade Flask-Migrate to 1.5
+
 1.1.29
 ======
 
