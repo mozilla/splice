@@ -1,0 +1,13 @@
+title,locale,target_url,adgroup_id,type,status,image_uri,enhanced_image_uri
+MDN,en-US,https://mdn.mozilla.com,1,affiliate,approved,image_uri_mdn,enhanced_image_uri_mdn
+MDN,en-GB,https://mdn.mozilla.com,1,affiliate,approved,image_uri_mdn,enhanced_image_uri_mdn
+MDN,es,https://mdn.mozilla.com,1,affiliate,approved,image_uri_mdn,enhanced_image_uri_mdn
+Pocket for Firefox,en-US,https://pocket.mozilla.com,2,affiliate,approved,image_uri_pocket,enhanced_image_uri_pocket
+Pocket para Firefox,es,https://pocket.mozilla.com,2,affiliate,approved,image_uri_pocket,enhanced_image_uri_pocket
+Hello,en-US,https://hello.mozilla.com,3,affiliate,approved,image_uri_hello,enhanced_image_uri_hello
+MDN,en-US,https://mdn.mozilla.com,4,affiliate,approved,image_uri_mdn_suggested,enhanced_image_uri_mdn_suggested
+Pocket for Firefox,en-US,https://pocket.mozilla.com,5,affiliate,approved,image_uri_pocket_suggested,enhanced_image_uri_pocket_suggested
+Booking.com,en-US,https://booking.com,5,sponsored,approved,image_uri_booking_en,enhanced_image_uri_booking_en
+Booking.com,es,https://booking.com,6,sponsored,approved,image_uri_booking_es,enhanced_image_uri_booking_es
+Booking.com,en-US,https://booking.com,7,sponsored,approved,image_uri_booking_fr,enhanced_image_uri_booking_fr
+Yahoo,en-US,https://news.yahoo.com,8,sponsored,approved,image_uri_yahoo,enhanced_image_yahoo
