@@ -59,7 +59,7 @@ def main():
             target_cursor.execute("select max(id) + 1 from %s" % table_name)
             nextone, = target_cursor.fetchone()
             print "Updating sequence for ", table_name
-            target_cursor.execute("ALTER SEQUENCE %s_id_seq start %s" % (table_name, nextone))
+            target_cursor.execute("SELECT setval('%s_id_seq', %s, false)" % (table_name, nextone))
             print "Done ", table_name
 
     except Exception as e:
