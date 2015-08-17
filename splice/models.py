@@ -28,19 +28,19 @@ class Tile(db.Model):
     __tablename__ = "tiles"
 
     TYPES = {"organic", "sponsored", "affiliate"}
+    STATUS = {"approved", "unapproved", "disapproved"}
 
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     target_url = db.Column(db.Text(), nullable=False)
-    bg_color = db.Column(db.String(16), nullable=False)
+    bg_color = db.Column(db.String(16), nullable=False, default="")
     title = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(40), nullable=False)
     locale = db.Column(db.String(14), nullable=False)
-    adgroup_id = db.Column(db.Integer(), db.ForeignKey("adgroups.id"))
-
     image_uri = db.Column(db.Text(), nullable=False)
     enhanced_image_uri = db.Column(db.Text(), nullable=True)
-
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+    status = db.Column(db.String(16), nullable=False)
+    adgroup_id = db.Column(db.Integer(), db.ForeignKey("adgroups.id"))
 
 
 class Adgroup(db.Model):
@@ -65,6 +65,7 @@ class Adgroup(db.Model):
     explanation = db.Column(db.String(255))
     check_inadjacency = db.Column(db.Boolean(), nullable=False, server_default=text('false'))
     channel_id = db.Column(db.Integer(), db.ForeignKey("channels.id"))
+    campaign_id = db.Column(db.Integer(), db.ForeignKey("campaigns.id"))
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
     tiles = db.relationship("Tile", backref="adgroup")
 
@@ -115,6 +116,7 @@ class Campaign(db.Model):
     status = db.Column(db.String(16), nullable=False)
     channel_id = db.Column(db.Integer(), db.ForeignKey('channels.id'), nullable=False)
     account_id = db.Column(db.Integer(), db.ForeignKey("accounts.id"), nullable=False)
+    adgroups = db.relationship("Adgroup", backref="campains")
 
 
 blacklisted_ips = db.Table(
