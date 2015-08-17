@@ -14,6 +14,8 @@ class DefaultConfig(object):
 
     STATIC_ENABLED_ENVS = {"dev", "test"}
     ENVIRONMENT = "dev"
+    # Switch for CSRF protection, you can disable it by overwriting it in your "localconfig.py"
+    CSRF = True
 
     SECRET_KEY = "moz-splice-development-key"
 
