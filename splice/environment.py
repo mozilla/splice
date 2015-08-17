@@ -150,7 +150,7 @@ class Environment(object):
             "countries": countries,
         }
 
-        def __setup_loggers(self, config):  # pragma: no cover
+    def __setup_loggers(self, config):  # pragma: no cover
         """
         Setup and return loggers
         """
