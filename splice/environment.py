@@ -73,7 +73,7 @@ class Environment(object):
             app.config['STATIC_FOLDER'] = None
         self.__application = app
 
-        if not test:
+        if config_obj.CSRF and not test:
             self.csrf = CsrfProtect()
             self.csrf.init_app(app)
 
