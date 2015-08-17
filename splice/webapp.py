@@ -10,12 +10,6 @@ def setup_routes(app):
     import splice.web.views
     splice.web.views.register_routes(app)
 
-    import splice.web.api.authoring
-    splice.web.api.authoring.register_routes(app)
-
-    import splice.web.api.upcoming
-    splice.web.api.upcoming.register_routes(app)
-
     import splice.web.api.heartbeat
     splice.web.api.heartbeat.register_routes(app)
 
