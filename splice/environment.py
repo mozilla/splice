@@ -150,7 +150,7 @@ class Environment(object):
             "countries": countries,
         }
 
-    def __setup_loggers(self, config):
+        def __setup_loggers(self, config):  # pragma: no cover
         """
         Setup and return loggers
         """
@@ -169,7 +169,7 @@ class Environment(object):
 
         return loggers
 
-    def log(self, msg, name='console', **kwargs):
+    def log(self, msg, name='console', **kwargs):  # pragma: no cover
         """
         Log messages via defined outputs
         """
