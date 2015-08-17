@@ -38,7 +38,6 @@ class Environment(object):
         self.__s3_conn = None
         self.__fixtures = None
         self.__db = SQLAlchemy()
-        self.__db_stats = SQLAlchemy()
 
         for path in CONFIG_PATH_LOCATIONS:
             sys.path.append(path)
@@ -80,7 +79,6 @@ class Environment(object):
         # A hack to keep the sqlalchemy binds state. Flask-SQLAlchemy strips it out
         sqlalchemy_binds = app.config.get('SQLALCHEMY_BINDS')
         self.db.init_app(self.__application)
-        self.db_stats.init_app(self.__application)
         app.config.SQLALCHEMY_BINDS = sqlalchemy_binds
         Migrate(self.__application, self.db)
 
@@ -107,10 +105,6 @@ class Environment(object):
     @property
     def db(self):
         return self.__db
-
-    @property
-    def db_stats(self):
-        return self.__db_stats
 
     @property
     def s3(self):

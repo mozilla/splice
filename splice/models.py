@@ -3,9 +3,6 @@ from sqlalchemy import text
 from splice.environment import Environment
 
 db = Environment.instance().db
-db_stats = Environment.instance().db_stats
-metadata = db.metadata
-metadata_stats = db_stats.metadata
 
 
 class Channel(db.Model):
@@ -120,100 +117,94 @@ class Campaign(db.Model):
     account_id = db.Column(db.Integer(), db.ForeignKey("accounts.id"), nullable=False)
 
 
-# Table definitions for the stats database (hosted in redshift)
-# *NOTE* that it uses db_stats other than db, in order to
-# support multiple databases migration.
-# TODO (najiang@mozill.com), use two seperate models for each
-# database to avoid this confusion
-
-blacklisted_ips = db_stats.Table(
+blacklisted_ips = db.Table(
     'blacklisted_ips',
-    db_stats.Column('ip', db_stats.String(64), nullable=False),
-    db_stats.Column('date', db_stats.Date(), nullable=False),
+    db.Column('ip', db.String(64), nullable=False),
+    db.Column('date', db.Date(), nullable=False),
     info={'bind_key': 'stats'}
 )
 
 
-impression_stats_daily = db_stats.Table(
+impression_stats_daily = db.Table(
     'impression_stats_daily',
-    db_stats.Column('tile_id', db_stats.Integer),
-    db_stats.Column('date', db_stats.Date, nullable=False),
-    db_stats.Column('impressions', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('clicks', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('pinned', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('blocked', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('sponsored_link', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('sponsored', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('position', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('enhanced', db_stats.Boolean, nullable=False, server_default="false"),
-    db_stats.Column('locale', db_stats.String(14), nullable=False),
-    db_stats.Column('country_code', db_stats.String(5), nullable=False),
-    db_stats.Column('os', db_stats.String(64), nullable=False),
-    db_stats.Column('browser', db_stats.String(64), nullable=False),
-    db_stats.Column('version', db_stats.String(64), nullable=False),
-    db_stats.Column('device', db_stats.String(64), nullable=False),
-    db_stats.Column('month', db_stats.Integer, nullable=False),
-    db_stats.Column('week', db_stats.Integer, nullable=False),
-    db_stats.Column('year', db_stats.Integer, nullable=False),
-    db_stats.Column('blacklisted', db_stats.Boolean, nullable=False, server_default="false"),
+    db.Column('tile_id', db.Integer),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('impressions', db.Integer, nullable=False, server_default="0"),
+    db.Column('clicks', db.Integer, nullable=False, server_default="0"),
+    db.Column('pinned', db.Integer, nullable=False, server_default="0"),
+    db.Column('blocked', db.Integer, nullable=False, server_default="0"),
+    db.Column('sponsored_link', db.Integer, nullable=False, server_default="0"),
+    db.Column('sponsored', db.Integer, nullable=False, server_default="0"),
+    db.Column('position', db.Integer, nullable=False, server_default="0"),
+    db.Column('enhanced', db.Boolean, nullable=False, server_default="false"),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    db.Column('month', db.Integer, nullable=False),
+    db.Column('week', db.Integer, nullable=False),
+    db.Column('year', db.Integer, nullable=False),
+    db.Column('blacklisted', db.Boolean, nullable=False, server_default="false"),
     info={'bind_key': 'stats'}
 )
 
 
-application_stats_daily = db_stats.Table(
+application_stats_daily = db.Table(
     'application_stats_daily',
-    db_stats.Column('date', db_stats.Date, nullable=False),
-    db_stats.Column('month', db_stats.Integer, nullable=False),
-    db_stats.Column('week', db_stats.Integer, nullable=False),
-    db_stats.Column('year', db_stats.Integer, nullable=False),
-    db_stats.Column('locale', db_stats.String(14), nullable=False),
-    db_stats.Column('action', db_stats.String(255), nullable=False),
-    db_stats.Column('country_code', db_stats.String(5), nullable=False),
-    db_stats.Column('os', db_stats.String(64), nullable=False),
-    db_stats.Column('browser', db_stats.String(64), nullable=False),
-    db_stats.Column('version', db_stats.String(64), nullable=False),
-    db_stats.Column('device', db_stats.String(64), nullable=False),
-    db_stats.Column('ver', db_stats.String(16), nullable=False),
-    db_stats.Column('count', db_stats.Integer, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('month', db.Integer, nullable=False),
+    db.Column('week', db.Integer, nullable=False),
+    db.Column('year', db.Integer, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('action', db.String(255), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    db.Column('ver', db.String(16), nullable=False),
+    db.Column('count', db.Integer, nullable=False),
     info={'bind_key': 'stats'}
 )
 
 
-site_stats_daily = db_stats.Table(
+site_stats_daily = db.Table(
     'site_stats_daily',
-    db_stats.Column('date', db_stats.Date, nullable=False),
-    db_stats.Column('month', db_stats.Integer, nullable=False),
-    db_stats.Column('week', db_stats.Integer, nullable=False),
-    db_stats.Column('year', db_stats.Integer, nullable=False),
-    db_stats.Column('locale', db_stats.String(14), nullable=False),
-    db_stats.Column('url', db_stats.String(255), nullable=False),
-    db_stats.Column('country_code', db_stats.String(5), nullable=False),
-    db_stats.Column('os', db_stats.String(64), nullable=False),
-    db_stats.Column('browser', db_stats.String(64), nullable=False),
-    db_stats.Column('version', db_stats.String(64), nullable=False),
-    db_stats.Column('device', db_stats.String(64), nullable=False),
-    db_stats.Column('impressions', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('clicks', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('pinned', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('blocked', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('sponsored_link', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('sponsored', db_stats.Integer, nullable=False, server_default="0"),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('month', db.Integer, nullable=False),
+    db.Column('week', db.Integer, nullable=False),
+    db.Column('year', db.Integer, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('url', db.String(255), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    db.Column('impressions', db.Integer, nullable=False, server_default="0"),
+    db.Column('clicks', db.Integer, nullable=False, server_default="0"),
+    db.Column('pinned', db.Integer, nullable=False, server_default="0"),
+    db.Column('blocked', db.Integer, nullable=False, server_default="0"),
+    db.Column('sponsored_link', db.Integer, nullable=False, server_default="0"),
+    db.Column('sponsored', db.Integer, nullable=False, server_default="0"),
     info={'bind_key': 'stats'}
 )
 
 
-newtab_stats_daily = db_stats.Table(
+newtab_stats_daily = db.Table(
     'newtab_stats_daily',
-    db_stats.Column('date', db_stats.Date, nullable=False),
-    db_stats.Column('newtabs', db_stats.Integer, nullable=False, server_default="0"),
-    db_stats.Column('month', db_stats.Integer, nullable=False),
-    db_stats.Column('week', db_stats.Integer, nullable=False),
-    db_stats.Column('year', db_stats.Integer, nullable=False),
-    db_stats.Column('locale', db_stats.String(14), nullable=False),
-    db_stats.Column('country_code', db_stats.String(5), nullable=False),
-    db_stats.Column('os', db_stats.String(64), nullable=False),
-    db_stats.Column('browser', db_stats.String(64), nullable=False),
-    db_stats.Column('version', db_stats.String(64), nullable=False),
-    db_stats.Column('device', db_stats.String(64), nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('newtabs', db.Integer, nullable=False, server_default="0"),
+    db.Column('month', db.Integer, nullable=False),
+    db.Column('week', db.Integer, nullable=False),
+    db.Column('year', db.Integer, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
     info={'bind_key': 'stats'}
 )
