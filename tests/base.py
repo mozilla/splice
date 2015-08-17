@@ -1,10 +1,10 @@
 import os
-import csv
+import populate_database
 from splice.environment import Environment
 from splice.webapp import create_webapp
 from flask.ext.testing import TestCase
 
-db_uri = os.environ.get('TEST_DB_URI') or 'postgres://localhost/splice_test'
+db_uri = os.environ.get('TEST_DB_URI') or "postgres://localhost/splice_test"
 env = Environment.instance(test=True, test_db_uri=db_uri)
 
 
@@ -19,44 +19,9 @@ class BaseTestCase(TestCase):
         return self.env.application
 
     def setUp(self):
-        self.env.db.drop_all()
-        self.create_app()
-        self.env.db.create_all()
+        from splice.models import Channel
 
-        def tile_values(fd):
-            for line in fd:
-                row = [el.decode('utf-8') for el in line.split(',')]
-                yield dict(zip(
-                    ('target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'adgroup_id', 'locale'),
-                    row))
-
-        def adgroup_values(fd):
-            for line in fd:
-                locale, check_inadjacency_str = [el.decode('utf-8') for el in line.split(',')]
-                yield dict(zip(
-                    ('locale', 'check_inadjacency'),
-                    (locale, check_inadjacency_str == 'true')))
-
-        from splice.models import Tile, Channel, Adgroup
-        session = env.db.session
-
-        with open(self.get_fixture_path('tiles.csv')) as fd:
-            for row in tile_values(fd):
-                tile = Tile(**row)
-                session.add(tile)
-
-        with open(self.get_fixture_path('adgroups.csv')) as fd:
-            for row in adgroup_values(fd):
-                tile = Adgroup(**row)
-                session.add(tile)
-
-        with open(self.get_fixture_path('channels.csv')) as fd:
-            reader = csv.DictReader(fd)
-            for row in reader:
-                channel = Channel(**row)
-                session.add(channel)
-
-        session.commit()
+        populate_database.insert(env, drop=True)
 
         self.channels = (
             env.db.session

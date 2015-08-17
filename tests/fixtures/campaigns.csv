@@ -1,0 +1,5 @@
+name,status,channel_id,account_id
+MozDirectory,active,1,1
+MozSuggested,active,3,1
+BookingDirectory,active,1,2
+YahooSuggested,active,3,3
