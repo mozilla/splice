@@ -4,7 +4,7 @@ from flask_restful import Api, Resource, marshal, fields, reqparse
 
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
-from splice.queries import session_scope
+from splice.queries.common import session_scope
 from splice.queries.adgroup import (
     get_adgroups_by_campaign_id, get_adgroup,
     insert_adgroup, update_adgroup)
