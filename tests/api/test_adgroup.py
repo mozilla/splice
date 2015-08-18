@@ -24,6 +24,8 @@ class TestAdgroup(BaseTestCase):
         super(TestAdgroup, self).setUp()
 
     def test_get_adgroups_by_campaign_id(self):
+        """ Test for getting all adgroups for a given campaign id
+        """
         for campaign_id, adgroups in self.adgroup_fixture.iteritems():
             url = url_for('api.adgroup.adgroups', campaign_id=campaign_id)
             response = self.client.get(url)
@@ -31,13 +33,24 @@ class TestAdgroup(BaseTestCase):
             resp = json.loads(response.data)
             assert_equal(len(resp["message"]), len(adgroups))
 
-    def test_post(self):
+    def test_post_and_get(self):
+        """ Test for HTTP POST and GET
+        """
         url = url_for('api.adgroup.adgroups', campaign_id=self.new_campaign_id)
         data = json.dumps(self.new_adgroup)
         response = self.client.post(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 201)
+        new = json.loads(response.data)["message"]
+
+        url = url_for('api.adgroup.adgroup', campaign_id=self.new_campaign_id, adgroup_id=new["id"])
+        response = self.client.get(url)
+        resp = json.loads(response.data)
+        assert_equal(new, resp["message"])
 
     def test_post_duplicate(self):
+        """ Test HTTP POST the same data twice, it should reject the second one as
+        invalid arguments
+        """
         url = url_for('api.adgroup.adgroups', campaign_id=self.new_campaign_id)
         data = json.dumps(self.new_adgroup)
         response = self.client.post(url, data=data, content_type="application/json")
@@ -46,6 +59,8 @@ class TestAdgroup(BaseTestCase):
         assert_equal(response.status_code, 400)
 
     def test_post_suggested_tile(self):
+        """ Test the success case of HTTP POST for suggested tiles
+        """
         url = url_for('api.adgroup.adgroups', campaign_id=self.new_campaign_id)
         adgroup = dict(self.new_adgroup)
         adgroup["type"] = "suggested"
@@ -55,6 +70,9 @@ class TestAdgroup(BaseTestCase):
         assert_equal(response.status_code, 201)
 
     def test_post_with_missing_category(self):
+        """ Test the failure case of HTTP POST for suggested tiles. If not specify
+        category of adgroup, it should respond a 400 error
+        """
         url = url_for('api.adgroup.adgroups', campaign_id=self.new_campaign_id)
         invalid_adgroup = dict(self.new_adgroup)
         invalid_adgroup["type"] = "suggested"
@@ -63,6 +81,8 @@ class TestAdgroup(BaseTestCase):
         assert_equal(response.status_code, 400)
 
     def test_http_put(self):
+        """ Test the success case of HTTP PUT
+        """
         url = url_for('api.adgroup.adgroups', campaign_id=self.new_campaign_id)
         data = json.dumps(self.new_adgroup)
         response = self.client.post(url, data=data, content_type="application/json")
@@ -76,8 +96,16 @@ class TestAdgroup(BaseTestCase):
         data = json.dumps(new)
         response = self.client.put(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 200)
+        updated = json.loads(response.data)["message"]
+
+        url = url_for('api.adgroup.adgroup', campaign_id=self.new_campaign_id, adgroup_id=new["id"])
+        response = self.client.get(url)
+        resp = json.loads(response.data)
+        assert_equal(updated, resp["message"])
 
     def test_http_put_404(self):
+        """ Test the failure case of HTTP PUT. Editing a missing adgroup ends up with a 404 error
+        """
         url = url_for('api.adgroup.adgroups', campaign_id=self.new_campaign_id)
         data = json.dumps(self.new_adgroup)
         response = self.client.post(url, data=data, content_type="application/json")
@@ -88,6 +116,9 @@ class TestAdgroup(BaseTestCase):
         assert_equal(response.status_code, 404)
 
     def test_http_put_400(self):
+        """ Test the failure case of HTTP PUT. Changing the type of adgroup to 'suggest' without specifying
+        category ends up with a 400 error
+        """
         url = url_for('api.adgroup.adgroups', campaign_id=self.new_campaign_id)
         data = json.dumps(self.new_adgroup)
         response = self.client.post(url, data=data, content_type="application/json")
@@ -99,15 +130,3 @@ class TestAdgroup(BaseTestCase):
         data = json.dumps(new_adgroup)
         response = self.client.put(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 400)
-
-    def test_http_get_by_adgroup_id(self):
-        url = url_for('api.adgroup.adgroups', campaign_id=self.new_campaign_id)
-        data = json.dumps(self.new_adgroup)
-        response = self.client.post(url, data=data, content_type="application/json")
-        assert_equal(response.status_code, 201)
-        new = json.loads(response.data)["message"]
-
-        url = url_for('api.adgroup.adgroup', campaign_id=self.new_campaign_id, adgroup_id=new["id"])
-        response = self.client.get(url)
-        resp = json.loads(response.data)
-        assert_equal(new, resp["message"])

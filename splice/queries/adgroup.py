@@ -15,7 +15,7 @@ def get_adgroups_by_campaign_id(campaign_id):
         env.db.session
         .query(Adgroup)
         .filter(Adgroup.campaign_id == campaign_id)
-        .order_by(Adgroup.id.asc())
+        .order_by(Adgroup.id.desc())
         .all()
     )
     output = [row_to_dict(d) for d in rows]
