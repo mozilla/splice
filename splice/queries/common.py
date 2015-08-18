@@ -1,9 +1,30 @@
+from contextlib import contextmanager
 from datetime import datetime, timedelta
 from sqlalchemy.sql import text
 from splice.models import Channel, Distribution, Tile, Adgroup, AdgroupSite
 from sqlalchemy.sql import select, func, and_
 from sqlalchemy.sql.expression import asc
 from sqlalchemy.orm.session import sessionmaker
+
+
+@contextmanager
+def session_scope():
+    from splice.environment import Environment
+
+    env = Environment.instance()
+    session = env.db.session
+    try:
+        yield session
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
+
+def row_to_dict(row):
+    return {c.name: getattr(row, c.name) for c in row.__table__.columns}
 
 
 def get_frecent_sites_for_tile(tile_id, conn=None):
