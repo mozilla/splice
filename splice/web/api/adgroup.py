@@ -20,6 +20,9 @@ adgroup_fields = {
     'locale': fields.String,
     'campaign_id': fields.Integer,
     'type': fields.String,
+    'category': fields.String,
+    'frequency_cap_daily': fields.Integer,
+    'frequency_cap_total': fields.Integer,
     'created_at': fields.DateTime
 }
 
@@ -47,6 +50,8 @@ class AdgroupListAPI(Resource):
         self.reqparse.add_argument('type', type=str, required=True,
                                    choices=Adgroup.TYPE,
                                    help='Adgroup type', location='json')
+        self.reqparse.add_argument('category', type=str,
+                                   help='Category of suggested tile', location='json')
         super(AdgroupListAPI, self).__init__()
 
     def get(self, campaign_id):
@@ -91,6 +96,8 @@ class AdgroupAPI(Resource):
                                    help='Switch of inadjacency check', location='json')
         self.reqparse.add_argument('type', type=str, choices=('directory', 'suggested'),
                                    help='Adgroup type', location='json')
+        self.reqparse.add_argument('category', type=str,
+                                   help='Category of suggested tile', location='json')
         super(AdgroupAPI, self).__init__()
 
     def get(self, campaign_id, adgroup_id):
@@ -107,6 +114,8 @@ class AdgroupAPI(Resource):
                 adgroup = update_adgroup(session, adgroup_id, args)
         except NoResultFound as e:
             return {"message": e.message}, 404
+        except InvalidRequestError as e:
+            return {"message": e.message}, 400
         except Exception as e:
             return {"message": e.message}, 500
         else:

@@ -48,6 +48,8 @@ def adgroup_exists(session, record):
 def insert_adgroup(session, record):
     if not adgroup_exists(session, record):
         adgroup = Adgroup(**record)
+        if adgroup.type == "suggested" and not adgroup.category:
+            raise InvalidRequestError("Each suggested adgroup must have a category")
         session.add(adgroup)
         session.flush()
         return row_to_dict(adgroup)
@@ -60,6 +62,21 @@ def update_adgroup(session, adgroup_id, record):
     if adgroup is None:
         raise NoResultFound("No result found")
 
-    # TODO (najiang@mozilla.com), which fields are mutable here?
-    adgroup.type = record["type"]
+    if "name" in record:
+        adgroup.name = record["name"]
+
+    if "type" in record:
+        adgroup.type = record["type"]
+
+    if "category" in record:
+        adgroup.category = record["category"]
+    if adgroup.type == "suggested" and not adgroup.category:
+        raise InvalidRequestError("Each suggested adgroup must have a category")
+
+    if "frequencey_cap_daily" in record:
+        adgroup.frequency_cap_daily = record["frequency_cap_daily"]
+
+    if "frequencey_cap_total" in record:
+        adgroup.frequency_cap_total = record["frequency_cap_total"]
+
     return row_to_dict(adgroup)

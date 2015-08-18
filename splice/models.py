@@ -51,6 +51,7 @@ class Adgroup(db.Model):
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     locale = db.Column(db.String(14), nullable=False)
     type = db.Column(db.String(16))
+    category = db.Column(db.String(64))
 
     # we have both the string and datetime objects to allow for optional timezones on the client
     # the datetime objects are always UTC
