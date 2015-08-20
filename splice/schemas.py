@@ -145,3 +145,36 @@ def get_payload_schema(compact=False):
         compact: Boolean, specify whether the payload is of compact type or not
     """
     return _compact_schema if compact else _default_schema
+
+
+_url_pattern = {
+    "type": "string",
+    "pattern": "^https?://.*$",
+}
+
+_image_uri_pattern = {
+    "type": "string",
+    "pattern": image_uri_pattern,
+}
+
+# schema of tile for HTTP POST
+API_TILE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "bg_color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
+        },
+        "target_url": _url_pattern,
+        "attribution_url": {
+            "anyOf": [
+                _url_pattern,
+                {"type": "null"}
+            ]
+        },
+        "enhanced_image_uri": _image_uri_pattern,
+        "image_uri": _image_uri_pattern
+    },
+    "required": ["target_url", "image_uri", "enhanced_image_uri"],
+    "additionalproperties": False,
+}
