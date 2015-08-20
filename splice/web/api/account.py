@@ -24,7 +24,7 @@ account_fields = {
 class AccountListAPI(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('name', type=str, required=True,
+        self.reqparse.add_argument('name', type=unicode, required=True,
                                    help='Name of the new account', location='json')
         self.reqparse.add_argument('email', type=str, required=False,
                                    help='Email address', location='json')
@@ -53,7 +53,7 @@ class AccountListAPI(Resource):
 class AccountAPI(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('name', type=str, required=False,
+        self.reqparse.add_argument('name', type=unicode, required=False,
                                    help='Name of the new account', location='json')
         self.reqparse.add_argument('email', type=str, required=False,
                                    help='Email address', location='json')

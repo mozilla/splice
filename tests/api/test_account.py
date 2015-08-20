@@ -75,8 +75,9 @@ class TestAccountAPI(BaseTestCase):
         assert_equal(response.status_code, 200)
         resp = json.loads(response.data)
         account = resp['result']
-        for field in ['name', 'email', 'phone']:
-            assert_equal(account[field], self.account_data[field])
+        del account['id']
+        del account['created_at']
+        assert_equal(account, self.account_data)
 
     def test_put_account(self):
         """Test updating an account via API (PUT)."""
@@ -103,5 +104,6 @@ class TestAccountAPI(BaseTestCase):
 
         # Verify the data.
         account = get_account(account_id)
-        for field in ['name', 'email', 'phone']:
-            assert_equal(account[field], new_account_data[field])
+        del account['id']
+        del account['created_at']
+        assert_equal(account, new_account_data)
