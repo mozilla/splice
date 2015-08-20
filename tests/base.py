@@ -9,6 +9,7 @@ env = Environment.instance(test=True, test_db_uri=db_uri)
 
 
 class BaseTestCase(TestCase):
+    load_fixtures = True
 
     def __init__(self, methodName='runTest'):
         self.env = env
@@ -19,15 +20,19 @@ class BaseTestCase(TestCase):
         return self.env.application
 
     def setUp(self):
-        from splice.models import Channel
+        if self.load_fixtures:
+            from splice.models import Channel
 
-        populate_database.insert(env, drop=True)
+            populate_database.insert(env, drop=True)
 
-        self.channels = (
-            env.db.session
-            .query(Channel)
-            .order_by(Channel.id.asc())
-            .all())
+            self.channels = (
+                env.db.session
+                .query(Channel)
+                .order_by(Channel.id.asc())
+                .all())
+        else:
+            env.db.drop_all()
+            env.db.create_all()
 
     def tearDown(self):
         self.env.db.session.remove()
