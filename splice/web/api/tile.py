@@ -81,8 +81,6 @@ class TileListAPI(Resource):
             return {"message": e.message}, 400
         except InvalidRequestError as e:
             return {"message": e.message}, 400
-        except Exception as e:
-            return {"message": e.message}, 500
         else:
             return {"message": marshal(new, tile_fields)}, 201
 
@@ -111,8 +109,6 @@ class TileAPI(Resource):
                 tile = update_tile(session, tile_id, args)
         except NoResultFound as e:
             return {"message": e.message}, 404
-        except Exception as e:
-            return {"message": e.message}, 500
         else:
             return {"message": marshal(tile, tile_fields)}, 200
 
