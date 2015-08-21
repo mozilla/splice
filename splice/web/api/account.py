@@ -27,9 +27,11 @@ class AccountListAPI(Resource):
         self.reqparse.add_argument('name', type=unicode, required=True,
                                    help='Name of the new account', location='json')
         self.reqparse.add_argument('email', type=str, required=False,
-                                   help='Email address', location='json')
+                                   help='Email address', location='json',
+                                   store_missing=False)
         self.reqparse.add_argument('phone', type=str, required=False,
-                                   help='Phone number', location='json')
+                                   help='Phone number', location='json',
+                                   store_missing=False)
 
         super(AccountListAPI, self).__init__()
 
@@ -56,9 +58,11 @@ class AccountAPI(Resource):
         self.reqparse.add_argument('name', type=unicode, required=False,
                                    help='Name of the new account', location='json')
         self.reqparse.add_argument('email', type=str, required=False,
-                                   help='Email address', location='json')
+                                   help='Email address', location='json',
+                                   store_missing=False)
         self.reqparse.add_argument('phone', type=str, required=False,
-                                   help='Phone number', location='json')
+                                   help='Phone number', location='json',
+                                   store_missing=False)
 
         super(AccountAPI, self).__init__()
 
