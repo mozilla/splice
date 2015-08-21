@@ -67,8 +67,6 @@ class AdgroupListAPI(Resource):
                 new = insert_adgroup(session, args)
         except InvalidRequestError as e:
             return {"message": e.message}, 400
-        except Exception as e:
-            return {"message": e.message}, 500
         else:
             return {"message": marshal(new, adgroup_fields)}, 201
 
@@ -76,26 +74,27 @@ class AdgroupListAPI(Resource):
 class AdgroupAPI(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('name', type=str,
+        self.reqparse.add_argument('name', type=str, store_missing=False,
                                    help='Name of the new adgroup', location='json')
-        self.reqparse.add_argument('locale', type=str,
+        self.reqparse.add_argument('locale', type=str, store_missing=False,
                                    help='Locale', location='json')
-        self.reqparse.add_argument('channel_id', type=int,
+        self.reqparse.add_argument('channel_id', type=int, store_missing=False,
                                    help='Channel ID', location='json')
         self.reqparse.add_argument('campaign_id', type=int, required=True,
                                    help='Campaign ID', location='json')
-        self.reqparse.add_argument('frequency_cap_daily', type=int,
+        self.reqparse.add_argument('frequency_cap_daily', type=int, store_missing=False,
                                    help='Daily frequency cap', location='json')
-        self.reqparse.add_argument('frequency_cap_total', type=int,
+        self.reqparse.add_argument('frequency_cap_total', type=int, store_missing=False,
                                    help='Total frequency cap', location='json')
-        self.reqparse.add_argument('explanation', type=unicode,
+        self.reqparse.add_argument('explanation', type=unicode, store_missing=False,
                                    help='Explanation', location='json')
-        self.reqparse.add_argument('check_inadjacency', type=str,
+        self.reqparse.add_argument('check_inadjacency', type=str, store_missing=False,
                                    choices=('true', 'false'),
                                    help='Switch of inadjacency check', location='json')
-        self.reqparse.add_argument('type', type=str, choices=('directory', 'suggested'),
+        self.reqparse.add_argument('type', type=str, store_missing=False,
+                                   choices=Adgroup.TYPE,
                                    help='Adgroup type', location='json')
-        self.reqparse.add_argument('category', type=str,
+        self.reqparse.add_argument('category', type=str, store_missing=False,
                                    help='Category of suggested tile', location='json')
         super(AdgroupAPI, self).__init__()
 
@@ -115,8 +114,6 @@ class AdgroupAPI(Resource):
             return {"message": e.message}, 404
         except InvalidRequestError as e:
             return {"message": e.message}, 400
-        except Exception as e:
-            return {"message": e.message}, 500
         else:
             return {"message": marshal(adgroup, adgroup_fields)}, 200
 
