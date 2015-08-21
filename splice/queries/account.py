@@ -44,13 +44,7 @@ def update_account(session, account_id, record):
     if account is None:
         raise NoResultFound('Account not found found')
 
-    if 'name' in record:
-        account.name = record['name']
-
-    if 'email' in record:
-        account.email = record['email']
-
-    if 'phone' in record:
-        account.phone = record['phone']
+    for key, val in record.items():
+        setattr(account, key, val)
 
     return row_to_dict(account)

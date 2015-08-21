@@ -107,3 +107,25 @@ class TestAccountAPI(BaseTestCase):
         del account['id']
         del account['created_at']
         assert_equal(account, new_account_data)
+
+    def test_put_without_optional_fields(self):
+        """Test PUTing just the required fields."""
+        new_account_data = {
+            'name': 'New Account Name',
+        }
+
+        # Create an account.
+        with session_scope() as session:
+            account_id = insert_account(session, self.account_data)['id']
+
+        # Update the account with the new data.
+        url = url_for('api.account.account', account_id=account_id)
+        data = json.dumps(new_account_data)
+        response = self.client.put(url, data=data, content_type='application/json')
+        assert_equal(response.status_code, 200)
+
+        # Verify the data. Make sure the fields not sent don't get updated (nulled).
+        account = get_account(account_id)
+        assert_equal(account['name'], new_account_data['name'])
+        assert_equal(account['email'], self.account_data['email'])
+        assert_equal(account['phone'], self.account_data['phone'])
