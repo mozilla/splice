@@ -42,7 +42,7 @@ def insert_account(session, record):
 def update_account(session, account_id, record):
     account = session.query(Account).get(account_id)
     if account is None:
-        raise NoResultFound('Account not found found')
+        raise NoResultFound('Account not found')
 
     for key, val in record.items():
         setattr(account, key, val)
