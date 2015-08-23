@@ -123,7 +123,6 @@ class CampaignAPI(Resource):
                                        help='Status', location='json',
                                        store_missing=False)
 
-
         super(CampaignAPI, self).__init__()
 
     def get(self, campaign_id):

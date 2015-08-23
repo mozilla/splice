@@ -38,7 +38,6 @@ class TestCampaignAPI(BaseTestCase):
             resp = json.loads(response.data)
             assert_equal(len(resp['results']), len(campaigns))
 
-
     def test_post_campaign(self):
         """Test creating an campaign via API (POST)."""
         # Create the campaign via API.
