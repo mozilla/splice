@@ -21,6 +21,9 @@ def setup_routes(app):
         import splice.web.api.account
         splice.web.api.account.register_routes(app)
 
+        import splice.web.api.campaign
+        splice.web.api.campaign.register_routes(app)
+
         register_flask_restful = True
 
 
