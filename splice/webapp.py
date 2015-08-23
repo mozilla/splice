@@ -15,14 +15,17 @@ def setup_routes(app):
     splice.web.api.heartbeat.register_routes(app)
 
     if not register_flask_restful:
-        import splice.web.api.adgroup
-        splice.web.api.adgroup.register_routes(app)
-
         import splice.web.api.account
         splice.web.api.account.register_routes(app)
 
         import splice.web.api.campaign
         splice.web.api.campaign.register_routes(app)
+
+        import splice.web.api.adgroup
+        splice.web.api.adgroup.register_routes(app)
+
+        import splice.web.api.tile
+        splice.web.api.tile.register_routes(app)
 
         register_flask_restful = True
 

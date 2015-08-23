@@ -27,7 +27,7 @@ class Distribution(db.Model):
 class Tile(db.Model):
     __tablename__ = "tiles"
 
-    TYPES = {"organic", "sponsored", "affiliate"}
+    TYPE = {"organic", "sponsored", "affiliate"}
     STATUS = {"approved", "unapproved", "disapproved"}
 
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
@@ -35,11 +35,13 @@ class Tile(db.Model):
     bg_color = db.Column(db.String(16), nullable=False, default="")
     title = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(40), nullable=False)
-    locale = db.Column(db.String(14), nullable=False)
     image_uri = db.Column(db.Text(), nullable=False)
     enhanced_image_uri = db.Column(db.Text(), nullable=True)
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
     status = db.Column(db.String(16), nullable=False)
+    explanation = db.Column(db.String(255))
+    attribution_url = db.Column(db.Text())
+    attribution_period = db.Column(db.Integer())
     adgroup_id = db.Column(db.Integer(), db.ForeignKey("adgroups.id"))
 
 
