@@ -38,7 +38,6 @@ class Environment(object):
         self.__s3_conn = None
         self.__fixtures = None
         self.__db = SQLAlchemy()
-        self.__db_stats = SQLAlchemy()
 
         for path in CONFIG_PATH_LOCATIONS:
             sys.path.append(path)
@@ -73,14 +72,13 @@ class Environment(object):
             app.config['STATIC_FOLDER'] = None
         self.__application = app
 
-        if not test:
+        if not test:  # pragma: no cover
             self.csrf = CsrfProtect()
             self.csrf.init_app(app)
 
         # A hack to keep the sqlalchemy binds state. Flask-SQLAlchemy strips it out
         sqlalchemy_binds = app.config.get('SQLALCHEMY_BINDS')
         self.db.init_app(self.__application)
-        self.db_stats.init_app(self.__application)
         app.config.SQLALCHEMY_BINDS = sqlalchemy_binds
         Migrate(self.__application, self.db)
 
@@ -107,10 +105,6 @@ class Environment(object):
     @property
     def db(self):
         return self.__db
-
-    @property
-    def db_stats(self):
-        return self.__db_stats
 
     @property
     def s3(self):
@@ -156,7 +150,7 @@ class Environment(object):
             "countries": countries,
         }
 
-    def __setup_loggers(self, config):
+    def __setup_loggers(self, config):  # pragma: no cover
         """
         Setup and return loggers
         """
@@ -175,7 +169,7 @@ class Environment(object):
 
         return loggers
 
-    def log(self, msg, name='console', **kwargs):
+    def log(self, msg, name='console', **kwargs):  # pragma: no cover
         """
         Log messages via defined outputs
         """

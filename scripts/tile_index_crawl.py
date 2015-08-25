@@ -66,6 +66,7 @@ def main():
         'desktop',
         'android',
         'desktop-prerelease',
+        'hello'
     ]
 
     if len(args) == 1:
@@ -83,65 +84,70 @@ def main():
     errors = []
 
     # extract tiles urls from tile index
-    tiles_urls = set([
-        tiles_url
-        for index in validate(
-            grequests.map(
-                grequests.get(
-                    '%s/%s_%s' %
-                    (cdn, channel, tile_index_key),
-                    allow_redirects=False,
-                )
-                for channel in channels
-            ),
-            options.verbose,
-            errors,
-        )
-        for key, value in index.json().iteritems()
-        if '/' in key
-        for tiles_url in value.values()
-    ])
+    try:
+        tiles_urls = set([
+            tiles_url
+            for index in validate(
+                grequests.imap(
+                    (grequests.get('%s/%s_%s' % (cdn, channel, tile_index_key), allow_redirects=False,)
+                     for channel in channels),
+                    size=10
+                ),
+                options.verbose,
+                errors,
+            )
+            for key, value in index.json().iteritems()
+            if '/' in key
+            for tiles_url in value.values()
+        ])
 
-    if not options.quiet:
-        print('NOTICE: tiles urls extracted: %s' % len(tiles_urls))
-        print('NOTICE: calculating image urls')
+        if not options.quiet:
+            print('NOTICE: tiles urls extracted: %s' % len(tiles_urls))
+            print('NOTICE: calculating image urls')
 
-    # extract image urls from tiles
-    image_urls = set([
-        image_url
-        for tiles in validate(
-            grequests.map(
-                grequests.get(tiles_url, allow_redirects=False)
-                for tiles_url in tiles_urls
-            ),
-            options.verbose,
-            errors,
-        )
-        for value_x in tiles.json().values()
-        for value_y in value_x
-        for key, image_url in value_y.iteritems()
-        if key in ['imageURI', 'enhancedImageURI']
-    ])
+        # extract image urls from tiles
+        image_urls = set([
+            image_url
+            for tiles in validate(
+                grequests.imap(
+                    (grequests.get(tiles_url, allow_redirects=False)
+                     for tiles_url in tiles_urls),
+                    size=10
+                ),
+                options.verbose,
+                errors,
+            )
+            for value_x in tiles.json().values()
+            for value_y in value_x
+            for key, image_url in value_y.iteritems()
+            if key in ['imageURI', 'enhancedImageURI']
+        ])
 
-    if not options.quiet:
-        print('NOTICE: image urls extracted: %s' % len(image_urls))
-        print('NOTICE: validating image urls')
+        if not options.quiet:
+            print('NOTICE: image urls extracted: %s' % len(image_urls))
+            print('NOTICE: validating image urls')
 
-    # Two things to notice here:
-    # 1. expanding the list comprehension is necessary to get the 'validate'
-    #    step above to actually evaluate (it's lazy.)
-    # 2. the actual value of the list comprehension is dropped, not returned.
-    [
-        valid.url
-        for valid in validate(
-            grequests.map(
-                grequests.head(image_url, allow_redirects=False)
-                for image_url in image_urls
-            ),
-            options.verbose,
-            errors,
-        )
-    ]
+        # Two things to notice here:
+        # 1. expanding the list comprehension is necessary to get the 'validate'
+        #    step above to actually evaluate (it's lazy.)
+        # 2. the actual value of the list comprehension is dropped, not returned.
+        [
+            valid.url
+            for valid in validate(
+                grequests.imap(
+                    (grequests.head(image_url, allow_redirects=False)
+                     for image_url in image_urls),
+                    size=10
+                ),
+                options.verbose,
+                errors,
+            )
+        ]
+    except Exception as e:
+        msg = 'ERROR: %s' % e
+        print(msg)
+        print(traceback.format_exc())
+        errors.append(msg)
 
     if errors:
         exit(1)

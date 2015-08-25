@@ -1,3 +1,15 @@
+1.1.31
+======
+
+* cherry-pick commit for adding test for 'hello' channel
+* cherry-pick commit for adding connection pool for tile_index_crawl
+* make SPLICE_IGNORE_REDSHIFT checking more explicit
+
+1.1.30
+======
+
+* upgrade Flask-Migrate to 1.5
+
 1.1.29
 ======
 
