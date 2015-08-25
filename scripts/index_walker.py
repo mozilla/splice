@@ -74,7 +74,7 @@ def main():
             except:
                 print "skipping ", geo_locale
 
-    print "active", str(active_tiles)
+    # print "active", str(active_tiles)
 
     env = Environment.instance()
 
@@ -111,6 +111,8 @@ def main():
         accounts = dict()
 
         for adgroup_id, url, locale, channel, created_at in result:
+            assert all(x is not None for x in (adgroup_id, url, locale, channel)), \
+                "Some of %s is None" % str((adgroup_id, url, locale, channel))
             tld = get_tld(url)
             active = adgroup_id in active_tiles
             curr = (tld, locale, channel, active)
@@ -118,7 +120,7 @@ def main():
                 # this is a new campaign, see if it's active
                 campaign_id += 1
                 if active:
-                    print "active", curr
+                    # print "active", curr
                     start_date = created_at.date()
                     end_date = ARBITRARY_FUTURE
                 else:
@@ -143,7 +145,7 @@ def main():
                         countries[campaign_id] = {'STAR'}
                     elif 'STAR' not in countries[campaign_id]:
                         countries[campaign_id].add(sub_country_code)
-                        # print "campaign", ctuple
+                # print "campaign", ctuple
 
             adgroups[campaign_id].append(adgroup_id)
 
