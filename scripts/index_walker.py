@@ -78,14 +78,8 @@ def main():
 
     env = Environment.instance()
 
-    # connect to stats db and grab the country data
-    country_codes = [dict(country_name='All Countries', country_code='STAR')]
-    stats_connection = create_engine(env.config.SQLALCHEMY_BINDS['stats']).connect()
-    try:
-        for country_name, country_code in stats_connection.execute("SELECT country_name, country_code FROM countries"):
-            country_codes.append(dict(country_name=country_name, country_code=country_code))
-    finally:
-        stats_connection.close()
+    # get the country data out of the fixtures
+    country_codes = [dict(country_name=cname, country_code=cc) for cc, cname in env._load_countries()]
 
     db_uri = env.config.SQLALCHEMY_DATABASE_URI
     engine = create_engine(db_uri)
