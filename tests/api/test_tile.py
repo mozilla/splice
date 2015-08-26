@@ -44,7 +44,7 @@ class TestTile(BaseTestCase):
     def test_post_and_get(self):
         """ Test for HTTP POST and GET
         """
-        url = url_for('api.tile.tiles', adgroup_id=self.new_adgroup_id)
+        url = url_for('api.tile.tiles')
         data = json.dumps(self.new_tile)
         response = self.client.post(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 201)
@@ -58,7 +58,7 @@ class TestTile(BaseTestCase):
     def test_post_400_missing_argument(self):
         """ Test the failure case of HTTP POST
         """
-        url = url_for('api.tile.tiles', adgroup_id=self.new_adgroup_id)
+        url = url_for('api.tile.tiles')
         tile = dict(self.new_tile)
         del tile["title"]
         data = json.dumps(tile)
@@ -68,7 +68,7 @@ class TestTile(BaseTestCase):
     def test_post_400_invalid_argument(self):
         """ Test the failure case of HTTP POST
         """
-        url = url_for('api.tile.tiles', adgroup_id=self.new_adgroup_id)
+        url = url_for('api.tile.tiles')
         tile = dict(self.new_tile)
         tile["target_url"] = "someinsane.site.com.*"
         data = json.dumps(tile)
@@ -85,7 +85,7 @@ class TestTile(BaseTestCase):
         """ Test HTTP POST the same data twice, it should reject the second one as
         invalid arguments
         """
-        url = url_for('api.tile.tiles', adgroup_id=self.new_adgroup_id)
+        url = url_for('api.tile.tiles')
         data = json.dumps(self.new_tile)
         response = self.client.post(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 201)
@@ -95,20 +95,20 @@ class TestTile(BaseTestCase):
     def test_http_put(self):
         """ Test the success case of HTTP PUT
         """
-        url = url_for('api.tile.tiles', adgroup_id=self.new_adgroup_id)
+        url = url_for('api.tile.tiles')
         data = json.dumps(self.new_tile)
         response = self.client.post(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 201)
         new = json.loads(response.data)["message"]
 
-        url = url_for('api.tile.tile', adgroup_id=self.new_adgroup_id, tile_id=new["id"])
+        url = url_for('api.tile.tile', tile_id=new["id"])
         new["status"] = "approved"
         data = json.dumps(new)
         response = self.client.put(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 200)
         updated = json.loads(response.data)["message"]
 
-        url = url_for('api.tile.tile', adgroup_id=self.new_adgroup_id, tile_id=new["id"])
+        url = url_for('api.tile.tile', tile_id=new["id"])
         response = self.client.get(url)
         resp = json.loads(response.data)
         assert_equal(updated, resp["message"])
@@ -116,7 +116,7 @@ class TestTile(BaseTestCase):
     def test_http_put_404(self):
         """ Test the failure case of HTTP PUT. Editing a missing tile ends up with a 404 error
         """
-        url = url_for('api.tile.tiles', adgroup_id=self.new_adgroup_id)
+        url = url_for('api.tile.tiles')
         data = json.dumps(self.new_tile)
         response = self.client.post(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 201)
@@ -129,13 +129,13 @@ class TestTile(BaseTestCase):
         """ Test the failure case of HTTP PUT. Sending request without required fileds should
         get a 400 error
         """
-        url = url_for('api.tile.tiles', adgroup_id=self.new_adgroup_id)
+        url = url_for('api.tile.tiles')
         data = json.dumps(self.new_tile)
         response = self.client.post(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 201)
         new_tile = json.loads(response.data)["message"]
 
-        url = url_for('api.tile.tile', adgroup_id=self.new_adgroup_id, tile_id=new_tile["id"])
+        url = url_for('api.tile.tile', tile_id=new_tile["id"])
         del new_tile["status"]
         data = json.dumps(new_tile)
         response = self.client.put(url, data=data, content_type="application/json")
