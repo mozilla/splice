@@ -46,8 +46,8 @@ class AccountListAPI(Resource):
         try:
             with session_scope() as session:
                 new = insert_account(session, args)
-        except IntegrityError:
-            return {'message': 'Account with that name already exists.'}, 400
+        except IntegrityError as e:
+            return {'message': e.message}, 400
         else:
             return {'result': marshal(new, account_fields)}, 201
 
@@ -56,7 +56,8 @@ class AccountAPI(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('name', type=unicode, required=False,
-                                   help='Name of the new account', location='json')
+                                   help='Name of the new account', location='json',
+                                   store_missing=False)
         self.reqparse.add_argument('email', type=str, required=False,
                                    help='Email address', location='json',
                                    store_missing=False)
@@ -81,7 +82,7 @@ class AccountAPI(Resource):
         except NoResultFound as e:
             return {'message': e.message}, 404
         except IntegrityError as e:
-            return {'message': 'Account with that name already exists.'}, 400
+            return {'message': e.message}, 400
         else:
             return {'result': marshal(account, account_fields)}, 200
 
