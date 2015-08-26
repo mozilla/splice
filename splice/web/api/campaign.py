@@ -80,7 +80,10 @@ campaign_parser.add_argument(
 
 class CampaignListAPI(Resource):
     def __init__(self):
-        self.reqparse = campaign_parser
+        self.reqparse_post = campaign_parser
+        self.reqparse_get = reqparse.RequestParser()
+        self.reqparse_get.add_argument(
+            'account_id', type=int, required=True, help='Account ID', location='args')
 
         super(CampaignListAPI, self).__init__()
 
@@ -89,16 +92,13 @@ class CampaignListAPI(Resource):
 
         Takes an optional account_id as a query string argument.
         """
-        parser = reqparse.RequestParser()
-        parser.add_argument(
-            'account_id', type=int, required=True, help='Account ID', location='args')
-        args = parser.parse_args()
+        args = self.reqparse_get.parse_args()
         campaigns = get_campaigns(args.get('account_id'))
         return {'results': marshal(campaigns, campaign_fields)}
 
     def post(self):
         """Creates a campaign."""
-        args = self.reqparse.parse_args()
+        args = self.reqparse_post.parse_args()
         try:
             with session_scope() as session:
                 new = insert_campaign(session, args)
