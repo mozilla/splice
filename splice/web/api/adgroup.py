@@ -29,14 +29,14 @@ adgroup_fields = {
 class AdgroupListAPI(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('campaign_id', type=int, required=True,
+                                   help='Campaign ID', location='json')
         self.reqparse.add_argument('name', type=str, required=True,
                                    help='Name of the new adgroup', location='json')
         self.reqparse.add_argument('locale', type=str, required=True,
                                    help='Locale', location='json')
         self.reqparse.add_argument('channel_id', type=int, required=True,
                                    help='Channel ID', location='json')
-        self.reqparse.add_argument('campaign_id', type=int, required=True,
-                                   help='Campaign ID', location='json')
         self.reqparse.add_argument('frequency_cap_daily', type=int,
                                    help='Daily frequency cap', location='json')
         self.reqparse.add_argument('frequency_cap_total', type=int,
@@ -51,16 +51,21 @@ class AdgroupListAPI(Resource):
                                    help='Adgroup type', location='json')
         self.reqparse.add_argument('category', type=str,
                                    help='Category of suggested tile', location='json')
+        self.reqparse_get = reqparse.RequestParser()
+        self.reqparse_get.add_argument('campaign_id', type=int, required=True,
+                                       help='Campaign ID', location='args')
+
         super(AdgroupListAPI, self).__init__()
 
-    def get(self, campaign_id):
-        adgroups = get_adgroups_by_campaign_id(campaign_id)
+    def get(self):
+        args = self.reqparse_get.parse_args()
+        adgroups = get_adgroups_by_campaign_id(args['campaign_id'])
         if len(adgroups) == 0:
             return {"message": "No adgroups found"}, 404
         else:
             return {"message": marshal(adgroups, adgroup_fields)}
 
-    def post(self, campaign_id):
+    def post(self):
         args = self.reqparse.parse_args()
         try:
             with session_scope() as session:
@@ -98,14 +103,14 @@ class AdgroupAPI(Resource):
                                    help='Category of suggested tile', location='json')
         super(AdgroupAPI, self).__init__()
 
-    def get(self, campaign_id, adgroup_id):
+    def get(self, adgroup_id):
         adgroup = get_adgroup(adgroup_id)
         if adgroup is None:
             return {"message": "Item is missing"}, 404
         else:
             return {"message": marshal(adgroup, adgroup_fields)}
 
-    def put(self, campaign_id, adgroup_id):
+    def put(self, adgroup_id):
         args = self.reqparse.parse_args()
         try:
             with session_scope() as session:
@@ -118,8 +123,8 @@ class AdgroupAPI(Resource):
             return {"message": marshal(adgroup, adgroup_fields)}, 200
 
 
-api.add_resource(AdgroupListAPI, '/campaigns/<int:campaign_id>/adgroups', endpoint='adgroups')
-api.add_resource(AdgroupAPI, '/campaigns/<int:campaign_id>/adgroups/<int:adgroup_id>', endpoint='adgroup')
+api.add_resource(AdgroupListAPI, '/adgroups', endpoint='adgroups')
+api.add_resource(AdgroupAPI, '/adgroups/<int:adgroup_id>', endpoint='adgroup')
 
 
 def register_routes(app):

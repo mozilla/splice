@@ -34,10 +34,10 @@ tile_fields = {
 class TileListAPI(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('title', type=unicode, required=True,
-                                   help='Title', location='json')
         self.reqparse.add_argument('adgroup_id', type=int, required=True,
                                    help='Adgroup ID', location='json')
+        self.reqparse.add_argument('title', type=unicode, required=True,
+                                   help='Title', location='json')
         self.reqparse.add_argument('type', type=str, required=True,
                                    choices=Tile.TYPE,
                                    help='Tile type', location='json')
@@ -55,16 +55,20 @@ class TileListAPI(Resource):
                                    help='Background color', location='json')
         self.reqparse.add_argument('explanation', type=unicode, default="",
                                    help='Contextual explanation', location='json')
+        self.reqparse_get = reqparse.RequestParser()
+        self.reqparse_get.add_argument('adgroup_id', type=int, required=True,
+                                       help='Adgroup ID', location='args')
         super(TileListAPI, self).__init__()
 
-    def get(self, adgroup_id):
-        tiles = get_tiles_by_adgroup_id(adgroup_id)
+    def get(self):
+        args = self.reqparse_get.parse_args()
+        tiles = get_tiles_by_adgroup_id(args['adgroup_id'])
         if len(tiles) == 0:
             return {"message": "No tiles found"}, 404
         else:
             return {"message": marshal(tiles, tile_fields)}
 
-    def post(self, adgroup_id):
+    def post(self):
         """ HTTP end point to create new tile. Note the initial status of a new
         tile is always set as 'unapproved'
         """
@@ -95,14 +99,14 @@ class TileAPI(Resource):
                                    help='Status', location='json')
         super(TileAPI, self).__init__()
 
-    def get(self, adgroup_id, tile_id):
+    def get(self, tile_id):
         tile = get_tile(tile_id)
         if tile is None:
             return {"message": "No tile found"}, 404
         else:
             return {"message": marshal(tile, tile_fields)}
 
-    def put(self, adgroup_id, tile_id):
+    def put(self, tile_id):
         args = self.reqparse.parse_args()
         try:
             with session_scope() as session:
@@ -113,8 +117,8 @@ class TileAPI(Resource):
             return {"message": marshal(tile, tile_fields)}, 200
 
 
-api.add_resource(TileListAPI, '/adgroups/<int:adgroup_id>/tiles', endpoint='tiles')
-api.add_resource(TileAPI, '/adgroups/<int:adgroup_id>/tile/<int:tile_id>', endpoint='tile')
+api.add_resource(TileListAPI, '/tiles', endpoint='tiles')
+api.add_resource(TileAPI, '/tiles/<int:tile_id>', endpoint='tile')
 
 
 def register_routes(app):
