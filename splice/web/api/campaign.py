@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Blueprint, request
+from flask import Blueprint
 from flask_restful import Api, Resource, marshal, fields, reqparse
 from sqlalchemy.exc import IntegrityError
 
