@@ -120,7 +120,6 @@ class AdgroupSite(db.Model):
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
 
 
-
 class AdgroupCategory(db.Model):
     __tablename__ = "adgroup_categories"
 
