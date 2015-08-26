@@ -89,7 +89,11 @@ class CampaignListAPI(Resource):
 
         Takes an optional account_id as a query string argument.
         """
-        campaigns = get_campaigns(request.args.get('account_id'))
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+            'account_id', type=int, required=True, help='Account ID', location='args')
+        args = parser.parse_args()
+        campaigns = get_campaigns(args.get('account_id'))
         return {'results': marshal(campaigns, campaign_fields)}
 
     def post(self):
