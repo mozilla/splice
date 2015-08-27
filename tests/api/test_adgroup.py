@@ -31,7 +31,7 @@ class TestAdgroup(BaseTestCase):
             response = self.client.get(url)
             assert_equal(response.status_code, 200)
             resp = json.loads(response.data)
-            assert_equal(len(resp["message"]), len(adgroups))
+            assert_equal(len(resp["results"]), len(adgroups))
 
     def test_post_and_get(self):
         """ Test for HTTP POST and GET
@@ -40,12 +40,12 @@ class TestAdgroup(BaseTestCase):
         data = json.dumps(self.new_adgroup)
         response = self.client.post(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 201)
-        new = json.loads(response.data)["message"]
+        new = json.loads(response.data)["result"]
 
         url = url_for('api.adgroup.adgroup', adgroup_id=new["id"])
         response = self.client.get(url)
         resp = json.loads(response.data)
-        assert_equal(new, resp["message"])
+        assert_equal(new, resp["result"])
 
     def test_post_duplicate(self):
         """ Test HTTP POST the same data twice, it should reject the second one as
@@ -87,7 +87,7 @@ class TestAdgroup(BaseTestCase):
         data = json.dumps(self.new_adgroup)
         response = self.client.post(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 201)
-        new = json.loads(response.data)["message"]
+        new = json.loads(response.data)["result"]
 
         url = url_for('api.adgroup.adgroup', adgroup_id=new["id"])
         new["name"] = "new_name"
@@ -96,12 +96,12 @@ class TestAdgroup(BaseTestCase):
         data = json.dumps(new)
         response = self.client.put(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 200)
-        updated = json.loads(response.data)["message"]
+        updated = json.loads(response.data)["result"]
 
         url = url_for('api.adgroup.adgroup', campaign_id=self.new_campaign_id, adgroup_id=new["id"])
         response = self.client.get(url)
         resp = json.loads(response.data)
-        assert_equal(updated, resp["message"])
+        assert_equal(updated, resp["result"])
 
     def test_http_put_404(self):
         """ Test the failure case of HTTP PUT. Editing a missing adgroup ends up with a 404 error
@@ -123,7 +123,7 @@ class TestAdgroup(BaseTestCase):
         data = json.dumps(self.new_adgroup)
         response = self.client.post(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 201)
-        new_adgroup = json.loads(response.data)["message"]
+        new_adgroup = json.loads(response.data)["result"]
 
         url = url_for('api.adgroup.adgroup', adgroup_id=new_adgroup["id"])
         new_adgroup["type"] = "suggested"

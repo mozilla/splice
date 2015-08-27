@@ -66,7 +66,7 @@ class TileListAPI(Resource):
         if len(tiles) == 0:
             return {"message": "No tiles found"}, 404
         else:
-            return {"message": marshal(tiles, tile_fields)}
+            return {"results": marshal(tiles, tile_fields)}
 
     def post(self):
         """ HTTP end point to create new tile. Note the initial status of a new
@@ -86,7 +86,7 @@ class TileListAPI(Resource):
         except InvalidRequestError as e:
             return {"message": e.message}, 400
         else:
-            return {"message": marshal(new, tile_fields)}, 201
+            return {"result": marshal(new, tile_fields)}, 201
 
 
 class TileAPI(Resource):
@@ -104,7 +104,7 @@ class TileAPI(Resource):
         if tile is None:
             return {"message": "No tile found"}, 404
         else:
-            return {"message": marshal(tile, tile_fields)}
+            return {"result": marshal(tile, tile_fields)}
 
     def put(self, tile_id):
         args = self.reqparse.parse_args()
@@ -114,7 +114,7 @@ class TileAPI(Resource):
         except NoResultFound as e:
             return {"message": e.message}, 404
         else:
-            return {"message": marshal(tile, tile_fields)}, 200
+            return {"result": marshal(tile, tile_fields)}, 200
 
 
 api.add_resource(TileListAPI, '/tiles', endpoint='tiles')

@@ -63,7 +63,7 @@ class AdgroupListAPI(Resource):
         if len(adgroups) == 0:
             return {"message": "No adgroups found"}, 404
         else:
-            return {"message": marshal(adgroups, adgroup_fields)}
+            return {"results": marshal(adgroups, adgroup_fields)}
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -73,7 +73,7 @@ class AdgroupListAPI(Resource):
         except InvalidRequestError as e:
             return {"message": e.message}, 400
         else:
-            return {"message": marshal(new, adgroup_fields)}, 201
+            return {"result": marshal(new, adgroup_fields)}, 201
 
 
 class AdgroupAPI(Resource):
@@ -108,7 +108,7 @@ class AdgroupAPI(Resource):
         if adgroup is None:
             return {"message": "Item is missing"}, 404
         else:
-            return {"message": marshal(adgroup, adgroup_fields)}
+            return {"result": marshal(adgroup, adgroup_fields)}
 
     def put(self, adgroup_id):
         args = self.reqparse.parse_args()
@@ -120,7 +120,7 @@ class AdgroupAPI(Resource):
         except InvalidRequestError as e:
             return {"message": e.message}, 400
         else:
-            return {"message": marshal(adgroup, adgroup_fields)}, 200
+            return {"result": marshal(adgroup, adgroup_fields)}, 200
 
 
 api.add_resource(AdgroupListAPI, '/adgroups', endpoint='adgroups')
