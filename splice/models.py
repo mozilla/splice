@@ -119,7 +119,7 @@ class Campaign(db.Model):
     status = db.Column(db.String(16), nullable=False)
     channel_id = db.Column(db.Integer(), db.ForeignKey('channels.id'), nullable=False)
     account_id = db.Column(db.Integer(), db.ForeignKey("accounts.id"), nullable=False)
-    adgroups = db.relationship("Adgroup", backref="campains")
+    adgroups = db.relationship("Adgroup", backref="campaigns")
 
 
 blacklisted_ips = db.Table(
