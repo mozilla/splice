@@ -32,7 +32,7 @@ class TestTile(BaseTestCase):
             response = self.client.get(url)
             assert_equal(response.status_code, 200)
             resp = json.loads(response.data)
-            assert_equal(len(resp["message"]), len(tiles))
+            assert_equal(len(resp["results"]), len(tiles))
 
     def test_get_tiles_404(self):
         """ Test the failure case of HTTP GET
@@ -48,12 +48,12 @@ class TestTile(BaseTestCase):
         data = json.dumps(self.new_tile)
         response = self.client.post(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 201)
-        new = json.loads(response.data)["message"]
+        new = json.loads(response.data)["result"]
 
         url = url_for('api.tile.tile', adgroup_id=self.new_adgroup_id, tile_id=new["id"])
         response = self.client.get(url)
         resp = json.loads(response.data)
-        assert_equal(new, resp["message"])
+        assert_equal(new, resp["result"])
 
     def test_post_400_missing_argument(self):
         """ Test the failure case of HTTP POST
@@ -99,19 +99,19 @@ class TestTile(BaseTestCase):
         data = json.dumps(self.new_tile)
         response = self.client.post(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 201)
-        new = json.loads(response.data)["message"]
+        new = json.loads(response.data)["result"]
 
         url = url_for('api.tile.tile', tile_id=new["id"])
         new["status"] = "approved"
         data = json.dumps(new)
         response = self.client.put(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 200)
-        updated = json.loads(response.data)["message"]
+        updated = json.loads(response.data)["result"]
 
         url = url_for('api.tile.tile', tile_id=new["id"])
         response = self.client.get(url)
         resp = json.loads(response.data)
-        assert_equal(updated, resp["message"])
+        assert_equal(updated, resp["result"])
 
     def test_http_put_404(self):
         """ Test the failure case of HTTP PUT. Editing a missing tile ends up with a 404 error
@@ -133,7 +133,7 @@ class TestTile(BaseTestCase):
         data = json.dumps(self.new_tile)
         response = self.client.post(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 201)
-        new_tile = json.loads(response.data)["message"]
+        new_tile = json.loads(response.data)["result"]
 
         url = url_for('api.tile.tile', tile_id=new_tile["id"])
         del new_tile["status"]
