@@ -135,75 +135,69 @@ def ingest_links(data, channel_id, *args, **kwargs):
             new_tiles_list = []
 
             for t in tiles:
+                if is_compact and not populate_image_uris(t, assets):
+                    continue
+                image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
+                enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() \
+                    if "enhancedImageURI" in t else None
+
+                # deduplicate and sort frecent_sites
+                frecent_sites = sorted(set(t.get("frecent_sites", [])))
+                if frecent_sites:
+                    t['frecent_sites'] = frecent_sites
+                frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+                adgroup_name = bleach.clean(t.get("adgroup_name", ""), strip=True) or None
+                explanation = bleach.clean(t.get("explanation", ""), strip=True) or None
+
+                check_inadjacency = False
+                if 'check_inadjacency' in t:
+                    check_inadjacency = t['check_inadjacency']
+
+                # we have both the string and datetime objects to allow for optional timezones on the client
+                time_limits = t.get("time_limits", {
+                    'start': None, 'end': None,
+                    'start_dt': None, 'end_dt': None
+                })
+                if time_limits.get('start') or time_limits.get('end'):
+                    time_limits.update({
+                        'start_dt': du_parse(time_limits['start']) if time_limits.get('start') else None,
+                        'end_dt': du_parse(time_limits['end']) if time_limits.get('end') else None
+                    })
+                    for dt_name in ('start_dt', 'end_dt'):
+                        dt = time_limits[dt_name]
+                        if dt and dt.tzinfo:
+                            # capture the datetime as UTC, but without the Timezone info
+                            # check because input may be TZ-unaware
+                            time_limits[dt_name] = dt.astimezone(pytz.utc).replace(tzinfo=None)
+
+                frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+
+                columns = dict(
+                    target_url=t["url"],
+                    bg_color=t["bgColor"],
+                    title=t["title"],
+                    typ=t["type"],
+                    image_uri=image_hash,
+                    enhanced_image_uri=enhanced_image_hash,
+                    locale=locale,
+                    frecent_sites=frecent_sites,
+                    time_limits=time_limits,
+                    frequency_caps=frequency_caps,
+                    adgroup_name=adgroup_name,
+                    explanation=explanation,
+                    check_inadjacency=check_inadjacency,
+                    channel_id=channel_id,
+                    conn=conn
+                )
+
+                # note both tile_exists() and insert_tile() will use this transaction
                 trans = conn.begin()
                 try:
-                    if not env.is_test:
-                        conn.execute("LOCK TABLE tiles; LOCK TABLE adgroups; LOCK TABLE adgroup_sites;")
-
-                    # TODO: (najiang@mozilla.com), collect and return tile
-                    # ingestion errors - Bug 1169302
-                    if is_compact and not populate_image_uris(t, assets):
-                        continue
-                    image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
-                    enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() \
-                        if "enhancedImageURI" in t else None
-
-                    # deduplicate and sort frecent_sites
-                    frecent_sites = sorted(set(t.get("frecent_sites", [])))
-                    if frecent_sites:
-                        t['frecent_sites'] = frecent_sites
-                    frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
-                    adgroup_name = bleach.clean(t.get("adgroup_name", ""), strip=True) or None
-                    explanation = bleach.clean(t.get("explanation", ""), strip=True) or None
-
-                    check_inadjacency = False
-                    if 'check_inadjacency' in t:
-                        check_inadjacency = t['check_inadjacency']
-
-                    # we have both the string and datetime objects to allow for optional timezones on the client
-                    time_limits = t.get("time_limits", {
-                        'start': None, 'end': None,
-                        'start_dt': None, 'end_dt': None
-                    })
-                    if time_limits.get('start') or time_limits.get('end'):
-                        time_limits.update({
-                            'start_dt': du_parse(time_limits['start']) if time_limits.get('start') else None,
-                            'end_dt': du_parse(time_limits['end']) if time_limits.get('end') else None
-                        })
-                        for dt_name in ('start_dt', 'end_dt'):
-                            dt = time_limits[dt_name]
-                            if dt and dt.tzinfo:
-                                # capture the datetime as UTC, but without the Timezone info
-                                # check because input may be TZ-unaware
-                                time_limits[dt_name] = dt.astimezone(pytz.utc).replace(tzinfo=None)
-
-                    frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
-
-                    columns = dict(
-                        target_url=t["url"],
-                        bg_color=t["bgColor"],
-                        title=t["title"],
-                        typ=t["type"],
-                        image_uri=image_hash,
-                        enhanced_image_uri=enhanced_image_hash,
-                        locale=locale,
-                        frecent_sites=frecent_sites,
-                        time_limits=time_limits,
-                        frequency_caps=frequency_caps,
-                        adgroup_name=adgroup_name,
-                        explanation=explanation,
-                        check_inadjacency=check_inadjacency,
-                        channel_id=channel_id,
-                        conn=conn
-                    )
-
                     db_tile_id, ag_id = tile_exists(**columns)
                     f_tile_id = t.get("directoryId")
 
                     if db_tile_id is None or ag_id is None:
-                        """
-                        Will generate a new id if not found in db
-                        """
+                        # Will generate a new id if not found in db
                         db_tile_id, ag_id = insert_tile(**columns)
                         t["directoryId"] = db_tile_id
                         new_tiles_list.append(remove_unserializable_data(t))
@@ -214,10 +208,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         command_logger.info("NOOP: id:{0} already exists".format(f_tile_id))
 
                     else:
-                        """
-                        Either f_tile_id was not provided or
-                        the id's provided differ
-                        """
+                        # Either f_tile_id was not provided or the id's provided differ
                         t["directoryId"] = db_tile_id
                         new_tiles_list.append(remove_unserializable_data(t))
                         command_logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))

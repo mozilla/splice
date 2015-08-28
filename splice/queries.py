@@ -23,13 +23,12 @@ def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
     """
     Return the id of a tile having the data provided
     """
-    from splice.environment import Environment
-    env = Environment.instance()
-
     if conn is not None:
         sm = sessionmaker(bind=conn)
         session = sm()
     else:
+        from splice.environment import Environment
+        env = Environment.instance()
         session = env.db.session
 
     # we add order_by in the query although it shouldn't be necessary
@@ -72,15 +71,14 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
                 frecent_sites, time_limits, frequency_caps, adgroup_name, explanation,
                 check_inadjacency, channel_id, conn=None, *args, **kwargs):
 
-    from splice.environment import Environment
-    env = Environment.instance()
-    now = datetime.utcnow()
-
     trans = None
     if conn is None:
+        from splice.environment import Environment
+        env = Environment.instance()
         conn = env.db.engine.connect()
         trans = conn.begin()
 
+    now = datetime.utcnow()
     try:
         conn.execute(
             text(
