@@ -15,7 +15,7 @@ from boto.s3.key import Key
 import jsonschema
 from furl import furl
 from dateutil.parser import parse as du_parse
-from splice.queries import tile_exists, insert_tile, insert_distribution
+from splice.queries import session_scope, tile_exists, insert_tile, insert_distribution
 from splice.environment import Environment
 from splice.schemas import get_payload_schema
 
@@ -187,39 +187,34 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     explanation=explanation,
                     check_inadjacency=check_inadjacency,
                     channel_id=channel_id,
-                    conn=conn
                 )
 
-                # note both tile_exists() and insert_tile() will use this transaction
-                trans = conn.begin()
                 try:
-                    db_tile_id, ag_id = tile_exists(**columns)
-                    f_tile_id = t.get("directoryId")
+                    with session_scope(conn) as session:
+                        db_tile_id, ag_id = tile_exists(session, **columns)
+                        f_tile_id = t.get("directoryId")
 
-                    if db_tile_id is None or ag_id is None:
-                        # Will generate a new id if not found in db
-                        db_tile_id, ag_id = insert_tile(**columns)
-                        t["directoryId"] = db_tile_id
-                        new_tiles_list.append(remove_unserializable_data(t))
-                        command_logger.info("INSERT: Creating id:{0}".format(db_tile_id))
+                        if db_tile_id is None or ag_id is None:
+                            # Will generate a new id if not found in db
+                            db_tile_id, ag_id = insert_tile(session, **columns)
+                            t["directoryId"] = db_tile_id
+                            log_msg = "INSERT: Creating id:{0}".format(db_tile_id)
 
-                    elif db_tile_id == f_tile_id:
-                        new_tiles_list.append(remove_unserializable_data(t))
-                        command_logger.info("NOOP: id:{0} already exists".format(f_tile_id))
+                        elif db_tile_id == f_tile_id:
+                            log_msg = "NOOP: id:{0} already exists".format(f_tile_id)
 
-                    else:
-                        # Either f_tile_id was not provided or the id's provided differ
-                        t["directoryId"] = db_tile_id
-                        new_tiles_list.append(remove_unserializable_data(t))
-                        command_logger.info("IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id))
+                        else:
+                            # Either f_tile_id was not provided or the id's provided differ
+                            t["directoryId"] = db_tile_id
+                            log_msg = "IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id)
 
                 except Exception as e:
-                    trans.rollback()
                     command_logger.error("ERROR: {0}\nError inserting {1}.  ".format(e, json.dumps(
                         remove_unserializable_data(t),
                         sort_keys=True)))
                 else:
-                    trans.commit()
+                    command_logger.info(log_msg)
+                    new_tiles_list.append(remove_unserializable_data(t))
 
             ingested_data[country_locale_str] = new_tiles_list
 

@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import text
+from sqlalchemy import text, UniqueConstraint
 from splice.environment import Environment
 
 db = Environment.instance().db
@@ -42,6 +42,7 @@ class Tile(db.Model):
     enhanced_image_uri = db.Column(db.Text(), nullable=True)
 
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+    UniqueConstraint("target_url", "bg_color", "title", "type", "image_uri", "enhanced_image_uri")
 
 
 class Adgroup(db.Model):
@@ -65,6 +66,8 @@ class Adgroup(db.Model):
     channel_id = db.Column(db.Integer(), db.ForeignKey("channels.id"))
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
     tiles = db.relationship("Tile", backref="adgroup")
+    UniqueConstraint("locale", "name", "channel_id", "start_date", "start_date_dt", "end_date", "end_date_dt",
+                     "frequency_cap_daily", "frequency_cap_total", "explanation", "check_inadjacency")
 
 
 class AdgroupSite(db.Model):
