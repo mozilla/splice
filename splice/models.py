@@ -9,7 +9,7 @@ class Account(db.Model):
     __tablename__ = "accounts"
 
     id = db.Column('id', db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
-    name = db.Column('name', db.String(length=255), nullable=True)
+    name = db.Column('name', db.String(length=255), nullable=False)
     contact_name = db.Column('contact_name', db.String(length=255), nullable=True)
     contact_email = db.Column('contact_email', db.String(length=255), nullable=True)
     contact_phone = db.Column('contact_phone', db.String(length=255), nullable=True)
