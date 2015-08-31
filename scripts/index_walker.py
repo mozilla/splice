@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 
 import requests
 import json
@@ -13,6 +14,9 @@ from splice.models import Tile, Adgroup, Country, Account, Campaign, CampaignCou
 from tld import get_tld
 
 ARBITRARY_FUTURE = datetime.datetime.strptime('2525-01-01', "%Y-%m-%d").date()
+TLD_ACCOUNT_MAPPINGS = {
+    u'wired.com': u'Condé Nast',
+}
 
 
 def main():
@@ -21,7 +25,7 @@ def main():
     by reading the currently deployed tile distributions (s3), where it determines the currently active
     tile set, as well as the geo-targetting data (currently only country level) for each tile/adgroup.
 
-    The script also popultates/migrates data from the 'countries' table in the stats database.
+    The script also loads the countries table from fixtures.
 
     The script will discriminate between 'active' and 'inactive' adgroups based on whether or not
     the adgroup exists in the current distribution.  Inactive adgroups are given start/end dates
@@ -107,9 +111,13 @@ def main():
         for adgroup_id, url, locale, channel, created_at in result:
             assert all(x is not None for x in (adgroup_id, url, locale, channel)), \
                 "Some of %s is None" % str((adgroup_id, url, locale, channel))
+
+            # do tld -> account mapping substitution
             tld = get_tld(url)
+            account_name = TLD_ACCOUNT_MAPPINGS.get(tld, tld)
+
             active = adgroup_id in active_tiles
-            curr = (tld, locale, channel, active)
+            curr = (account_name, locale, channel, active)
             if curr not in campaigns:
                 # this is a new campaign, see if it's active
                 campaign_id += 1
@@ -122,23 +130,20 @@ def main():
                     end_date = created_at.date()
 
                 # insert it into the right account
-                if tld not in accounts:
+                if account_name not in accounts:
                     account_id += 1
                     next_account_id = account_id
-                    accounts[tld] = account_id
+                    accounts[account_name] = account_id
                 else:
-                    next_account_id = accounts[tld]
+                    next_account_id = accounts[account_name]
 
-                ctuple = (campaign_id, locale, start_date, end_date, '/'.join((tld, locale, str(channel))),
+                ctuple = (campaign_id, locale, start_date, end_date, u"%s %s/%s" % (account_name, locale, channel),
                           False, channel, next_account_id)
                 campaigns[curr] = ctuple
 
-                # append all the countries, be smart about 'STAR'
+                # append all the countries
                 for sub_country_code, sub_locale in tile_geodes[adgroup_id]:
-                    if sub_country_code == 'STAR':
-                        countries[campaign_id] = {'STAR'}
-                    elif 'STAR' not in countries[campaign_id]:
-                        countries[campaign_id].add(sub_country_code)
+                    countries[campaign_id].add(sub_country_code)
                 # print "campaign", ctuple
 
             adgroups[campaign_id].append(adgroup_id)
