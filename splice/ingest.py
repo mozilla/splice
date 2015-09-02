@@ -84,11 +84,8 @@ def ingest_links(data, channel_id, *args, **kwargs):
         except KeyError as e:
             command_logger.error("Failed to find base64-encoded image for key: {0}, "
                                  "when inserting tile with title: {1}, locale: "
-                                 "{2}, type: {3}, url: {4}".format(e,
-                                                                   tile["title"],
-                                                                   country_locale_str,
-                                                                   tile["type"],
-                                                                   tile["url"]))
+                                 "{2}, type: {3}, url: {4}"
+                                 .format(e, tile["title"], country_locale_str, tile["type"], tile["url"]))
             return False
         return True
 
@@ -116,112 +113,122 @@ def ingest_links(data, channel_id, *args, **kwargs):
     country_locales = sorted(distributions.keys())
 
     try:
-        for country_locale_str in country_locales:
+        with session_scope(conn) as session:
+            for country_locale_str in country_locales:
 
-            tiles = distributions[country_locale_str]
-            country_code, locale = country_locale_str.split("/")
-            country_code = country_code.upper()
+                tiles = distributions[country_locale_str]
+                country_code, locale = country_locale_str.split("/")
+                country_code = country_code.upper()
 
-            if country_code not in Environment.instance().fixtures["countries"]:
-                raise IngestError("country_code '{0}' is invalid".format(country_code))
+                if country_code not in Environment.instance().fixtures["countries"]:
+                    raise IngestError("country_code '{0}' is invalid".format(country_code))
 
-            if locale not in Environment.instance().fixtures["locales"]:
-                raise IngestError("locale '{0}' is invalid".format(locale))
+                if locale not in Environment.instance().fixtures["locales"]:
+                    raise IngestError("locale '{0}' is invalid".format(locale))
 
-            command_logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1} CHANNEL:{2}".format(country_code,
-                                                                                           locale,
-                                                                                           channel_id))
+                command_logger.info("PROCESSING FOR COUNTRY:{0} LOCALE:{1} CHANNEL:{2}"
+                                    .format(country_code, locale, channel_id))
 
-            new_tiles_list = []
+                new_tiles_list = []
 
-            for t in tiles:
-                if is_compact and not populate_image_uris(t, assets):
-                    continue
-                image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
-                enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() \
-                    if "enhancedImageURI" in t else None
+                for t in tiles:
+                    if is_compact and not populate_image_uris(t, assets):
+                        continue
 
-                # deduplicate and sort frecent_sites
-                frecent_sites = sorted(set(t.get("frecent_sites", [])))
-                if frecent_sites:
-                    t['frecent_sites'] = frecent_sites
-                frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
-                adgroup_name = bleach.clean(t.get("adgroup_name", ""), strip=True) or None
-                explanation = bleach.clean(t.get("explanation", ""), strip=True) or None
+                    columns = _create_tile_record(t, channel_id, locale)
 
-                check_inadjacency = False
-                if 'check_inadjacency' in t:
-                    check_inadjacency = t['check_inadjacency']
+                    db_tile_id, ag_id = tile_exists(session, **columns)
+                    f_tile_id = t.get("directoryId")
 
-                # we have both the string and datetime objects to allow for optional timezones on the client
-                time_limits = t.get("time_limits", {
-                    'start': None, 'end': None,
-                    'start_dt': None, 'end_dt': None
-                })
-                if time_limits.get('start') or time_limits.get('end'):
-                    time_limits.update({
-                        'start_dt': du_parse(time_limits['start']) if time_limits.get('start') else None,
-                        'end_dt': du_parse(time_limits['end']) if time_limits.get('end') else None
-                    })
-                    for dt_name in ('start_dt', 'end_dt'):
-                        dt = time_limits[dt_name]
-                        if dt and dt.tzinfo:
-                            # capture the datetime as UTC, but without the Timezone info
-                            # check because input may be TZ-unaware
-                            time_limits[dt_name] = dt.astimezone(pytz.utc).replace(tzinfo=None)
+                    if db_tile_id is None or ag_id is None:
+                        # Will generate a new id if not found in db
+                        db_tile_id, ag_id = insert_tile(session, **columns)
+                        t["directoryId"] = db_tile_id
+                        log_msg = "INSERT: Creating id:{0}".format(db_tile_id)
 
-                frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+                    elif db_tile_id == f_tile_id:
+                        log_msg = "NOOP: id:{0} already exists".format(f_tile_id)
 
-                columns = dict(
-                    target_url=t["url"],
-                    bg_color=t["bgColor"],
-                    title=t["title"],
-                    typ=t["type"],
-                    image_uri=image_hash,
-                    enhanced_image_uri=enhanced_image_hash,
-                    locale=locale,
-                    frecent_sites=frecent_sites,
-                    time_limits=time_limits,
-                    frequency_caps=frequency_caps,
-                    adgroup_name=adgroup_name,
-                    explanation=explanation,
-                    check_inadjacency=check_inadjacency,
-                    channel_id=channel_id,
-                )
+                    else:
+                        # Either f_tile_id was not provided or the id's provided differ
+                        t["directoryId"] = db_tile_id
+                        log_msg = "IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id)
 
-                try:
-                    with session_scope(conn) as session:
-                        db_tile_id, ag_id = tile_exists(session, **columns)
-                        f_tile_id = t.get("directoryId")
-
-                        if db_tile_id is None or ag_id is None:
-                            # Will generate a new id if not found in db
-                            db_tile_id, ag_id = insert_tile(session, **columns)
-                            t["directoryId"] = db_tile_id
-                            log_msg = "INSERT: Creating id:{0}".format(db_tile_id)
-
-                        elif db_tile_id == f_tile_id:
-                            log_msg = "NOOP: id:{0} already exists".format(f_tile_id)
-
-                        else:
-                            # Either f_tile_id was not provided or the id's provided differ
-                            t["directoryId"] = db_tile_id
-                            log_msg = "IGNORE: Tile already exists with id: {1}".format(f_tile_id, db_tile_id)
-
-                except Exception as e:
-                    command_logger.error("ERROR: {0}\nError inserting {1}.  ".format(e, json.dumps(
-                        remove_unserializable_data(t),
-                        sort_keys=True)))
-                else:
                     command_logger.info(log_msg)
                     new_tiles_list.append(remove_unserializable_data(t))
 
-            ingested_data[country_locale_str] = new_tiles_list
+                ingested_data[country_locale_str] = new_tiles_list
 
         return ingested_data
 
+    except Exception as e:
+        command_logger.error("ERROR: {0}\nRollback the transaction now.".format(e))
+        raise
+
     finally:
         conn.close()
+
+
+def _create_tile_record(t, channel_id, locale):
+    """Given a tile, create a record for the database queries
+    :param
+        t: tile data
+        channel_id: an integer channel id
+        locale: locale string
+    :return
+        a dictionary
+    """
+    image_hash = hashlib.sha1(t["imageURI"]).hexdigest()
+    enhanced_image_hash = hashlib.sha1(t.get("enhancedImageURI")).hexdigest() \
+        if "enhancedImageURI" in t else None
+
+    # deduplicate and sort frecent_sites
+    frecent_sites = sorted(set(t.get("frecent_sites", [])))
+    if frecent_sites:
+        t['frecent_sites'] = frecent_sites
+    frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+    adgroup_name = bleach.clean(t.get("adgroup_name", ""), strip=True) or None
+    explanation = bleach.clean(t.get("explanation", ""), strip=True) or None
+
+    check_inadjacency = False
+    if 'check_inadjacency' in t:
+        check_inadjacency = t['check_inadjacency']
+
+    # we have both the string and datetime objects to allow for optional timezones on the client
+    time_limits = t.get("time_limits", {
+        'start': None, 'end': None,
+        'start_dt': None, 'end_dt': None
+    })
+    if time_limits.get('start') or time_limits.get('end'):
+        time_limits.update({
+            'start_dt': du_parse(time_limits['start']) if time_limits.get('start') else None,
+            'end_dt': du_parse(time_limits['end']) if time_limits.get('end') else None
+        })
+        for dt_name in ('start_dt', 'end_dt'):
+            dt = time_limits[dt_name]
+            if dt and dt.tzinfo:
+                # capture the datetime as UTC, but without the Timezone info
+                # check because input may be TZ-unaware
+                time_limits[dt_name] = dt.astimezone(pytz.utc).replace(tzinfo=None)
+
+    frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
+
+    return dict(
+        target_url=t["url"],
+        bg_color=t["bgColor"],
+        title=t["title"],
+        typ=t["type"],
+        image_uri=image_hash,
+        enhanced_image_uri=enhanced_image_hash,
+        locale=locale,
+        frecent_sites=frecent_sites,
+        time_limits=time_limits,
+        frequency_caps=frequency_caps,
+        adgroup_name=adgroup_name,
+        explanation=explanation,
+        check_inadjacency=check_inadjacency,
+        channel_id=channel_id,
+    )
 
 
 def generate_artifacts(data, channel_name, deploy):
