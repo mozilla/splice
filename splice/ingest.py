@@ -114,6 +114,10 @@ def ingest_links(data, channel_id, *args, **kwargs):
 
     try:
         with session_scope(conn) as session:
+            if not env.is_test:
+                # lock the tables to avoid other concurrent write transactions
+                session.execute("LOCK TABLE tiles; LOCK TABLE adgroups; LOCK TABLE adgroup_sites;")
+
             for country_locale_str in country_locales:
 
                 tiles = distributions[country_locale_str]
