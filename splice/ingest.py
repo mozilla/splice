@@ -182,6 +182,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
                     columns = dict(
                         target_url=t["url"],
                         bg_color=t["bgColor"],
+                        title_bg_color=t.get("titleBgColor"),
                         title=t["title"],
                         typ=t["type"],
                         image_uri=image_hash,

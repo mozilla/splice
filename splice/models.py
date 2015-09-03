@@ -33,6 +33,7 @@ class Tile(db.Model):
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     target_url = db.Column(db.Text(), nullable=False)
     bg_color = db.Column(db.String(16), nullable=False)
+    title_bg_color = db.Column(db.String(16), nullable=True)
     title = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(40), nullable=False)
     locale = db.Column(db.String(14), nullable=False)
