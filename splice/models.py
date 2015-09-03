@@ -80,8 +80,8 @@ class AdgroupSite(db.Model):
 class AdgroupCategory(db.Model):
     __tablename__ = "adgroup_categories"
 
-    adgroup_id = db.Column(db.Integer(), db.ForeignKey("adgroups.id"))
-    category = db.Column(db.String(255))
+    adgroup_id = db.Column(db.Integer(), db.ForeignKey("adgroups.id"), primary_key=True)
+    category = db.Column(db.String(255), primary_key=True)
 
 
 blacklisted_ips = db.Table(
