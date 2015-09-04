@@ -55,7 +55,8 @@ class TestAuthoring(BaseTestCase):
     def test_publish_wrong_channel(self):
         url = "{0}?deploy=1&channelId=500".format(url_for('api.authoring.all_tiles'))
         response = self.client.post(url, data=self.sample_tile_data)
-        assert_equal(response.status_code, 404)
+        # ingest_tile will capture this error as the channel_id is missing
+        assert_equal(response.status_code, 400)
 
     def test_publish_corrupt_payload(self):
         url = "{0}?deploy=1&channelId=1".format(url_for('api.authoring.all_tiles'))

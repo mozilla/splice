@@ -928,16 +928,18 @@ class TestIngestLinks(BaseTestCase):
                 raise Exception('Boom')
 
         function_mock = Mock(side_effect=mock_ingest)
-        splice.ingest.insert_tile = function_mock
+        try:
+            splice.ingest.insert_tile = function_mock
 
-        ingest_links({"STAR/en-US": tiles_star}, self.channels[0].id)
-        tile_count_after = self.env.db.session.query(Tile).count()
+            assert_raises(Exception, ingest_links, {"STAR/en-US": tiles_star}, self.channels[0].id)
+            tile_count_after = self.env.db.session.query(Tile).count()
 
-        # only one has been inserted out of two
-        assert_equal(1, tile_count_after - tile_count_before)
+            # None of two has been inserted, to test the "all or nothing" scenario
+            assert_equal(0, tile_count_after - tile_count_before)
 
-        # put the module function back to what it was
-        splice.ingest.insert_tile = insert_function
+        finally:
+            # put the module function back to what it was
+            splice.ingest.insert_tile = insert_function
 
     def test_ingest_dbpool(self):
         """

@@ -1,38 +1,45 @@
+from contextlib import contextmanager
 from datetime import datetime, timedelta
 from sqlalchemy.sql import text
 from splice.models import Channel, Distribution, Tile, Adgroup, AdgroupSite
-from sqlalchemy.sql import select, func, and_
+from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import asc
 from sqlalchemy.orm.session import sessionmaker
 
 
-def get_frecent_sites_for_tile(tile_id, conn=None):
-    stmt = (select([AdgroupSite.site])
-            .where(and_(AdgroupSite.adgroup_id == Adgroup.id,
-                        Adgroup.id == Tile.adgroup_id,
-                        Tile.id == tile_id)))
-    result = conn.execute(stmt)
-    if result:
-        vals = list(r[0] for r in result)
-        return sorted(set(vals))
+@contextmanager
+def session_scope(conn):
+    try:
+        sm = sessionmaker(bind=conn)
+        session = sm()
+        session._model_changes = {}  # this is a workaround to make Flask-SQLAlchemy happy
+        yield session
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
+
+def get_frecent_sites_for_tile(session, tile_id):
+    results = (
+        session.query(AdgroupSite.site)
+        .filter(AdgroupSite.adgroup_id == Adgroup.id)
+        .filter(Adgroup.id == Tile.adgroup_id)
+        .filter(Tile.id == tile_id))
+    if results:
+        sites = [site for site, in results]
+        return sorted(set(sites))
     return []
 
 
-def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
+def tile_exists(session, target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
                 frecent_sites, time_limits, frequency_caps, adgroup_name, explanation, check_inadjacency, channel_id,
-                title_bg_color, conn=None, *args, **kwargs):
+                title_bg_color, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
-    from splice.environment import Environment
-    env = Environment.instance()
-
-    if conn is not None:
-        sm = sessionmaker(bind=conn)
-        session = sm()
-    else:
-        session = env.db.session
-
     # we add order_by in the query although it shouldn't be necessary
     # this is because of a previous bug where duplicate tiles could be created
     results = (
@@ -63,109 +70,57 @@ def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
     if results:
         for tile_id, adgroup_id in results:
             # now check frecent sites for this tile
-            db_frecents = get_frecent_sites_for_tile(tile_id, conn)
+            db_frecents = get_frecent_sites_for_tile(session, tile_id)
             if db_frecents == sorted(set(frecent_sites)):
                 return tile_id, adgroup_id
 
     return None, None
 
 
-def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
+def insert_tile(session, target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
                 frecent_sites, time_limits, frequency_caps, adgroup_name, explanation,
-                check_inadjacency, channel_id, title_bg_color, conn=None, *args, **kwargs):
-
-    from splice.environment import Environment
-    env = Environment.instance()
+                check_inadjacency, channel_id, title_bg_color, *args, **kwargs):
     now = datetime.utcnow()
 
-    trans = None
-    if conn is None:
-        conn = env.db.engine.connect()
-        trans = conn.begin()
+    adgroup = Adgroup(
+        locale=locale,
+        start_date=time_limits.get('start'),
+        end_date=time_limits.get('end'),
+        start_date_dt=time_limits.get('start_dt'),
+        end_date_dt=time_limits.get('end_dt'),
+        name=adgroup_name,
+        explanation=explanation,
+        frequency_cap_daily=frequency_caps['daily'],
+        frequency_cap_total=frequency_caps['total'],
+        check_inadjacency=check_inadjacency,
+        channel_id=channel_id,
+        created_at=now
+    )
+    session.add(adgroup)
+    session.flush()
+    ag_id = adgroup.id
 
-    try:
-        conn.execute(
-            text(
-                "INSERT INTO adgroups ("
-                "locale, "
-                "start_date, "
-                "end_date, "
-                "start_date_dt, "
-                "end_date_dt, "
-                "name, "
-                "explanation, "
-                "frequency_cap_daily, "
-                "frequency_cap_total, "
-                "check_inadjacency, "
-                "channel_id, "
-                "created_at"
-                ") "
-                "VALUES ("
-                ":locale, "
-                ":start_date, "
-                ":end_date, "
-                ":start_date_dt, "
-                ":end_date_dt, "
-                ":adgroup_name, "
-                ":explanation, "
-                ":frequency_cap_daily, "
-                ":frequency_cap_total, "
-                ":check_inadjacency, "
-                ":channel_id, "
-                ":created_at"
-                ")"
-            ),
-            locale=locale,
-            start_date=time_limits.get('start'),
-            end_date=time_limits.get('end'),
-            start_date_dt=time_limits.get('start_dt'),
-            end_date_dt=time_limits.get('end_dt'),
-            adgroup_name=adgroup_name,
-            explanation=explanation,
-            frequency_cap_daily=frequency_caps['daily'],
-            frequency_cap_total=frequency_caps['total'],
-            check_inadjacency=check_inadjacency,
-            channel_id=channel_id,
-            created_at=now,
-        )
-        ag_id = conn.execute("SELECT MAX(id) FROM adgroups;").scalar()
+    if frecent_sites:
+        sites = (AdgroupSite(adgroup_id=ag_id, site=site, created_at=now) for site in frecent_sites)
+        session.bulk_save_objects(sites)
 
-        if frecent_sites:
-            values = ','.join(["(%d, '%s', '%s')" % (ag_id, site, now) for site in frecent_sites])
-            stmt = "INSERT INTO adgroup_sites (adgroup_id, site, created_at)  VALUES %s" % values
-            conn.execute(stmt)
+    tile = Tile(
+        target_url=target_url,
+        bg_color=bg_color,
+        title_bg_color=title_bg_color,
+        title=title,
+        type=typ,
+        image_uri=image_uri,
+        enhanced_image_uri=enhanced_image_uri,
+        created_at=now,
+        locale=locale,
+        adgroup_id=ag_id
+    )
+    session.add(tile)
+    session.flush()
+    tile_id = tile.id
 
-        conn.execute(
-            text(
-                "INSERT INTO tiles ("
-                " target_url, bg_color, title, type, image_uri, enhanced_image_uri, created_at, "
-                "locale, adgroup_id, title_bg_color"
-                ") "
-                "VALUES ("
-                " :target_url, :bg_color, :title, :type, :image_uri, :enhanced_image_uri, "
-                ":created_at, :locale, :adgroup_id, :title_bg_color"
-                ")"
-            ),
-            target_url=target_url,
-            bg_color=bg_color,
-            title=title,
-            type=typ,
-            image_uri=image_uri,
-            enhanced_image_uri=enhanced_image_uri,
-            created_at=now,
-            locale=locale,
-            adgroup_id=ag_id,
-            title_bg_color=title_bg_color
-        )
-        tile_id = conn.execute("SELECT MAX(id) FROM tiles;").scalar()
-
-        if trans is not None:
-            trans.commit()
-        return tile_id, ag_id
-    except Exception as e:
-        if trans is not None:
-            trans.rollback()
-        raise e
+    return tile_id, ag_id
 
 
 def insert_distribution(url, channel_id, deployed, scheduled_dt, *args, **kwargs):

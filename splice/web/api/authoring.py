@@ -4,6 +4,7 @@ from datetime import datetime
 from flask import Blueprint, request, jsonify
 from werkzeug.exceptions import BadRequest
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import IntegrityError
 from splice.environment import Environment
 from splice.queries import get_channels, get_all_distributions
 from splice.ingest import IngestError, ScheduleError, ingest_links, distribute, get_payload_schema
@@ -46,7 +47,7 @@ def all_tiles():
         errors.append(error)
         env.log("VALIDATION_ERROR path:{0} msg:{1}".format(path, e.message), level=logging.ERROR, name="client_error")
         return jsonify({"err": errors}), 400
-    except IngestError, e:
+    except (IngestError, IntegrityError), e:
         env.log("INGEST_ERROR msg:{0}".format(e.message), level=logging.ERROR, name="client_error")
         return jsonify({"err": [{"msg": e.message}]}), 400
     except ScheduleError, e:
