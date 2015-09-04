@@ -501,6 +501,30 @@ class TestIngestLinks(BaseTestCase):
         c = self.env.db.session.query(Adgroup).count()
         assert_equal(32, c)
 
+    def test_title_bg_color(self):
+        """
+        A simple test of frequency caps
+        """
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "titleBgColor": "#FF00FF"
+        }
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links({"US/en-US": [tile]}, self.channels[0].id)
+        assert_equal(1, len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(31, c)
+
+        tile = self.env.db.session.query(Tile).filter(Tile.id == 31).one()
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
+        assert_equal(tile.adgroup_id, ag.id)
+        assert_equal(tile.title_bg_color, "#FF00FF")
+
     def test_frequency_caps(self):
         """
         A simple test of frequency caps

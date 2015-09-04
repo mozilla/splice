@@ -98,7 +98,7 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
                 "frequency_cap_total, "
                 "check_inadjacency, "
                 "channel_id, "
-                "created_at, "
+                "created_at"
                 ") "
                 "VALUES ("
                 ":locale, "
@@ -112,7 +112,7 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
                 ":frequency_cap_total, "
                 ":check_inadjacency, "
                 ":channel_id, "
-                ":created_at, "
+                ":created_at"
                 ")"
             ),
             locale=locale,
