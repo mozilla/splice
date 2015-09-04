@@ -19,7 +19,8 @@ def get_frecent_sites_for_tile(tile_id, conn=None):
 
 
 def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                frecent_sites, time_limits, frequency_caps, adgroup_name, explanation, check_inadjacency, channel_id, conn=None, *args, **kwargs):
+                frecent_sites, time_limits, frequency_caps, adgroup_name, explanation, check_inadjacency, channel_id,
+                title_bg_color, conn=None, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
@@ -39,6 +40,7 @@ def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
         .query(Tile.id, Tile.adgroup_id)
         .filter(Tile.target_url == target_url)
         .filter(Tile.bg_color == bg_color)
+        .filter(Tile.title_bg_color == title_bg_color)
         .filter(Tile.title == title)
         .filter(Tile.type == typ)
         .filter(Tile.image_uri == image_uri)
@@ -70,7 +72,7 @@ def tile_exists(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
 
 def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
                 frecent_sites, time_limits, frequency_caps, adgroup_name, explanation,
-                check_inadjacency, channel_id, conn=None, *args, **kwargs):
+                check_inadjacency, channel_id, title_bg_color, conn=None, *args, **kwargs):
 
     from splice.environment import Environment
     env = Environment.instance()
@@ -136,10 +138,12 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
         conn.execute(
             text(
                 "INSERT INTO tiles ("
-                " target_url, bg_color, title, type, image_uri, enhanced_image_uri, created_at, locale, adgroup_id"
+                " target_url, bg_color, title, type, image_uri, enhanced_image_uri, created_at, "
+                "locale, adgroup_id, title_bg_color"
                 ") "
                 "VALUES ("
-                " :target_url, :bg_color, :title, :type, :image_uri, :enhanced_image_uri, :created_at, :locale, :adgroup_id"
+                " :target_url, :bg_color, :title, :type, :image_uri, :enhanced_image_uri, "
+                ":created_at, :locale, :adgroup_id, :title_bg_color"
                 ")"
             ),
             target_url=target_url,
@@ -150,7 +154,8 @@ def insert_tile(target_url, bg_color, title, typ, image_uri, enhanced_image_uri,
             enhanced_image_uri=enhanced_image_uri,
             created_at=now,
             locale=locale,
-            adgroup_id=ag_id
+            adgroup_id=ag_id,
+            title_bg_color=title_bg_color
         )
         tile_id = conn.execute("SELECT MAX(id) FROM tiles;").scalar()
 
