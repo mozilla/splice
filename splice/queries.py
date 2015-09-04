@@ -35,7 +35,8 @@ def get_frecent_sites_for_tile(session, tile_id):
 
 
 def tile_exists(session, target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                frecent_sites, time_limits, frequency_caps, adgroup_name, explanation, check_inadjacency, channel_id, *args, **kwargs):
+                frecent_sites, time_limits, frequency_caps, adgroup_name, explanation, check_inadjacency, channel_id,
+                title_bg_color, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
@@ -46,6 +47,7 @@ def tile_exists(session, target_url, bg_color, title, typ, image_uri, enhanced_i
         .query(Tile.id, Tile.adgroup_id)
         .filter(Tile.target_url == target_url)
         .filter(Tile.bg_color == bg_color)
+        .filter(Tile.title_bg_color == title_bg_color)
         .filter(Tile.title == title)
         .filter(Tile.type == typ)
         .filter(Tile.image_uri == image_uri)
@@ -77,7 +79,7 @@ def tile_exists(session, target_url, bg_color, title, typ, image_uri, enhanced_i
 
 def insert_tile(session, target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
                 frecent_sites, time_limits, frequency_caps, adgroup_name, explanation,
-                check_inadjacency, channel_id, *args, **kwargs):
+                check_inadjacency, channel_id, title_bg_color, *args, **kwargs):
     now = datetime.utcnow()
 
     adgroup = Adgroup(
@@ -105,6 +107,7 @@ def insert_tile(session, target_url, bg_color, title, typ, image_uri, enhanced_i
     tile = Tile(
         target_url=target_url,
         bg_color=bg_color,
+        title_bg_color=title_bg_color,
         title=title,
         type=typ,
         image_uri=image_uri,

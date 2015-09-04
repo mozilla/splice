@@ -140,7 +140,6 @@ def ingest_links(data, channel_id, *args, **kwargs):
                         continue
 
                     columns = _create_tile_record(t, channel_id, locale)
-
                     db_tile_id, ag_id = tile_exists(session, **columns)
                     f_tile_id = t.get("directoryId")
 
@@ -220,6 +219,7 @@ def _create_tile_record(t, channel_id, locale):
     return dict(
         target_url=t["url"],
         bg_color=t["bgColor"],
+        title_bg_color=t.get("titleBgColor"),
         title=t["title"],
         typ=t["type"],
         image_uri=image_hash,

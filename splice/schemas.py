@@ -49,6 +49,10 @@ def _make_common_schema():
                             "type": "string",
                             "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
                         },
+                        "titleBgColor": {
+                            "type": "string",
+                            "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
+                        },
                         "type": {
                             "enum": ["affiliate", "organic", "sponsored"],
                         },
