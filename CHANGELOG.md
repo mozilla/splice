@@ -1,3 +1,12 @@
+1.1.32
+======
+
+* Bug 1197962 - Add adgroup_categories table
+* Bug 1182241 - Remove table locking on insert
+* Bug 1188051 - Add title_bg_color to tiles table
+__note__:
+* Include new database migration in migrations/versions/d8d5541170a_.py
+
 1.1.31
 ======
 
