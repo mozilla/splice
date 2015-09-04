@@ -503,7 +503,7 @@ class TestIngestLinks(BaseTestCase):
 
     def test_title_bg_color(self):
         """
-        A simple test of frequency caps
+        A simple test of title_bg_color
         """
         tile = {
             "imageURI": "data:image/png;base64,somedata",
