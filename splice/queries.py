@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from datetime import datetime, timedelta
 from sqlalchemy.sql import text
-from splice.models import Channel, Distribution, Tile, Adgroup, AdgroupSite
+from splice.models import Channel, Distribution, Tile, Adgroup, AdgroupSite, AdgroupCategory
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import asc
 from sqlalchemy.orm.session import sessionmaker
@@ -34,9 +34,19 @@ def get_frecent_sites_for_tile(session, tile_id):
     return []
 
 
+def get_categories_for_adgroup(session, adgroup_id):
+    results = (
+        session.query(AdgroupCategory.category)
+        .filter(AdgroupCategory.adgroup_id == adgroup_id))
+    if results:
+        categories = [category for category, in results]
+        return sorted(set(categories))
+    return []
+
+
 def tile_exists(session, target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                frecent_sites, time_limits, frequency_caps, adgroup_name, explanation, check_inadjacency, channel_id,
-                title_bg_color, *args, **kwargs):
+                frecent_sites, time_limits, frequency_caps, adgroup_name, adgroup_categories, explanation,
+                check_inadjacency, channel_id, title_bg_color, *args, **kwargs):
     """
     Return the id of a tile having the data provided
     """
@@ -69,17 +79,18 @@ def tile_exists(session, target_url, bg_color, title, typ, image_uri, enhanced_i
 
     if results:
         for tile_id, adgroup_id in results:
-            # now check frecent sites for this tile
+            # now check frecent sites and adgroup categories for this tile
             db_frecents = get_frecent_sites_for_tile(session, tile_id)
-            if db_frecents == sorted(set(frecent_sites)):
+            db_categories = get_categories_for_adgroup(session, adgroup_id)
+            if db_frecents == sorted(set(frecent_sites)) and db_categories == sorted(set(adgroup_categories)):
                 return tile_id, adgroup_id
 
     return None, None
 
 
 def insert_tile(session, target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,
-                frecent_sites, time_limits, frequency_caps, adgroup_name, explanation,
-                check_inadjacency, channel_id, title_bg_color, *args, **kwargs):
+                frecent_sites, time_limits, frequency_caps, adgroup_name, adgroup_categories,
+                explanation, check_inadjacency, channel_id, title_bg_color, *args, **kwargs):
     now = datetime.utcnow()
 
     adgroup = Adgroup(
@@ -103,6 +114,10 @@ def insert_tile(session, target_url, bg_color, title, typ, image_uri, enhanced_i
     if frecent_sites:
         sites = (AdgroupSite(adgroup_id=ag_id, site=site, created_at=now) for site in frecent_sites)
         session.bulk_save_objects(sites)
+
+    if adgroup_categories:
+        categories = (AdgroupCategory(adgroup_id=ag_id, category=category) for category in adgroup_categories)
+        session.bulk_save_objects(categories)
 
     tile = Tile(
         target_url=target_url,
