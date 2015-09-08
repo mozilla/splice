@@ -529,8 +529,6 @@ class TestIngestLinks(BaseTestCase):
         """
         A simple test of adgroup_categories with invalid data
         """
-        from splice.queries import get_categories_for_adgroup
-
         tile = {
             "imageURI": "data:image/png;base64,somedata",
             "url": "https://somewhere.com",
