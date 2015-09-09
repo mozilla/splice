@@ -27,21 +27,19 @@ def get_frecent_sites_for_tile(session, tile_id):
         session.query(AdgroupSite.site)
         .filter(AdgroupSite.adgroup_id == Adgroup.id)
         .filter(Adgroup.id == Tile.adgroup_id)
-        .filter(Tile.id == tile_id))
-    if results:
-        sites = [site for site, in results]
-        return sorted(set(sites))
-    return []
+        .filter(Tile.id == tile_id)).all()
+    sites = [site for site, in results]
+
+    return sorted(set(sites))
 
 
 def get_categories_for_adgroup(session, adgroup_id):
     results = (
         session.query(AdgroupCategory.category)
-        .filter(AdgroupCategory.adgroup_id == adgroup_id))
-    if results:
-        categories = [category for category, in results]
-        return sorted(set(categories))
-    return []
+        .filter(AdgroupCategory.adgroup_id == adgroup_id)).all()
+    categories = [category for category, in results]
+
+    return sorted(set(categories))
 
 
 def tile_exists(session, target_url, bg_color, title, typ, image_uri, enhanced_image_uri, locale,

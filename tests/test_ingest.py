@@ -151,25 +151,6 @@ class TestIngestLinks(BaseTestCase):
         assert_equal(data["CA/en-US"][0]['frecent_sites'],
                      ["http://abc.com", "http://def.com", "http://lmnop.org", "https://xyz.com"])
 
-    def test_ingest_empty_suggested_sites(self):
-        """
-        Test that ingest tile with an empty suggested sites
-        """
-        from splice.queries import get_frecent_sites_for_tile
-
-        tile = {
-            "imageURI": "data:image/png;base64,somedata",
-            "url": "https://somewhere.com",
-            "title": "Some Title",
-            "type": "organic",
-            "bgColor": "#FFFFFF",
-            "frecent_sites": []
-        }
-        data = ingest_links({"CA/en-US": [tile]}, self.channels[0].id)
-        assert_equal(1, len(data["CA/en-US"]))
-        assert_equal(data["CA/en-US"][0]['frecent_sites'],
-                     get_frecent_sites_for_tile(self.env.db.session, 31))
-
     def test_ingest_suggested_sites(self):
         """
         Test that there is no duplication when ingesting tiles
@@ -557,25 +538,6 @@ class TestIngestLinks(BaseTestCase):
             "adgroup_categories": "Technology_General"  # should be a list here
         }
         assert_raises(ValidationError, ingest_links, {"US/en-US": [tile]}, self.channels[0].id)
-
-    def test_ingest_empty_adgroup_categories(self):
-        """
-        Test that ingest tile with an empty adgroup categories
-        """
-        from splice.queries import get_categories_for_adgroup
-
-        tile = {
-            "imageURI": "data:image/png;base64,somedata",
-            "url": "https://somewhere.com",
-            "title": "Some Title",
-            "type": "organic",
-            "bgColor": "#FFFFFF",
-            "adgroup_categories": []
-        }
-        data = ingest_links({"CA/en-US": [tile]}, self.channels[0].id)
-        assert_equal(1, len(data["CA/en-US"]))
-        assert_equal(data["CA/en-US"][0]['adgroup_categories'],
-                     get_categories_for_adgroup(self.env.db.session, 31))
 
     def test_adgroup_categories_single(self):
         """
