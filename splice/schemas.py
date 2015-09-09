@@ -49,6 +49,10 @@ def _make_common_schema():
                             "type": "string",
                             "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
                         },
+                        "titleBgColor": {
+                            "type": "string",
+                            "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|"
+                        },
                         "type": {
                             "enum": ["affiliate", "organic", "sponsored"],
                         },
@@ -103,6 +107,13 @@ def _make_common_schema():
                             # are optiobal
                             "type": "string",
                             "maxLength": 255,
+                        },
+                        "adgroup_categories": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "maxLength": 255,
+                            }
                         }
                     },
                     "required": ["url", "title", "bgColor", "type", "imageURI"],

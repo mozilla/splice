@@ -74,6 +74,7 @@ class Tile(db.Model):
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     target_url = db.Column(db.Text(), nullable=False)
     bg_color = db.Column(db.String(16), nullable=False)
+    title_bg_color = db.Column(db.String(16), nullable=True)
     title = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(40), nullable=False)
     locale = db.Column(db.String(14), nullable=False)
@@ -117,6 +118,13 @@ class AdgroupSite(db.Model):
     active = db.Column(db.Boolean(), default=True)
     site = db.Column(db.String(1024), nullable=False)
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
+
+
+class AdgroupCategory(db.Model):
+    __tablename__ = "adgroup_categories"
+
+    adgroup_id = db.Column(db.Integer(), db.ForeignKey("adgroups.id"), primary_key=True)
+    category = db.Column(db.String(255), primary_key=True)
 
 
 blacklisted_ips = db.Table(

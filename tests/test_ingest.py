@@ -501,6 +501,98 @@ class TestIngestLinks(BaseTestCase):
         c = self.env.db.session.query(Adgroup).count()
         assert_equal(32, c)
 
+    def test_title_bg_color(self):
+        """
+        A simple test of title_bg_color
+        """
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "titleBgColor": "#FF00FF"
+        }
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links({"US/en-US": [tile]}, self.channels[0].id)
+        assert_equal(1, len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(31, c)
+
+        tile = self.env.db.session.query(Tile).filter(Tile.id == 31).one()
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
+        assert_equal(tile.adgroup_id, ag.id)
+        assert_equal(tile.title_bg_color, "#FF00FF")
+
+    def test_adgroup_categories_invalid(self):
+        """
+        A simple test of adgroup_categories with invalid data
+        """
+        tile = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "adgroup_categories": "Technology_General"  # should be a list here
+        }
+        assert_raises(ValidationError, ingest_links, {"US/en-US": [tile]}, self.channels[0].id)
+
+    def test_adgroup_categories_single(self):
+        """
+        A simple test of adgroup_categories
+        """
+        from splice.queries import get_categories_for_adgroup
+
+        tile_ = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "adgroup_categories": ["Technology_General"]
+        }
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links({"US/en-US": [tile_]}, self.channels[0].id)
+        assert_equal(1, len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(31, c)
+
+        tile = self.env.db.session.query(Tile).filter(Tile.id == 31).one()
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
+        assert_equal(tile.adgroup_id, ag.id)
+        db_categories = get_categories_for_adgroup(self.env.db.session, ag.id)
+        assert_equal(tile_["adgroup_categories"], db_categories)
+
+    def test_adgroup_categories_multiple(self):
+        """
+        A simple test of adgroup_categories with multiple categories
+        """
+        from splice.queries import get_categories_for_adgroup
+
+        tile_ = {
+            "imageURI": "data:image/png;base64,somedata",
+            "url": "https://somewhere.com",
+            "title": "Some Title",
+            "type": "organic",
+            "bgColor": "#FFFFFF",
+            "adgroup_categories": ["Technology_General", "Technology_Mobile"]
+        }
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(30, c)
+        data = ingest_links({"US/en-US": [tile_]}, self.channels[0].id)
+        assert_equal(1, len(data["US/en-US"]))
+        c = self.env.db.session.query(Adgroup).count()
+        assert_equal(31, c)
+
+        tile = self.env.db.session.query(Tile).filter(Tile.id == 31).one()
+        ag = self.env.db.session.query(Adgroup).filter(Adgroup.id == 31).one()
+        assert_equal(tile.adgroup_id, ag.id)
+        db_categories = get_categories_for_adgroup(self.env.db.session, ag.id)
+        assert_equal(sorted(tile_["adgroup_categories"]), db_categories)
+
     def test_frequency_caps(self):
         """
         A simple test of frequency caps
@@ -904,16 +996,18 @@ class TestIngestLinks(BaseTestCase):
                 raise Exception('Boom')
 
         function_mock = Mock(side_effect=mock_ingest)
-        splice.ingest.insert_tile = function_mock
+        try:
+            splice.ingest.insert_tile = function_mock
 
-        ingest_links({"STAR/en-US": tiles_star}, self.channels[0].id)
-        tile_count_after = self.env.db.session.query(Tile).count()
+            assert_raises(Exception, ingest_links, {"STAR/en-US": tiles_star}, self.channels[0].id)
+            tile_count_after = self.env.db.session.query(Tile).count()
 
-        # only one has been inserted out of two
-        assert_equal(1, tile_count_after - tile_count_before)
+            # None of two has been inserted, to test the "all or nothing" scenario
+            assert_equal(0, tile_count_after - tile_count_before)
 
-        # put the module function back to what it was
-        splice.ingest.insert_tile = insert_function
+        finally:
+            # put the module function back to what it was
+            splice.ingest.insert_tile = insert_function
 
     def test_ingest_dbpool(self):
         """
