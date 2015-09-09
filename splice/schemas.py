@@ -107,6 +107,13 @@ def _make_common_schema():
                             # are optiobal
                             "type": "string",
                             "maxLength": 255,
+                        },
+                        "adgroup_categories": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "maxLength": 255,
+                            }
                         }
                     },
                     "required": ["url", "title", "bgColor", "type", "imageURI"],

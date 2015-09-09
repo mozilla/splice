@@ -189,6 +189,12 @@ def _create_tile_record(t, channel_id, locale):
     frecent_sites = sorted(set(t.get("frecent_sites", [])))
     if frecent_sites:
         t['frecent_sites'] = frecent_sites
+
+    # deduplicate and sort adgroup_categories
+    adgroup_categories = sorted(set(t.get("adgroup_categories", [])))
+    if adgroup_categories:
+        t['adgroup_categories'] = adgroup_categories
+
     frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
     adgroup_name = bleach.clean(t.get("adgroup_name", ""), strip=True) or None
     explanation = bleach.clean(t.get("explanation", ""), strip=True) or None
@@ -229,6 +235,7 @@ def _create_tile_record(t, channel_id, locale):
         time_limits=time_limits,
         frequency_caps=frequency_caps,
         adgroup_name=adgroup_name,
+        adgroup_categories=adgroup_categories,
         explanation=explanation,
         check_inadjacency=check_inadjacency,
         channel_id=channel_id,
@@ -298,7 +305,8 @@ def generate_artifacts(data, channel_name, deploy):
             legacy_tiles = copy.deepcopy(dir_tiles)
             for tile in legacy_tiles:
                 # remove extra metadata
-                for key in ('frequency_caps', 'adgroup_name', 'explanation', 'check_inadjacency', 'time_limits'):
+                for key in ('frequency_caps', 'adgroup_name', 'adgroup_categories',
+                            'explanation', 'check_inadjacency', 'time_limits'):
                     tile.pop(key, None)
 
             legacy = json.dumps({locale: legacy_tiles}, sort_keys=True)
