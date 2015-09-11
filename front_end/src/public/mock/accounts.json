@@ -1,0 +1,25 @@
+{
+    "results": [
+        {
+            "created_at": "Fri, 28 Aug 2015 00:13:01 -0000", 
+            "email": "business@yahoo.com", 
+            "id": 3, 
+            "name": "Yahoo", 
+            "phone": "+1(888)7777777"
+        }, 
+        {
+            "created_at": "Fri, 28 Aug 2015 00:13:01 -0000", 
+            "email": "business@booking.com", 
+            "id": 2, 
+            "name": "Booking.com", 
+            "phone": "+1(888)6666666"
+        }, 
+        {
+            "created_at": "Fri, 28 Aug 2015 00:13:01 -0000", 
+            "email": "business@mozilla.com", 
+            "id": 1, 
+            "name": "Mozilla", 
+            "phone": "+1(888)8888888"
+        }
+    ]
+}
