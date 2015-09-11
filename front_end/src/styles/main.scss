@@ -1,0 +1,36 @@
+blockquote {
+	color: red;
+}
+
+.image {
+	background: url(/public/img/imdb.png);
+	height: 100px;
+	width: 100px;
+}
+
+.fadeIn-appear {
+	opacity: 0.01;
+	transition: opacity .5s ease-in;
+}
+
+.fadeIn-appear.fadeIn-appear-active {
+	opacity: 1;
+}
+
+.fadeIn-enter {
+	opacity: 0.01;
+	transition: opacity .5s ease-in;
+}
+
+.fadeIn-enter.fadeIn-enter-active {
+	opacity: 1;
+}
+
+.fadeIn-leave {
+	opacity: 1;
+	transition: opacity 1s ease-in;
+}
+
+.fadeIn-leave.fadeIn-leave-active {
+	opacity: 0.01;
+}
