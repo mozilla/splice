@@ -26,10 +26,11 @@ export default class App extends Component {
 				</DebugPanel>
 			);
 		}
+
 		return (
 			<div>
 				<Provider store={store}>
-					{() => <Routes history={history}/>}
+					{() => <Routes history={history} />}
 				</Provider>
 				{devtools}
 			</div>

@@ -1,5 +1,12 @@
 import fetch from 'isomorphic-fetch';
 
+let apiUrl;
+if (typeof __DEVELOPMENT__ !== 'undefined' && __DEVELOPMENT__ === true) {
+	apiUrl = __DEVAPI__;
+} else {
+	apiUrl = __LIVEAPI__;
+}
+
 export const REQUEST_ADD_ACCOUNT = 'REQUEST_ADD_ACCOUNT';
 export const RECEIVE_ADD_ACCOUNT = 'RECEIVE_ADD_ACCOUNT';
 
@@ -42,15 +49,14 @@ export function fetchAccountView(accountId) {
 	return function next(dispatch) {
 		dispatch(requestAccountView());
 		// Return a promise to wait for
-		// (this is not required by thunk middleware, but it is convenient for us)
 		//return fetch('http://localhost:9999/public/mock/account_' + accountId + '.json')
-		return fetch('http://tbg-staging-1.thebuddygroup.com:5000/api/accounts/' + accountId)
+		return fetch(apiUrl + '/api/accounts/' + accountId)
 			.then(response => response.json())
 			.then(json => new Promise(resolve => {
-				// We can dispatch many times!
 				dispatch(receiveAccountView(json));
 				resolve();
-			}));
+				})
+			);
 	};
 }
 
@@ -59,15 +65,13 @@ export function fetchAccounts() {
 	return function next(dispatch) {
 		dispatch(requestAccounts());
 		// Return a promise to wait for
-		// (this is not required by thunk middleware, but it is convenient for us)
 		//return fetch('http://localhost:9999/public/mock/accounts.json')
-		return fetch('http://tbg-staging-1.thebuddygroup.com:5000/api/accounts')
+		return fetch(apiUrl + '/api/accounts')
 			.then(response => response.json())
 			.then(json => {
-				// We can dispatch many times!
-				dispatch(receiveAccounts(json));
-			}
-		);
+					dispatch(receiveAccounts(json));
+				}
+			);
 	};
 }
 
@@ -76,21 +80,29 @@ export function saveAccount(data) {
 	return function next(dispatch) {
 		dispatch(requestAddAccount());
 		// Return a promise to wait for
-		// (this is not required by thunk middleware, but it is convenient for us)
 		/*return fetch('http://localhost:9999/public/mock/accounts.json', {
-		 method: 'post',
-		 headers: {
-		 'Accept': 'application/json',
-		 'Content-Type': 'application/json'
-		 },
-		 body: JSON.stringify({
-		 name: data.text
-		 })
-		 })*/
+			method: 'post',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				name: data.text
+			})
+		}).then(response => response.json())
+			.then((json) => {
+				dispatch(receiveAddAccount({
+					'created_at': '',
+					'email': 'test@gmail.com',
+					'id': 99,
+					'name': data.text,
+					'phone': '+1(888)0000000'
+				}));
+			});*/
+
 		return fetch('http://localhost:9999/public/mock/accounts.json')
 			.then(response => response.json())
-			.then(() =>
-				// We can dispatch many times!
+			.then(() => {
 				setTimeout(() => {
 					dispatch(receiveAddAccount({
 						'created_at': '',
@@ -99,7 +111,8 @@ export function saveAccount(data) {
 						'name': data.text,
 						'phone': '+1(888)0000000'
 					}));
-				}, 1000)
+				}, 1000);
+			}
 		);
 	};
 }

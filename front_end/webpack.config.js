@@ -6,78 +6,50 @@
  */
 'use strict';
 var webpack = require('webpack');
-
 var assetPath = require('path').join(__dirname, 'dist');
+
+import { webpack_resolve, webpack_modules_loaders, devApi, liveApi, development, devTools } from './settings.conf.js';
 
 module.exports = {
 
-  output: {
-    path: assetPath,
-    filename: 'main.js',
-    publicPath: '/assets/'
-  },
+	output: {
+		path: assetPath,
+		filename: 'main.js',
+		publicPath: '/assets/'
+	},
 
-  cache: true,
-  debug: true,
-  devtool: 'sourcemap',
-  entry: [
-    'webpack-dev-server/client?http://localhost:9999',
-    'webpack/hot/only-dev-server',
-    './src/main.js'
-  ],
+	cache: true,
+	debug: true,
+	devtool: 'sourcemap',
+	entry: [
+		'webpack-dev-server/client?http://localhost:9999',
+		'webpack/hot/only-dev-server',
+		'./src/main.js'
+	],
 
-  stats: {
-    colors: true,
-    reasons: true
-  },
+	stats: {
+		colors: true,
+		reasons: true
+	},
 
-  resolve: {
-    extensions: ['', '.js', '.jsx'],
-    alias: {
-      'styles': __dirname + '/src/styles',
-      'components': __dirname + '/src/components/',
-      'reducers': __dirname + '/src/reducers/',
-      'actions': __dirname + '/src/actions/',
-      'constants': __dirname + '/src/constants/',
-      'pages': __dirname + '/src/pages/'
-    }
-  },
-  module: {
-    preLoaders: [{
-      test: /\.(js|jsx)$/,
-      exclude: [/node_module/, 'server.js', 'mock/*'],
-      loader: 'eslint'
-    }],
-    loaders: [{
-      test: /\.(js|jsx)$/,
-      exclude: /node_modules/,
-      loader: 'react-hot!babel'
-    }, {
-      test: /\.scss/,
-      loader: 'style!css?sourceMap!autoprefixer!sass?outputStyle=expanded'
-    }, {
-      test: /\.css$/,
-      exclude: [/\.raw\.css$/, /\.useable\.css$/],
-      loader: 'style!css?sourceMap!autoprefixer'
-    }, {
-      test: /\.useable\.css$/,
-      loader: 'style/useable!raw!autoprefixer'
-    }, {
-      test: /\.raw\.css$/,
-      loader: 'style!raw!autoprefixer'
-    }, {
-      test: /\.(png|jpg|woff|woff2)$/,
-      loader: 'url?limit=8192'
-    }]
-  },
+	resolve: webpack_resolve,
+	module: {
+		preLoaders: [{
+			test: /\.(js|jsx)$/,
+			exclude: [/node_module/, 'server.js', 'mock/*'],
+			loader: 'eslint'
+		}],
+		loaders: webpack_modules_loaders
+	},
 
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({
-      __DEVELOPMENT__: true,
-      __DEVTOOLS__: false  // <-------- DISABLE redux-devtools HERE
-    })
-  ],
-
+	plugins: [
+		new webpack.HotModuleReplacementPlugin(),
+		new webpack.NoErrorsPlugin(),
+		new webpack.DefinePlugin({
+			__DEVELOPMENT__: development,
+			__DEVTOOLS__: devTools,  // <-------- DISABLE redux-devtools HERE
+			__DEVAPI__: devApi,
+			__LIVEAPI__: liveApi
+		})
+	]
 };
