@@ -4,6 +4,10 @@ This project is based on [react-redux-scaffold](https://github.com/lcjnil/react-
 
 Write in progress, issues are welcomed.
 
+## Config
+
+Modify `settings.conf.js` variables `devApi` or `liveApi` with your API url. 
+
 ## Run
 
 `npm install` to install dependencies.
