@@ -11,25 +11,22 @@ export function finalCreateStore(reducer){
 				thunkMiddleware,
 				loggerMiddleware
 			),
-			devTools(),
-			createStore
-		);	
+			devTools()
+		)(createStore);
 	} else if((typeof __DEVTOOLS__ === 'undefined' || __DEVTOOLS__ === false) && 
 			(typeof __DEVELOPMENT__ !== 'undefined' || __DEVELOPMENT__ === true)){
 		result = compose(
 			applyMiddleware(
 				thunkMiddleware,
 				loggerMiddleware
-			),
-			createStore
-		);
+			)
+		)(createStore);
 	} else {
 		result = compose(
 			applyMiddleware(
 				thunkMiddleware
-			),
-			createStore
-		);
+			)
+		)(createStore);
 	}
 	return result(reducer);
 }

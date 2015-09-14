@@ -71,7 +71,8 @@ gulp.task('serve', () => {
 		hot: true,
 		stats: {
 			colors: true
-		}
+		},
+		historyApiFallback: false
 	});
 	server.listen(9999, 'localhost', (err) => {
 		console.log('server listen at 9999');
