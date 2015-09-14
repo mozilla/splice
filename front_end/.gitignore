@@ -1,5 +1,7 @@
 ### IDEA ###
 .idea
+.editorconfig
+*.iml
 
 ### OSX ###
 .DS_Store
