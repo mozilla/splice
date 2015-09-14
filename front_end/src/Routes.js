@@ -2,7 +2,11 @@
 
 import React, { Component } from 'react';
 import { Router, Route } from 'react-router';
-import { history } from 'react-router/lib/HashHistory';
+import createHistory from 'history/lib/createHashHistory';
+// Use _key instead of _k.
+const history = createHistory({
+	queryKey: false
+});
 
 import {
 	AppPage,
@@ -11,7 +15,7 @@ import {
 	AccountsViewPage,
 	AccountsAddPage,
 	CampaignsPage
-} from './pages';
+} from './pages/index';
 
 export default class App extends Component {
 	render() {
