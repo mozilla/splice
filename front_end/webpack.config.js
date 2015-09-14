@@ -15,7 +15,7 @@ module.exports = {
 	output: {
 		path: assetPath,
 		filename: 'main.js',
-		publicPath: '/assets/'
+		publicPath: '/'
 	},
 
 	cache: true,

@@ -38,11 +38,10 @@ gulp.task('bundle:dist', (cb) => {
 
 gulp.task('assets', (cb) => {
 	gulp.src('src/public/**')
-		.pipe(gulp.dest('dist/'))
+		.pipe(gulp.dest('dist/public/'))
 		.pipe($.size({title: 'assets'}));
 
-	gulp.src('src/index_production.html')
-		.pipe(rename('index.html'))
+	gulp.src('src/index.html')
 		.pipe(gulp.dest('dist'))
 		.pipe($.size({title: 'index.html'}));
 });
@@ -68,7 +67,7 @@ gulp.task('serve', () => {
 	const bundler = webpack(config);
 	let server = new WebpackDevServer(bundler, {
 		contentBase: './src',
-		publicPath: '/assets/',
+		publicPath: '/',
 		hot: true,
 		stats: {
 			colors: true
