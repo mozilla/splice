@@ -1,10 +1,9 @@
-export const devApi = "'http://tbg-staging-1.thebuddygroup.com:5000'";
-export const liveApi = "''";
+exports.devApi = "'http://tbg-staging-1.thebuddygroup.com:5000'";
+exports.liveApi = "'http://tbg-staging-1.thebuddygroup.com:5000'";
+exports.development = true;
+exports.devTools = false;
 
-export const development = true;
-export const devTools = false;
-
-export const webpack_modules_loaders =
+exports.webpack_modules_loaders =
 	[{
 		test: /\.(js|jsx)$/,
 		exclude: /node_modules/,
@@ -24,7 +23,7 @@ export const webpack_modules_loaders =
 		loader: 'url?limit=8192'
 	}];
 
-export const webpack_resolve = {
+exports.webpack_resolve = {
 	extensions: ['', '.js', '.jsx'],
 	alias: {
 		'styles': __dirname + '/src/styles',
@@ -35,3 +34,4 @@ export const webpack_resolve = {
 		'pages': __dirname + '/src/pages/'
 	}
 };
+
