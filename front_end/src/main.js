@@ -30,7 +30,7 @@ export default class App extends Component {
 		return (
 			<div>
 				<Provider store={store}>
-					{() => <Routes history={history} />}
+					{() => <Routes />}
 				</Provider>
 				{devtools}
 			</div>
