@@ -20,10 +20,12 @@ export default class AppPage extends Component {
 				<TopBar {...this.props} />
 
 				<div className="container">
-					<SideBar accountRows={this.props.Account.accountRows}/>
+					<div className="row">
+						<SideBar accountRows={this.props.Account.accountRows}/>
 
-					<div className="col-md-9">
-						{this.props.children}
+						<div className="col-md-9">
+							{this.props.children}
+						</div>
 					</div>
 				</div>
 			</div>

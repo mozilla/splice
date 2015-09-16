@@ -6,6 +6,7 @@ export default class AccountRow extends Component {
 		//console.log(this.props.id);
 		return (
 			<tr>
+				<td>{this.props.id}</td>
 				<td><Link to={'/accounts/' + this.props.id}>{this.props.name}</Link></td>
 				<td>{this.props.email}</td>
 				<td>{this.props.phone}</td>
