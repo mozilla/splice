@@ -2,12 +2,6 @@ import Cookie from 'react-cookie';
 
 export const GET_RECENTLY_VIEWED = 'GET_RECENTLY_VIEWED';
 
-export const FILE_UPLOADED = 'FILE_UPLOADED';
-
-export function fileUploaded(files) {
-	return {type: FILE_UPLOADED, files: files};
-}
-
 function getRecentlyViewed(recentlyViewed) {
 	return {type: GET_RECENTLY_VIEWED, recentlyViewed: recentlyViewed};
 }
@@ -18,11 +12,6 @@ export function fetchRecentlyViewed() {
 		const recentlyViewed = Cookie.load('recentlyViewed');
 		dispatch(getRecentlyViewed(recentlyViewed));
 	};
-}
-
-export function updateDocTitle(title) {
-	document.subTitle = title;
-	document.title = 'Redux | ' + document.subTitle;
 }
 
 export function saveRecentlyViewed(title, context) {
@@ -54,9 +43,4 @@ export function saveRecentlyViewed(title, context) {
 	Cookie.save('recentlyViewed', recents, {maxAge: 7 * 24 * 60 * 60});
 
 	//Cookie.remove('recentlyViewed');
-}
-
-export function pageVisit(title, context) {
-	updateDocTitle(title);
-	saveRecentlyViewed(title, context);
 }
