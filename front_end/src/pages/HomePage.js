@@ -5,16 +5,6 @@ import { fetchAccounts } from 'actions/Accounts/AccountActions';
 import { fetchRecentlyViewed, fileUploaded } from 'actions/AppActions';
 import AccountList from 'components/Accounts/AccountList/AccountList';
 import RecentlyViewedList from 'components/App/RecentlyViewed/RecentlyViewedList';
-import Calendar from 'rc-calendar';
-import 'rc-calendar/assets/index.css';
-
-import GregorianCalendar from 'gregorian-calendar';
-const date = new GregorianCalendar(); // defaults to en-us
-date.setTime(+new Date('2015-09-14 13:00:00'));
-//console.log(date.getDayOfWeek());
-
-import Dropzone from 'react-dropzone';
-
 
 export default class HomePage extends Component {
 	componentDidMount() {
@@ -29,50 +19,30 @@ export default class HomePage extends Component {
 	render() {
 		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-		let filesMarkup;
-		if (_.isEmpty(this.props.App.files) === false) {
-			filesMarkup = this.props.App.files.map((file, index) =>
-					<img src={file.preview} style={{width: '100px'}} key={'uploaded' + index}/>
-			);
-		} else {
-			filesMarkup = '';
-		}
-
 		return (
 			<div>
 				<ReactCSSTransitionGroup transitionName="fadeIn" transitionAppear={true}>
-					<h1>Dashboard</h1>
-
-					<div><strong>Accounts</strong></div>
-					<AccountList accountRows={this.props.Account.accountRows}
-								 isFetchingAccounts={this.props.Account.isFetchingAccounts}/>
-					<RecentlyViewedList recentlyViewedRows={this.props.App.recentlyViewed}/>
-					<Calendar defaultValue={date} showToday={true} onSelect={this.handleDateSelect}/>
-					<Dropzone onDrop={(files) => this.handleFileUpload(files) } multiple={false} style={
-							{
-								width: '100px',
-								height: '100px',
-								borderWidth: '2px',
-								borderColor: '#666',
-								borderStyle: 'dashed',
-								borderRadius: '5px'
-							}
-						}>
-						<div>Try dropping some a file here, or click to select a file to upload.</div>
-					</Dropzone>
-					{filesMarkup}
+					<div className="row">
+						<h1>Dashboard</h1>
+					</div>
+					<div className="row">
+						<div className="col-md-9" style={{height: '250px', border: '1px solid #666'}}>
+							Bar Graph
+						</div>
+						<div className="col-md-3">
+							<RecentlyViewedList recentlyViewedRows={this.props.App.recentlyViewed}/>
+						</div>
+					</div>
+					<div className="row">
+						<div className="col-md-12" >
+							<div><strong>Accounts</strong></div>
+							<AccountList accountRows={this.props.Account.accountRows}
+										 isFetchingAccounts={this.props.Account.isFetchingAccounts}/>
+						</div>
+					</div>
 				</ReactCSSTransitionGroup>
 			</div>
 		);
-	}
-
-	handleDateSelect(gCal) {
-		//console.log(new Date(gCal.getTime() ) );
-	}
-
-	handleFileUpload(files) {
-		const { dispatch } = this.props;
-		dispatch(fileUploaded(files));
 	}
 }
 

@@ -21,6 +21,7 @@ export default class AccountList extends Component {
 				<thead>
 				<tr>
 					<th>ID</th>
+					<th>Name</th>
 					<th>Email</th>
 					<th>Phone</th>
 				</tr>
