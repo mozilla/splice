@@ -1,5 +1,5 @@
 import React, { Component } from 'react/addons';
-import { pageVisit } from 'actions/AppActions';
+import { pageVisit } from 'actions/App/AppActions';
 
 export default class CampaignsPage extends Component {
 	componentDidMount() {

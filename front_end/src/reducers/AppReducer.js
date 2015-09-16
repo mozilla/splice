@@ -1,9 +1,7 @@
 import _ from 'lodash';
 
-import {
-	GET_RECENTLY_VIEWED,
-	FILE_UPLOADED
-} from 'actions/AppActions';
+import { FILE_UPLOADED } from 'actions/App/AppActions';
+import { GET_RECENTLY_VIEWED } from 'actions/App/RecentlyViewedActions';
 
 const initialState = {
 	recentlyViewed: [],

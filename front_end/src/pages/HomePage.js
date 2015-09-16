@@ -2,8 +2,9 @@ import React, { Component } from 'react/addons';
 import { connect } from 'react-redux';
 
 import { fetchAccounts } from 'actions/Accounts/AccountActions';
-import { fetchRecentlyViewed, fileUploaded } from 'actions/AppActions';
+import { fetchRecentlyViewed } from 'actions/App/RecentlyViewedActions';
 import AccountList from 'components/Accounts/AccountList/AccountList';
+import AppList from 'components/App/AppList/AppList';
 import RecentlyViewedList from 'components/App/RecentlyViewed/RecentlyViewedList';
 
 export default class HomePage extends Component {
@@ -23,11 +24,13 @@ export default class HomePage extends Component {
 			<div>
 				<ReactCSSTransitionGroup transitionName="fadeIn" transitionAppear={true}>
 					<div className="row">
-						<h1>Dashboard</h1>
+						<div className="col-md-12">
+							<h1>Dashboard</h1>
+						</div>
 					</div>
-					<div className="row">
-						<div className="col-md-9" style={{height: '250px', border: '1px solid #666'}}>
-							Bar Graph
+					<div className="row" style={{marginBottom: '25px'}}>
+						<div className="col-md-9" >
+							<div style={{height: '250px', border: '1px solid #666'}}>Bar Graph</div>
 						</div>
 						<div className="col-md-3">
 							<RecentlyViewedList recentlyViewedRows={this.props.App.recentlyViewed}/>
@@ -35,9 +38,7 @@ export default class HomePage extends Component {
 					</div>
 					<div className="row">
 						<div className="col-md-12" >
-							<div><strong>Accounts</strong></div>
-							<AccountList accountRows={this.props.Account.accountRows}
-										 isFetchingAccounts={this.props.Account.isFetchingAccounts}/>
+							<AppList Account={this.props.Account} App={this.props.App} />
 						</div>
 					</div>
 				</ReactCSSTransitionGroup>

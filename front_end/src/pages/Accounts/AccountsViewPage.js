@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { Link } from 'react-router';
 
 import { fetchAccountView } from 'actions/Accounts/AccountActions';
-import { updateDocTitle, pageVisit } from 'actions/AppActions';
+import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
 
 import AccountDetails from 'components/Accounts/AccountDetails/AccountDetails';
 
