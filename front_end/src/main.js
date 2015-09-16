@@ -7,7 +7,9 @@ import { Provider } from 'react-redux';
 import * as reducers from './reducers';
 import Routes from './Routes.js';
 
-require('./styles/main.scss');
+import './styles/main.scss';
+
+require('bootstrap-webpack');
 
 import { finalCreateStore } from './finalCreateStore';
 
