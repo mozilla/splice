@@ -1,3 +1,8 @@
+1.1.34
+=====
+ * Bug 1205832 - Splice's tile_index_crawl.py script doesn't work with SNI
+ * Upgrade AngularJs to 1.4.5
+
 1.1.33
 =====
  * Bug 1197962 - ingest tiles with adgroup_categories field
