@@ -1,28 +1,40 @@
 import React, { Component, PropTypes } from 'react';
+
 import AccountList from 'components/Accounts/AccountList/AccountList';
 
 export default class AppList extends Component {
 	render() {
+		let listMarkup = '';
+		switch (this.props.App.listType){
+			case 'accounts':
+				listMarkup = (<AccountList accountRows={this.props.Account.accountRows}
+										   isFetchingAccounts={this.props.Account.isFetchingAccounts}/>);
+				break;
+			default:
+				break;
+		}
+
 		return (
 			<div>
-				<select onChange={(e) => this.selectType(e)}>
-					<option>Accounts</option>
-					<option>Campaigns</option>
-					<option>Ad Groups</option>
-					<option>Tiles</option>
+				<select ref="typeSelector" onChange={(e) => this.selectType(e)}>
+					<option value="accounts">Accounts</option>
+					<option value="campaigns">Campaigns</option>
+					<option value="ad_groups">Ad Groups</option>
+					<option value="tiles">Tiles</option>
 				</select>
-				<AccountList accountRows={this.props.Account.accountRows}
-							 isFetchingAccounts={this.props.Account.isFetchingAccounts}/>
+				{listMarkup}
 			</div>
 		);
 	}
 
 	selectType(e){
-
+		const value = e.target.value;
+		this.props.handleListTypeSelect(value);
 	}
 }
 
 AppList.propTypes = {
 	Account: PropTypes.object.isRequired,
-	App: PropTypes.object.isRequired
+	App: PropTypes.object.isRequired,
+	handleListTypeSelect: PropTypes.func.isRequired
 };

@@ -39,8 +39,7 @@ AppPage.propTypes = {};
 // Note: use https://github.com/faassen/reselect for better performance.
 function select(state) {
 	return {
-		Account: state.Account,
-		App: state.App
+		Account: state.Account
 	};
 }
 

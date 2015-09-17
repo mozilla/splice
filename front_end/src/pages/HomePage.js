@@ -1,19 +1,22 @@
 import React, { Component } from 'react/addons';
 import { connect } from 'react-redux';
 
+import { updateDocTitle, listTypeSelect } from 'actions/App/AppActions';
 import { fetchAccounts } from 'actions/Accounts/AccountActions';
 import { fetchRecentlyViewed } from 'actions/App/RecentlyViewedActions';
+
 import AccountList from 'components/Accounts/AccountList/AccountList';
 import AppList from 'components/App/AppList/AppList';
 import RecentlyViewedList from 'components/App/RecentlyViewed/RecentlyViewedList';
 
 export default class HomePage extends Component {
 	componentDidMount() {
+		updateDocTitle('Home');
+
 		const { dispatch } = this.props;
 		if (this.props.Account.accountRows.length === 0) {
-			dispatch(fetchAccounts());
+			this.props.dispatch(fetchAccounts());
 		}
-
 		dispatch(fetchRecentlyViewed());
 	}
 
@@ -25,7 +28,7 @@ export default class HomePage extends Component {
 				<ReactCSSTransitionGroup transitionName="fadeIn" transitionAppear={true}>
 					<div className="row">
 						<div className="col-md-12">
-							<h1>Dashboard</h1>
+							<h1>Dashboard <i className="fa fa-firefox"></i></h1>
 						</div>
 					</div>
 					<div className="row" style={{marginBottom: '25px'}}>
@@ -38,7 +41,9 @@ export default class HomePage extends Component {
 					</div>
 					<div className="row">
 						<div className="col-md-12" >
-							<AppList Account={this.props.Account} App={this.props.App} />
+							<AppList Account={this.props.Account}
+									 App={this.props.App}
+									 handleListTypeSelect={value => this.props.dispatch(listTypeSelect(value))}/>
 						</div>
 					</div>
 				</ReactCSSTransitionGroup>

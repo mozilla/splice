@@ -6,7 +6,6 @@ import {
 	REQUEST_ACCOUNT_VIEW,
 	RECEIVE_ACCOUNT_VIEW
 } from 'actions/Accounts/AccountActions';
-import _ from 'lodash';
 
 const initialState = {
 	accountRows: [],

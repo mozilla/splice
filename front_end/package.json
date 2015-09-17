@@ -13,6 +13,7 @@
     "babel": "5.8.21",
     "bootstrap": "^3.3.5",
     "bootstrap-webpack": "0.0.3",
+    "font-awesome": "^4.4.0",
     "gregorian-calendar": "^3.0.0",
     "history": "^1.9.1",
     "immutable": "^3.7.4",

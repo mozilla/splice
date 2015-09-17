@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import loggerMiddleware from 'redux-logger';
-import { Provider } from 'react-redux';
+import { combineReducers } from 'redux';
 
+import { Provider } from 'react-redux';
+import _ from 'lodash';
 import * as reducers from './reducers';
 import Routes from './Routes.js';
 
 import './styles/main.scss';
 
 require('bootstrap-webpack');
+require('font-awesome/css/font-awesome.min.css');
 
 import { finalCreateStore } from './finalCreateStore';
 

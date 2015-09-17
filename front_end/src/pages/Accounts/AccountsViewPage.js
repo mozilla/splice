@@ -1,7 +1,6 @@
 import React, { Component } from 'react/addons';
 
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import { Link } from 'react-router';
 
 import { fetchAccountView } from 'actions/Accounts/AccountActions';
