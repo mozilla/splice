@@ -2,7 +2,7 @@ import React, { Component } from 'react/addons';
 import { pageVisit } from 'actions/App/AppActions';
 import { connect } from 'react-redux';
 
-require('styles/Accounts/accounts.scss');
+require('styles/accounts/accounts.scss');
 
 export default class AccountsAddPage extends Component {
 	render() {

@@ -8,7 +8,7 @@ import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
 
 import AccountDetails from 'components/Accounts/AccountDetails/AccountDetails';
 
-require('styles/Accounts/accounts.scss');
+require('styles/accounts/accounts.scss');
 
 export default class AccountsViewPage extends Component {	
 	componentWillMount() {

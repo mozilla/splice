@@ -2,6 +2,7 @@ import expect from 'expect';
 import { List, Map } from 'immutable';
 import { Account } from 'reducers/AccountReducer';
 import * as types from 'actions/Accounts/AccountActions';
+import _ from 'lodash';
 
 describe('Account ', () => {
 	//Test initial state	

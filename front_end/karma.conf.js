@@ -1,6 +1,8 @@
 var webpack = require('webpack');
 var settings = require('./settings.conf.js');
 
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 module.exports = function (config) {
 	config.set({
 		browsers: ['Firefox'], //run in Chrome
@@ -21,6 +23,7 @@ module.exports = function (config) {
 				loaders: settings.webpack_modules_loaders
 			},
 			plugins: [
+				new ExtractTextPlugin('public/css/styles.css'),
 				new webpack.DefinePlugin({
 					__DEVELOPMENT__: false,
 					__DEVTOOLS__: false, // <-------- DISABLE redux-devtools HERE

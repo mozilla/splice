@@ -8,19 +8,21 @@
 var webpack = require('webpack');
 var assetPath = require('path').join(__dirname, 'dist');
 
-import { webpack_resolve, webpack_modules_loaders, devApi, liveApi, development, devTools } from './settings.conf.js';
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+import { webpack_resolve, webpack_modules_loaders, devApi, liveApi, development, devTools, devUrl, liveUrl } from './settings.conf.js';
 
 module.exports = {
 
 	output: {
 		path: assetPath,
 		filename: 'main.js',
-		publicPath: './'
+		publicPath: 'http://localhost:9999/'
 	},
 
 	cache: true,
 	debug: true,
-	devtool: 'sourcemap',
+	devtool: 'source-map',
 	entry: [
 		'webpack-dev-server/client?http://localhost:9999',
 		'webpack/hot/only-dev-server',
@@ -43,6 +45,7 @@ module.exports = {
 	},
 
 	plugins: [
+		new ExtractTextPlugin('public/css/styles.css'),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin(),
 		new webpack.DefinePlugin({
