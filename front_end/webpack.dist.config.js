@@ -8,14 +8,16 @@
 var webpack = require('webpack');
 var assetPath = require('path').join(__dirname, 'dist');
 
-import { webpack_resolve, webpack_modules_loaders, devApi, liveApi } from './settings.conf.js';
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+import { webpack_resolve, webpack_modules_loaders, devApi, liveApi, devUrl, liveUrl } from './settings.conf.js';
 
 module.exports = {
 
 	output: {
 		path: assetPath,
 		filename: 'main.js',
-		publicPath: './'
+		publicPath: liveUrl
 	},
 	devtool: 'source-map',
 	progress: true,
@@ -34,6 +36,7 @@ module.exports = {
 	},
 
 	plugins: [
+		new ExtractTextPlugin('public/css/styles.css'),
 		new webpack.DefinePlugin({
 			__DEVELOPMENT__: false,
 			__DEVTOOLS__: false, // <-------- DISABLE redux-devtools HERE

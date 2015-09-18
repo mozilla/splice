@@ -8,7 +8,7 @@ import AccountForm from 'components/Accounts/AccountAdd/AccountForm';
 
 import { Link } from 'react-router';
 
-require('styles/Accounts/accounts.scss');
+require('styles/accounts/accounts.scss');
 
 export default class AccountsPage extends Component {
 	componentDidMount() {

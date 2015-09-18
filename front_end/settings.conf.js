@@ -1,7 +1,11 @@
 exports.devApi = "'http://tbg-staging-1.thebuddygroup.com:5000'";
 exports.liveApi = "'http://tbg-staging-1.thebuddygroup.com:5000'";
+exports.devUrl = "http://localhost:9999/";
+exports.liveUrl = "http://dev.splice.com/";
 exports.development = true;
 exports.devTools = false;
+
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 exports.webpack_modules_loaders =
 	[
@@ -14,13 +18,15 @@ exports.webpack_modules_loaders =
 		{ test: /fonts.*\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: "file?name=public/fonts/[name].[ext]" },
 		{ test: /fonts.*\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: "file?name=public/fonts/[name].[ext]" },
 		{ test: /fonts.*\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: "file?name=public/fonts/[name].[ext]" },
+		{ test: /\.(png|jpg|gif)$/,    loader: "file?name=public/img/[name].[ext]" },
 	{
 		test: /\.(js|jsx)$/,
 		exclude: /node_modules/,
 		loader: 'react-hot!babel'
 	}, {
 		test: /\.scss/,
-		loader: 'style!css?sourceMap!autoprefixer!sass?outputStyle=expanded'
+		loader: ExtractTextPlugin.extract('css?sourceMap!autoprefixer!sass?sourceMap')
+
 	}, {
 		test: /\.css$/,
 		exclude: [/\.raw\.css$/, /\.useable\.css$/],

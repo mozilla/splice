@@ -43,12 +43,23 @@ export default class HomePage extends Component {
 						<div className="col-md-12" >
 							<AppList Account={this.props.Account}
 									 App={this.props.App}
-									 handleListTypeSelect={value => this.props.dispatch(listTypeSelect(value))}/>
+									 handleListTypeSelect={value => this.handleListTypeSelect(value)}/>
 						</div>
 					</div>
 				</ReactCSSTransitionGroup>
 			</div>
 		);
+	}
+
+	handleListTypeSelect(value){
+		this.props.dispatch(listTypeSelect(value));
+		switch (value){
+			case 'accounts':
+				this.props.dispatch(fetchAccounts);
+				break;
+			default:
+				break;
+		}
 	}
 }
 
