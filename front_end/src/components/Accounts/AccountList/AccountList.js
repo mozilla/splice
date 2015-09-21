@@ -3,33 +3,35 @@ import AccountRow from './AccountRow';
 
 export default class AccountList extends Component {
 	render() {
+		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 		let rows;
+		let spinner;
 		if (this.props.isFetchingAccounts === false) {
 			rows = this.props.accountRows.map((accountRow, index) =>
 					<AccountRow {...accountRow} key={index}/>
 			);
 		} else {
-			rows = (
-				<tr>
-					<td><img src="./public/img/ajax-loader.gif"/></td>
-				</tr>
-			);
+			spinner = (<img src="./public/img/ajax-loader.gif"/>);
 		}
 
 		return (
-			<table className="table">
-				<thead>
-				<tr>
-					<th>ID</th>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Phone</th>
-				</tr>
-				</thead>
-				<tbody>{rows}
-
-				</tbody>
-			</table>
+			<div>
+				<table className="table">
+					<thead>
+					<tr>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Phone</th>
+					</tr>
+					</thead>
+					<ReactCSSTransitionGroup component="tbody" transitionName="fade" transitionLeave={false} >
+						{rows}
+					</ReactCSSTransitionGroup>
+				</table>
+				{spinner}
+			</div>
 		);
 	}
 }

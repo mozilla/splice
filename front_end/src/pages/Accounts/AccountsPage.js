@@ -8,8 +8,6 @@ import AccountForm from 'components/Accounts/AccountAdd/AccountForm';
 
 import { Link } from 'react-router';
 
-require('styles/accounts/accounts.scss');
-
 export default class AccountsPage extends Component {
 	componentDidMount() {
 		pageVisit('Accounts', this);
@@ -21,24 +19,21 @@ export default class AccountsPage extends Component {
 	}
 
 	render() {
-		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 		const dispatch = this.props.dispatch;
 
 		return (
 			<div>
-				<ReactCSSTransitionGroup transitionName="fadeIn" transitionAppear={true} transitionLeave={false}>
-					<div>
-						<h1>Accounts</h1>
+				<div>
+					<h1>Accounts</h1>
 
-						<div className="pull-right">
-							<Link to="/accounts/add">Add Account</Link>
-						</div>
-						<AccountForm onAddClick={text => dispatch(saveAccount(text))}
-									 isSavingAccount={this.props.Account.isSavingAccount}/>
-						<AccountList accountRows={this.props.Account.accountRows}
-									 isFetchingAccounts={this.props.Account.isFetchingAccounts}/>
+					<div className="pull-right">
+						<Link to="/accounts/add">Add Account</Link>
 					</div>
-				</ReactCSSTransitionGroup>
+					<AccountForm onAddClick={text => dispatch(saveAccount(text))}
+								 isSavingAccount={this.props.Account.isSavingAccount}/>
+					<AccountList accountRows={this.props.Account.accountRows}
+								 isFetchingAccounts={this.props.Account.isFetchingAccounts}/>
+				</div>
 			</div>
 		);
 	}

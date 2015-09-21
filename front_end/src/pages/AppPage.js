@@ -15,6 +15,9 @@ export default class AppPage extends Component {
 	}
 
 	render() {
+		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+		const key = this.props.location.pathname;
+
 		return (
 			<div>
 				<TopBar {...this.props} />
@@ -24,7 +27,9 @@ export default class AppPage extends Component {
 						<SideBar accountRows={this.props.Account.accountRows}/>
 
 						<div className="col-md-9">
-							{this.props.children}
+							<ReactCSSTransitionGroup transitionName="page-transition" transitionLeave={false}>
+								{React.cloneElement(this.props.children || <div />, { key: key })}
+							</ReactCSSTransitionGroup>
 						</div>
 					</div>
 				</div>
