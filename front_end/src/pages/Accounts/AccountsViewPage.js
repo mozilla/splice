@@ -3,10 +3,12 @@ import React, { Component } from 'react/addons';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { fetchAccountView } from 'actions/Accounts/AccountActions';
 import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
+import { fetchAccountView } from 'actions/Accounts/AccountActions';
+import { fetchCampaigns } from 'actions/Campaigns/CampaignActions';
 
 import AccountDetails from 'components/Accounts/AccountDetails/AccountDetails';
+import CampaignList from 'components/Campaigns/CampaignList/CampaignList';
 
 require('styles/accounts/accounts.scss');
 
@@ -32,6 +34,11 @@ export default class AccountsViewPage extends Component {
 							<Link to="/campaigns/add">Add Campaign</Link>
 						</div>
 						<AccountDetails Account={this.props.Account}/>
+						<br/>
+						<br/>
+						<strong>Campaigns</strong>
+						<CampaignList campaignRows={this.props.Campaign.campaignRows}
+									 isFetchingCampaigns={this.props.Campaign.isFetchingCampaigns}/>
 					</div>
 				</ReactCSSTransitionGroup>
 			</div>
@@ -47,6 +54,7 @@ export default class AccountsViewPage extends Component {
 
 		dispatch(fetchAccountView(accountId)).then(() => {
 			pageVisit('Account - ' + this.props.Account.accountDetails.name, this);
+			dispatch(fetchCampaigns(this.props.Account.accountDetails.id));
 		});
 	}
 }
@@ -60,6 +68,7 @@ AccountsViewPage.propTypes = {
 function select(state) {
 	return {
 		Account: state.Account,
+		Campaign: state.Campaign,
 		App: state.App
 	};
 }
