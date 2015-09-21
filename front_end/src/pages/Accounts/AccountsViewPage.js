@@ -10,8 +10,6 @@ import { fetchCampaigns } from 'actions/Campaigns/CampaignActions';
 import AccountDetails from 'components/Accounts/AccountDetails/AccountDetails';
 import CampaignList from 'components/Campaigns/CampaignList/CampaignList';
 
-require('styles/accounts/accounts.scss');
-
 export default class AccountsViewPage extends Component {	
 	componentWillMount() {
 		this.fetchAccountDetails(this.props);
@@ -24,23 +22,19 @@ export default class AccountsViewPage extends Component {
 	}
 
 	render() {
-		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
 		return (
 			<div>
-				<ReactCSSTransitionGroup transitionName="fadeIn" transitionAppear={true} transitionLeave={false}>
-					<div>
-						<div className="pull-right">
-							<Link to="/campaigns/add">Add Campaign</Link>
-						</div>
-						<AccountDetails Account={this.props.Account}/>
-						<br/>
-						<br/>
-						<strong>Campaigns</strong>
-						<CampaignList campaignRows={this.props.Campaign.campaignRows}
-									 isFetchingCampaigns={this.props.Campaign.isFetchingCampaigns}/>
+				<div>
+					<div className="pull-right">
+						<Link to="/campaigns/add">Add Campaign</Link>
 					</div>
-				</ReactCSSTransitionGroup>
+					<AccountDetails Account={this.props.Account}/>
+					<br/>
+					<br/>
+					<strong>Campaigns</strong>
+					<CampaignList campaignRows={this.props.Campaign.campaignRows}
+								 isFetchingCampaigns={this.props.Campaign.isFetchingCampaigns}/>
+				</div>
 			</div>
 		);
 	}

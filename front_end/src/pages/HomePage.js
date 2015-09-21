@@ -22,32 +22,28 @@ export default class HomePage extends Component {
 	}
 
 	render() {
-		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
 		return (
 			<div>
-				<ReactCSSTransitionGroup transitionName="fadeIn" transitionAppear={true}>
-					<div className="row">
-						<div className="col-md-12">
-							<h1>Dashboard <i className="fa fa-firefox"></i></h1>
-						</div>
+				<div className="row">
+					<div className="col-md-12">
+						<h1>Dashboard <i className="fa fa-firefox"></i></h1>
 					</div>
-					<div className="row" style={{marginBottom: '25px'}}>
-						<div className="col-md-9" >
-							<div style={{height: '250px', border: '1px solid #666'}}>Bar Graph</div>
-						</div>
-						<div className="col-md-3">
-							<RecentlyViewedList recentlyViewedRows={this.props.App.recentlyViewed}/>
-						</div>
+				</div>
+				<div className="row" style={{marginBottom: '25px'}}>
+					<div className="col-md-9" >
+						<div style={{height: '250px', border: '1px solid #666'}}>Bar Graph</div>
 					</div>
-					<div className="row">
-						<div className="col-md-12" >
-							<AppList Account={this.props.Account}
-									 App={this.props.App}
-									 handleListTypeSelect={value => this.handleListTypeSelect(value)}/>
-						</div>
+					<div className="col-md-3">
+						<RecentlyViewedList recentlyViewedRows={this.props.App.recentlyViewed}/>
 					</div>
-				</ReactCSSTransitionGroup>
+				</div>
+				<div className="row">
+					<div className="col-md-12" >
+						<AppList Account={this.props.Account}
+								 App={this.props.App}
+								 handleListTypeSelect={value => this.handleListTypeSelect(value)}/>
+					</div>
+				</div>
 			</div>
 		);
 	}

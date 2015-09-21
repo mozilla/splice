@@ -2,19 +2,13 @@ import React, { Component } from 'react/addons';
 import { pageVisit } from 'actions/App/AppActions';
 import { connect } from 'react-redux';
 
-require('styles/accounts/accounts.scss');
-
 export default class AccountsAddPage extends Component {
 	render() {
-		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
 		return (
 			<div>
-				<ReactCSSTransitionGroup transitionName="fadeIn" transitionAppear={true} transitionLeave={false}>
-					<div>
-						<h1>Add Account</h1>
-					</div>
-				</ReactCSSTransitionGroup>
+				<div>
+					<h1>Add Account</h1>
+				</div>
 			</div>
 		);
 	}

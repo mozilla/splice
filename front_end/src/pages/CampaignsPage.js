@@ -7,13 +7,9 @@ export default class CampaignsPage extends Component {
 	}
 
 	render() {
-		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
 		return (
 			<div>
-				<ReactCSSTransitionGroup transitionName="fadeIn" transitionAppear={true}>
-					<h1>Campaigns</h1>
-				</ReactCSSTransitionGroup>
+				<h1>Campaigns</h1>
 			</div>
 		);
 	}
