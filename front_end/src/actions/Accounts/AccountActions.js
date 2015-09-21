@@ -80,7 +80,7 @@ export function saveAccount(data) {
 	return function next(dispatch) {
 		dispatch(requestAddAccount());
 		// Return a promise to wait for
-		/*return fetch('http://localhost:9999/public/mock/accounts.json', {
+		/*return fetch(apiUrl + '/api/accounts', {
 			method: 'post',
 			headers: {
 				'Accept': 'application/json',

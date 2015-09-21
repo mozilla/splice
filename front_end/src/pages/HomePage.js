@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { updateDocTitle, listTypeSelect } from 'actions/App/AppActions';
 import { fetchAccounts } from 'actions/Accounts/AccountActions';
+import { fetchCampaigns } from 'actions/Campaigns/CampaignActions';
 import { fetchRecentlyViewed } from 'actions/App/RecentlyViewedActions';
 
 import AccountList from 'components/Accounts/AccountList/AccountList';
@@ -55,7 +56,10 @@ export default class HomePage extends Component {
 		this.props.dispatch(listTypeSelect(value));
 		switch (value){
 			case 'accounts':
-				this.props.dispatch(fetchAccounts);
+				this.props.dispatch(fetchAccounts());
+				break;
+			case 'campaigns':
+				//this.props.dispatch(fetchCampaigns());
 				break;
 			default:
 				break;

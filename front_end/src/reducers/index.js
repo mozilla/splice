@@ -1,7 +1,9 @@
-import { Account } from './AccountReducer.js';
 import { App } from './AppReducer.js';
+import { Account } from './AccountReducer.js';
+import { Campaign } from './CampaignReducer.js';
 
-export { 
-	Account, 
-	App 
+export {
+	App,
+	Account,
+	Campaign
 };
