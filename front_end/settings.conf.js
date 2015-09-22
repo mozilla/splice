@@ -44,7 +44,8 @@ exports.webpack_resolve = {
 		'reducers': __dirname + '/src/reducers/',
 		'actions': __dirname + '/src/actions/',
 		'constants': __dirname + '/src/constants/',
-		'pages': __dirname + '/src/pages/'
+		'pages': __dirname + '/src/pages/',
+		'helpers': __dirname + '/src/helpers/'
 	}
 };
 
