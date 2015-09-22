@@ -3,11 +3,18 @@ import { Link } from 'react-router';
 
 export default class SideBar extends Component {
 	render() {
-		let accountLinks;
-		if (_.isEmpty(this.props.accountRows) === false) {
-			accountLinks = this.props.accountRows.map((row, index) =>
-				<li key={'sidebar' + index}><Link to={'/accounts/' + row.id }>{row.name}</Link></li>
-			);
+		const props = this.props;
+		let accountLinks = [];
+		if (_.isEmpty(this.props.Account.accountRows) === false) {
+			this.props.Account.accountRows.map(function loop(row, index) {
+				let className = '';
+				if (props.location.pathname === ('/accounts/' + row.id)) {
+					className = 'active';
+				}
+				accountLinks.push(
+					<li key={'sidebar-' + index} className={className}><Link to={'/accounts/' + row.id }>{row.name}</Link></li>
+				);
+			});
 		} else {
 			accountLinks = '';
 		}
@@ -16,7 +23,7 @@ export default class SideBar extends Component {
 			<div className="sidebar col-md-3">
 				<div>
 					Accounts
-					<ul className="">
+					<ul className="nav nav-pills nav-stacked">
 						{accountLinks}
 					</ul>
 				</div>
