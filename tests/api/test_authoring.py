@@ -52,11 +52,11 @@ class TestAuthoring(BaseTestCase):
         # count is 8: 4 images, one locale-tile file, one distribution file, one v3 file and one index file
         assert_equal(8, self.key_mock.set_contents_from_string.call_count)
 
-    # def test_publish_wrong_channel(self):
-        # url = "{0}?deploy=1&channelId=500".format(url_for('api.authoring.all_tiles'))
-        # response = self.client.post(url, data=self.sample_tile_data)
+    def test_publish_wrong_channel(self):
+        url = "{0}?deploy=1&channelId=500".format(url_for('api.authoring.all_tiles'))
+        response = self.client.post(url, data=self.sample_tile_data)
         # ingest_tile will capture this error as the channel_id is missing
-        # assert_equal(response.status_code, 400)
+        assert_equal(response.status_code, 404)
 
     def test_publish_corrupt_payload(self):
         url = "{0}?deploy=1&channelId=1".format(url_for('api.authoring.all_tiles'))

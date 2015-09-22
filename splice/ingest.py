@@ -116,7 +116,7 @@ def ingest_links(data, channel_id, *args, **kwargs):
         with session_scope(conn) as session:
             if not env.is_test:
                 # lock the tables to avoid other concurrent write transactions
-                session.execute("LOCK TABLE tiles; LOCK TABLE adgroups; LOCK TABLE adgroup_sites;")
+                session.execute("LOCK TABLE tiles; LOCK TABLE adgroups; LOCK TABLE adgroup_sites;")  # pragma: no cover
 
             for country_locale_str in country_locales:
 
@@ -218,7 +218,7 @@ def _create_tile_record(t, channel_id, locale):
             if dt and dt.tzinfo:
                 # capture the datetime as UTC, but without the Timezone info
                 # check because input may be TZ-unaware
-                time_limits[dt_name] = dt.astimezone(pytz.utc).replace(tzinfo=None)
+                time_limits[dt_name] = dt.astimezone(pytz.utc).replace(tzinfo=None)  # pragma: no cover
 
     frequency_caps = t.get("frequency_caps", {"daily": 0, "total": 0})
 
