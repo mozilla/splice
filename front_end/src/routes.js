@@ -13,7 +13,7 @@ import {
 	HomePage,
 	AccountsPage,
 	AccountViewPage,
-	AccountsAddPage,
+	AccountAddPage,
 	CampaignsPage
 } from './pages/index';
 
@@ -25,7 +25,7 @@ export default class App extends Component {
 					<Route path="/" title="Home" component={HomePage}></Route>
 
 					<Route path="/accounts" title="Accounts" component={AccountsPage}></Route>
-					<Route path="/accounts/add" title="Account Add" component={AccountsAddPage}></Route>
+					<Route path="/accounts/add" title="Account Add" component={AccountAddPage}></Route>
 					<Route path="/accounts/:accountId" title="Account View" component={AccountViewPage}></Route>
 
 					<Route path="/campaigns" title="Campaigns" component={CampaignsPage}></Route>
