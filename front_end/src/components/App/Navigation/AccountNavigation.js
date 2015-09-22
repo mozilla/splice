@@ -16,14 +16,12 @@ export default class Nav extends Component {
 
 		return (
 			<div className={className}>
-				<div className="container">
-					<ul className="nav navbar-nav">
-						<li className={this.props.location.pathname.match(/\/accounts.*/) ? 'active' : ''}><Link to={'/accounts/' + accountId}>Profile</Link></li>
-						<li className={this.props.location.pathname === '/campaigns' ? 'active' : ''}><Link to={'/campaigns?accountId=' + accountId}>Campaigns</Link></li>
-						<li className={this.props.location.pathname === '/adgroups' ? 'active' : ''}><Link to={'/adgroups?accountId=' + accountId}>Ad Groups</Link></li>
-						<li className={this.props.location.pathname === '/tiles' ? 'active' : ''}><Link to={'/tiles?accountId=' + accountId}>Tiles</Link></li>
-					</ul>
-				</div>
+				<ul className="nav navbar-nav">
+					<li className={this.props.location.pathname.match(/\/accounts.*/) ? 'active' : ''}><Link to={'/accounts/' + accountId}>Profile</Link></li>
+					<li className={this.props.location.pathname === '/campaigns' ? 'active' : ''}><Link to={'/campaigns?accountId=' + accountId}>Campaigns</Link></li>
+					<li className={this.props.location.pathname === '/adgroups' ? 'active' : ''}><Link to={'/adgroups?accountId=' + accountId}>Ad Groups</Link></li>
+					<li className={this.props.location.pathname === '/tiles' ? 'active' : ''}><Link to={'/tiles?accountId=' + accountId}>Tiles</Link></li>
+				</ul>
 			</div>
 		);
 	}
