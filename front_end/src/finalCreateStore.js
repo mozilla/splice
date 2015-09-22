@@ -1,8 +1,13 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import loggerMiddleware from 'redux-logger';
+import createLogger from 'redux-logger';
 
 export function finalCreateStore(reducer){
+	const loggerMiddleware = createLogger({
+		level: 'info',
+		collapsed: true
+	});
+
 	let result;
 	if (typeof __DEVTOOLS__ !== 'undefined' && __DEVTOOLS__ === true) {
 		const { devTools } = require('redux-devtools');

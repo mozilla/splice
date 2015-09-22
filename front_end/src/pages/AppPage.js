@@ -5,6 +5,7 @@ import { fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import TopBar from 'components/App/Navigation/TopBar.js';
 import SideBar from 'components/App/Navigation/SideBar.js';
+import AccountNavigation from 'components/App/Navigation/AccountNavigation.js';
 
 export default class AppPage extends Component {
 	componentDidMount() {
@@ -24,9 +25,11 @@ export default class AppPage extends Component {
 
 				<div className="container">
 					<div className="row">
-						<SideBar accountRows={this.props.Account.accountRows}/>
+						<SideBar {...this.props} />
 
 						<div className="col-md-9">
+							<AccountNavigation {...this.props} />
+
 							<ReactCSSTransitionGroup transitionName="page-transition" transitionLeave={false}>
 								{React.cloneElement(this.props.children || <div />, { key: key })}
 							</ReactCSSTransitionGroup>

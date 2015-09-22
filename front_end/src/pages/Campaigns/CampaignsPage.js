@@ -1,4 +1,4 @@
-import React, { Component } from 'react/addons';
+import React, { Component } from '../../../node_modules/react/addons';
 import { pageVisit } from 'actions/App/AppActions';
 
 export default class CampaignsPage extends Component {
