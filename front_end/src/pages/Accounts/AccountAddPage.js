@@ -2,7 +2,7 @@ import React, { Component } from 'react/addons';
 import { pageVisit } from 'actions/App/AppActions';
 import { connect } from 'react-redux';
 
-export default class AccountsAddPage extends Component {
+export default class AccountAddPage extends Component {
 	render() {
 		return (
 			<div>
@@ -14,7 +14,7 @@ export default class AccountsAddPage extends Component {
 	}
 }
 
-AccountsAddPage.propTypes = {};
+AccountAddPage.propTypes = {};
 
 // Which props do we want to inject, given the global state?
 // Note: use https://github.com/faassen/reselect for better performance.
@@ -25,4 +25,4 @@ function select(state) {
 }
 
 // Wrap the component to inject dispatch and state into it
-export default connect(select)(AccountsAddPage);
+export default connect(select)(AccountAddPage);
