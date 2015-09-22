@@ -10,7 +10,7 @@ import { fetchCampaigns } from 'actions/Campaigns/CampaignActions';
 import AccountDetails from 'components/Accounts/AccountDetails/AccountDetails';
 import CampaignList from 'components/Campaigns/CampaignList/CampaignList';
 
-export default class AccountsViewPage extends Component {	
+export default class AccountViewPage extends Component {
 	componentWillMount() {
 		this.fetchAccountDetails(this.props);
 	}
@@ -50,7 +50,7 @@ export default class AccountsViewPage extends Component {
 	}
 }
 
-AccountsViewPage.propTypes = {
+AccountViewPage.propTypes = {
   	
 };
 
@@ -65,4 +65,4 @@ function select(state) {
 }
 
 // Wrap the component to inject dispatch and state into it
-export default connect(select)(AccountsViewPage);
+export default connect(select)(AccountViewPage);
