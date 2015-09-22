@@ -108,18 +108,18 @@ function shouldFetchTiles(state, channel, locale) {
 
 export function fetchLocalesIfNeeded(channel) {
   return (dispatch, getState) => {
-    if (shouldFetchLocales(getState(), channel)) {
-      return dispatch(fetchLocales(getState(), channel));
+    if (shouldFetchLocales(getState().WebtilesPreviewer, channel)) {
+      return dispatch(fetchLocales(getState().WebtilesPreviewer, channel));
     } else {
-      return dispatch(selectLocale(Object.keys(getState().channels[channel].locales)[0]));
+      return dispatch(selectLocale(Object.keys(getState().WebtilesPreviewer.channels[channel].locales)[0]));
     }
   };
 }
 
 export function fetchTilesIfNeeded(channel, locale) {
   return (dispatch, getState) => {
-    if (shouldFetchTiles(getState(), channel, locale)) {
-      return dispatch(fetchTiles(getState(), channel, locale));
+    if (shouldFetchTiles(getState().WebtilesPreviewer, channel, locale)) {
+      return dispatch(fetchTiles(getState().WebtilesPreviewer, channel, locale));
     }
   };
 }

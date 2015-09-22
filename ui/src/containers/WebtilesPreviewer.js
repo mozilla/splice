@@ -102,13 +102,13 @@ WebtilesPreviewer.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { selectedChannel, selectedLocale, selectedType, channels } = state;
+  const { selectedChannel, selectedLocale, selectedType, channels } = state.WebtilesPreviewer;
   const { locales } = channels[selectedChannel];
   const types = ['suggested', 'directory'];
   var tiles = [];
   if (selectedChannel && selectedChannel && selectedLocale &&
-      state.channels[selectedChannel].locales) {
-    tiles = state.channels[selectedChannel].locales[selectedLocale][selectedType + 'Tiles'];
+      state.WebtilesPreviewer.channels[selectedChannel].locales) {
+    tiles = state.WebtilesPreviewer.channels[selectedChannel].locales[selectedLocale][selectedType + 'Tiles'];
   }
 
   return {
