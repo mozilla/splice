@@ -1,0 +1,46 @@
+#pickers {
+  padding: 25px 50px;
+}
+
+#pickers select {
+  margin: 0 15px 0 5px;
+}
+
+.newtab-cell {
+  position: relative;
+}
+
+.frecent-sites {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px #000;
+  display: none;
+  left: 300px;
+  padding: 10px;
+  position: absolute;
+  text-align: left;
+  top: 0;
+  width: 160px;
+  z-index: 100;
+}
+
+.frecent-sites ul, .frecent-sites li {
+  font-size: 9px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0 5px;
+}
+
+.newtab-cell:hover .frecent-sites {
+  display:block;
+}
+
+/* override some rules from newtab.css */
+.newtab-site.suggested > .newtab-sponsored {
+   background-color: #E2E2E2;
+   border: none;
+ }
+
+ .newtab-site.suggested .newtab-suggested {
+   display: table;
+ }
