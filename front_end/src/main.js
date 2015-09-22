@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { combineReducers } from 'redux';
-
 import { Provider } from 'react-redux';
+
 import _ from 'lodash';
+
 import * as reducers from './reducers';
 import Routes from './Routes.js';
 

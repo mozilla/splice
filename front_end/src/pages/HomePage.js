@@ -31,7 +31,9 @@ export default class HomePage extends Component {
 				</div>
 				<div className="row" style={{marginBottom: '25px'}}>
 					<div className="col-md-9" >
-						<div style={{height: '250px', border: '1px solid #666'}}>Bar Graph</div>
+						<div style={{height: '250px', border: '1px solid #666'}}>
+							<strong>Bar Graph</strong>
+						</div>
 					</div>
 					<div className="col-md-3">
 						<RecentlyViewedList recentlyViewedRows={this.props.App.recentlyViewed}/>

@@ -3,6 +3,8 @@ import RecentlyViewedRow from './RecentlyViewedRow';
 
 export default class RecentlyViewedList extends Component {
 	render() {
+		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 		let rows;
 		if (this.props.recentlyViewedRows !== undefined && this.props.recentlyViewedRows.length > 0) {
 			rows = this.props.recentlyViewedRows.map((recentlyViewedRow, index) =>
@@ -19,9 +21,9 @@ export default class RecentlyViewedList extends Component {
 					<th>Recently Viewed</th>
 				</tr>
 				</thead>
-				<tbody>
-				{rows}
-				</tbody>
+				<ReactCSSTransitionGroup component="tbody" transitionName="fade" transitionLeave={false} >
+					{rows}
+				</ReactCSSTransitionGroup>
 			</table>
 		);
 	}
