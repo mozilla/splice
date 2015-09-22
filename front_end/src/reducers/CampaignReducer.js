@@ -3,8 +3,8 @@ import {
 	RECEIVE_ADD_CAMPAIGN,
 	REQUEST_CAMPAIGNS,
 	RECEIVE_CAMPAIGNS,
-	REQUEST_CAMPAIGN_VIEW,
-	RECEIVE_CAMPAIGN_VIEW
+	REQUEST_CAMPAIGN,
+	RECEIVE_CAMPAIGN
 } from 'actions/Campaigns/CampaignActions';
 
 const initialState = {
@@ -12,7 +12,7 @@ const initialState = {
 	campaignDetails: [],
 	isSavingCampaign: false,
 	isFetchingCampaigns: false,
-	isFetchingCampaignView: false
+	isFetchingCampaign: false
 };
 
 export function Campaign(state = initialState, action = null) {
@@ -35,14 +35,14 @@ export function Campaign(state = initialState, action = null) {
 				campaignRows: action.campaignRows,
 				isFetchingCampaigns: false
 			});
-		case REQUEST_CAMPAIGN_VIEW:
+		case REQUEST_CAMPAIGN:
 			return _.assign({}, state, {
-				isFetchingCampaignView: true
+				isFetchingCampaign: true
 			});
-		case RECEIVE_CAMPAIGN_VIEW:
+		case RECEIVE_CAMPAIGN:
 			return _.assign({}, state, {
 				campaignDetails: action.campaignDetails,
-				isFetchingCampaignView: false
+				isFetchingCampaign: false
 			});
 		default:
 			return state;

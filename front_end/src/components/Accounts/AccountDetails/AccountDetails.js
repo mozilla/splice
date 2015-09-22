@@ -7,7 +7,7 @@ export default class AccountDetails extends Component {
 
 		let details;
 		let subtitle;
-		if (this.props.Account.isFetchingAccountView === false) {
+		if (this.props.Account.isFetchingAccount === false) {
 			details = (
 				<div className="accound-details">
 					<div><strong>Account <span> - {data.name}</span></strong></div>

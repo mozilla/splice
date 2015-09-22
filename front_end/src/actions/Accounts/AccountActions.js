@@ -13,8 +13,8 @@ export const RECEIVE_ADD_ACCOUNT = 'RECEIVE_ADD_ACCOUNT';
 export const REQUEST_ACCOUNTS = 'REQUEST_ACCOUNTS';
 export const RECEIVE_ACCOUNTS = 'RECEIVE_ACCOUNTS';
 
-export const REQUEST_ACCOUNT_VIEW = 'REQUEST_ACCOUNT_VIEW';
-export const RECEIVE_ACCOUNT_VIEW = 'RECEIVE_ACCOUNT_VIEW';
+export const REQUEST_ACCOUNT = 'REQUEST_ACCOUNT_VIEW';
+export const RECEIVE_ACCOUNT = 'RECEIVE_ACCOUNT_VIEW';
 
 function requestAddAccount() {
 	return {type: REQUEST_ADD_ACCOUNT};
@@ -34,26 +34,26 @@ function receiveAccounts(json) {
 	};
 }
 
-function requestAccountView() {
-	return {type: REQUEST_ACCOUNT_VIEW};
+function requestAccount() {
+	return {type: REQUEST_ACCOUNT};
 }
-function receiveAccountView(json) {
+function receiveAccount(json) {
 	return {
-		type: RECEIVE_ACCOUNT_VIEW,
+		type: RECEIVE_ACCOUNT,
 		accountDetails: json.result
 	};
 }
 
-export function fetchAccountView(accountId) {
+export function fetchAccount(accountId) {
 	// thunk middleware knows how to handle functions
 	return function next(dispatch) {
-		dispatch(requestAccountView());
+		dispatch(requestAccount());
 		// Return a promise to wait for
 		//return fetch('http://localhost:9999/public/mock/account_' + accountId + '.json')
 		return fetch(apiUrl + '/api/accounts/' + accountId)
 			.then(response => response.json())
 			.then(json => new Promise(resolve => {
-				dispatch(receiveAccountView(json));
+				dispatch(receiveAccount(json));
 				resolve();
 				})
 			);

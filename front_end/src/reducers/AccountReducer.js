@@ -3,8 +3,8 @@ import {
 	RECEIVE_ADD_ACCOUNT,
 	REQUEST_ACCOUNTS,
 	RECEIVE_ACCOUNTS,
-	REQUEST_ACCOUNT_VIEW,
-	RECEIVE_ACCOUNT_VIEW
+	REQUEST_ACCOUNT,
+	RECEIVE_ACCOUNT
 } from 'actions/Accounts/AccountActions';
 
 const initialState = {
@@ -12,7 +12,7 @@ const initialState = {
 	accountDetails: [],
 	isSavingAccount: false,
 	isFetchingAccounts: false,
-	isFetchingAccountView: false
+	isFetchingAccount: false
 };
 
 export function Account(state = initialState, action = null) {
@@ -35,14 +35,14 @@ export function Account(state = initialState, action = null) {
 				accountRows: action.accountRows,
 				isFetchingAccounts: false
 			});
-		case REQUEST_ACCOUNT_VIEW:
+		case REQUEST_ACCOUNT:
 			return _.assign({}, state, {
-				isFetchingAccountView: true
+				isFetchingAccount: true
 			});
-		case RECEIVE_ACCOUNT_VIEW:
+		case RECEIVE_ACCOUNT:
 			return _.assign({}, state, {
 				accountDetails: action.accountDetails,
-				isFetchingAccountView: false
+				isFetchingAccount: false
 			});
 		default:
 			return state;

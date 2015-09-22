@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import { getAccountId } from 'helpers/AppHelpers';
 
 export default class Nav extends Component {
 	render() {
-		let accountId = '';
-		if(this.props.Account.accountDetails.id !== undefined){
-			accountId = this.props.Account.accountDetails.id;
-		}
-		else if(this.props.location.query.accountId !== undefined){
-			accountId = this.props.location.query.accountId;
-		}
+		const accountId = getAccountId(this.props);
 
 		let className = 'navbar navbar-default ';
 		if(!this.props.location.pathname.match(/\/accounts.*/) &&
