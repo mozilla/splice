@@ -24,6 +24,7 @@ export default class AccountList extends Component {
 						<th>Name</th>
 						<th>Email</th>
 						<th>Phone</th>
+						<th>Created</th>
 					</tr>
 					</thead>
 					<ReactCSSTransitionGroup component="tbody" transitionName="fade" transitionLeave={false} >

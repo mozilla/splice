@@ -25,9 +25,6 @@ export default class AccountsViewPage extends Component {
 		return (
 			<div>
 				<div>
-					<div className="pull-right">
-						<Link to="/campaigns/add">Add Campaign</Link>
-					</div>
 					<AccountDetails Account={this.props.Account}/>
 					<br/>
 					<br/>

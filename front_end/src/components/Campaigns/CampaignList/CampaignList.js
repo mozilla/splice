@@ -3,17 +3,17 @@ import CampaignRow from './CampaignRow';
 
 export default class CampaignList extends Component {
 	render() {
+		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 		let rows;
+		let spinner;
+
 		if (this.props.isFetchingCampaigns === false) {
 			rows = this.props.campaignRows.map((campaignRow, index) =>
 					<CampaignRow {...campaignRow} key={index}/>
 			);
 		} else {
-			rows = (
-				<tr>
-					<td><img src="./public/img/ajax-loader.gif"/></td>
-				</tr>
-			);
+			spinner = (<img src="./public/img/ajax-loader.gif"/>);
 		}
 
 		return (
@@ -26,9 +26,9 @@ export default class CampaignList extends Component {
 					<th>Created</th>
 				</tr>
 				</thead>
-				<tbody>{rows}
-
-				</tbody>
+				<ReactCSSTransitionGroup component="tbody" transitionName="fade" transitionLeave={false} >
+					{rows}
+				</ReactCSSTransitionGroup>
 			</table>
 		);
 	}
