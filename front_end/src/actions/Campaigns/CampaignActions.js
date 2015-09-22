@@ -13,8 +13,8 @@ export const RECEIVE_ADD_CAMPAIGN = 'RECEIVE_ADD_CAMPAIGN';
 export const REQUEST_CAMPAIGNS = 'REQUEST_CAMPAIGNS';
 export const RECEIVE_CAMPAIGNS = 'RECEIVE_CAMPAIGNS';
 
-export const REQUEST_CAMPAIGN_VIEW = 'REQUEST_CAMPAIGN_VIEW';
-export const RECEIVE_CAMPAIGN_VIEW = 'RECEIVE_CAMPAIGN_VIEW';
+export const REQUEST_CAMPAIGN = 'REQUEST_CAMPAIGN';
+export const RECEIVE_CAMPAIGN = 'RECEIVE_CAMPAIGN';
 
 function requestAddCampaign() {
 	return {type: REQUEST_ADD_CAMPAIGN};
@@ -34,25 +34,25 @@ function receiveCampaigns(json) {
 	};
 }
 
-function requestCampaignView() {
-	return {type: REQUEST_CAMPAIGN_VIEW};
+function requestCampaign() {
+	return {type: REQUEST_CAMPAIGN};
 }
-function receiveCampaignView(json) {
+function receiveCampaign(json) {
 	return {
-		type: RECEIVE_CAMPAIGN_VIEW,
+		type: RECEIVE_CAMPAIGN,
 		campaignDetails: json.result
 	};
 }
 
-export function fetchCampaignView(campaignId) {
+export function fetchCampaign(campaignId) {
 	// thunk middleware knows how to handle functions
 	return function next(dispatch) {
-		dispatch(requestCampaignView());
+		dispatch(requestCampaign());
 		// Return a promise to wait for
 		return fetch(apiUrl + '/api/campaign/' + campaignId)
 			.then(response => response.json())
 			.then(json => new Promise(resolve => {
-				dispatch(receiveCampaignView(json));
+				dispatch(receiveCampaign(json));
 				resolve();
 			}));
 	};
