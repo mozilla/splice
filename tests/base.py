@@ -27,7 +27,7 @@ class BaseTestCase(TestCase):
             for line in fd:
                 row = [el.decode('utf-8') for el in line.split(',')]
                 yield dict(zip(
-                    ('target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'adgroup_id', 'locale'),
+                    ('target_url', 'bg_color', 'title', 'type', 'image_uri', 'enhanced_image_uri', 'adgroup_id', 'status'),
                     row))
 
         def adgroup_values(fd):
