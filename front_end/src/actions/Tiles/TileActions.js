@@ -28,9 +28,14 @@ function requestTiles() {
 	return {type: REQUEST_TILES};
 }
 function receiveTiles(json) {
+	let rows = [];
+	if(json.results !== undefined){
+		rows = json.results;
+	}
+
 	return {
 		type: RECEIVE_TILES,
-		rows: json.results
+		rows: rows
 	};
 }
 

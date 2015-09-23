@@ -1,21 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-export default class AdGroupDetails extends Component {
+export default class TileDetails extends Component {
 	render() {
-		const data = this.props.AdGroup.details;
+		const data = this.props.Tile.details;
 
 		let details;
-		if (this.props.AdGroup.isFetching === false) {
+		if (this.props.Tile.isFetching === false) {
 			details = (
 				<div className="panel panel-default">
-					<div className="panel-heading">Ad Group - {data.name}
+					<div className="panel-heading">Tile - {data.title}
 						<Link to={'/adgroups/edit/' + data.id}> <i className="fa fa-pencil"></i></Link>
 					</div>
 					<div className="panel-body">
-						<p>Ad Group ID: {data.id}</p>
-						<p>Category: </p>
-						<p>Type: </p>
+						<p>Tile ID: {data.id}</p>
+						<p>Url: {data.target_url}</p>
 					</div>
 				</div>
 			);
@@ -27,6 +26,6 @@ export default class AdGroupDetails extends Component {
 	}
 }
 
-AdGroupDetails.propTypes = {
-	AdGroup: PropTypes.object.isRequired
+TileDetails.propTypes = {
+	Tile: PropTypes.object.isRequired
 };
