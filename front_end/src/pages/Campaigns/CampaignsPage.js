@@ -20,8 +20,8 @@ export default class CampaignsPage extends Component {
 		return (
 			<div>
 				<h1>Campaigns</h1>
-				<CampaignList campaignRows={this.props.Campaign.campaignRows}
-							  isFetchingCampaigns={this.props.Campaign.isFetchingCampaigns}/>
+				<CampaignList rows={this.props.Campaign.rows}
+							  isFetching={this.props.Campaign.isFetching}/>
 			</div>
 		);
 	}

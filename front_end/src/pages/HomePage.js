@@ -15,7 +15,7 @@ export default class HomePage extends Component {
 		updateDocTitle('Home');
 
 		const { dispatch } = this.props;
-		if (this.props.Account.accountRows.length === 0) {
+		if (this.props.Account.rows.length === 0) {
 			this.props.dispatch(fetchAccounts());
 		}
 		dispatch(fetchRecentlyViewed());
@@ -31,8 +31,10 @@ export default class HomePage extends Component {
 				</div>
 				<div className="row" style={{marginBottom: '25px'}}>
 					<div className="col-md-9" >
-						<div style={{height: '250px', border: '1px solid #666'}}>
-							<strong>Bar Graph</strong>
+						<div className="panel panel-default" style={{height: '250px'}}>
+							<div className="panel-body">
+								<strong>Bar Graph</strong>
+							</div>
 						</div>
 					</div>
 					<div className="col-md-3">

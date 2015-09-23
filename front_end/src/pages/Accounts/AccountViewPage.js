@@ -24,28 +24,30 @@ export default class AccountViewPage extends Component {
 	render() {
 		return (
 			<div>
-				<div>
-					<AccountDetails Account={this.props.Account}/>
-					<br/>
-					<br/>
-					<strong>Campaigns</strong>
-					<CampaignList campaignRows={this.props.Campaign.campaignRows}
-								 isFetchingCampaigns={this.props.Campaign.isFetchingCampaigns}/>
+				<div className="row">
+					<div className="col-md-6">
+						<h1>Account</h1>
+						<AccountDetails Account={this.props.Account}/>
+					</div>
 				</div>
+				<br/>
+				<strong>Campaigns</strong>
+				<CampaignList rows={this.props.Campaign.rows}
+							 isFetching={this.props.Campaign.isFetching}/>
 			</div>
 		);
 	}
 
 	fetchAccountDetails(props){
 		const { dispatch } = props;
-		const data = props.Account.accountDetails;
+		const data = props.Account.details;
 		const accountId = parseInt(props.params.accountId, 10);
 
 		updateDocTitle('Account View');
 
 		dispatch(fetchAccount(accountId)).then(() => {
-			pageVisit('Account - ' + this.props.Account.accountDetails.name, this);
-			dispatch(fetchCampaigns(this.props.Account.accountDetails.id));
+			pageVisit('Account - ' + this.props.Account.details.name, this);
+			dispatch(fetchCampaigns(this.props.Account.details.id));
 		});
 	}
 }
@@ -54,13 +56,10 @@ AccountViewPage.propTypes = {
   	
 };
 
-// Which props do we want to inject, given the global state?
-// Note: use https://github.com/faassen/reselect for better performance.
 function select(state) {
 	return {
 		Account: state.Account,
-		Campaign: state.Campaign,
-		App: state.App
+		Campaign: state.Campaign
 	};
 }
 

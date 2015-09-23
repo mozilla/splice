@@ -14,7 +14,11 @@ import {
 	AccountsPage,
 	AccountViewPage,
 	AccountAddPage,
-	CampaignsPage
+	CampaignsPage,
+	CampaignViewPage,
+	AdGroupsPage,
+	AdGroupViewPage,
+	TilesPage
 } from './pages/index';
 
 export default class App extends Component {
@@ -29,6 +33,12 @@ export default class App extends Component {
 					<Route path="/accounts/:accountId" title="Account View" component={AccountViewPage}></Route>
 
 					<Route path="/campaigns" title="Campaigns" component={CampaignsPage}></Route>
+					<Route path="/campaigns/:campaignId" title="Campaign View" component={CampaignViewPage}></Route>
+
+					<Route path="/adgroups" title="Ad Groups" component={AdGroupsPage}></Route>
+					<Route path="/adgroups/:adGroupId" title="Ad Group View" component={AdGroupViewPage}></Route>
+
+					<Route path="/tiles" title="Tiles" component={TilesPage}></Route>
 				</Route>
 			</Router>
 		);
