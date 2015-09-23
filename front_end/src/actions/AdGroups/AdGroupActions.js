@@ -16,28 +16,28 @@ export const RECEIVE_ADGROUPS = 'RECEIVE_ADGROUPS';
 export const REQUEST_ADGROUP = 'REQUEST_ADGROUP';
 export const RECEIVE_ADGROUP = 'RECEIVE_ADGROUP';
 
-function requestAddAdGroup() {
+export function requestAddAdGroup() {
 	return {type: REQUEST_ADD_ADGROUP};
 }
 
-function receiveAddAdGroup(json) {
+export function receiveAddAdGroup(json) {
 	return {type: RECEIVE_ADD_ADGROUP, json};
 }
 
-function requestAdGroups() {
+export function requestAdGroups() {
 	return {type: REQUEST_ADGROUPS};
 }
-function receiveAdGroups(json) {
+export function receiveAdGroups(json) {
 	return {
 		type: RECEIVE_ADGROUPS,
 		rows: json.results
 	};
 }
 
-function requestAdGroup() {
+export function requestAdGroup() {
 	return {type: REQUEST_ADGROUP};
 }
-function receiveAdGroup(json) {
+export function receiveAdGroup(json) {
 	return {
 		type: RECEIVE_ADGROUP,
 		details: json.result

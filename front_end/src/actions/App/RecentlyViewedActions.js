@@ -2,7 +2,7 @@ import Cookie from 'react-cookie';
 
 export const GET_RECENTLY_VIEWED = 'GET_RECENTLY_VIEWED';
 
-function getRecentlyViewed(recentlyViewed) {
+export function getRecentlyViewed(recentlyViewed) {
 	return {type: GET_RECENTLY_VIEWED, recentlyViewed: recentlyViewed};
 }
 

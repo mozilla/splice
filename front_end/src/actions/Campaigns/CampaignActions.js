@@ -16,28 +16,28 @@ export const RECEIVE_CAMPAIGNS = 'RECEIVE_CAMPAIGNS';
 export const REQUEST_CAMPAIGN = 'REQUEST_CAMPAIGN';
 export const RECEIVE_CAMPAIGN = 'RECEIVE_CAMPAIGN';
 
-function requestAddCampaign() {
+export function requestAddCampaign() {
 	return {type: REQUEST_ADD_CAMPAIGN};
 }
 
-function receiveAddCampaign(json) {
+export function receiveAddCampaign(json) {
 	return {type: RECEIVE_ADD_CAMPAIGN, json};
 }
 
-function requestCampaigns() {
+export function requestCampaigns() {
 	return {type: REQUEST_CAMPAIGNS};
 }
-function receiveCampaigns(json) {
+export function receiveCampaigns(json) {
 	return {
 		type: RECEIVE_CAMPAIGNS,
 		rows: json.results
 	};
 }
 
-function requestCampaign() {
+export function requestCampaign() {
 	return {type: REQUEST_CAMPAIGN};
 }
-function receiveCampaign(json) {
+export function receiveCampaign(json) {
 	return {
 		type: RECEIVE_CAMPAIGN,
 		details: json.result

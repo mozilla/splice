@@ -16,18 +16,18 @@ export const RECEIVE_TILES = 'RECEIVE_TILES';
 export const REQUEST_TILE = 'REQUEST_TILE';
 export const RECEIVE_TILE = 'RECEIVE_TILE';
 
-function requestAddTile() {
+export function requestAddTile() {
 	return {type: REQUEST_ADD_TILE};
 }
 
-function receiveAddTile(json) {
+export function receiveAddTile(json) {
 	return {type: RECEIVE_ADD_TILE, json};
 }
 
-function requestTiles() {
+export function requestTiles() {
 	return {type: REQUEST_TILES};
 }
-function receiveTiles(json) {
+export function receiveTiles(json) {
 	let rows = [];
 	if(json.results !== undefined){
 		rows = json.results;
@@ -39,10 +39,10 @@ function receiveTiles(json) {
 	};
 }
 
-function requestTile() {
+export function requestTile() {
 	return {type: REQUEST_TILE};
 }
-function receiveTile(json) {
+export function receiveTile(json) {
 	return {
 		type: RECEIVE_TILE,
 		details: json.result
