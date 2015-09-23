@@ -9,7 +9,7 @@ import {
 
 const initialState = {
   rows: [],
-  details: [],
+  details: {},
   isSaving: false,
   isFetching: false
 };
