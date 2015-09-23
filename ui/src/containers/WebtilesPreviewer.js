@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { selectChannel, selectLocale, selectType, fetchLocalesIfNeeded, fetchTilesIfNeeded } from '../actions';
+import { selectChannel, selectLocale, selectType, fetchLocalesIfNeeded, fetchTilesIfNeeded } from '../actions/WebtilesPreviewer';
 import Picker from '../components/Picker';
 import Tiles from '../components/Tiles';
 

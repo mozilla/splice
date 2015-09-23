@@ -3,7 +3,7 @@ import {
   SELECT_CHANNEL, SELECT_LOCALE, SELECT_TYPE,
   REQUEST_LOCALES, REQUEST_TILES,
   RECEIVE_LOCALES, RECEIVE_TILES
-} from '../actions';
+} from '../actions/WebtilesPreviewer';
 
 function selectedChannel(state = 'desktop', action) {
   switch (action.type) {
