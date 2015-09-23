@@ -11,6 +11,26 @@ describe('Account ', () => {
 			Account(undefined, {}).rows).toEqual([]);
 		});
 
+	it('should receive the accounts', () => {
+		expect(
+			Account(undefined, {
+				type: types.RECEIVE_ACCOUNTS,
+				rows: [{text: "Run the tests" }]
+			}).rows).toEqual(
+			[{ text: "Run the tests" }]
+		);
+	});
+
+	it('should receive the account', () => {
+		expect(
+			Account(undefined, {
+				type: types.RECEIVE_ACCOUNT,
+				details: {text: "Run the tests" }
+			}).details).toEqual(
+			{ text: "Run the tests" }
+		);
+	});
+
 	it('should handle RECEIVE_ADD_ACCOUNT', () => {
 		//Test adding to initial state 
 		expect(
