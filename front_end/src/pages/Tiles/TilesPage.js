@@ -1,44 +1,38 @@
 import React, { Component } from '../../../node_modules/react/addons';
 import { connect } from 'react-redux';
 import { pageVisit } from 'actions/App/AppActions';
-import { fetchCampaigns } from 'actions/Campaigns/CampaignActions';
 import { getAccountId } from 'helpers/AppHelpers';
 
-import CampaignList from 'components/Campaigns/CampaignList/CampaignList';
-
-export default class CampaignsPage extends Component {
+export default class TilesPage extends Component {
 	componentDidMount() {
 		const { dispatch } = this.props;
 
-		pageVisit('Campaigns', this);
+		pageVisit('Tiles', this);
 
 		const accountId = getAccountId(this.props);
-		dispatch(fetchCampaigns(accountId));
 	}
 
 	render() {
 		return (
 			<div>
-				<h1>Campaigns</h1>
-				<CampaignList rows={this.props.Campaign.rows}
-							  isFetching={this.props.Campaign.isFetching}/>
+				<h1>Tiles</h1>
 			</div>
 		);
 	}
 }
 
-CampaignsPage.propTypes = {};
+TilesPage.propTypes = {};
 
 // Which props do we want to inject, given the global state?
 // Note: use https://github.com/faassen/reselect for better performance.
 function select(state) {
 	return {
 		Account: state.Account,
-		Campaign: state.Campaign
+		Tile: state.Tile
 	};
 }
 
 // Wrap the component to inject dispatch and state into it
-export default connect(select)(CampaignsPage);
+export default connect(select)(TilesPage);
 
 

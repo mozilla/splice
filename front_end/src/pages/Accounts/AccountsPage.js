@@ -13,7 +13,7 @@ export default class AccountsPage extends Component {
 		pageVisit('Accounts', this);
 
 		const { dispatch } = this.props;
-		if (this.props.Account.accountRows.length === 0) {
+		if (this.props.Account.row.length === 0) {
 			dispatch(fetchAccounts());
 		}
 	}
@@ -30,9 +30,9 @@ export default class AccountsPage extends Component {
 						<Link to="/accounts/add">Add Account</Link>
 					</div>
 					<AccountForm onAddClick={text => dispatch(saveAccount(text))}
-								 isSavingAccount={this.props.Account.isSavingAccount}/>
-					<AccountList accountRows={this.props.Account.accountRows}
-								 isFetchingAccounts={this.props.Account.isFetchingAccounts}/>
+								 isSaving={this.props.Account.isSaving}/>
+					<AccountList rows={this.props.Account.rows}
+								 isFetching={this.props.Account.isFetching}/>
 				</div>
 			</div>
 		);

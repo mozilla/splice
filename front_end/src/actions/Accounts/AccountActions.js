@@ -30,7 +30,7 @@ function requestAccounts() {
 function receiveAccounts(json) {
 	return {
 		type: RECEIVE_ACCOUNTS,
-		accountRows: json.results
+		rows: json.results
 	};
 }
 
@@ -40,7 +40,7 @@ function requestAccount() {
 function receiveAccount(json) {
 	return {
 		type: RECEIVE_ACCOUNT,
-		accountDetails: json.result
+		details: json.result
 	};
 }
 

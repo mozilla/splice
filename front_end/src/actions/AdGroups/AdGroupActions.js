@@ -7,82 +7,82 @@ if (typeof __DEVELOPMENT__ !== 'undefined' && __DEVELOPMENT__ === true) {
 	apiUrl = __LIVEAPI__;
 }
 
-export const REQUEST_ADD_CAMPAIGN = 'REQUEST_ADD_CAMPAIGN';
-export const RECEIVE_ADD_CAMPAIGN = 'RECEIVE_ADD_CAMPAIGN';
+export const REQUEST_ADD_ADGROUP = 'REQUEST_ADD_ADGROUP';
+export const RECEIVE_ADD_ADGROUP = 'RECEIVE_ADD_ADGROUP';
 
-export const REQUEST_CAMPAIGNS = 'REQUEST_CAMPAIGNS';
-export const RECEIVE_CAMPAIGNS = 'RECEIVE_CAMPAIGNS';
+export const REQUEST_ADGROUPS = 'REQUEST_ADGROUPS';
+export const RECEIVE_ADGROUPS = 'RECEIVE_ADGROUPS';
 
-export const REQUEST_CAMPAIGN = 'REQUEST_CAMPAIGN';
-export const RECEIVE_CAMPAIGN = 'RECEIVE_CAMPAIGN';
+export const REQUEST_ADGROUP = 'REQUEST_ADGROUP';
+export const RECEIVE_ADGROUP = 'RECEIVE_ADGROUP';
 
-function requestAddCampaign() {
-	return {type: REQUEST_ADD_CAMPAIGN};
+function requestAddAdGroup() {
+	return {type: REQUEST_ADD_ADGROUP};
 }
 
-function receiveAddCampaign(json) {
-	return {type: RECEIVE_ADD_CAMPAIGN, json};
+function receiveAddAdGroup(json) {
+	return {type: RECEIVE_ADD_ADGROUP, json};
 }
 
-function requestCampaigns() {
-	return {type: REQUEST_CAMPAIGNS};
+function requestAdGroups() {
+	return {type: REQUEST_ADGROUPS};
 }
-function receiveCampaigns(json) {
+function receiveAdGroups(json) {
 	return {
-		type: RECEIVE_CAMPAIGNS,
+		type: RECEIVE_ADGROUPS,
 		rows: json.results
 	};
 }
 
-function requestCampaign() {
-	return {type: REQUEST_CAMPAIGN};
+function requestAdGroup() {
+	return {type: REQUEST_ADGROUP};
 }
-function receiveCampaign(json) {
+function receiveAdGroup(json) {
 	return {
-		type: RECEIVE_CAMPAIGN,
+		type: RECEIVE_ADGROUP,
 		details: json.result
 	};
 }
 
-export function fetchCampaign(campaignId) {
+export function fetchAdGroup(adGroupId) {
 	// thunk middleware knows how to handle functions
 	return function next(dispatch) {
-		dispatch(requestCampaign());
+		dispatch(requestAdGroup());
 		// Return a promise to wait for
-		return fetch(apiUrl + '/api/campaign/' + campaignId)
+		return fetch(apiUrl + '/api/adgroups/' + adGroupId)
 			.then(response => response.json())
 			.then(json => new Promise(resolve => {
-				dispatch(receiveCampaign(json));
+				dispatch(receiveAdGroup(json));
 				resolve();
 			}));
 	};
 }
 
-export function fetchCampaigns(accountId = null) {
+export function fetchAdGroups(accountId = null) {
 	// thunk middleware knows how to handle functions
 	return function next(dispatch) {
-		dispatch(requestCampaigns());
+		dispatch(requestAdGroups());
 		// Return a promise to wait for
 		let params = '';
 		if(accountId !== null){
-			params = '?account_id=' + accountId;
+			params = '?campaign_id=' + accountId;
 		}
 
-		return fetch(apiUrl + '/api/campaigns' + params)
+		return fetch(apiUrl + '/api/adgroups' + params)
 			.then(response => response.json())
 			.then(json => {
-				dispatch(receiveCampaigns(json));
+				dispatch(receiveAdGroups(json));
 			}
 		);
 	};
 }
 
-export function saveCampaign(data) {
+export function saveAdGroup(data) {
 	// thunk middleware knows how to handle functions
 	return function next(dispatch) {
-		dispatch(requestAddCampaign());
+		dispatch(requestAddAdGroup());
 		// Return a promise to wait for
-		/*return fetch(apiUrl + '/api/campaigns', {
+		/*return fetch(apiUrl + '/api/adgroups', {
 		 method: 'post',
 		 headers: {
 		 'Accept': 'application/json',
@@ -101,11 +101,11 @@ export function saveCampaign(data) {
 		 'phone': '+1(888)0000000'
 		 }));
 		 });*/
-		return fetch('http://localhost:9999/public/mock/campaigns.json')
+		return fetch('http://localhost:9999/public/mock/adGroups.json')
 			.then(response => response.json())
 			.then(() =>
 				setTimeout(() => {
-					dispatch(receiveAddCampaign({
+					dispatch(receiveAddAdGroup({
 						'created_at': '',
 						'email': 'test@gmail.com',
 						'id': 99,

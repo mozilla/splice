@@ -7,82 +7,82 @@ if (typeof __DEVELOPMENT__ !== 'undefined' && __DEVELOPMENT__ === true) {
 	apiUrl = __LIVEAPI__;
 }
 
-export const REQUEST_ADD_CAMPAIGN = 'REQUEST_ADD_CAMPAIGN';
-export const RECEIVE_ADD_CAMPAIGN = 'RECEIVE_ADD_CAMPAIGN';
+export const REQUEST_ADD_TILE = 'REQUEST_ADD_TILE';
+export const RECEIVE_ADD_TILE = 'RECEIVE_ADD_TILE';
 
-export const REQUEST_CAMPAIGNS = 'REQUEST_CAMPAIGNS';
-export const RECEIVE_CAMPAIGNS = 'RECEIVE_CAMPAIGNS';
+export const REQUEST_TILES = 'REQUEST_TILES';
+export const RECEIVE_TILES = 'RECEIVE_TILES';
 
-export const REQUEST_CAMPAIGN = 'REQUEST_CAMPAIGN';
-export const RECEIVE_CAMPAIGN = 'RECEIVE_CAMPAIGN';
+export const REQUEST_TILE = 'REQUEST_TILE';
+export const RECEIVE_TILE = 'RECEIVE_TILE';
 
-function requestAddCampaign() {
-	return {type: REQUEST_ADD_CAMPAIGN};
+function requestAddTile() {
+	return {type: REQUEST_ADD_TILE};
 }
 
-function receiveAddCampaign(json) {
-	return {type: RECEIVE_ADD_CAMPAIGN, json};
+function receiveAddTile(json) {
+	return {type: RECEIVE_ADD_TILE, json};
 }
 
-function requestCampaigns() {
-	return {type: REQUEST_CAMPAIGNS};
+function requestTiles() {
+	return {type: REQUEST_TILES};
 }
-function receiveCampaigns(json) {
+function receiveTiles(json) {
 	return {
-		type: RECEIVE_CAMPAIGNS,
+		type: RECEIVE_TILES,
 		rows: json.results
 	};
 }
 
-function requestCampaign() {
-	return {type: REQUEST_CAMPAIGN};
+function requestTile() {
+	return {type: REQUEST_TILE};
 }
-function receiveCampaign(json) {
+function receiveTile(json) {
 	return {
-		type: RECEIVE_CAMPAIGN,
+		type: RECEIVE_TILE,
 		details: json.result
 	};
 }
 
-export function fetchCampaign(campaignId) {
+export function fetchTile(tileId) {
 	// thunk middleware knows how to handle functions
 	return function next(dispatch) {
-		dispatch(requestCampaign());
+		dispatch(requestTile());
 		// Return a promise to wait for
-		return fetch(apiUrl + '/api/campaign/' + campaignId)
+		return fetch(apiUrl + '/api/tiles/' + tileId)
 			.then(response => response.json())
 			.then(json => new Promise(resolve => {
-				dispatch(receiveCampaign(json));
+				dispatch(receiveTile(json));
 				resolve();
 			}));
 	};
 }
 
-export function fetchCampaigns(accountId = null) {
+export function fetchTiles(id = null) {
 	// thunk middleware knows how to handle functions
 	return function next(dispatch) {
-		dispatch(requestCampaigns());
+		dispatch(requestTiles());
 		// Return a promise to wait for
 		let params = '';
-		if(accountId !== null){
-			params = '?account_id=' + accountId;
+		if(id !== null){
+			params = '?adgroup_id=' + id;
 		}
 
-		return fetch(apiUrl + '/api/campaigns' + params)
+		return fetch(apiUrl + '/api/tiles' + params)
 			.then(response => response.json())
 			.then(json => {
-				dispatch(receiveCampaigns(json));
+				dispatch(receiveTiles(json));
 			}
 		);
 	};
 }
 
-export function saveCampaign(data) {
+export function saveTile(data) {
 	// thunk middleware knows how to handle functions
 	return function next(dispatch) {
-		dispatch(requestAddCampaign());
+		dispatch(requestAddTile());
 		// Return a promise to wait for
-		/*return fetch(apiUrl + '/api/campaigns', {
+		/*return fetch(apiUrl + '/api/tiles', {
 		 method: 'post',
 		 headers: {
 		 'Accept': 'application/json',
@@ -101,11 +101,11 @@ export function saveCampaign(data) {
 		 'phone': '+1(888)0000000'
 		 }));
 		 });*/
-		return fetch('http://localhost:9999/public/mock/campaigns.json')
+		return fetch('http://localhost:9999/public/mock/tiles.json')
 			.then(response => response.json())
 			.then(() =>
 				setTimeout(() => {
-					dispatch(receiveAddCampaign({
+					dispatch(receiveAddTile({
 						'created_at': '',
 						'email': 'test@gmail.com',
 						'id': 99,

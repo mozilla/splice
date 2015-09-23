@@ -7,8 +7,8 @@ export default class AppList extends Component {
 		let listMarkup = '';
 		switch (this.props.App.listType){
 			case 'accounts':
-				listMarkup = (<AccountList accountRows={this.props.Account.accountRows}
-										   isFetchingAccounts={this.props.Account.isFetchingAccounts}/>);
+				listMarkup = (<AccountList rows={this.props.Account.rows}
+										   isFetching={this.props.Account.isFetching}/>);
 				break;
 			default:
 				break;

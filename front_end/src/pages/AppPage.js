@@ -10,7 +10,7 @@ import AccountNavigation from 'components/App/Navigation/AccountNavigation.js';
 export default class AppPage extends Component {
 	componentDidMount() {
 		const { dispatch } = this.props;
-		if (this.props.Account.accountRows.length === 0) {
+		if (this.props.Account.rows.length === 0) {
 			dispatch(fetchAccounts());
 		}
 	}
@@ -46,9 +46,7 @@ AppPage.propTypes = {};
 // Which props do we want to inject, given the global state?
 // Note: use https://github.com/faassen/reselect for better performance.
 function select(state) {
-	return {
-		Account: state.Account
-	};
+	return state;
 }
 
 // Wrap the component to inject dispatch and state into it

@@ -1,11 +1,11 @@
 import {
-	REQUEST_ADD_ACCOUNT,
-	RECEIVE_ADD_ACCOUNT,
-	REQUEST_ACCOUNTS,
-	RECEIVE_ACCOUNTS,
-	REQUEST_ACCOUNT,
-	RECEIVE_ACCOUNT
-} from 'actions/Accounts/AccountActions';
+	REQUEST_ADD_TILE,
+	RECEIVE_ADD_TILE,
+	REQUEST_TILES,
+	RECEIVE_TILES,
+	REQUEST_TILE,
+	RECEIVE_TILE
+} from 'actions/Tiles/TileActions';
 
 const initialState = {
 	rows: [],
@@ -14,31 +14,31 @@ const initialState = {
 	isFetching: false
 };
 
-export function Account(state = initialState, action = null) {
+export function Tile(state = initialState, action = null) {
 	switch (action.type) {
-		case REQUEST_ADD_ACCOUNT:
+		case REQUEST_ADD_TILE:
 			return _.assign({}, state, {
 				isSaving: true
 			});
-		case RECEIVE_ADD_ACCOUNT:
+		case RECEIVE_ADD_TILE:
 			return _.assign({}, state, {
 				rows: [...state.rows, action.json],
 				isSaving: false
 			});
-		case REQUEST_ACCOUNTS:
+		case REQUEST_TILES:
 			return _.assign({}, state, {
 				isFetching: true
 			});
-		case RECEIVE_ACCOUNTS:
+		case RECEIVE_TILES:
 			return _.assign({}, state, {
 				rows: action.rows,
 				isFetching: false
 			});
-		case REQUEST_ACCOUNT:
+		case REQUEST_TILE:
 			return _.assign({}, state, {
 				isFetching: true
 			});
-		case RECEIVE_ACCOUNT:
+		case RECEIVE_TILE:
 			return _.assign({}, state, {
 				details: action.details,
 				isFetching: false

@@ -5,8 +5,8 @@ export default class SideBar extends Component {
 	render() {
 		const props = this.props;
 		let accountLinks = [];
-		if (_.isEmpty(this.props.Account.accountRows) === false) {
-			this.props.Account.accountRows.map(function loop(row, index) {
+		if (_.isEmpty(this.props.Account.rows) === false) {
+			this.props.Account.rows.map(function loop(row, index) {
 				let className = '';
 				if (props.location.pathname === ('/accounts/' + row.id)) {
 					className = 'active';
