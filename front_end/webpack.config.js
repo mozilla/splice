@@ -14,45 +14,45 @@ import { webpack_resolve, webpack_modules_loaders, devApi, liveApi, development,
 
 module.exports = {
 
-	output: {
-		path: assetPath,
-		filename: 'main.js',
-		publicPath: 'http://localhost:9999/'
-	},
+  output: {
+    path: assetPath,
+    filename: 'main.js',
+    publicPath: 'http://localhost:9999/'
+  },
 
-	cache: true,
-	debug: true,
-	devtool: 'source-map',
-	entry: [
-		'webpack-dev-server/client?http://localhost:9999',
-		'webpack/hot/only-dev-server',
-		'./src/main.js'
-	],
+  cache: true,
+  debug: true,
+  devtool: 'source-map',
+  entry: [
+    'webpack-dev-server/client?http://localhost:9999',
+    'webpack/hot/only-dev-server',
+    './src/main.js'
+  ],
 
-	stats: {
-		colors: true,
-		reasons: true
-	},
+  stats: {
+    colors: true,
+    reasons: true
+  },
 
-	resolve: webpack_resolve,
-	module: {
-		preLoaders: [{
-			test: /\.(js|jsx)$/,
-			exclude: [/node_module/, 'server.js', 'mock/*'],
-			loader: 'eslint'
-		}],
-		loaders: webpack_modules_loaders
-	},
+  resolve: webpack_resolve,
+  module: {
+    preLoaders: [{
+      test: /\.(js|jsx)$/,
+      exclude: [/node_module/, 'server.js', 'mock/*'],
+      loader: 'eslint'
+    }],
+    loaders: webpack_modules_loaders
+  },
 
-	plugins: [
-		new ExtractTextPlugin('public/css/styles.css'),
-		new webpack.HotModuleReplacementPlugin(),
-		new webpack.NoErrorsPlugin(),
-		new webpack.DefinePlugin({
-			__DEVELOPMENT__: development,
-			__DEVTOOLS__: devTools,  // <-------- DISABLE redux-devtools HERE
-			__DEVAPI__: devApi,
-			__LIVEAPI__: liveApi
-		})
-	]
+  plugins: [
+    new ExtractTextPlugin('public/css/styles.css'),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
+    new webpack.DefinePlugin({
+      __DEVELOPMENT__: development,
+      __DEVTOOLS__: devTools,  // <-------- DISABLE redux-devtools HERE
+      __DEVAPI__: devApi,
+      __LIVEAPI__: liveApi
+    })
+  ]
 };

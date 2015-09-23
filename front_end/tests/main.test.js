@@ -5,8 +5,8 @@ var Main = require('../src/main'); //my root-test lives in components/__tests__/
 var assert = require('assert');
 
 describe('main', function () {
-	it('renders without problems', function () {
-		var main = TestUtils.renderIntoDocument(<Main/>);
-		expect(main).toExist();
-	});
+  it('renders without problems', function () {
+    var main = TestUtils.renderIntoDocument(<Main/>);
+    expect(main).toExist();
+  });
 });

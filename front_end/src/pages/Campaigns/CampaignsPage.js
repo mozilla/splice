@@ -7,24 +7,24 @@ import { getAccountId } from 'helpers/AppHelpers';
 import CampaignList from 'components/Campaigns/CampaignList/CampaignList';
 
 export default class CampaignsPage extends Component {
-	componentDidMount() {
-		const { dispatch } = this.props;
+  componentDidMount() {
+    const { dispatch } = this.props;
 
-		pageVisit('Campaigns', this);
+    pageVisit('Campaigns', this);
 
-		const accountId = getAccountId(this.props);
-		dispatch(fetchCampaigns(accountId));
-	}
+    const accountId = getAccountId(this.props);
+    dispatch(fetchCampaigns(accountId));
+  }
 
-	render() {
-		return (
-			<div>
-				<h1>Campaigns</h1>
-				<CampaignList rows={this.props.Campaign.rows}
-							  isFetching={this.props.Campaign.isFetching}/>
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div>
+        <h1>Campaigns</h1>
+        <CampaignList rows={this.props.Campaign.rows}
+                      isFetching={this.props.Campaign.isFetching}/>
+      </div>
+    );
+  }
 }
 
 CampaignsPage.propTypes = {};
@@ -32,10 +32,10 @@ CampaignsPage.propTypes = {};
 // Which props do we want to inject, given the global state?
 // Note: use https://github.com/faassen/reselect for better performance.
 function select(state) {
-	return {
-		Account: state.Account,
-		Campaign: state.Campaign
-	};
+  return {
+    Account: state.Account,
+    Campaign: state.Campaign
+  };
 }
 
 // Wrap the component to inject dispatch and state into it
