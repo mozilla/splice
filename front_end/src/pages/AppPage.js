@@ -5,30 +5,40 @@ import { fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import TopBar from 'components/App/Navigation/TopBar.js';
 import SideBar from 'components/App/Navigation/SideBar.js';
+import AccountNavigation from 'components/App/Navigation/AccountNavigation.js';
 
 export default class AppPage extends Component {
-	componentDidMount() {
-		const { dispatch } = this.props;
-		if (this.props.Account.accountRows.length === 0) {
-			dispatch(fetchAccounts());
-		}
-	}
+  componentDidMount() {
+    const { dispatch } = this.props;
+    if (this.props.Account.rows.length === 0) {
+      dispatch(fetchAccounts());
+    }
+  }
 
-	render() {
-		return (
-			<div>
-				<TopBar {...this.props} />
+  render() {
+    const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+    const key = this.props.location.pathname;
 
-				<div className="container">
-					<SideBar accountRows={this.props.Account.accountRows}/>
+    return (
+      <div>
+        <TopBar {...this.props} />
 
-					<div className="col-md-9">
-						{this.props.children}
-					</div>
-				</div>
-			</div>
-		);
-	}
+        <div className="container">
+          <div className="row">
+            <SideBar {...this.props} />
+
+            <div className="col-md-9">
+              <AccountNavigation {...this.props} />
+
+              <ReactCSSTransitionGroup transitionName="page-transition" transitionLeave={false}>
+                {React.cloneElement(this.props.children || <div />, {key: key})}
+              </ReactCSSTransitionGroup>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 AppPage.propTypes = {};
@@ -36,10 +46,7 @@ AppPage.propTypes = {};
 // Which props do we want to inject, given the global state?
 // Note: use https://github.com/faassen/reselect for better performance.
 function select(state) {
-	return {
-		Account: state.Account,
-		App: state.App
-	};
+  return state;
 }
 
 // Wrap the component to inject dispatch and state into it

@@ -8,45 +8,48 @@
 var webpack = require('webpack');
 var assetPath = require('path').join(__dirname, 'dist');
 
-import { webpack_resolve, webpack_modules_loaders, devApi, liveApi } from './settings.conf.js';
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+import { webpack_resolve, webpack_modules_loaders, devApi, liveApi, devUrl, liveUrl } from './settings.conf.js';
 
 module.exports = {
 
-	output: {
-		path: assetPath,
-		filename: 'main.js',
-		publicPath: '/'
-	},
-	devtool: 'source-map',
-	progress: true,
-	entry: [
-		'./src/main.js'
-	],
+  output: {
+    path: assetPath,
+    filename: 'main.js',
+    publicPath: liveUrl
+  },
+  devtool: 'source-map',
+  progress: true,
+  entry: [
+    './src/main.js'
+  ],
 
-	stats: {
-		colors: true,
-		reasons: true
-	},
+  stats: {
+    colors: true,
+    reasons: true
+  },
 
-	resolve: webpack_resolve,
-	module: {
-		loaders: webpack_modules_loaders
-	},
+  resolve: webpack_resolve,
+  module: {
+    loaders: webpack_modules_loaders
+  },
 
-	plugins: [
-		new webpack.DefinePlugin({
-			__DEVELOPMENT__: false,
-			__DEVTOOLS__: false, // <-------- DISABLE redux-devtools HERE
-			__DEVAPI__: devApi,
-			__LIVEAPI__: liveApi
-		}),
-		new webpack.optimize.DedupePlugin(),
-		new webpack.optimize.OccurenceOrderPlugin(),
-		new webpack.optimize.UglifyJsPlugin({
-			compress: {
-				warnings: false
-			}
-		})
-	]
+  plugins: [
+    new ExtractTextPlugin('public/css/styles.css'),
+    new webpack.DefinePlugin({
+      __DEVELOPMENT__: false,
+      __DEVTOOLS__: false, // <-------- DISABLE redux-devtools HERE
+      __DEVAPI__: devApi,
+      __LIVEAPI__: liveApi
+    }),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
+  ]
 
 };

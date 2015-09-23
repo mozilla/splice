@@ -1,79 +1,70 @@
 import React, { Component } from 'react/addons';
 import { connect } from 'react-redux';
 
+import { updateDocTitle, listTypeSelect } from 'actions/App/AppActions';
 import { fetchAccounts } from 'actions/Accounts/AccountActions';
-import { fetchRecentlyViewed, fileUploaded } from 'actions/AppActions';
+import { fetchCampaigns } from 'actions/Campaigns/CampaignActions';
+import { fetchRecentlyViewed } from 'actions/App/RecentlyViewedActions';
+
 import AccountList from 'components/Accounts/AccountList/AccountList';
+import AppList from 'components/App/AppList/AppList';
 import RecentlyViewedList from 'components/App/RecentlyViewed/RecentlyViewedList';
-import Calendar from 'rc-calendar';
-import 'rc-calendar/assets/index.css';
-
-import GregorianCalendar from 'gregorian-calendar';
-const date = new GregorianCalendar(); // defaults to en-us
-date.setTime(+new Date('2015-09-14 13:00:00'));
-//console.log(date.getDayOfWeek());
-
-import Dropzone from 'react-dropzone';
-
 
 export default class HomePage extends Component {
-	componentDidMount() {
-		const { dispatch } = this.props;
-		if (this.props.Account.accountRows.length === 0) {
-			dispatch(fetchAccounts());
-		}
+  componentDidMount() {
+    updateDocTitle('Home');
 
-		dispatch(fetchRecentlyViewed());
-	}
+    const { dispatch } = this.props;
+    if (this.props.Account.rows.length === 0) {
+      this.props.dispatch(fetchAccounts());
+    }
+    dispatch(fetchRecentlyViewed());
+  }
 
-	render() {
-		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+  render() {
+    return (
+      <div>
+        <div className="row">
+          <div className="col-md-12">
+            <h1>Dashboard <i className="fa fa-firefox"></i></h1>
+          </div>
+        </div>
+        <div className="row" style={{marginBottom: '25px'}}>
+          <div className="col-md-9">
+            <div className="panel panel-default" style={{height: '250px'}}>
+              <div className="panel-body">
+                <strong>Bar Graph</strong>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <RecentlyViewedList recentlyViewedRows={this.props.App.recentlyViewed}/>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <AppList Account={this.props.Account}
+                     App={this.props.App}
+                     handleListTypeSelect={value => this.handleListTypeSelect(value)}/>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-		let filesMarkup;
-		if (_.isEmpty(this.props.App.files) === false) {
-			filesMarkup = this.props.App.files.map((file, index) =>
-					<img src={file.preview} style={{width: '100px'}} key={'uploaded' + index}/>
-			);
-		} else {
-			filesMarkup = '';
-		}
-
-		return (
-			<div>
-				<ReactCSSTransitionGroup transitionName="fadeIn" transitionAppear={true}>
-					<h1>Dashboard</h1>
-
-					<div><strong>Accounts</strong></div>
-					<AccountList accountRows={this.props.Account.accountRows}
-								 isFetchingAccounts={this.props.Account.isFetchingAccounts}/>
-					<RecentlyViewedList recentlyViewedRows={this.props.App.recentlyViewed}/>
-					<Calendar defaultValue={date} showToday={true} onSelect={this.handleDateSelect}/>
-					<Dropzone onDrop={(files) => this.handleFileUpload(files) } multiple={false} style={
-							{
-								width: '100px',
-								height: '100px',
-								borderWidth: '2px',
-								borderColor: '#666',
-								borderStyle: 'dashed',
-								borderRadius: '5px'
-							}
-						}>
-						<div>Try dropping some a file here, or click to select a file to upload.</div>
-					</Dropzone>
-					{filesMarkup}
-				</ReactCSSTransitionGroup>
-			</div>
-		);
-	}
-
-	handleDateSelect(gCal) {
-		//console.log(new Date(gCal.getTime() ) );
-	}
-
-	handleFileUpload(files) {
-		const { dispatch } = this.props;
-		dispatch(fileUploaded(files));
-	}
+  handleListTypeSelect(value) {
+    this.props.dispatch(listTypeSelect(value));
+    switch (value) {
+      case 'accounts':
+        this.props.dispatch(fetchAccounts());
+        break;
+      case 'campaigns':
+        //this.props.dispatch(fetchCampaigns());
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 HomePage.propTypes = {};
@@ -81,10 +72,10 @@ HomePage.propTypes = {};
 // Which props do we want to inject, given the global state?
 // Note: use https://github.com/faassen/reselect for better performance.
 function select(state) {
-	return {
-		Account: state.Account,
-		App: state.App
-	};
+  return {
+    Account: state.Account,
+    App: state.App
+  };
 }
 
 // Wrap the component to inject dispatch and state into it
