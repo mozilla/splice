@@ -61,16 +61,16 @@ def tile_exists(session, target_url, bg_color, title, typ, image_uri, enhanced_i
         .filter(Tile.image_uri == image_uri)
         .filter(Tile.enhanced_image_uri == enhanced_image_uri)
         .filter(Adgroup.locale == locale)
-        .filter(Adgroup.start_date == time_limits.get('start'))
-        .filter(Adgroup.end_date == time_limits.get('end'))
-        .filter(Adgroup.start_date_dt == time_limits.get('start_dt'))
-        .filter(Adgroup.end_date_dt == time_limits.get('end_dt'))
+        # .filter(Adgroup.start_date == time_limits.get('start'))
+        # .filter(Adgroup.end_date == time_limits.get('end'))
+        # .filter(Adgroup.start_date_dt == time_limits.get('start_dt'))
+        # .filter(Adgroup.end_date_dt == time_limits.get('end_dt'))
         .filter(Adgroup.frequency_cap_daily == frequency_caps['daily'])
         .filter(Adgroup.frequency_cap_total == frequency_caps['total'])
         .filter(Adgroup.name == adgroup_name)
         .filter(Adgroup.explanation == explanation)
         .filter(Adgroup.check_inadjacency == check_inadjacency)
-        .filter(Adgroup.channel_id == channel_id)
+        # .filter(Adgroup.channel_id == channel_id)
         .join(Adgroup.tiles)
         .order_by(asc(Tile.id))
     )
@@ -93,16 +93,16 @@ def insert_tile(session, target_url, bg_color, title, typ, image_uri, enhanced_i
 
     adgroup = Adgroup(
         locale=locale,
-        start_date=time_limits.get('start'),
-        end_date=time_limits.get('end'),
-        start_date_dt=time_limits.get('start_dt'),
-        end_date_dt=time_limits.get('end_dt'),
+        # start_date=time_limits.get('start'),
+        # end_date=time_limits.get('end'),
+        # start_date_dt=time_limits.get('start_dt'),
+        # end_date_dt=time_limits.get('end_dt'),
         name=adgroup_name,
         explanation=explanation,
         frequency_cap_daily=frequency_caps['daily'],
         frequency_cap_total=frequency_caps['total'],
         check_inadjacency=check_inadjacency,
-        channel_id=channel_id,
+        # channel_id=channel_id,
         created_at=now
     )
     session.add(adgroup)
@@ -126,7 +126,8 @@ def insert_tile(session, target_url, bg_color, title, typ, image_uri, enhanced_i
         image_uri=image_uri,
         enhanced_image_uri=enhanced_image_uri,
         created_at=now,
-        locale=locale,
+        # locale=locale,
+        status="approved",
         adgroup_id=ag_id
     )
     session.add(tile)
