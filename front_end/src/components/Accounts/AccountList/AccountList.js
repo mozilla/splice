@@ -7,9 +7,9 @@ export default class AccountList extends Component {
 
 		let rows;
 		let spinner;
-		if (this.props.isFetchingAccounts === false) {
-			rows = this.props.accountRows.map((accountRow, index) =>
-					<AccountRow {...accountRow} key={index}/>
+		if (this.props.isFetching === false) {
+			rows = this.props.rows.map((row, index) =>
+					<AccountRow {...row} key={index}/>
 			);
 		} else {
 			spinner = (<img src="./public/img/ajax-loader.gif"/>);
@@ -38,7 +38,7 @@ export default class AccountList extends Component {
 }
 
 AccountList.propTypes = {
-	accountRows: PropTypes.arrayOf(PropTypes.shape({
+	rows: PropTypes.arrayOf(PropTypes.shape({
 		name: PropTypes.string.isRequired,
 		email: PropTypes.string.isRequired,
 		phone: PropTypes.string.isRequired

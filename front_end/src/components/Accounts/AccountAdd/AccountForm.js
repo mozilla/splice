@@ -6,7 +6,7 @@ export default class AccountForm extends Component {
 			<div>
 				<input type="text" ref="input" onKeyDown={(e) => this.handleEnter(e)}/>
 				<input type="submit" value="Add" onClick={(e) => this.handleSubmit(e)}/>
-				{(this.props.isSavingAccount) ? <img src="./public/img/ajax-loader.gif"/> : ''}
+				{(this.props.isSaving) ? <img src="./public/img/ajax-loader.gif"/> : ''}
 			</div>
 		);
 	}
@@ -32,5 +32,5 @@ export default class AccountForm extends Component {
 
 AccountForm.propTypes = {
 	onAddClick: PropTypes.func.isRequired,
-	isSavingAccount: PropTypes.bool.isRequired
+	isSaving: PropTypes.bool.isRequired
 };

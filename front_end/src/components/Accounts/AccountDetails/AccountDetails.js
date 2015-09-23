@@ -3,25 +3,25 @@ import { Link } from 'react-router';
 
 export default class AccountDetails extends Component {
 	render() {
-		const data = this.props.Account.accountDetails;
+		const data = this.props.Account.details;
 
 		let details;
-		let subtitle;
-		if (this.props.Account.isFetchingAccount === false) {
+		if (this.props.Account.isFetching === false) {
 			details = (
-				<div className="accound-details">
-					<div><strong>Account <span> - {data.name}</span></strong></div>
-					<div>Account ID: {data.id}</div>
-
-					<div>{data.phone}</div>
-					<div>{data.email}</div>
-
-					<div>Account Currency:</div>
-					<div><Link to={'/accounts/edit/' + data.id}>Edit</Link></div>
+				<div className="panel panel-default">
+					<div className="panel-heading">Account - {data.name}
+						<Link to={'/accounts/edit/' + data.id}> <i className="fa fa-pencil"></i></Link>
+					</div>
+					<div className="panel-body">
+						<p>Account ID: {data.id}</p>
+						<p>{data.phone}</p>
+						<p>{data.email}</p>
+						<p>Account Currency:</p>
+					</div>
 				</div>
 			);
 		} else {
-			details = <div><img src="./public/img/ajax-loader.gif"/></div>;
+			details = <img src="./public/img/ajax-loader.gif"/>;
 		}
 
 		return (<div>{details}</div>);

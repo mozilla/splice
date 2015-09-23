@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import CampaignRow from './CampaignRow';
+import TileRow from './TileRow';
 
-export default class CampaignList extends Component {
+export default class TileList extends Component {
 	render() {
 		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -9,8 +9,8 @@ export default class CampaignList extends Component {
 		let spinner;
 
 		if (this.props.isFetching === false) {
-			rows = this.props.rows.map((campaignRow, index) =>
-					<CampaignRow {...campaignRow} key={index}/>
+			rows = this.props.rows.map((row, index) =>
+					<TileRow {...row} key={index}/>
 			);
 		} else {
 			spinner = (<img src="./public/img/ajax-loader.gif"/>);
@@ -22,8 +22,8 @@ export default class CampaignList extends Component {
 					<thead>
 					<tr>
 						<th>ID</th>
-						<th>Name</th>
-						<th>Status</th>
+						<th>Title</th>
+						<th>Type</th>
 						<th>Created</th>
 					</tr>
 					</thead>
@@ -37,11 +37,11 @@ export default class CampaignList extends Component {
 	}
 }
 
-CampaignList.propTypes = {
+TileList.propTypes = {
 	rows: PropTypes.arrayOf(PropTypes.shape({
 		id: PropTypes.number.isRequired,
-		name: PropTypes.string.isRequired,
-		status: PropTypes.string.isRequired,
+		title: PropTypes.string.isRequired,
+		type: PropTypes.string.isRequired,
 		created_at: PropTypes.string.isRequired
 	}).isRequired).isRequired
 };

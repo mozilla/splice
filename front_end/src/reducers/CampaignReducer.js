@@ -8,41 +8,40 @@ import {
 } from 'actions/Campaigns/CampaignActions';
 
 const initialState = {
-	campaignRows: [],
-	campaignDetails: [],
-	isSavingCampaign: false,
-	isFetchingCampaigns: false,
-	isFetchingCampaign: false
+	rows: [],
+	details: [],
+	isSaving: false,
+	isFetching: false
 };
 
 export function Campaign(state = initialState, action = null) {
 	switch (action.type) {
 		case REQUEST_ADD_CAMPAIGN:
 			return _.assign({}, state, {
-				isSavingCampaign: true
+				isSaving: true
 			});
 		case RECEIVE_ADD_CAMPAIGN:
 			return _.assign({}, state, {
-				campaignRows: [...state.campaignRows, action.json],
-				isSavingCampaign: false
+				rows: [...state.rows, action.json],
+				isSaving: false
 			});
 		case REQUEST_CAMPAIGNS:
 			return _.assign({}, state, {
-				isFetchingCampaigns: true
+				isFetching: true
 			});
 		case RECEIVE_CAMPAIGNS:
 			return _.assign({}, state, {
-				campaignRows: action.campaignRows,
-				isFetchingCampaigns: false
+				rows: action.rows,
+				isFetching: false
 			});
 		case REQUEST_CAMPAIGN:
 			return _.assign({}, state, {
-				isFetchingCampaign: true
+				isFetching: true
 			});
 		case RECEIVE_CAMPAIGN:
 			return _.assign({}, state, {
-				campaignDetails: action.campaignDetails,
-				isFetchingCampaign: false
+				details: action.details,
+				isFetching: false
 			});
 		default:
 			return state;
