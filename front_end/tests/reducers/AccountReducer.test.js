@@ -8,16 +8,16 @@ describe('Account ', () => {
 	//Test initial state	
 	it('should return the initial state', () => {
 		expect(
-			Account(undefined, {}).accountRows).toEqual([]);
+			Account(undefined, {}).rows).toEqual([]);
 		});
 
-	it('should handle ADD_ACCOUNT', () => {
+	it('should handle RECEIVE_ADD_ACCOUNT', () => {
 		//Test adding to initial state 
 		expect(
 			Account(undefined, {
 				type: types.RECEIVE_ADD_ACCOUNT,
 				json: {text: "Run the tests" }
-			}).accountRows
+			}).rows
 		).toEqual([				
 			{ text: "Run the tests" }
 		]);
@@ -25,7 +25,7 @@ describe('Account ', () => {
 		//Test adding when state is explicitly set
 		expect(
 			Account({
-				accountRows: [
+				rows: [
 					{ text: "Use Redux" },
 					{ text: "Learn to connect it to React" },
 					{ text: "Run the tests" }
@@ -33,7 +33,7 @@ describe('Account ', () => {
 			}, {
 				type: types.RECEIVE_ADD_ACCOUNT,
 				json: { text: "Last test" }
-			}).accountRows
+			}).rows
 		).toEqual([
 			{ text: "Use Redux" },
 			{ text: "Learn to connect it to React" },

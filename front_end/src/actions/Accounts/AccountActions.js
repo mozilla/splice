@@ -16,28 +16,28 @@ export const RECEIVE_ACCOUNTS = 'RECEIVE_ACCOUNTS';
 export const REQUEST_ACCOUNT = 'REQUEST_ACCOUNT_VIEW';
 export const RECEIVE_ACCOUNT = 'RECEIVE_ACCOUNT_VIEW';
 
-function requestAddAccount() {
+export function requestAddAccount() {
 	return {type: REQUEST_ADD_ACCOUNT};
 }
 
-function receiveAddAccount(json) {
+export function receiveAddAccount(json) {
 	return {type: RECEIVE_ADD_ACCOUNT, json};
 }
 
-function requestAccounts() {
+export function requestAccounts() {
 	return {type: REQUEST_ACCOUNTS};
 }
-function receiveAccounts(json) {
+export function receiveAccounts(json) {
 	return {
 		type: RECEIVE_ACCOUNTS,
 		rows: json.results
 	};
 }
 
-function requestAccount() {
+export function requestAccount() {
 	return {type: REQUEST_ACCOUNT};
 }
-function receiveAccount(json) {
+export function receiveAccount(json) {
 	return {
 		type: RECEIVE_ACCOUNT,
 		details: json.result
