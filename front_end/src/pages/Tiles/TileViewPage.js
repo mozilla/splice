@@ -10,51 +10,49 @@ import { fetchTile } from 'actions/Tiles/TileActions';
 import TileDetails from 'components/Tiles/TileDetails/TileDetails';
 
 export default class TileViewPage extends Component {
-	componentWillMount() {
-		this.fetchTileDetails(this.props);
-	}
+  componentWillMount() {
+    this.fetchTileDetails(this.props);
+  }
 
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.params.tileId !== this.props.params.tileId) {
-			this.fetchTileDetails(nextProps);
-		}
-	}
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.params.tileId !== this.props.params.tileId) {
+      this.fetchTileDetails(nextProps);
+    }
+  }
 
-	render() {
-		return (
-			<div>
-				<div className="row">
-					<div className="col-md-6">
-						<h1>Tile</h1>
-						<TileDetails Tile={this.props.Tile}/>
-					</div>
-				</div>
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div>
+        <div className="row">
+          <div className="col-md-6">
+            <h1>Tile</h1>
+            <TileDetails Tile={this.props.Tile}/>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-	fetchTileDetails(props){
-		const { dispatch } = props;
-		const data = props.Tile.details;
-		const tileId = parseInt(props.params.tileId, 10);
+  fetchTileDetails(props) {
+    const { dispatch } = props;
+    const data = props.Tile.details;
+    const tileId = parseInt(props.params.tileId, 10);
 
-		updateDocTitle('Tile View');
+    updateDocTitle('Tile View');
 
-		dispatch(fetchTile(tileId)).then(() => {
-			pageVisit('Tile - ' + this.props.Tile.details.title, this);
-		});
-	}
+    dispatch(fetchTile(tileId)).then(() => {
+      pageVisit('Tile - ' + this.props.Tile.details.title, this);
+    });
+  }
 }
 
-TileViewPage.propTypes = {
-
-};
+TileViewPage.propTypes = {};
 
 function select(state) {
-	return {
-		Account: state.Account,
-		Tile: state.Tile
-	};
+  return {
+    Account: state.Account,
+    Tile: state.Tile
+  };
 }
 
 // Wrap the component to inject dispatch and state into it

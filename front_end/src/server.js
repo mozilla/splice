@@ -21,9 +21,9 @@ app.all('/assets/*', function (req, res) {
   });
 });
 
-app.use('/', function(req, res) {
+app.use('/', function (req, res) {
   res.setHeader('Content-Type', 'text/html');
-  require('fs').readFile(__dirname + '/index.html', function(err, text) {
+  require('fs').readFile(__dirname + '/index.html', function (err, text) {
     res.send(text);
   });
 });

@@ -11,16 +11,16 @@ import TilesPage from './Tiles/TilesPage.js';
 import TileViewPage from './Tiles/TileViewPage.js';
 
 export {
-	AppPage,
-	HomePage,
-	AccountsPage,
-	AccountViewPage,
-	AccountAddPage,
-	CampaignsPage,
-	CampaignViewPage,
-	AdGroupsPage,
-	AdGroupViewPage,
-	TilesPage,
-	TileViewPage
+  AppPage,
+  HomePage,
+  AccountsPage,
+  AccountViewPage,
+  AccountAddPage,
+  CampaignsPage,
+  CampaignViewPage,
+  AdGroupsPage,
+  AdGroupViewPage,
+  TilesPage,
+  TileViewPage
 };
 

@@ -5,9 +5,9 @@ import { AdGroup } from './AdGroupReducer.js';
 import { Tile } from './TileReducer.js';
 
 export {
-	App,
-	Account,
-	Campaign,
-	AdGroup,
-	Tile
+  App,
+  Account,
+  Campaign,
+  AdGroup,
+  Tile
 };

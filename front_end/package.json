@@ -10,7 +10,6 @@
   "test": "test",
   "dist": "dist",
   "dependencies": {
-
   },
   "devDependencies": {
     "babel": "5.8.21",
