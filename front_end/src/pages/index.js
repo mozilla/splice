@@ -8,6 +8,7 @@ import CampaignViewPage from './Campaigns/CampaignViewPage.js';
 import AdGroupsPage from './AdGroups/AdGroupsPage.js';
 import AdGroupViewPage from './AdGroups/AdGroupViewPage.js';
 import TilesPage from './Tiles/TilesPage.js';
+import TileViewPage from './Tiles/TileViewPage.js';
 
 export {
 	AppPage,
@@ -19,6 +20,7 @@ export {
 	CampaignViewPage,
 	AdGroupsPage,
 	AdGroupViewPage,
-	TilesPage
+	TilesPage,
+	TileViewPage
 };
 
