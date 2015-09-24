@@ -41,8 +41,8 @@ campaign_parser.add_argument(
     'end_date', type=datetime, required=False, help='End date', location='json',
     store_missing=False)
 campaign_parser.add_argument(
-    'paused', type=str, required=True, help='Campaign status', location='json',
-    choices=('true', 'false'), store_missing=False)
+    'paused', type=bool, required=True, help='Campaign status', location='json',
+    store_missing=False)
 campaign_parser.add_argument(
     'channel_id', type=int, required=True, help='Channel ID', location='json')
 campaign_parser.add_argument(
@@ -97,9 +97,9 @@ class CampaignAPI(Resource):
         self.reqparse.replace_argument('account_id', type=int, required=False,
                                        help='Account ID', location='json',
                                        store_missing=False)
-        self.reqparse.replace_argument('paused', type=str, required=False,
+        self.reqparse.replace_argument('paused', type=bool, required=False,
                                        help='Campaign status', location='json',
-                                       choices=('true', 'false'), store_missing=False)
+                                       store_missing=False)
 
         super(CampaignAPI, self).__init__()
 

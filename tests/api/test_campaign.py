@@ -16,7 +16,7 @@ class TestCampaignAPI(BaseTestCase):
     def setUp(self):
         self.campaign_data = {
             'name': 'Test Campaign',
-            'paused': 'false',
+            'paused': False,
             'account_id': 1,
             'channel_id': 1,
             'country': 'US',
@@ -50,9 +50,8 @@ class TestCampaignAPI(BaseTestCase):
 
         # Verify the right data was stored to DB.
         campaign = get_campaign(campaign_id)
-        for field in ['name', 'account_id', 'channel_id', 'country']:
+        for field in ['name', 'account_id', 'channel_id', 'country', 'paused']:
             assert_equal(campaign[field], self.campaign_data[field])
-        assert_equal(json.dumps(campaign['paused']), self.campaign_data['paused'])
 
         # Posting again with same name should fail with a 400.
         response = self.client.post(url, data=data, content_type='application/json')
@@ -70,15 +69,14 @@ class TestCampaignAPI(BaseTestCase):
         assert_equal(response.status_code, 200)
         resp = json.loads(response.data)
         campaign = resp['result']
-        for field in ['name', 'account_id', 'channel_id', 'country']:
+        for field in ['name', 'account_id', 'channel_id', 'country', 'paused']:
             assert_equal(campaign[field], self.campaign_data[field])
-        assert_equal(json.dumps(campaign['paused']), self.campaign_data['paused'])
 
     def test_put_campaign(self):
         """Test updating a campaign via API (PUT)."""
         new_campaign_data = {
             'name': 'New Campaign Name',
-            'paused': 'true',
+            'paused': True,
             'account_id': 2,
             'channel_id': 2,
             'country': 'CA',
@@ -96,6 +94,5 @@ class TestCampaignAPI(BaseTestCase):
 
         # Verify the data.
         campaign = get_campaign(campaign_id)
-        for field in ['name', 'account_id', 'channel_id']:
+        for field in ['name', 'account_id', 'channel_id', 'paused']:
             assert_equal(campaign[field], new_campaign_data[field])
-        assert_equal(json.dumps(campaign['paused']), new_campaign_data['paused'])
