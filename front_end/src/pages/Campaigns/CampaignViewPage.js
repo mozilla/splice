@@ -5,7 +5,8 @@ import { Link } from 'react-router';
 
 import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
 
-import { fetchCampaign } from 'actions/Campaigns/CampaignActions';
+import { fetchAccount } from 'actions/Accounts/AccountActions';
+import { fetchCampaign, fetchCampaigns } from 'actions/Campaigns/CampaignActions';
 import { fetchAdGroups } from 'actions/AdGroups/AdGroupActions';
 
 import CampaignDetails from 'components/Campaigns/CampaignDetails/CampaignDetails';
@@ -46,9 +47,13 @@ export default class CampaignViewPage extends Component {
 
     updateDocTitle('Campaign View');
 
+    //Retrieve Current Campaign, parent Account and all Campaigns under the account.
     dispatch(fetchCampaign(campaignId)).then(() => {
       pageVisit('Campaign - ' + this.props.Campaign.details.name, this);
       dispatch(fetchAdGroups(this.props.Campaign.details.id));
+    }).then(() => {
+      dispatch(fetchAccount(this.props.Campaign.details.account_id));
+      dispatch(fetchCampaigns(this.props.Campaign.details.account_id));
     });
   }
 }

@@ -58,14 +58,14 @@ export function fetchAdGroup(adGroupId) {
   };
 }
 
-export function fetchAdGroups(accountId = null) {
+export function fetchAdGroups(campaignId = null) {
   // thunk middleware knows how to handle functions
   return function next(dispatch) {
     dispatch(requestAdGroups());
     // Return a promise to wait for
     let params = '';
-    if (accountId !== null) {
-      params = '?campaign_id=' + accountId;
+    if (campaignId !== null) {
+      params = '?campaign_id=' + campaignId;
     }
 
     return fetch(apiUrl + '/api/adgroups' + params)

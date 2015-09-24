@@ -5,7 +5,9 @@ import { Link } from 'react-router';
 
 import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
 
-import { fetchAdGroup } from 'actions/AdGroups/AdGroupActions';
+import { fetchAccount } from 'actions/Accounts/AccountActions';
+import { fetchCampaign, fetchCampaigns } from 'actions/Campaigns/CampaignActions';
+import { fetchAdGroup, fetchAdGroups } from 'actions/AdGroups/AdGroupActions';
 import { fetchTiles } from 'actions/Tiles/TileActions';
 
 import AdGroupDetails from 'components/AdGroups/AdGroupDetails/AdGroupDetails';
@@ -49,6 +51,13 @@ export default class AdGroupViewPage extends Component {
     dispatch(fetchAdGroup(adGroupId)).then(() => {
       pageVisit('Ad Group - ' + this.props.AdGroup.details.name, this);
       dispatch(fetchTiles(this.props.AdGroup.details.id));
+    }).then(() => {
+      dispatch(fetchAdGroups(this.props.AdGroup.details.campaign_id));
+
+      dispatch(fetchCampaign(this.props.AdGroup.details.campaign_id)).then(() => {
+        dispatch(fetchAccount(this.props.Campaign.details.account_id));
+        dispatch(fetchCampaigns(this.props.Campaign.details.account_id));
+      });
     });
   }
 }

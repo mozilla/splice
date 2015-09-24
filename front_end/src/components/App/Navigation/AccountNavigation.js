@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { getAccountId } from 'helpers/AppHelpers';
 
-export default class Nav extends Component {
+export default class AccountNavigation extends Component {
   render() {
     const accountId = getAccountId(this.props);
 
-    let className = 'navbar navbar-default ';
-    if (!this.props.location.pathname.match(/\/accounts.*/) && !this.props.location.pathname.match(/\/campaigns.*/) && !this.props.location.pathname.match(/\/adgroups.*/) && !this.props.location.pathname.match(/\/tiles.*/)) {
+    let className = 'navbar navbar-default hide ';
+    if (!this.props.location.pathname.match(/\/accounts.*/) &&
+        !this.props.location.pathname.match(/\/campaigns.*/) &&
+        !this.props.location.pathname.match(/\/adgroups.*/) &&
+        !this.props.location.pathname.match(/\/tiles.*/) ) {
       className += 'hide';
     }
 

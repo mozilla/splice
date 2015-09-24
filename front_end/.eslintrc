@@ -22,6 +22,7 @@
     // disabled dueto eslint error
     "no-duplicate-case": 0,
     "brace-style": 0,
+    "func-names": 0,
     "react/jsx-boolean-value": 0
   },
   "env": {
