@@ -13,15 +13,20 @@ export default class BreadCrumbs extends Component {
   render() {
     let navClass = 'navbar navbar-default ';
 
-    if (!this.props.location.pathname.match(/\/campaigns\/.*/) &&
+    if (!this.props.location.pathname.match(/\/accounts\/.*/) &&
+        !this.props.location.pathname.match(/\/campaigns\/.*/) &&
         !this.props.location.pathname.match(/\/adgroups\/.*/) &&
         !this.props.location.pathname.match(/\/tiles\/.*/) ) {
       navClass += 'hide';
     }
 
+    let accountActive = '';
     let campaignActive = '';
     let adGroupActive = '';
     let tileActive = '';
+    if(this.props.location.pathname.match(/\/accounts\/.*/) ){
+      accountActive = 'active';
+    }
     if(this.props.location.pathname.match(/\/campaigns\/.*/) ){
       campaignActive = 'active';
     }
@@ -32,20 +37,20 @@ export default class BreadCrumbs extends Component {
       tileActive = 'active';
     }
 
-    let campaignMarkup = (<li className="text-muted"><a disabled="disabled" style={{pointerEvents: 'none'}}>Campaign</a></li>);
+    let campaignMarkup = (<li className="text-muted"><a disabled="disabled" style={{pointerEvents: 'none'}}>Campaigns</a></li>);
     if(this.props.location.pathname.match(/\/campaigns\/.*/) ||
        this.props.location.pathname.match(/\/adgroups\/.*/) ||
        this.props.location.pathname.match(/\/tiles\/.*/) ){
       campaignMarkup = this.generateCrumb(this.props.Campaign, campaignActive, '/campaigns/');
     }
 
-    let adGroupMarkup = (<li className="text-muted"><a disabled="disabled" style={{pointerEvents: 'none'}}>Ad Group</a></li>);
+    let adGroupMarkup = (<li className="text-muted"><a disabled="disabled" style={{pointerEvents: 'none'}}>Ad Groups</a></li>);
     if(this.props.location.pathname.match(/\/adgroups\/.*/) ||
       this.props.location.pathname.match(/\/tiles\/.*/) ){
       adGroupMarkup = this.generateCrumb(this.props.AdGroup, adGroupActive, '/adgroups/');
     }
 
-    let tileMarkup = (<li className="text-muted"><a disabled="disabled" style={{pointerEvents: 'none'}}>Tile</a></li>);
+    let tileMarkup = (<li className="text-muted"><a disabled="disabled" style={{pointerEvents: 'none'}}>Tiles</a></li>);
     if(this.props.location.pathname.match(/\/tiles\/.*/) ){
       tileMarkup = this.generateCrumb(this.props.Tile, tileActive, '/tiles/');
     }
@@ -53,7 +58,7 @@ export default class BreadCrumbs extends Component {
     return (
       <div className={navClass}>
         <ul className="nav navbar-nav">
-          <li className=""><Link to={'/accounts/' + this.props.Account.details.id}>{this.props.Account.details.name} </Link></li>
+          <li className={accountActive}><Link to={'/accounts/' + this.props.Account.details.id}>{this.props.Account.details.name} </Link></li>
           <li><a><i className="fa fa-angle-right"></i></a></li>
           { campaignMarkup }
           <li><a><i className="fa fa-angle-right"></i></a></li>
