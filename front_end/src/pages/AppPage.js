@@ -21,14 +21,14 @@ export default class AppPage extends Component {
     const key = this.props.location.pathname;
 
     return (
-      <div>
+      <div style={{minWidth: '1024px'}}>
         <TopBar {...this.props} />
 
-        <div className="container">
+        <div className="container-fluid" >
           <div className="row">
             <SideBar {...this.props} />
 
-            <div className="col-md-9">
+            <div className="col-xs-10">
               <AccountNavigation {...this.props} />
               <BreadCrumbs {...this.props} />
 
@@ -46,7 +46,6 @@ export default class AppPage extends Component {
 AppPage.propTypes = {};
 
 // Which props do we want to inject, given the global state?
-// Note: use https://github.com/faassen/reselect for better performance.
 function select(state) {
   return state;
 }

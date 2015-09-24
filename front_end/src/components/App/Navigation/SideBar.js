@@ -20,7 +20,7 @@ export default class SideBar extends Component {
     }
 
     return (
-      <div className="sidebar col-md-3">
+      <div className="sidebar col-xs-2">
         <div>
           Accounts
           <ul className="nav nav-pills nav-stacked">

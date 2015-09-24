@@ -1,1 +1,17 @@
 @import 'animations';
+
+/* Override Bootstrap 3 responsive navbar */
+.navbar-nav {
+  float: left !important;
+  margin: 0 !important;
+}
+.navbar {
+  border-radius: 4px !important;
+}
+.navbar-nav > li {
+  float: left !important;
+}
+.navbar-nav > li > a {
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+}
