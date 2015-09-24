@@ -5,7 +5,7 @@ export default class TopBar extends Component {
   render() {
     return (
       <div className="navbar navbar-default">
-        <div className="container">
+        <div className="container-fluid">
           <div className="row">
             <ul className="nav navbar-nav">
               <li><Link to="/">SPLICE</Link></li>
