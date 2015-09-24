@@ -63,14 +63,14 @@ export function fetchTile(tileId) {
   };
 }
 
-export function fetchTiles(id = null) {
+export function fetchTiles(adGroupId = null) {
   // thunk middleware knows how to handle functions
   return function next(dispatch) {
     dispatch(requestTiles());
     // Return a promise to wait for
     let params = '';
-    if (id !== null) {
-      params = '?adgroup_id=' + id;
+    if (adGroupId !== null) {
+      params = '?adgroup_id=' + adGroupId;
     }
 
     return fetch(apiUrl + '/api/tiles' + params)

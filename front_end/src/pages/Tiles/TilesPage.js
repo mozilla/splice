@@ -1,15 +1,12 @@
 import React, { Component } from '../../../node_modules/react/addons';
 import { connect } from 'react-redux';
 import { pageVisit } from 'actions/App/AppActions';
-import { getAccountId } from 'helpers/AppHelpers';
 
 export default class TilesPage extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
 
     pageVisit('Tiles', this);
-
-    const accountId = getAccountId(this.props);
   }
 
   render() {

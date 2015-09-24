@@ -13,8 +13,8 @@ export const RECEIVE_ADD_ACCOUNT = 'RECEIVE_ADD_ACCOUNT';
 export const REQUEST_ACCOUNTS = 'REQUEST_ACCOUNTS';
 export const RECEIVE_ACCOUNTS = 'RECEIVE_ACCOUNTS';
 
-export const REQUEST_ACCOUNT = 'REQUEST_ACCOUNT_VIEW';
-export const RECEIVE_ACCOUNT = 'RECEIVE_ACCOUNT_VIEW';
+export const REQUEST_ACCOUNT = 'REQUEST_ACCOUNT';
+export const RECEIVE_ACCOUNT = 'RECEIVE_ACCOUNT';
 
 export function requestAddAccount() {
   return {type: REQUEST_ADD_ACCOUNT};

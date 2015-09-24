@@ -2,7 +2,6 @@ import React, { Component } from '../../../node_modules/react/addons';
 import { connect } from 'react-redux';
 import { pageVisit } from 'actions/App/AppActions';
 import { fetchCampaigns } from 'actions/Campaigns/CampaignActions';
-import { getAccountId } from 'helpers/AppHelpers';
 
 import CampaignList from 'components/Campaigns/CampaignList/CampaignList';
 
@@ -12,8 +11,9 @@ export default class CampaignsPage extends Component {
 
     pageVisit('Campaigns', this);
 
-    const accountId = getAccountId(this.props);
-    dispatch(fetchCampaigns(accountId));
+    if (this.props.location.query.accountId !== undefined) {
+      dispatch(fetchCampaigns(this.props.location.query.accountId));
+    }
   }
 
   render() {

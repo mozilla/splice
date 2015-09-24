@@ -29,8 +29,31 @@ export function getAccountId(props) {
       type: 'GET',
       url: apiUrl + '/api/campaign/' + props.AdGroup.details.campaign_id,
       async: false,
+      dataType: 'json',
       success: function handleResponse(data) {
         accountId = data.result.account_id;
+      }
+    });
+  }
+  else if (props.Tile.details.adgroup_id !== undefined) {
+    //Use jQuery.ajax() to do synchronous request.
+    $.ajax({
+      type: 'GET',
+      url: apiUrl + '/api/adgroups/' + props.Tile.details.adgroup_id,
+      async: false,
+      dataType: 'json',
+      success: function handleResponse(data) {
+        const campaignId = data.result.campaign_id;
+
+        $.ajax({
+          type: 'GET',
+          url: apiUrl + '/api/campaign/' + campaignId,
+          async: false,
+          dataType: 'json',
+          success: function handleResponse2(data2) {
+            accountId = data2.result.account_id;
+          }
+        });
       }
     });
   }

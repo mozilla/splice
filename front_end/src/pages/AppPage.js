@@ -6,6 +6,7 @@ import { fetchAccounts } from 'actions/Accounts/AccountActions';
 import TopBar from 'components/App/Navigation/TopBar.js';
 import SideBar from 'components/App/Navigation/SideBar.js';
 import AccountNavigation from 'components/App/Navigation/AccountNavigation.js';
+import BreadCrumbs from 'components/App/Navigation/BreadCrumbs.js';
 
 export default class AppPage extends Component {
   componentDidMount() {
@@ -29,8 +30,9 @@ export default class AppPage extends Component {
 
             <div className="col-md-9">
               <AccountNavigation {...this.props} />
+              <BreadCrumbs {...this.props} />
 
-              <ReactCSSTransitionGroup transitionName="page-transition" transitionLeave={false}>
+              <ReactCSSTransitionGroup transitionName="page-transition" transitionAppear={true} transitionLeave={false}>
                 {React.cloneElement(this.props.children || <div />, {key: key})}
               </ReactCSSTransitionGroup>
             </div>
