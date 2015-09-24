@@ -17,7 +17,7 @@ def parse_csv(file, fieldnames=None):
 
 
 def get_country_code():
-    for code, name in env._load_countries():
+    for code, name in Environment.instance()._load_countries():
         yield dict(country_name=name, country_code=code)
 
 

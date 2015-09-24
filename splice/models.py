@@ -9,7 +9,7 @@ class Account(db.Model):
     __tablename__ = "accounts"
 
     id = db.Column('id', db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
-    name = db.Column('name', db.String(length=255), nullable=False)
+    name = db.Column('name', db.String(length=255), nullable=False, unique=True)
     contact_name = db.Column('contact_name', db.String(length=255), nullable=True)
     contact_email = db.Column('contact_email', db.String(length=255), nullable=True)
     contact_phone = db.Column('contact_phone', db.String(length=255), nullable=True)
@@ -23,11 +23,12 @@ class Campaign(db.Model):
     id = db.Column('id', db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     start_date = db.Column('start_date', db.DateTime(), nullable=True)
     end_date = db.Column('end_date', db.DateTime(), nullable=True)
-    name = db.Column('name', db.String(length=255), nullable=True)
+    name = db.Column('name', db.String(length=255), nullable=False)
     paused = db.Column('paused', db.Boolean(), nullable=False, server_default=db.text(u'false'))
     channel_id = db.Column('channel_id', db.Integer(), db.ForeignKey("channels.id"))
     account_id = db.Column('account_id', db.Integer(), db.ForeignKey("accounts.id"))
     created_at = db.Column('created_at', db.DateTime(), server_default=db.func.now(), nullable=False)
+    __table_args__ = (db.UniqueConstraint('account_id', 'name'),)
     adgroups = db.relationship("Adgroup", backref="campaign")
     countries = db.relationship("CampaignCountry")
 
