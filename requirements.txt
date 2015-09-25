@@ -18,3 +18,4 @@ bleach==1.4.1
 pyOpenSSL==0.15.1
 ndg-httpsclient==0.4.0
 tld==0.7.3
+flask-restful==0.3.4

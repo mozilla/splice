@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from nose.tools import assert_raises, assert_equal
 from tests.base import BaseTestCase
 from sqlalchemy.orm.exc import NoResultFound
-from splice.queries import (
+from splice.queries.common import (
     get_scheduled_distributions,
     unschedule_distribution,
     insert_distribution,

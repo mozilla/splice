@@ -1,4 +1,3 @@
-from sqlalchemy import text
 from splice.environment import Environment
 
 db = Environment.instance().db
@@ -9,7 +8,7 @@ class Account(db.Model):
     __tablename__ = "accounts"
 
     id = db.Column('id', db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
-    name = db.Column('name', db.String(length=255), nullable=False)
+    name = db.Column('name', db.String(length=255), nullable=False, unique=True)
     contact_name = db.Column('contact_name', db.String(length=255), nullable=True)
     contact_email = db.Column('contact_email', db.String(length=255), nullable=True)
     contact_phone = db.Column('contact_phone', db.String(length=255), nullable=True)
@@ -23,11 +22,12 @@ class Campaign(db.Model):
     id = db.Column('id', db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     start_date = db.Column('start_date', db.DateTime(), nullable=True)
     end_date = db.Column('end_date', db.DateTime(), nullable=True)
-    name = db.Column('name', db.String(length=255), nullable=True)
-    paused = db.Column('paused', db.Boolean(), nullable=False, server_default=db.text(u'false'))
+    name = db.Column('name', db.String(length=255), nullable=False)
+    paused = db.Column('paused', db.Boolean(), nullable=False, default=False)
     channel_id = db.Column('channel_id', db.Integer(), db.ForeignKey("channels.id"))
     account_id = db.Column('account_id', db.Integer(), db.ForeignKey("accounts.id"))
     created_at = db.Column('created_at', db.DateTime(), server_default=db.func.now(), nullable=False)
+    __table_args__ = (db.UniqueConstraint('account_id', 'name', name="UQ_CAMPAIGN_ACCOUNT_ID_NAME"),)
     adgroups = db.relationship("Adgroup", backref="campaign")
     countries = db.relationship("CampaignCountry")
 
@@ -77,7 +77,7 @@ class Tile(db.Model):
     title_bg_color = db.Column(db.String(16), nullable=True)
     title = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(40), nullable=False)
-    paused = db.Column('paused', db.Boolean(), nullable=False, server_default=db.text(u'false'))
+    paused = db.Column('paused', db.Boolean(), nullable=False, default=False)
     adgroup_id = db.Column(db.Integer(), db.ForeignKey("adgroups.id"))
 
     image_uri = db.Column(db.Text(), nullable=False)
@@ -96,15 +96,16 @@ class Adgroup(db.Model):
     locale = db.Column(db.String(14), nullable=False)
 
     type = db.Column(db.String(16))
-    paused = db.Column('paused', db.Boolean(), nullable=False, server_default=db.text(u'false'))
+    paused = db.Column('paused', db.Boolean(), nullable=False, default=False)
     frequency_cap_daily = db.Column(db.Integer())
     frequency_cap_total = db.Column(db.Integer())
     name = db.Column(db.String(255))
     explanation = db.Column(db.String(255))
-    check_inadjacency = db.Column(db.Boolean(), nullable=False, server_default=text('false'))
+    check_inadjacency = db.Column(db.Boolean(), nullable=False, default=False)
     campaign_id = db.Column(db.Integer(), db.ForeignKey("campaigns.id"))
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
     tiles = db.relationship("Tile", backref="adgroup")
+    categories = db.relationship("AdgroupCategory")
 
 
 class AdgroupSite(db.Model):
