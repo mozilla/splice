@@ -1,4 +1,3 @@
-from sqlalchemy import text
 from splice.environment import Environment
 
 db = Environment.instance().db
@@ -86,6 +85,8 @@ class Tile(db.Model):
     status = db.Column(db.String(16), nullable=False, server_default=u'unapproved')
 
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
+    __table_args__ = (db.UniqueConstraint('adgroup_id', 'title', 'target_url', 'image_uri',
+                                          'enhanced_image_uri', 'type'),)
 
 
 class Adgroup(db.Model):

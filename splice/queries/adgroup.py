@@ -1,5 +1,4 @@
 from splice.models import Adgroup, AdgroupCategory
-from sqlalchemy.sql import exists
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 

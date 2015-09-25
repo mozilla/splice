@@ -52,7 +52,7 @@ class AdgroupListAPI(Resource):
         self.reqparse.add_argument('categories', type=list, default=[],
                                    help='Category of suggested tile', location='json')
         self.reqparse.add_argument('paused', type=bool, required=True,
-                                    help='Campaign status', location='json')
+                                   help='Campaign status', location='json')
         self.reqparse_get = reqparse.RequestParser()
         self.reqparse_get.add_argument('campaign_id', type=int, required=True,
                                        help='Campaign ID', location='args')

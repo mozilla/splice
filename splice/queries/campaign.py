@@ -12,7 +12,7 @@ def get_campaigns(account_id=None):
     query = (
         env.db.session
         .query(Campaign, CampaignCountry.country_code)
-        .join(CampaignCountry, Campaign.id==CampaignCountry.campaign_id)
+        .join(CampaignCountry, Campaign.id == CampaignCountry.campaign_id)
     )
 
     if account_id is not None:
@@ -37,7 +37,7 @@ def get_campaign(campaign_id):
     row = (
         env.db.session
         .query(Campaign, CampaignCountry.country_code)
-        .join(CampaignCountry, Campaign.id==CampaignCountry.campaign_id)
+        .join(CampaignCountry, Campaign.id == CampaignCountry.campaign_id)
         .filter(Campaign.id == campaign_id)
     ).one()
     if row:
@@ -46,6 +46,7 @@ def get_campaign(campaign_id):
         return ret
     else:
         return None
+
 
 def insert_campaign(session, record):
     record = record.copy()
