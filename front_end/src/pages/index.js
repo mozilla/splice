@@ -19,6 +19,7 @@ export {
   AccountAddPage,
   CampaignsPage,
   CampaignViewPage,
+  CampaignBulkUploadPage,
   AdGroupsPage,
   AdGroupViewPage,
   TilesPage,

@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
-import { fetchAccount } from 'actions/Accounts/AccountActions';
-import { fetchCampaigns } from 'actions/Campaigns/CampaignActions';
+import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
 import AccountDetails from 'components/Accounts/AccountDetails/AccountDetails';
 import CampaignList from 'components/Campaigns/CampaignList/CampaignList';
@@ -40,11 +39,10 @@ export default class AccountViewPage extends Component {
 
   fetchAccountDetails(props) {
     const { dispatch } = props;
-    const accountId = parseInt(props.params.accountId, 10);
 
     updateDocTitle('Account View');
 
-    dispatch(fetchAccount(accountId)).then(() => {
+    dispatch(fetchHierarchy('account', props)).then(() => {
       pageVisit('Account - ' + this.props.Account.details.name, this);
     });
   }

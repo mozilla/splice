@@ -11,6 +11,16 @@ export default class CampaignBulkUploadPage extends Component {
     return (
       <div>
         <h1>Bulk Upload</h1>
+        <div className="panel panel-default">
+          <div className="panel-body">
+            <form >
+              <label htmlFor="bulkUpload">Upload File</label>
+              <input type="file" name="bulkUpload" id="bulkUpload" />
+              <br/>
+              <input className="btn btn-primary" value="Submit" />
+            </form>
+          </div>
+        </div>
       </div>
     );
   }
