@@ -7,7 +7,7 @@ export default class BreadCrumbs extends Component {
         !this.props.location.pathname.match(/\/campaigns\/.*/) &&
         !this.props.location.pathname.match(/\/adgroups\/.*/) &&
         !this.props.location.pathname.match(/\/tiles\/.*/) ) {
-      return '';
+      return (<span></span>);
     }
 
     let accountActive = '';
