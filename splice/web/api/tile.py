@@ -3,7 +3,7 @@ import jsonschema
 from flask import Blueprint
 from flask_restful import Api, Resource, marshal, fields, reqparse
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.exc import InvalidRequestError, IntegrityError
+from sqlalchemy.exc import InvalidRequestError
 from splice.schemas import API_TILE_SCHEMA_POST, API_TILE_SCHEMA_PUT
 from splice.models import Tile
 from splice.queries.common import session_scope
@@ -83,8 +83,6 @@ class TileListAPI(Resource):
                 new = insert_tile(session, args)
         except jsonschema.exceptions.ValidationError as e:
             return {"message": e.message}, 400
-        except IntegrityError:
-            return {'message': 'Tile already exists.'}, 400
         except InvalidRequestError as e:
             return {"message": e.message}, 400
         else:

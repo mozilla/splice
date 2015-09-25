@@ -1,5 +1,7 @@
 from splice.models import Tile
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.sql import exists
 
 from splice.queries.common import row_to_dict
 
@@ -33,11 +35,29 @@ def get_tile(id):
     return row_to_dict(row) if row else None
 
 
+def tile_exists(session, title, target_url, image_uri, enhanced_image_uri, tile_type, adgroup_id):
+    ret = session.query(
+        exists().
+        where(Tile.title == title).
+        where(Tile.target_url == target_url).
+        where(Tile.image_uri == image_uri).
+        where(Tile.enhanced_image_uri == enhanced_image_uri).
+        where(Tile.type == tile_type).
+        where(Tile.adgroup_id == adgroup_id)).scalar()
+    return ret
+
+
 def insert_tile(session, record):
-    tile = Tile(**record)
-    session.add(tile)
-    session.flush()
-    return row_to_dict(tile)
+    if not tile_exists(session, record["title"], record["target_url"],
+                       record["image_uri"], record["enhanced_image_uri"],
+                       record["type"], record["adgroup_id"]):
+        tile = Tile(**record)
+        session.add(tile)
+        session.flush()
+
+        return row_to_dict(tile)
+    else:
+        raise InvalidRequestError("Tile already exists")
 
 
 def update_tile(session, tile_id, record):

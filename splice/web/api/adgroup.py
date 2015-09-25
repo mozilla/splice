@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_restful import Api, Resource, marshal, fields, reqparse
 
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.exc import InvalidRequestError, IntegrityError
+from sqlalchemy.exc import InvalidRequestError
 from splice.queries.common import session_scope
 from splice.queries.adgroup import (
     get_adgroups_by_campaign_id, get_adgroup,
@@ -72,8 +72,6 @@ class AdgroupListAPI(Resource):
         try:
             with session_scope() as session:
                 new = insert_adgroup(session, args)
-        except IntegrityError:
-            return {'message': 'Adgroup already exists.'}, 400
         except InvalidRequestError as e:
             return {"message": e.message}, 400
         else:

@@ -1,4 +1,5 @@
 from splice.models import Adgroup, AdgroupCategory
+from sqlalchemy.sql import exists
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 
@@ -60,21 +61,33 @@ def get_adgroup(id):
     return new
 
 
+def adgroup_exists(session, name, adgroup_type, campaign_id):
+    ret = session.query(
+        exists()
+        .where(Adgroup.name == name)
+        .where(Adgroup.type == adgroup_type)
+        .where(Adgroup.campaign_id == campaign_id)).scalar()
+    return ret
+
+
 def insert_adgroup(session, record):
-    record = record.copy()
-    categories = record.pop('categories', [])
-    if record['type'] == "suggested" and not categories:
-        raise InvalidRequestError("Each suggested adgroup must have at least one category.")
-    cats = [AdgroupCategory(category=category) for category in categories]
-    adgroup = Adgroup(categories=cats, **record)
-    session.add(adgroup)
+    if not adgroup_exists(session, record["name"], record["type"], record["campaign_id"]):
+        record = record.copy()
+        categories = record.pop('categories', [])
+        if record['type'] == "suggested" and not categories:
+            raise InvalidRequestError("Each suggested adgroup must have at least one category.")
+        cats = [AdgroupCategory(category=category) for category in categories]
+        adgroup = Adgroup(categories=cats, **record)
+        session.add(adgroup)
 
-    session.flush()
-    new = row_to_dict(adgroup)
-    # row_to_dict can't handle nested objects
-    new['categories'] = categories
+        session.flush()
+        new = row_to_dict(adgroup)
+        # row_to_dict can't handle nested objects
+        new['categories'] = categories
 
-    return new
+        return new
+    else:
+        raise InvalidRequestError("Adgroup already exists")
 
 
 def update_adgroup(session, adgroup_id, record):
@@ -85,11 +98,17 @@ def update_adgroup(session, adgroup_id, record):
     if "paused" in record:
         adgroup.paused = record["paused"]
 
-    if "name" in record:
+    is_unique_key_changed = False
+    if "name" in record and adgroup.name != record["name"]:
+        is_unique_key_changed = True
         adgroup.name = record["name"]
 
-    if "type" in record:
+    if "type" in record and adgroup.type != record["type"]:
+        is_unique_key_changed = True
         adgroup.type = record["type"]
+
+    if is_unique_key_changed and adgroup_exists(session, adgroup.name, adgroup.type, adgroup.campaign_id):
+        raise InvalidRequestError("Adgroup already exists")
 
     if "frequencey_cap_daily" in record:
         adgroup.frequency_cap_daily = record["frequency_cap_daily"]

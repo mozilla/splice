@@ -27,7 +27,7 @@ class Campaign(db.Model):
     channel_id = db.Column('channel_id', db.Integer(), db.ForeignKey("channels.id"))
     account_id = db.Column('account_id', db.Integer(), db.ForeignKey("accounts.id"))
     created_at = db.Column('created_at', db.DateTime(), server_default=db.func.now(), nullable=False)
-    __table_args__ = (db.UniqueConstraint('account_id', 'name'),)
+    __table_args__ = (db.UniqueConstraint('account_id', 'name', name="UQ_CAMPAIGN_ACCOUNT_ID_NAME"),)
     adgroups = db.relationship("Adgroup", backref="campaign")
     countries = db.relationship("CampaignCountry")
 
@@ -85,8 +85,6 @@ class Tile(db.Model):
     status = db.Column(db.String(16), nullable=False, server_default=u'unapproved')
 
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
-    __table_args__ = (db.UniqueConstraint('adgroup_id', 'title', 'target_url', 'image_uri',
-                                          'enhanced_image_uri', 'type'),)
 
 
 class Adgroup(db.Model):
@@ -97,17 +95,16 @@ class Adgroup(db.Model):
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     locale = db.Column(db.String(14), nullable=False)
 
-    type = db.Column(db.String(16), nullable=False)
+    type = db.Column(db.String(16))
     paused = db.Column('paused', db.Boolean(), nullable=False, default=False)
     frequency_cap_daily = db.Column(db.Integer())
     frequency_cap_total = db.Column(db.Integer())
-    name = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(255))
     explanation = db.Column(db.String(255))
     check_inadjacency = db.Column(db.Boolean(), nullable=False, default=False)
     campaign_id = db.Column(db.Integer(), db.ForeignKey("campaigns.id"))
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
     tiles = db.relationship("Tile", backref="adgroup")
-    __table_args__ = (db.UniqueConstraint('campaign_id', 'name', 'type'),)
     categories = db.relationship("AdgroupCategory")
 
 
