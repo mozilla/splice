@@ -5,10 +5,7 @@ import { Link } from 'react-router';
 
 import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
 
-import { fetchAccount } from 'actions/Accounts/AccountActions';
-import { fetchCampaign, fetchCampaigns } from 'actions/Campaigns/CampaignActions';
-import { fetchAdGroup, fetchAdGroups } from 'actions/AdGroups/AdGroupActions';
-import { fetchTile, fetchTiles } from 'actions/Tiles/TileActions';
+import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
 import { AppHelpers } from 'helpers/AppHelpers';
 
@@ -40,11 +37,10 @@ export default class TileViewPage extends Component {
 
   fetchTileDetails(props) {
     const { dispatch } = props;
-    const tileId = parseInt(props.params.tileId, 10);
 
     updateDocTitle('Tile View');
 
-    dispatch(fetchTile(tileId)).then(() => {
+    dispatch(fetchHierarchy('tile', props)).then(() => {
       pageVisit('Tile - ' + this.props.Tile.details.title, this);
     });
   }
