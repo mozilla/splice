@@ -11,8 +11,7 @@ def get_campaigns(account_id=None):
 
     query = (
         env.db.session
-        .query(Campaign, CampaignCountry.country_code)
-        .join(CampaignCountry, Campaign.id == CampaignCountry.campaign_id)
+        .query(Campaign)
     )
 
     if account_id is not None:
@@ -22,8 +21,11 @@ def get_campaigns(account_id=None):
 
     campaigns = []
     for row in rows:
-        ret = row_to_dict(row.Campaign)
-        ret['country'] = row.country_code
+        ret = row_to_dict(row)
+        countries = []
+        for country in row.countries:
+            countries.append(country.country_code)
+        ret['countries'] = countries
         campaigns.append(ret)
 
     return campaigns
@@ -36,13 +38,14 @@ def get_campaign(campaign_id):
 
     row = (
         env.db.session
-        .query(Campaign, CampaignCountry.country_code)
-        .join(CampaignCountry, Campaign.id == CampaignCountry.campaign_id)
-        .filter(Campaign.id == campaign_id)
-    ).one()
+        .query(Campaign).get(campaign_id)
+    )
     if row:
-        ret = row_to_dict(row.Campaign)
-        ret['country'] = row.country_code
+        ret = row_to_dict(row)
+        countries = []
+        for country in row.countries:
+            countries.append(country.country_code)
+        ret['countries'] = countries
         return ret
     else:
         return None
@@ -50,15 +53,13 @@ def get_campaign(campaign_id):
 
 def insert_campaign(session, record):
     record = record.copy()
-    country = record.pop('country')
-    campaign = Campaign(**record)
+    countries = record.pop('countries')
+    countries_objs = [CampaignCountry(country_code=country) for country in countries]
+    campaign = Campaign(countries=countries_objs, **record)
     session.add(campaign)
     session.flush()
     new = row_to_dict(campaign)
-    campaign_country = CampaignCountry(campaign_id=campaign.id, country_code=country)
-    session.add(campaign_country)
-    session.flush()
-    new["country"] = country
+    new["countries"] = countries
 
     return new
 
@@ -68,7 +69,20 @@ def update_campaign(session, campaign_id, record):
     if campaign is None:
         raise NoResultFound('Campaign not found')
 
+    record = record.copy()
+    countries = record.pop("countries", [])
     for key, val in record.items():
         setattr(campaign, key, val)
 
-    return row_to_dict(campaign)
+    session.flush()
+    new = row_to_dict(campaign)
+
+    if countries:
+        for country in campaign.countries:
+            session.delete(country)
+        for country in countries:
+            campaign.countries.append(CampaignCountry(country_code=country))
+
+        new['countries'] = countries
+
+    return new

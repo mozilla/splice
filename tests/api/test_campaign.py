@@ -19,7 +19,7 @@ class TestCampaignAPI(BaseTestCase):
             'paused': False,
             'account_id': 1,
             'channel_id': 1,
-            'country': 'US',
+            'countries': ['CA', 'US'],
         }
 
         self.campaign_fixture = defaultdict(list)
@@ -50,7 +50,7 @@ class TestCampaignAPI(BaseTestCase):
 
         # Verify the right data was stored to DB.
         campaign = get_campaign(campaign_id)
-        for field in ['name', 'account_id', 'channel_id', 'country', 'paused']:
+        for field in ['name', 'account_id', 'channel_id', 'countries', 'paused']:
             assert_equal(campaign[field], self.campaign_data[field])
 
         # Posting again with same name should fail with a 400.
@@ -69,7 +69,7 @@ class TestCampaignAPI(BaseTestCase):
         assert_equal(response.status_code, 200)
         resp = json.loads(response.data)
         campaign = resp['result']
-        for field in ['name', 'account_id', 'channel_id', 'country', 'paused']:
+        for field in ['name', 'account_id', 'channel_id', 'countries', 'paused']:
             assert_equal(campaign[field], self.campaign_data[field])
 
     def test_put_campaign(self):
@@ -79,7 +79,7 @@ class TestCampaignAPI(BaseTestCase):
             'paused': True,
             'account_id': 2,
             'channel_id': 2,
-            'country': 'CA',
+            'countries': ['CA', 'FR'],
         }
 
         # Create a new campaign.
@@ -94,5 +94,5 @@ class TestCampaignAPI(BaseTestCase):
 
         # Verify the data.
         campaign = get_campaign(campaign_id)
-        for field in ['name', 'account_id', 'channel_id', 'paused']:
+        for field in ['name', 'account_id', 'channel_id', 'paused', 'countries']:
             assert_equal(campaign[field], new_campaign_data[field])

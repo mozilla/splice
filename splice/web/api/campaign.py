@@ -17,7 +17,7 @@ api = Api(campaign_bp)
 campaign_fields = {
     'id': fields.Integer,
     'name': fields.String,
-    'country': fields.String,
+    'countries': fields.List(fields.String),
     'created_at': fields.DateTime,
     'start_date': fields.DateTime,
     'end_date': fields.DateTime,
@@ -32,8 +32,7 @@ campaign_parser.add_argument(
     'name', type=unicode, required=True, help='Name of the campaign',
     location='json')
 campaign_parser.add_argument(
-    'country', type=str, required=True, help='Country', location='json',
-    default='STAR')
+    'countries', type=list, required=True, default=["STAR"], help='List of countries', location='json')
 campaign_parser.add_argument(
     'start_date', type=datetime, required=False, help='Start date', location='json',
     store_missing=False)
@@ -88,8 +87,8 @@ class CampaignAPI(Resource):
         self.reqparse.replace_argument('name', type=unicode, required=False,
                                        help='Name of the campaign',
                                        location='json', store_missing=False)
-        self.reqparse.replace_argument('country', type=str, required=False,
-                                       help='Country', location='json',
+        self.reqparse.replace_argument('countries', type=list, required=False,
+                                       help='List of countries', location='json',
                                        store_missing=False)
         self.reqparse.replace_argument('channel_id', type=int, required=False,
                                        help='Channel ID', location='json',
