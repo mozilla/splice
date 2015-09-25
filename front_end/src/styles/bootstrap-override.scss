@@ -1,0 +1,41 @@
+/* Override Bootstrap 3 responsive navbar */
+.navbar-nav {
+  float: left !important;
+  margin: 0 !important;
+}
+.navbar {
+  border-radius: 4px !important;
+}
+.navbar-nav > li {
+  float: left !important;
+}
+.navbar-nav > li > a {
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+}
+@media (max-width: 767px){
+  .app-container .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ffffff;
+    text-decoration: none;
+    outline: 0;
+    background-color: #337ab7;
+  }
+  .app-container .navbar-nav .open .dropdown-menu > li > a, .navbar-nav .open .dropdown-menu .dropdown-header {
+    padding: 3px 20px;
+  }
+  .app-container .navbar-nav .open .dropdown-menu {
+    position: absolute;
+    left: 0;
+    margin: 2px 0 0;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
+    margin-top: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+  }
+}

@@ -21,7 +21,7 @@ export default class AppPage extends Component {
     const key = this.props.location.pathname;
 
     return (
-      <div style={{minWidth: '1024px'}}>
+      <div className="app-container" style={{minWidth: '1170px'}}>
         <TopBar {...this.props} />
 
         <div className="container-fluid" >
