@@ -42,7 +42,6 @@ export default class CampaignViewPage extends Component {
 
   fetchCampaignDetails(props) {
     const { dispatch } = props;
-    const data = props.Campaign.details;
     const campaignId = parseInt(props.params.campaignId, 10);
 
     updateDocTitle('Campaign View');
@@ -50,10 +49,6 @@ export default class CampaignViewPage extends Component {
     //Retrieve Current Campaign, parent Account and all Campaigns under the account.
     dispatch(fetchCampaign(campaignId)).then(() => {
       pageVisit('Campaign - ' + this.props.Campaign.details.name, this);
-      dispatch(fetchAdGroups(this.props.Campaign.details.id));
-    }).then(() => {
-      dispatch(fetchAccount(this.props.Campaign.details.account_id));
-      dispatch(fetchCampaigns(this.props.Campaign.details.account_id));
     });
   }
 }
