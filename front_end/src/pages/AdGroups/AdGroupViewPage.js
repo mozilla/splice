@@ -43,21 +43,12 @@ export default class AdGroupViewPage extends Component {
 
   fetchAdGroupDetails(props) {
     const { dispatch } = props;
-    const data = props.AdGroup.details;
     const adGroupId = parseInt(props.params.adGroupId, 10);
 
     updateDocTitle('Ad Group View');
 
     dispatch(fetchAdGroup(adGroupId)).then(() => {
       pageVisit('Ad Group - ' + this.props.AdGroup.details.name, this);
-      dispatch(fetchTiles(this.props.AdGroup.details.id));
-    }).then(() => {
-      dispatch(fetchAdGroups(this.props.AdGroup.details.campaign_id));
-
-      dispatch(fetchCampaign(this.props.AdGroup.details.campaign_id)).then(() => {
-        dispatch(fetchAccount(this.props.Campaign.details.account_id));
-        dispatch(fetchCampaigns(this.props.Campaign.details.account_id));
-      });
     });
   }
 }

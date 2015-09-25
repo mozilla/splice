@@ -1,34 +1,31 @@
 import React, { Component } from '../../../node_modules/react/addons';
 import { connect } from 'react-redux';
-import { pageVisit } from 'actions/App/AppActions';
+//import { pageVisit } from 'actions/App/AppActions';
 
-export default class AdGroupsPage extends Component {
+export default class CampaignBulkUploadPage extends Component {
   componentDidMount() {
-    const { dispatch } = this.props;
 
-    pageVisit('Ad Groups', this);
   }
 
   render() {
     return (
       <div>
-        <h1>Ad Groups</h1>
+        <h1>Bulk Upload</h1>
       </div>
     );
   }
 }
 
-AdGroupsPage.propTypes = {};
+CampaignBulkUploadPage.propTypes = {};
 
 // Which props do we want to inject, given the global state?
 function select(state) {
   return {
-    Account: state.Account,
-    AdGroup: state.AdGroup
+    Campaign: state.Campaign
   };
 }
 
 // Wrap the component to inject dispatch and state into it
-export default connect(select)(AdGroupsPage);
+export default connect(select)(CampaignBulkUploadPage);
 
 

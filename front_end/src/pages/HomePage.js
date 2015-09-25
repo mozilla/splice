@@ -70,7 +70,6 @@ export default class HomePage extends Component {
 HomePage.propTypes = {};
 
 // Which props do we want to inject, given the global state?
-// Note: use https://github.com/faassen/reselect for better performance.
 function select(state) {
   return {
     Account: state.Account,

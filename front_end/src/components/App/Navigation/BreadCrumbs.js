@@ -1,23 +1,100 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react/addons';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
+
+import { fetchAccount } from 'actions/Accounts/AccountActions';
+import { fetchCampaign, fetchCampaigns } from 'actions/Campaigns/CampaignActions';
+import { fetchAdGroup, fetchAdGroups } from 'actions/AdGroups/AdGroupActions';
+import { fetchTile, fetchTiles } from 'actions/Tiles/TileActions';
 
 export default class BreadCrumbs extends Component {
   componentWillMount() {
-
+    this.getHierarchy(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
+    if( (this.props.location.pathname.match(/\/accounts\/.*/) && nextProps.params.accountId !== this.props.params.accountId) ||
+        (this.props.location.pathname.match(/\/campaigns\/.*/) && nextProps.params.campaignId !== this.props.params.campaignId) ||
+        (this.props.location.pathname.match(/\/adgroups\/.*/) && nextProps.params.adGroupId !== this.props.params.adGroupId) ||
+        (this.props.location.pathname.match(/\/tiles\/.*/) && nextProps.params.tileId !== this.props.params.tileId) ) {
+      this.getHierarchy(this.props);
+    }
+  }
 
+  getHierarchy(props){
+    if(this.props.location.pathname.match(/\/accounts\/.*/) ){
+      this.getAccountHierarchy(props);
+    }
+    else if(this.props.location.pathname.match(/\/campaigns\/.*/) ){
+      this.getCampaignHierarchy(props);
+    }
+    else if(this.props.location.pathname.match(/\/adgroups\/.*/) ){
+      this.getAdGroupHierarchy(props);
+    }
+    else if(this.props.location.pathname.match(/\/tiles\/.*/) ){
+      this.getTileHierarchy(props);
+    }
+  }
+
+  getAccountHierarchy(props){
+    const { dispatch } = props;
+    const accountId = parseInt(props.params.accountId, 10);
+
+    dispatch(fetchAccount(accountId)).then(() => {
+      dispatch(fetchCampaigns(this.props.Account.details.id));
+    });
+  }
+
+  getCampaignHierarchy(props){
+    const { dispatch } = props;
+    const campaignId = parseInt(props.params.campaignId, 10);
+
+    dispatch(fetchCampaign(campaignId)).then(() => {
+      dispatch(fetchAdGroups(this.props.Campaign.details.id));
+      dispatch(fetchAccount(this.props.Campaign.details.account_id));
+      dispatch(fetchCampaigns(this.props.Campaign.details.account_id));
+    });
+  }
+
+  getAdGroupHierarchy(props){
+    const { dispatch } = props;
+    const adGroupId = parseInt(props.params.adGroupId, 10);
+
+    dispatch(fetchAdGroup(adGroupId)).then(() => {
+      dispatch(fetchTiles(this.props.AdGroup.details.id));
+      dispatch(fetchAdGroups(this.props.AdGroup.details.campaign_id));
+
+      dispatch(fetchCampaign(this.props.AdGroup.details.campaign_id)).then(() => {
+        dispatch(fetchAccount(this.props.Campaign.details.account_id));
+        dispatch(fetchCampaigns(this.props.Campaign.details.account_id));
+      });
+    });
+  }
+
+  getTileHierarchy(props){
+    const { dispatch } = props;
+    const tileId = parseInt(props.params.tileId, 10);
+
+    dispatch(fetchTile(tileId)).then(() => {
+      dispatch(fetchTiles(this.props.Tile.details.adgroup_id));
+
+      dispatch(fetchAdGroup(this.props.Tile.details.adgroup_id)).then(() => {
+        dispatch(fetchAdGroups(this.props.AdGroup.details.campaign_id));
+
+        dispatch(fetchCampaign(this.props.AdGroup.details.campaign_id)).then(() => {
+          dispatch(fetchAccount(this.props.Campaign.details.account_id));
+          dispatch(fetchCampaigns(this.props.Campaign.details.account_id));
+        });
+      });
+    });
   }
 
   render() {
-    let navClass = 'navbar navbar-default ';
-
     if (!this.props.location.pathname.match(/\/accounts\/.*/) &&
         !this.props.location.pathname.match(/\/campaigns\/.*/) &&
         !this.props.location.pathname.match(/\/adgroups\/.*/) &&
         !this.props.location.pathname.match(/\/tiles\/.*/) ) {
-      navClass += 'hide';
+      return '';
     }
 
     let accountActive = '';
@@ -64,7 +141,7 @@ export default class BreadCrumbs extends Component {
     }
 
     return (
-      <div className={navClass}>
+      <div className="navbar navbar-default">
         <ul className="nav navbar-nav">
           <li className={accountActive}><Link to={'/accounts/' + this.props.Account.details.id}>{this.props.Account.details.name}</Link></li>
           <li><a><i className="fa fa-angle-right"></i></a></li>
@@ -94,3 +171,18 @@ export default class BreadCrumbs extends Component {
     );
   }
 }
+
+BreadCrumbs.propTypes = {};
+
+// Which props do we want to inject, given the global state?
+function select(state) {
+  return {
+    Account: state.Account,
+    Campaign: state.Campaign,
+    AdGroup: state.AdGroup,
+    Tile: state.Tile
+  };
+}
+
+// Wrap the component to inject dispatch and state into it
+export default connect(select)(BreadCrumbs);

@@ -40,14 +40,12 @@ export default class AccountViewPage extends Component {
 
   fetchAccountDetails(props) {
     const { dispatch } = props;
-    const data = props.Account.details;
     const accountId = parseInt(props.params.accountId, 10);
 
     updateDocTitle('Account View');
 
     dispatch(fetchAccount(accountId)).then(() => {
       pageVisit('Account - ' + this.props.Account.details.name, this);
-      dispatch(fetchCampaigns(this.props.Account.details.id));
     });
   }
 }
