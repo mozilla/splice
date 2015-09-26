@@ -10,6 +10,7 @@ import AdGroupsPage from './AdGroups/AdGroupsPage.js';
 import AdGroupViewPage from './AdGroups/AdGroupViewPage.js';
 import TilesPage from './Tiles/TilesPage.js';
 import TileViewPage from './Tiles/TileViewPage.js';
+import ApprovalsPage from './Approvals/ApprovalsPage.js';
 
 export {
   AppPage,
@@ -23,6 +24,7 @@ export {
   AdGroupsPage,
   AdGroupViewPage,
   TilesPage,
-  TileViewPage
+  TileViewPage,
+  ApprovalsPage
 };
 

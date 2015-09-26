@@ -20,7 +20,8 @@ import {
   AdGroupsPage,
   AdGroupViewPage,
   TilesPage,
-  TileViewPage
+  TileViewPage,
+  ApprovalsPage
 } from './pages/index';
 
 export default class App extends Component {
@@ -43,6 +44,8 @@ export default class App extends Component {
 
           <Route path="/tiles" title="Tiles" component={TilesPage}></Route>
           <Route path="/tiles/:tileId" title="Tile View" component={TileViewPage}></Route>
+
+          <Route path="/approvals" title="Approval Queue" component={ApprovalsPage}></Route>
         </Route>
       </Router>
     );
