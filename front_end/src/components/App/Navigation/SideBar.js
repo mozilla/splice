@@ -29,7 +29,7 @@ export default class SideBar extends Component {
         </div>
 
         <div> Create +</div>
-        <div> Approval Queue</div>
+        <div><Link to={'/approvals'} >Approval Queue</Link></div>
       </div>
     );
   }
