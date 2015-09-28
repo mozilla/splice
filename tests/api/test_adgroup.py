@@ -1,4 +1,4 @@
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 from flask import url_for, json
 from tests.base import BaseTestCase
 from tests.populate_database import parse_csv
@@ -22,6 +22,18 @@ class TestAdgroup(BaseTestCase):
         for adgroup in parse_csv("adgroups.csv"):
             self.adgroup_fixture[int(adgroup["campaign_id"])].append(adgroup)
         super(TestAdgroup, self).setUp()
+
+    def test_cors(self):
+        """Test the support for CORS"""
+        url = url_for('api.adgroup.adgroups')
+        data = json.dumps(self.new_adgroup)
+        res = self.client.post(url, data=data, content_type='application/json')
+        assert_equal(res.status_code, 201)
+        assert_equal(res.headers['Access-Control-Allow-Origin'], '*')
+        assert_equal(res.headers['Access-Control-Max-Age'], '21600')
+        assert_true('HEAD' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('POS' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('GET' in res.headers['Access-Control-Allow-Methods'])
 
     def test_get_adgroups_by_campaign_id(self):
         """ Test for getting all adgroups for a given campaign id

@@ -1,5 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api, Resource, marshal, fields, reqparse
+from flask_restful.utils import cors
 from sqlalchemy.exc import IntegrityError
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -9,7 +10,7 @@ from splice.queries.account import (
 
 
 account_bp = Blueprint('api.account', __name__, url_prefix='/api')
-api = Api(account_bp)
+api = Api(account_bp, decorators=[cors.crossdomain(origin='*')])
 
 
 account_fields = {

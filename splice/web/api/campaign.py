@@ -2,6 +2,7 @@ from datetime import datetime
 
 from flask import Blueprint
 from flask_restful import Api, Resource, marshal, fields, reqparse
+from flask_restful.utils import cors
 from sqlalchemy.exc import IntegrityError
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -11,7 +12,7 @@ from splice.queries.campaign import (
 
 
 campaign_bp = Blueprint('api.campaign', __name__, url_prefix='/api')
-api = Api(campaign_bp)
+api = Api(campaign_bp, decorators=[cors.crossdomain(origin='*')])
 
 
 campaign_fields = {

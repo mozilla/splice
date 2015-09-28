@@ -1,4 +1,4 @@
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 from flask import url_for, json
 from tests.base import BaseTestCase
 from tests.populate_database import parse_csv
@@ -23,6 +23,18 @@ class TestTile(BaseTestCase):
         for tile in parse_csv("tiles.csv"):
             self.tile_fixture[int(tile["adgroup_id"])].append(tile)
         super(TestTile, self).setUp()
+
+    def test_cors(self):
+        """Test the support for CORS"""
+        url = url_for('api.tile.tiles')
+        data = json.dumps(self.new_tile)
+        res = self.client.post(url, data=data, content_type='application/json')
+        assert_equal(res.status_code, 201)
+        assert_equal(res.headers['Access-Control-Allow-Origin'], '*')
+        assert_equal(res.headers['Access-Control-Max-Age'], '21600')
+        assert_true('HEAD' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('POS' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('GET' in res.headers['Access-Control-Allow-Methods'])
 
     def test_get_tiles_by_adgroup_id(self):
         """ Test for getting all tiles for a given adgroup id
