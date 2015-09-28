@@ -156,3 +156,48 @@ def get_payload_schema(compact=False):
         compact: Boolean, specify whether the payload is of compact type or not
     """
     return _compact_schema if compact else _default_schema
+
+
+_url_pattern = {
+    "type": "string",
+    "pattern": "^https?://.*$",
+}
+
+_image_uri_pattern = {
+    "type": "string",
+    "pattern": image_uri_pattern,
+}
+
+# schema of tile for HTTP POST
+API_TILE_SCHEMA_POST = {
+    "type": "object",
+    "properties": {
+        "bg_color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|^$"
+        },
+        "title_bg_color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|^$"
+        },
+        "target_url": _url_pattern,
+        "enhanced_image_uri": _image_uri_pattern,
+        "image_uri": _image_uri_pattern,
+    },
+    "required": ["target_url", "image_uri", "enhanced_image_uri"],
+}
+
+# schema of tile for HTTP PUT
+API_TILE_SCHEMA_PUT = {
+    "type": "object",
+    "properties": {
+        "bg_color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|^$"
+        },
+        "title_bg_color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]+$|^rgb\([0-9]+,[0-9]+,[0-9]+\)$|^$"
+        },
+    },
+}
