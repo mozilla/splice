@@ -127,7 +127,7 @@ class CampaignAPI(Resource):
 
 
 api.add_resource(CampaignListAPI, '/campaigns', endpoint='campaigns')
-api.add_resource(CampaignAPI, '/campaign/<int:campaign_id>', endpoint='campaign')
+api.add_resource(CampaignAPI, '/campaigns/<int:campaign_id>', endpoint='campaign')
 
 
 def register_routes(app):
