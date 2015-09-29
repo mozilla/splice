@@ -2,6 +2,7 @@ import jsonschema
 
 from flask import Blueprint
 from flask_restful import Api, Resource, marshal, fields, reqparse
+from flask_restful.utils import cors
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from splice.schemas import API_TILE_SCHEMA_POST, API_TILE_SCHEMA_PUT
@@ -12,7 +13,7 @@ from splice.queries.tile import (
 
 
 tile_bp = Blueprint('api.tile', __name__, url_prefix='/api')
-api = Api(tile_bp)
+api = Api(tile_bp, decorators=[cors.crossdomain(origin='*')])
 
 tile_fields = {
     'id': fields.Integer,

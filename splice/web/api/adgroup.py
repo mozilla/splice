@@ -1,5 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api, Resource, marshal, fields, reqparse
+from flask_restful.utils import cors
 
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
@@ -11,7 +12,7 @@ from splice.models import Adgroup
 
 
 adgroup_bp = Blueprint('api.adgroup', __name__, url_prefix='/api')
-api = Api(adgroup_bp)
+api = Api(adgroup_bp, decorators=[cors.crossdomain(origin='*')])
 
 adgroup_fields = {
     'id': fields.Integer,
