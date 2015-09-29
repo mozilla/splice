@@ -19,7 +19,7 @@ export default class AppPage extends Component {
     const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
     let output = '';
-    if (this.props.location.pathname.match(/\/accounts\/.*/) ||
+    if (this.props.location.pathname.match(/\/accounts\/\d.*/) ||
       this.props.location.pathname.match(/\/campaigns\/.*/) ||
       this.props.location.pathname.match(/\/adgroups\/.*/) ||
       this.props.location.pathname.match(/\/tiles\/.*/) ) {

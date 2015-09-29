@@ -2,7 +2,7 @@ import AppPage from './AppPage.js';
 import HomePage from './HomePage.js';
 import AccountsPage from './Accounts/AccountsPage.js';
 import AccountViewPage from './Accounts/AccountViewPage.js';
-import AccountAddPage from './Accounts/AccountAddPage.js';
+import AccountCreatePage from './Accounts/AccountCreatePage.js';
 import CampaignsPage from './Campaigns/CampaignsPage.js';
 import CampaignViewPage from './Campaigns/CampaignViewPage.js';
 import CampaignBulkUploadPage from './Campaigns/CampaignBulkUploadPage.js';
@@ -17,7 +17,7 @@ export {
   HomePage,
   AccountsPage,
   AccountViewPage,
-  AccountAddPage,
+  AccountCreatePage,
   CampaignsPage,
   CampaignViewPage,
   CampaignBulkUploadPage,

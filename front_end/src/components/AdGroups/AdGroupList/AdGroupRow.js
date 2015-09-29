@@ -9,8 +9,10 @@ export default class AdGroupRow extends Component {
       <tr>
         <td>{this.props.id}</td>
         <td><Link to={'/adgroups/' + this.props.id}>{this.props.name}</Link></td>
-        <td>{this.props.type}</td>
-        <td>{formatPsDateTime(this.props.created_at, 'M/D/YYYY h:mma')}</td>
+        <td>{this.props.locale}</td>
+        <td>{_.capitalize(this.props.type)}</td>
+        <td>{(this.props.paused) ? 'Paused' : 'Active'}</td>
+        <td>{formatPsDateTime(this.props.created_at, 'M/D/YYYY')}</td>
       </tr>
     );
   }

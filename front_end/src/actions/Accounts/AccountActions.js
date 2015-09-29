@@ -7,8 +7,8 @@ if (typeof __DEVELOPMENT__ !== 'undefined' && __DEVELOPMENT__ === true) {
   apiUrl = __LIVEAPI__;
 }
 
-export const REQUEST_ADD_ACCOUNT = 'REQUEST_ADD_ACCOUNT';
-export const RECEIVE_ADD_ACCOUNT = 'RECEIVE_ADD_ACCOUNT';
+export const REQUEST_CREATE_ACCOUNT = 'REQUEST_CREATE_ACCOUNT';
+export const RECEIVE_CREATE_ACCOUNT = 'RECEIVE_CREATE_ACCOUNT';
 
 export const REQUEST_ACCOUNTS = 'REQUEST_ACCOUNTS';
 export const RECEIVE_ACCOUNTS = 'RECEIVE_ACCOUNTS';
@@ -16,12 +16,12 @@ export const RECEIVE_ACCOUNTS = 'RECEIVE_ACCOUNTS';
 export const REQUEST_ACCOUNT = 'REQUEST_ACCOUNT';
 export const RECEIVE_ACCOUNT = 'RECEIVE_ACCOUNT';
 
-export function requestAddAccount() {
-  return {type: REQUEST_ADD_ACCOUNT};
+export function requestCreateAccount() {
+  return {type: REQUEST_CREATE_ACCOUNT};
 }
 
-export function receiveAddAccount(json) {
-  return {type: RECEIVE_ADD_ACCOUNT, json};
+export function receiveCreateAccount(json) {
+  return {type: RECEIVE_CREATE_ACCOUNT, json};
 }
 
 export function requestAccounts() {
@@ -75,32 +75,26 @@ export function fetchAccounts() {
   };
 }
 
-export function saveAccount(data) {
+export function createAccount(data) {
   // thunk middleware knows how to handle functions
   return function next(dispatch) {
-    dispatch(requestAddAccount());
+    dispatch(requestCreateAccount());
     // Return a promise to wait for
-    /*return fetch(apiUrl + '/api/accounts', {
-     method: 'post',
-     headers: {
-     'Accept': 'application/json',
-     'Content-Type': 'application/json'
-     },
-     body: JSON.stringify({
-     name: data.text
-     })
-     }).then(response => response.json())
-     .then((json) => {
-     dispatch(receiveAddAccount({
-     'created_at': '',
-     'email': 'test@gmail.com',
-     'id': 99,
-     'name': data.text,
-     'phone': '+1(888)0000000'
-     }));
-     });*/
-
-    return fetch('http://localhost:9999/public/mock/accounts.json')
+    return fetch(apiUrl + '/api/accounts', {
+    //return fetch('http://dev.sandbox.com/receiveFile.php', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: data
+    }).then(response => response.json())
+      .then((json) => new Promise(resolve => {
+          dispatch(receiveCreateAccount(json));
+          resolve();
+        })
+      );
+    /*return fetch('http://localhost:9999/public/mock/accounts.json')
       .then(response => response.json())
       .then(() => {
         setTimeout(() => {
@@ -113,6 +107,6 @@ export function saveAccount(data) {
           }));
         }, 1000);
       }
-    );
+    );*/
   };
 }

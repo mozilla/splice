@@ -13,7 +13,7 @@ import {
   HomePage,
   AccountsPage,
   AccountViewPage,
-  AccountAddPage,
+  AccountCreatePage,
   CampaignsPage,
   CampaignViewPage,
   CampaignBulkUploadPage,
@@ -32,7 +32,7 @@ export default class App extends Component {
           <Route path="/" title="Home" component={HomePage}></Route>
 
           <Route path="/accounts" title="Accounts" component={AccountsPage}></Route>
-          <Route path="/accounts/add" title="Account Add" component={AccountAddPage}></Route>
+          <Route path="/accounts/create" title="Create Account" component={AccountCreatePage}></Route>
           <Route path="/accounts/:accountId" title="Account View" component={AccountViewPage}></Route>
 
           <Route path="/campaigns" title="Campaigns" component={CampaignsPage}></Route>

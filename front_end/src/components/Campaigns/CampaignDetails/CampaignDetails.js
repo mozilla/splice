@@ -1,23 +1,47 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
+import { formatPsDateTime } from 'helpers/ViewHelpers';
+
 export default class CampaignDetails extends Component {
   render() {
     const data = this.props.Campaign.details;
+
+    let countries = '';
+    if(data.countries !== undefined && data.countries.length > 0){
+      data.countries.map(function(val, index){
+        if(index !== 0){
+          countries += ', ';
+        }
+        countries += val;
+      });
+    }
 
     let details;
     if (this.props.Campaign.isFetching === false) {
       details = (
         <div className="panel panel-default">
-          <div className="panel-heading">Campaign - {data.name}
-            <Link to={'/campaigns/edit/' + data.id}> <i className="fa fa-pencil"></i></Link>
+          <div className="panel-heading">
+            <div className="pull-right">
+              {(data.paused) ? 'PAUSED' : 'ACTIVE'}
+            </div>
+            <div className="pull-left">
+              <div>{data.name} <Link to={'/campaigns/edit/' + data.id}> <i className="fa fa-pencil"></i></Link></div>
+              <p>ID: {data.id}</p>
+            </div>
+
+            <div className="clearfix"></div>
           </div>
           <div className="panel-body">
-            <p>Campaign ID: {data.id}</p>
+            <p><strong>Channel ID:</strong> {data.channel_id}</p>
 
-            <p>Channel: </p>
+            <p><strong>Countries:</strong> {countries}</p>
 
-            <p>Type: </p>
+            <p><strong>Start Date:</strong> {(data.start_date !== null) ? formatPsDateTime(data.start_date, 'M/D/YYYY') : ''}</p>
+
+            <p><strong>End Date:</strong> {(data.end_date !== null) ? formatPsDateTime(data.end_date, 'M/D/YYYY') : ''}</p>
+
+            <p><strong>Created:</strong> {formatPsDateTime(data.created_at, 'M/D/YYYY')}</p>
           </div>
         </div>
       );

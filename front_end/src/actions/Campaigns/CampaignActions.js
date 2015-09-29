@@ -49,7 +49,7 @@ export function fetchCampaign(campaignId) {
   return function next(dispatch) {
     dispatch(requestCampaign());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/campaign/' + campaignId)
+    return fetch(apiUrl + '/api/campaigns/' + campaignId)
       .then(response => response.json())
       .then(json => new Promise(resolve => {
         dispatch(receiveCampaign(json));
