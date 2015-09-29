@@ -3,7 +3,7 @@
 from tests.base import BaseTestCase
 
 from flask import url_for, json
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 
 from splice.queries.account import insert_account, get_account
 from splice.queries.common import session_scope
@@ -21,6 +21,18 @@ class TestAccountAPI(BaseTestCase):
         }
 
         super(TestAccountAPI, self).setUp()
+
+    def test_cors(self):
+        """Test the support for CORS"""
+        url = url_for('api.account.accounts')
+        data = json.dumps(self.account_data)
+        res = self.client.post(url, data=data, content_type='application/json')
+        assert_equal(res.status_code, 201)
+        assert_equal(res.headers['Access-Control-Allow-Origin'], '*')
+        assert_equal(res.headers['Access-Control-Max-Age'], '21600')
+        assert_true('HEAD' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('POS' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('GET' in res.headers['Access-Control-Allow-Methods'])
 
     def test_get_accounts(self):
         """Test getting the list of accounts via API (GET)."""
