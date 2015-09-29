@@ -24,6 +24,8 @@ export default class TileList extends Component {
 						<th>ID</th>
 						<th>Title</th>
 						<th>Type</th>
+						<th>Active Status</th>
+						<th>Approval Status</th>
 						<th>Created</th>
 					</tr>
 					</thead>

@@ -9,8 +9,10 @@ export default class TileRow extends Component {
 			<tr>
 				<td>{this.props.id}</td>
 				<td><Link to={'/tiles/' + this.props.id}>{this.props.title}</Link></td>
-				<td>{this.props.type}</td>
-				<td>{formatPsDateTime(this.props.created_at, 'M/D/YYYY h:mma')}</td>
+				<td>{_.capitalize(this.props.type)}</td>
+				<td>{(this.props.paused) ? 'Paused' : 'Active'}</td>
+				<td>{_.capitalize(this.props.status)}</td>
+				<td>{formatPsDateTime(this.props.created_at, 'M/D/YYYY')}</td>
 			</tr>
 		);
 	}
