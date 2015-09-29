@@ -1,12 +1,36 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
+import $ from 'jquery';
+import './SideBar.scss';
+
 export default class SideBar extends Component {
+  componentDidMount(){
+    $(document).on('click', '.side-bar a', function(){
+      $('.side-bar').slideUp();
+    });
+
+    let maxHeight;
+    $(window).resize(function(){
+      let h;
+      const app = $('.app-container');
+      if(window.innerHeight > app.outerHeight() ){
+        h = window.innerHeight;
+      }
+      else{
+        h = app.outerHeight();
+      }
+
+      maxHeight = h - ($('.top-bar .navigation-toggle').outerHeight() + $('.side-bar .create').outerHeight() + $('.side-bar .approval').outerHeight() );
+      $('.accounts-list').css('max-height', maxHeight);
+    });
+  }
+
   render() {
     const props = this.props;
     let accountLinks = [];
     if (_.isEmpty(this.props.Account.rows) === false) {
-      this.props.Account.rows.map(function loop(row, index) {
+      this.props.Account.rows.map(function(row, index) {
         let className = '';
         if (props.location.pathname === ('/accounts/' + row.id)) {
           className = 'active';
@@ -20,16 +44,32 @@ export default class SideBar extends Component {
     }
 
     return (
-      <div className="sidebar col-xs-2">
-        <div>
-          Accounts
-          <ul className="nav nav-pills nav-stacked">
+      <div className="side-bar">
+        <div className="accounts-list">
+          <ul className="">
             {accountLinks}
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+            <li> <a>Account Name</a></li>
+
+
           </ul>
         </div>
 
-        <div> Create +</div>
-        <div><Link to={'/approvals'} >Approval Queue</Link></div>
+        <div className="create button text-center"><a>Create <i className="fa fa-plus"></i></a></div>
+        <div className="approval button text-center"><Link to={'/approvals'} >Approval Queue <i className="fa fa-check"></i></Link></div>
       </div>
     );
   }

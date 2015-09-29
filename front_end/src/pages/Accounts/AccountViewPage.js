@@ -24,7 +24,7 @@ export default class AccountViewPage extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-xs-6">
             <h1>Account</h1>
             <AccountDetails Account={this.props.Account}/>
           </div>

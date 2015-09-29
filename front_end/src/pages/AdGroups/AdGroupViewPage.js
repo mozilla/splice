@@ -25,7 +25,7 @@ export default class AdGroupViewPage extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-xs-6">
             <h1>Ad Group</h1>
             <AdGroupDetails AdGroup={this.props.AdGroup}/>
           </div>
