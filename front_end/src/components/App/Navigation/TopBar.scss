@@ -1,0 +1,18 @@
+.top-bar{
+  overflow: auto;
+
+  h1{
+    font-size: 18px;
+    float:left;
+    margin: 0;
+    padding-top: 10px;
+  }
+  .navigation-toggle{
+    float:left;
+    margin: 0 15px 0 0;
+    background-color: darkgray;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+}

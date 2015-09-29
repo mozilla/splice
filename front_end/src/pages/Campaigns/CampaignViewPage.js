@@ -25,7 +25,7 @@ export default class CampaignViewPage extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-xs-6">
             <h1>Campaign</h1>
             <CampaignDetails Campaign={this.props.Campaign}/>
           </div>

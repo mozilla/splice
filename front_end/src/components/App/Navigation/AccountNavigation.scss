@@ -1,0 +1,15 @@
+.account-navigation{
+  display: block;
+
+  .row{
+    margin: 0;
+  }
+  .button{
+    border: 1px solid darkgray;
+    border-left:0px;
+    padding: 10px 20px;
+  }
+  .button.active{
+    background-color: darkgray;
+  }
+}

@@ -25,24 +25,17 @@ export default class HomePage extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-xs-12">
             <h1>Dashboard <i className="fa fa-firefox"></i></h1>
           </div>
         </div>
-        <div className="row" style={{marginBottom: '25px'}}>
-          <div className="col-md-9">
-            <div className="panel panel-default" style={{height: '250px'}}>
-              <div className="panel-body">
-                <strong>Bar Graph</strong>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
+        <div className="row">
+          <div className="col-xs-3">
             <RecentlyViewedList recentlyViewedRows={this.props.App.recentlyViewed}/>
           </div>
         </div>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-xs-12">
             <AppList Account={this.props.Account}
                      App={this.props.App}
                      handleListTypeSelect={value => this.handleListTypeSelect(value)}/>

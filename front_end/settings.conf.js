@@ -25,7 +25,7 @@ exports.webpack_modules_loaders =
       loader: 'react-hot!babel'
     }, {
     test: /\.scss/,
-    loader: ExtractTextPlugin.extract('css?sourceMap!autoprefixer!sass?sourceMap')
+    loader: 'style!css?sourceMap!autoprefixer!sass?sourceMap'
 
   }, {
     test: /\.css$/,
