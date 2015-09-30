@@ -33,6 +33,8 @@ class TestAccountAPI(BaseTestCase):
         assert_true('HEAD' in res.headers['Access-Control-Allow-Methods'])
         assert_true('POS' in res.headers['Access-Control-Allow-Methods'])
         assert_true('GET' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('OPTIONS' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('CONTENT-TYPE' in res.headers['Access-Control-Allow-Headers'])
 
     def test_get_accounts(self):
         """Test getting the list of accounts via API (GET)."""
