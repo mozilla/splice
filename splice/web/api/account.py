@@ -48,7 +48,7 @@ class AccountListAPI(Resource):
 
     def options(self):
         """Placeholder for flask-restful cors"""
-        pass
+        pass  # pragma: no cover
 
     def post(self):
         """Creates an account."""
@@ -82,7 +82,7 @@ class AccountAPI(Resource):
 
     def options(self):
         """Placeholder for flask-restful cors"""
-        pass
+        pass  # pragma: no cover
 
     def get(self, account_id):
         account = get_account(account_id)

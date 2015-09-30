@@ -63,7 +63,7 @@ class AdgroupListAPI(Resource):
 
     def options(self):
         """Placeholder for flask-restful cors"""
-        pass
+        pass  # pragma: no cover
 
     def get(self):
         args = self.reqparse_get.parse_args()
@@ -114,7 +114,7 @@ class AdgroupAPI(Resource):
 
     def options(self):
         """Placeholder for flask-restful cors"""
-        pass
+        pass  # pragma: no cover
 
     def get(self, adgroup_id):
         adgroup = get_adgroup(adgroup_id)

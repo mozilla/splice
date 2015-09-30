@@ -61,7 +61,7 @@ class CampaignListAPI(Resource):
 
     def options(self):
         """Placeholder for flask-restful cors"""
-        pass
+        pass  # pragma: no cover
 
     def get(self):
         """Returns all the campaigns.
@@ -110,7 +110,7 @@ class CampaignAPI(Resource):
 
     def options(self):
         """Placeholder for flask-restful cors"""
-        pass
+        pass  # pragma: no cover
 
     def get(self, campaign_id):
         """Returns the campaign with given campaign_id."""

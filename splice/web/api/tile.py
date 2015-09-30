@@ -64,7 +64,7 @@ class TileListAPI(Resource):
 
     def options(self):
         """Placeholder for flask-restful cors"""
-        pass
+        pass  # pragma: no cover
 
     def get(self):
         args = self.reqparse_get.parse_args()
@@ -112,7 +112,7 @@ class TileAPI(Resource):
 
     def options(self):
         """Placeholder for flask-restful cors"""
-        pass
+        pass  # pragma: no cover
 
     def get(self, tile_id):
         tile = get_tile(tile_id)
