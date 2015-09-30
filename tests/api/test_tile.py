@@ -35,6 +35,8 @@ class TestTile(BaseTestCase):
         assert_true('HEAD' in res.headers['Access-Control-Allow-Methods'])
         assert_true('POS' in res.headers['Access-Control-Allow-Methods'])
         assert_true('GET' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('OPTIONS' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('CONTENT-TYPE' in res.headers['Access-Control-Allow-Headers'])
 
     def test_get_tiles_by_adgroup_id(self):
         """ Test for getting all tiles for a given adgroup id

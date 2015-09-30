@@ -13,7 +13,8 @@ from splice.queries.tile import (
 
 
 tile_bp = Blueprint('api.tile', __name__, url_prefix='/api')
-api = Api(tile_bp, decorators=[cors.crossdomain(origin='*')])
+api = Api(tile_bp,
+          decorators=[cors.crossdomain(origin='*', headers=['Content-Type'])])
 
 tile_fields = {
     'id': fields.Integer,
@@ -61,6 +62,10 @@ class TileListAPI(Resource):
                                        help='Adgroup ID', location='args')
         super(TileListAPI, self).__init__()
 
+    def options(self):
+        """Placeholder for flask-restful cors"""
+        pass
+
     def get(self):
         args = self.reqparse_get.parse_args()
         tiles = get_tiles_by_adgroup_id(args['adgroup_id'])
@@ -104,6 +109,10 @@ class TileAPI(Resource):
         self.reqparse.add_argument('title_bg_color', type=str, required=False, store_missing=False,
                                    help='Background color of title', location='json')
         super(TileAPI, self).__init__()
+
+    def options(self):
+        """Placeholder for flask-restful cors"""
+        pass
 
     def get(self, tile_id):
         tile = get_tile(tile_id)

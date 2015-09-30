@@ -34,6 +34,8 @@ class TestAdgroup(BaseTestCase):
         assert_true('HEAD' in res.headers['Access-Control-Allow-Methods'])
         assert_true('POS' in res.headers['Access-Control-Allow-Methods'])
         assert_true('GET' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('OPTIONS' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('CONTENT-TYPE' in res.headers['Access-Control-Allow-Headers'])
 
     def test_get_adgroups_by_campaign_id(self):
         """ Test for getting all adgroups for a given campaign id

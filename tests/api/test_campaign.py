@@ -39,6 +39,7 @@ class TestCampaignAPI(BaseTestCase):
         assert_true('HEAD' in res.headers['Access-Control-Allow-Methods'])
         assert_true('POS' in res.headers['Access-Control-Allow-Methods'])
         assert_true('GET' in res.headers['Access-Control-Allow-Methods'])
+        assert_true('CONTENT-TYPE' in res.headers['Access-Control-Allow-Headers'])
 
     def test_get_campaigns_by_account_id(self):
         """Test getting the list of campaigns by campaign via API (GET)."""

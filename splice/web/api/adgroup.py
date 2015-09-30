@@ -12,7 +12,8 @@ from splice.models import Adgroup
 
 
 adgroup_bp = Blueprint('api.adgroup', __name__, url_prefix='/api')
-api = Api(adgroup_bp, decorators=[cors.crossdomain(origin='*')])
+api = Api(adgroup_bp,
+          decorators=[cors.crossdomain(origin='*', headers=['Content-Type'])])
 
 adgroup_fields = {
     'id': fields.Integer,
@@ -60,6 +61,10 @@ class AdgroupListAPI(Resource):
 
         super(AdgroupListAPI, self).__init__()
 
+    def options(self):
+        """Placeholder for flask-restful cors"""
+        pass
+
     def get(self):
         args = self.reqparse_get.parse_args()
         adgroups = get_adgroups_by_campaign_id(args['campaign_id'])
@@ -106,6 +111,10 @@ class AdgroupAPI(Resource):
                                    help='Adgroup status', location='json',
                                    store_missing=False)
         super(AdgroupAPI, self).__init__()
+
+    def options(self):
+        """Placeholder for flask-restful cors"""
+        pass
 
     def get(self, adgroup_id):
         adgroup = get_adgroup(adgroup_id)
