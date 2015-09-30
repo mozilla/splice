@@ -21,7 +21,8 @@ import {
   AdGroupViewPage,
   TilesPage,
   TileViewPage,
-  ApprovalsPage
+  ApprovalsPage,
+  Error404Page
 } from './pages/index';
 
 export default class App extends Component {
@@ -46,6 +47,8 @@ export default class App extends Component {
           <Route path="/tiles/:tileId" title="Tile View" component={TileViewPage}></Route>
 
           <Route path="/approvals" title="Approval Queue" component={ApprovalsPage}></Route>
+
+          <Route path="/error404" title="Page Not Found" component={Error404Page}></Route>
         </Route>
       </Router>
     );

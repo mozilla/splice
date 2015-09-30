@@ -42,7 +42,11 @@ export default class AccountViewPage extends Component {
 
     updateDocTitle('Account View');
 
-    dispatch(fetchHierarchy('account', props)).then(() => {
+    dispatch(fetchHierarchy('account', props))
+      .catch(function(){
+        props.history.pushState(null, '/error404');
+      })
+    .then(() => {
       pageVisit('Account - ' + this.props.Account.details.name, this);
     });
   }
