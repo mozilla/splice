@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 
 export default class BreadCrumbs extends Component {
   render() {
-    let accountActive = '';
     let campaignActive = '';
     let adGroupActive = '';
     let tileActive = '';
@@ -13,7 +12,6 @@ export default class BreadCrumbs extends Component {
     let tileCount = '';
 
     if(this.props.location.pathname.match(/\/accounts\/.*/) ){
-      accountActive = 'active';
       campaignCount = '(' + this.props.Campaign.rows.length + ')';
     }
     if(this.props.location.pathname.match(/\/campaigns\/.*/) ){
@@ -49,11 +47,6 @@ export default class BreadCrumbs extends Component {
     return (
       <div className="navbar navbar-default bread-crumbs">
         <ul className="nav navbar-nav">
-          {/*
-            <li className={accountActive}><Link
-              to={'/accounts/' + this.props.Account.details.id}>{this.props.Account.details.name}</Link></li>
-            < li > <a><i className="fa fa-angle-right"></i></a> < / li >
-          */}
           { campaignMarkup }
           <li><a><i className="fa fa-angle-right"></i></a></li>
           { adGroupMarkup }

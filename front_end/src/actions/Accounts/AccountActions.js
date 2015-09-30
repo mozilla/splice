@@ -51,7 +51,12 @@ export function fetchAccount(accountId) {
     // Return a promise to wait for
     //return fetch('http://localhost:9999/public/mock/account_' + accountId + '.json')
     return fetch(apiUrl + '/api/accounts/' + accountId)
-      .then(response => response.json())
+      .then(function(response) {
+        if (response.status >= 400) {
+          throw new Error('Bad response from server');
+        }
+        return response.json();
+      })
       .then(json => new Promise(resolve => {
         dispatch(receiveAccount(json));
         resolve();

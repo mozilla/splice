@@ -11,6 +11,7 @@ import AdGroupViewPage from './AdGroups/AdGroupViewPage.js';
 import TilesPage from './Tiles/TilesPage.js';
 import TileViewPage from './Tiles/TileViewPage.js';
 import ApprovalsPage from './Approvals/ApprovalsPage.js';
+import Error404Page from './Errors/Error404Page.js';
 
 export {
   AppPage,
@@ -25,6 +26,7 @@ export {
   AdGroupViewPage,
   TilesPage,
   TileViewPage,
-  ApprovalsPage
+  ApprovalsPage,
+  Error404Page
 };
 
