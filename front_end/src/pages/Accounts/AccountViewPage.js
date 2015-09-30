@@ -30,7 +30,8 @@ export default class AccountViewPage extends Component {
           </div>
         </div>
         <br/>
-        <strong>Campaigns</strong>
+        <p><Link className="btn btn-default" to={'/campaigns/' + this.props.Campaign.details.id + '/create'}>Create Campaign <i className="fa fa-plus"></i></Link></p>
+        <div><strong>Campaigns</strong></div>
         <CampaignList rows={this.props.Campaign.rows}
                       isFetching={this.props.Campaign.isFetching}/>
       </div>
