@@ -15,14 +15,7 @@ export default class CampaignCreatePage extends Component {
   componentDidMount() {
     this.fetchAccountDetails(this.props);
 
-    const context = this;
-    $('#CampaignForm input').keydown(function(e){
-      if (e.which === 13) {
-        context.handleFormSubmit(e);
-      }
-    });
-
-    $('#CampaignCountries').select2();
+    this.frontEndScripts();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -102,6 +95,17 @@ export default class CampaignCreatePage extends Component {
     /*dispatch(createCampaign(data)).then(function(){
       props.history.pushState(null, '/');
     });*/
+  }
+
+  frontEndScripts(){
+    const context = this;
+    $('#CampaignForm input').keydown(function(e){
+      if (e.which === 13) {
+        context.handleFormSubmit(e);
+      }
+    });
+
+    $('#CampaignCountries').select2();
   }
 }
 
