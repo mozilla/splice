@@ -5,6 +5,7 @@ import AccountViewPage from './Accounts/AccountViewPage.js';
 import AccountCreatePage from './Accounts/AccountCreatePage.js';
 import CampaignsPage from './Campaigns/CampaignsPage.js';
 import CampaignViewPage from './Campaigns/CampaignViewPage.js';
+import CampaignCreatePage from './Campaigns/CampaignCreatePage.js';
 import CampaignBulkUploadPage from './Campaigns/CampaignBulkUploadPage.js';
 import AdGroupsPage from './AdGroups/AdGroupsPage.js';
 import AdGroupViewPage from './AdGroups/AdGroupViewPage.js';
@@ -21,6 +22,7 @@ export {
   AccountCreatePage,
   CampaignsPage,
   CampaignViewPage,
+  CampaignCreatePage,
   CampaignBulkUploadPage,
   AdGroupsPage,
   AdGroupViewPage,
