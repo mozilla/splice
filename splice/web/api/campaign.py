@@ -12,7 +12,8 @@ from splice.queries.campaign import (
 
 
 campaign_bp = Blueprint('api.campaign', __name__, url_prefix='/api')
-api = Api(campaign_bp, decorators=[cors.crossdomain(origin='*')])
+api = Api(campaign_bp,
+          decorators=[cors.crossdomain(origin='*', headers=['Content-Type'])])
 
 
 campaign_fields = {
@@ -58,6 +59,10 @@ class CampaignListAPI(Resource):
 
         super(CampaignListAPI, self).__init__()
 
+    def options(self):
+        """Placeholder for flask-restful cors"""
+        pass  # pragma: no cover
+
     def get(self):
         """Returns all the campaigns.
 
@@ -102,6 +107,10 @@ class CampaignAPI(Resource):
                                        store_missing=False)
 
         super(CampaignAPI, self).__init__()
+
+    def options(self):
+        """Placeholder for flask-restful cors"""
+        pass  # pragma: no cover
 
     def get(self, campaign_id):
         """Returns the campaign with given campaign_id."""
