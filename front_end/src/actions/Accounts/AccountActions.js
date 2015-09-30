@@ -21,7 +21,10 @@ export function requestCreateAccount() {
 }
 
 export function receiveCreateAccount(json) {
-  return {type: RECEIVE_CREATE_ACCOUNT, json};
+  return {
+    type: RECEIVE_CREATE_ACCOUNT,
+    json: json.result
+  };
 }
 
 export function requestAccounts() {
