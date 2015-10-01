@@ -33,4 +33,20 @@ describe('actions', () => {
     };
     expect(actions.receiveAccount(json)).toEqual(expectedAction);
   });
+
+  it('should request to create account', () => {
+    const expectedAction = {
+      type: actions.REQUEST_CREATE_ACCOUNT
+    };
+    expect(actions.requestCreateAccount()).toEqual(expectedAction);
+  });
+
+  it('should receive created account', () => {
+    const json = {result: [{test: 'test'}]};
+    const expectedAction = {
+      type: actions.RECEIVE_CREATE_ACCOUNT,
+      json: json.result
+    };
+    expect(actions.receiveCreateAccount(json)).toEqual(expectedAction);
+  });
 });

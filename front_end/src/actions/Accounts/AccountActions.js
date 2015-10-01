@@ -96,25 +96,12 @@ export function createAccount(data) {
         'Content-Type': 'application/json'
       },
       body: data
-    }).then(response => response.json())
-      .then((json) => new Promise(resolve => {
-          dispatch(receiveCreateAccount(json));
-          resolve();
-        })
-      );
-    /*return fetch('http://localhost:9999/public/mock/accounts.json')
-      .then(response => response.json())
-      .then(() => {
-        setTimeout(() => {
-          dispatch(receiveAddAccount({
-            'created_at': '',
-            'email': 'test@gmail.com',
-            'id': 99,
-            'name': data.text,
-            'phone': '+1(888)0000000'
-          }));
-        }, 1000);
-      }
-    );*/
+    })
+    .then(response => response.json())
+    .then((json) => new Promise(resolve => {
+      dispatch(receiveCreateAccount(json));
+        resolve();
+      })
+    );
   };
 }
