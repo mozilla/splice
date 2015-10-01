@@ -8,12 +8,17 @@ cache:
     directories:
         - .pip_download_cache
         - "$HOME/virtualenv/python2.7.9"
+        - front_end/node_modules
 # command to install dependencies
 install: pip install -r requirements.txt -r requirements-dev.txt
 env: TEST_DB_URI=postgres://postgres@127.0.0.1:5432/travis_ci_test
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 # command to run the build
-script: fab build
+script:
+  - fab build
+  - cd front_end && npm install && npm test
 after_success:
   - coveralls

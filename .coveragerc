@@ -2,7 +2,7 @@
 branch = True
 source = splice
 include = splice/*
-omit = splice/tests/*,scripts/*,splice/wsgi.py,splice/commands.py
+omit = splice/tests/*,scripts/*,splice/wsgi.py,splice/commands.py,front_end/*
 
 [report]
 show_missing = True
