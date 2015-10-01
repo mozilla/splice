@@ -7,7 +7,6 @@ export default class App extends Component {
       <div id="page">
         <div id="nav">
           <ul>
-            <li><Link to="/">Live Tiles</Link></li>
             <li><Link to="/authoring">Authoring</Link></li>
             <li><Link to="/upcoming">Upcoming</Link></li>
           </ul>

@@ -4,6 +4,9 @@ var config = require('./webpack.config');
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
+  proxy: {
+    "/api/*": "http://localhost:5000"
+  },
   hot: true,
   historyApiFallback: true,
   stats: {

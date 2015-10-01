@@ -77,6 +77,7 @@ function channel(state = {
   localeIndexUrl: null,
   isFetching: false,
   locales: null,
+  lastUpdated: null
 }, action) {
   switch (action.type) {
   case REQUEST_LOCALES:
@@ -97,21 +98,21 @@ function channel(state = {
 }
 
 function channels(state = {
-    desktop: {
-        name: 'Desktop',
-        localeIndexUrl: 'https://tiles.cdn.mozilla.net/desktop_tile_index_v3.json',
-        isFetching: false
-    },
-    prerelease: {
-        name: 'Prerelease',
-        localeIndexUrl: 'https://tiles.cdn.mozilla.net/desktop-prerelease_tile_index_v3.json',
-        isFetching: false
-    },
-    android: {
-        name: 'Android',
-        localeIndexUrl: 'https://tiles.cdn.mozilla.net/android_tile_index_v3.json',
-        isFetching: false
-    }
+  desktop: {
+    name: 'Desktop',
+    localeIndexUrl: 'https://tiles.cdn.mozilla.net/desktop_tile_index_v3.json',
+    isFetching: false
+  },
+  prerelease: {
+    name: 'Prerelease',
+    localeIndexUrl: 'https://tiles.cdn.mozilla.net/desktop-prerelease_tile_index_v3.json',
+    isFetching: false
+  },
+  android: {
+    name: 'Android',
+    localeIndexUrl: 'https://tiles.cdn.mozilla.net/android_tile_index_v3.json',
+    isFetching: false
+  }
 }, action) {
   switch (action.type) {
   case RECEIVE_LOCALES:

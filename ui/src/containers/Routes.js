@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Router, Route, IndexRoute } from 'react-router';
+import { Router, Route, Redirect } from 'react-router';
 import App from './App'
 import WebtilesPreviewer from './WebtilesPreviewer';
 import Authoring from './Authoring';
@@ -9,8 +9,8 @@ export default class Routes extends Component {
   render() {
     return (
       <Router>
+        <Redirect from="/" to="/authoring" />
         <Route path="/" component={App}>
-          <IndexRoute component={WebtilesPreviewer} />
           <Route path="authoring" component={Authoring} />
           <Route path="upcoming" component={Upcoming} />
         </Route>
