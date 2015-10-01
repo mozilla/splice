@@ -69,10 +69,7 @@ class TileListAPI(Resource):
     def get(self):
         args = self.reqparse_get.parse_args()
         tiles = get_tiles_by_adgroup_id(args['adgroup_id'])
-        if len(tiles) == 0:
-            return {"message": "No tiles found"}, 404
-        else:
-            return {"results": marshal(tiles, tile_fields)}
+        return {"results": marshal(tiles, tile_fields)}
 
     def post(self):
         """ HTTP end point to create new tile. Note the initial status of a new
