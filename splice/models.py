@@ -102,6 +102,8 @@ class Adgroup(db.Model):
     name = db.Column(db.String(255))
     explanation = db.Column(db.String(255))
     check_inadjacency = db.Column(db.Boolean(), nullable=False, default=False)
+    # TODO(najiang@mozilla.com): channel_id is deprecated, leave it here only for backwards compatibility
+    channel_id = db.Column(db.Integer(), db.ForeignKey("channels.id"))
     campaign_id = db.Column(db.Integer(), db.ForeignKey("campaigns.id"))
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
     tiles = db.relationship("Tile", backref="adgroup")
