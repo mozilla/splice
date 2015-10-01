@@ -20,6 +20,7 @@ adgroup_fields = {
     'name': fields.String,
     'locale': fields.String,
     'campaign_id': fields.Integer,
+    'channel_id': fields.Integer,
     'type': fields.String,
     'categories': fields.List(fields.String),
     'explanation': fields.String,
@@ -35,6 +36,8 @@ class AdgroupListAPI(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('campaign_id', type=int, required=True,
                                    help='Campaign ID', location='json')
+        self.reqparse.add_argument('channel_id', type=int, required=True,
+                                   help='Channle ID', location='json')
         self.reqparse.add_argument('name', type=str, required=True,
                                    help='Name of the new adgroup', location='json')
         self.reqparse.add_argument('locale', type=str, required=True,

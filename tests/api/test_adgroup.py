@@ -17,6 +17,7 @@ class TestAdgroup(BaseTestCase):
             "frequency_cap_daily": 3,
             "frequency_cap_total": 10,
             "paused": 'false',
+            "channel_id": 1,
         }
 
         for adgroup in parse_csv("adgroups.csv"):

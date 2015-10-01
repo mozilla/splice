@@ -1,10 +1,10 @@
-name,locale,type,paused,campaign_id
-MDN,en-US,directory,false,1
-Pocket for Firefox,en-US,directory,false,1
-Hello,en-US,directory,false,1
-MDN,en-US,suggested,false,2
-Pocket for Firefox,en-US,suggested,false,2
-BookingEN,en-US,directory,false,3
-BookingES,es,directory,false,3
-BookingFR,fr,directory,false,3
-YahooEN,en-US,suggested,false,4
+name,locale,type,paused,campaign_id,channel_id
+MDN,en-US,directory,false,1,1
+Pocket for Firefox,en-US,directory,false,1,1
+Hello,en-US,directory,false,1,1
+MDN,en-US,suggested,false,2,1
+Pocket for Firefox,en-US,suggested,false,2,1
+BookingEN,en-US,directory,false,3,1
+BookingES,es,directory,false,3,1
+BookingFR,fr,directory,false,3,1
+YahooEN,en-US,suggested,false,4,1
