@@ -1,0 +1,5 @@
+name,paused,channel_id,account_id
+MozDirectory,false,1,1
+MozSuggested,false,3,1
+BookingDirectory,false,1,2
+YahooSuggested,false,3,3

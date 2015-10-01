@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import _ from 'lodash';
 
 import * as reducers from './reducers';
-import Routes from './Routes.js';
+import Routes from './routes.js';
 
 import './styles/main.scss';
 
