@@ -55,10 +55,10 @@ describe('Account ', () => {
         json: {text: "Last test"}
       }).rows
     ).toEqual([
+        {text: "Last test"},
         {text: "Use Redux"},
         {text: "Learn to connect it to React"},
-        {text: "Run the tests"},
-        {text: "Last test"},
+        {text: "Run the tests"}
       ]);
   });
 });
