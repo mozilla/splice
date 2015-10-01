@@ -71,10 +71,7 @@ class AdgroupListAPI(Resource):
     def get(self):
         args = self.reqparse_get.parse_args()
         adgroups = get_adgroups_by_campaign_id(args['campaign_id'])
-        if len(adgroups) == 0:
-            return {"message": "No adgroups found"}, 404
-        else:
-            return {"results": marshal(adgroups, adgroup_fields)}
+        return {"results": marshal(adgroups, adgroup_fields)}
 
     def post(self):
         args = self.reqparse.parse_args()

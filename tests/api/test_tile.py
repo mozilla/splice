@@ -48,12 +48,13 @@ class TestTile(BaseTestCase):
             resp = json.loads(response.data)
             assert_equal(len(resp["results"]), len(tiles))
 
-    def test_get_tiles_404(self):
-        """ Test the failure case of HTTP GET
-        """
+    def test_get_tiles_for_missing_agroups(self):
+        """ Test for getting tiles for a missing adgroup id """
         url = url_for('api.tile.tiles', adgroup_id=10001)
         response = self.client.get(url)
-        assert_equal(response.status_code, 404)
+        assert_equal(response.status_code, 200)
+        resp = json.loads(response.data)
+        assert_equal(len(resp["results"]), 0)
 
     def test_post_and_get(self):
         """ Test for HTTP POST and GET

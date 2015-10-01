@@ -48,6 +48,15 @@ class TestAdgroup(BaseTestCase):
             resp = json.loads(response.data)
             assert_equal(len(resp["results"]), len(adgroups))
 
+    def test_get_adgroups_by_missing_campaign_id(self):
+        """ Test for getting adgroups for a missing campaign id
+        """
+        url = url_for('api.adgroup.adgroups', campaign_id=1234)
+        response = self.client.get(url)
+        assert_equal(response.status_code, 200)
+        resp = json.loads(response.data)
+        assert_equal(len(resp["results"]), 0)
+
     def test_post_and_get(self):
         """ Test for HTTP POST and GET
         """
