@@ -1,7 +1,9 @@
 import React, { Component } from 'react/addons';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
-import { createAccount } from 'actions/Accounts/AccountActions';
+import { displayMessage, shownMessage } from 'actions/App/AppActions';
+import { createAccount, fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import $ from 'jquery';
 window.$ = $;
@@ -46,6 +48,9 @@ export default class AccountCreatePage extends Component {
                 <input className="form-control" type="text" id="AccountContactPhone" name="contact_phone" ref="contact_phone" />
               </div>
               <input onClick={(e) => this.handleFormSubmit(e)} type="submit" value="Submit" className="btn btn-primary"/>
+              &nbsp;
+              <Link to="/" className="btn btn-default">Cancel</Link>
+              &nbsp;
               {spinner}
             </form>
           </div>
@@ -55,14 +60,32 @@ export default class AccountCreatePage extends Component {
   }
 
   handleFormSubmit(e){
+    e.preventDefault();
+
     const { dispatch } = this.props;
     const props = this.props;
+    const context = this;
 
-    e.preventDefault();
     const data = JSON.stringify($('#AccountForm').serializeJSON());
-    dispatch(createAccount(data)).then(function(){
-      props.history.pushState(null, '/');
-    });
+
+    dispatch(createAccount(data))
+      .then(function(response){
+        if(response.result === undefined){
+          if(_.isString(response.message)){
+            dispatch(displayMessage('error', 'Error: ' + response.message) );
+          }
+          else{
+            dispatch(displayMessage('error', 'Error: Validation Errors') );
+          }
+          dispatch(shownMessage());
+        }
+        else{
+          dispatch(fetchAccounts());
+          dispatch(displayMessage('success', 'Account Created Successfully') );
+          props.history.pushState(null, '/accounts/' + response.id);
+        }
+      }
+    );
   }
 }
 

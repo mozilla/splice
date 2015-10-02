@@ -2,16 +2,33 @@ import React, { PropTypes, Component } from 'react/addons';
 import { connect } from 'react-redux';
 
 import { fetchAccounts } from 'actions/Accounts/AccountActions';
+import { shownMessage, removeMessage } from 'actions/App/AppActions';
 
 import TopBar from 'components/App/Navigation/TopBar.js';
 import AccountNavigation from 'components/App/Navigation/AccountNavigation.js';
 import BreadCrumbs from 'components/App/Navigation/BreadCrumbs.js';
+import AppMessage from 'components/App/AppMessage/AppMessage.js';
 
 export default class AppPage extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     if (this.props.Account.rows.length === 0) {
       dispatch(fetchAccounts());
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { dispatch } = this.props;
+
+    //Handle global messaging
+    if(this.props.location.pathname !== nextProps.location.pathname){
+      if(this.props.App.message.shown === true){
+        dispatch(removeMessage());
+      }
+      else if(this.props.App.message.display === true &&
+              this.props.App.message.shown === false){
+        dispatch(shownMessage());
+      }
     }
   }
 
@@ -49,6 +66,7 @@ export default class AppPage extends Component {
           <div className="row">
             <div className="col-xs-12">
               <div className="content-container">
+                <AppMessage message={this.props.App.message} dispatch={this.props.dispatch}/>
                 <ReactCSSTransitionGroup transitionName="page-transition" transitionAppear={true} transitionLeave={false}>
                   {React.cloneElement(this.props.children || <div />, {key: key})}
                 </ReactCSSTransitionGroup>

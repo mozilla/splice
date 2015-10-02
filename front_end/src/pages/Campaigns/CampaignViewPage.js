@@ -52,8 +52,12 @@ export default class CampaignViewPage extends Component {
 
     updateDocTitle('Campaign View');
 
-    dispatch(fetchHierarchy('campaign', props)).then(() => {
-      pageVisit('Campaign - ' + this.props.Campaign.details.name, this);
+    dispatch(fetchHierarchy('campaign', props))
+      .catch(function(){
+        props.history.pushState(null, '/error404');
+      })
+      .then(() => {
+        pageVisit('Campaign - ' + this.props.Campaign.details.name, this);
     });
   }
 }

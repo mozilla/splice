@@ -5,6 +5,10 @@
  }*/
 import { saveRecentlyViewed } from 'actions/App/RecentlyViewedActions';
 
+export const DISPLAY_MESSAGE = 'DISPLAY_MESSAGE';
+export const SHOWN_MESSAGE = 'SHOWN_MESSAGE';
+export const REMOVE_MESSAGE = 'REMOVE_MESSAGE';
+
 export const LIST_TYPE_SELECT = 'LIST_TYPE_SELECT';
 
 export function updateDocTitle(title) {
@@ -17,6 +21,27 @@ export function pageVisit(title, context) {
   saveRecentlyViewed(title, context);
 }
 
+export function displayMessage(messageType, message){
+  return {
+    type: DISPLAY_MESSAGE,
+    messageType: messageType,
+    messageBody: message
+  };
+}
+
+export function shownMessage(){
+  return {
+    type: SHOWN_MESSAGE
+  };
+}
+
+export function removeMessage(){
+  return {
+    type: REMOVE_MESSAGE
+  };
+}
+
 export function listTypeSelect(value) {
   return {type: LIST_TYPE_SELECT, value: value};
 }
+

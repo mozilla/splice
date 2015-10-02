@@ -26,7 +26,7 @@ export default class HomePage extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <h1>Dashboard <i className="fa fa-firefox"></i></h1>
+            <h1>Dashboard</h1>
           </div>
         </div>
         <div className="row">

@@ -1,9 +1,11 @@
 import React, { Component } from 'react/addons';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
+import { updateDocTitle, displayMessage, shownMessage } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
-import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
 import { createCampaign } from 'actions/Campaigns/CampaignActions';
+import Moment from 'moment';
 
 import $ from 'jquery';
 window.$ = $;
@@ -36,7 +38,7 @@ export default class CampaignCreatePage extends Component {
         <div className="panel panel-default">
           <div className="panel-body">
             <form id="CampaignForm" ref="form">
-              <input type="hidden" name="id" ref="id" value={this.props.params.accountId} />
+              <input type="hidden" name="account_id" ref="account_id" value={this.props.params.accountId} />
               <div className="form-group">
                 <label htmlFor="CampaignName">Name</label>
                 <input className="form-control" type="text" id="CampaignName" name="name" ref="name" />
@@ -63,6 +65,9 @@ export default class CampaignCreatePage extends Component {
                 </select>
               </div>
               <input onClick={(e) => this.handleFormSubmit(e)} type="submit" value="Submit" className="btn btn-primary"/>
+              &nbsp;
+              <Link to={'/accounts/' + this.props.Account.details.id} className="btn btn-default">Cancel</Link>
+              &nbsp;
               {spinner}
             </form>
           </div>
@@ -87,14 +92,62 @@ export default class CampaignCreatePage extends Component {
     const props = this.props;
 
     e.preventDefault();
-    const data = JSON.stringify($('#CampaignForm').serializeJSON());
-    /*
-    console.log($('#CampaignForm').serializeJSON());
-    console.log(data);
-    */
-    /*dispatch(createCampaign(data)).then(function(){
-      props.history.pushState(null, '/');
-    });*/
+    const formData = $('#CampaignForm').serializeJSON();
+    if(formData.start_date.trim() !== ''){
+      //formData.start_date = Moment(formData.start_date).unix();
+    }
+    if(formData.end_date.trim() !== ''){
+      //formData.end_date = Moment(formData.end_date).unix();
+    }
+    delete formData.start_date;
+    delete formData.end_date;
+    formData.paused = false;
+
+    const data = JSON.stringify(formData);
+
+    dispatch(createCampaign(data)).then(function(response){
+      props.history.pushState(null, '/campaigns/' + response.id);
+    });
+  }
+
+  handleFormSubmit(e){
+    e.preventDefault();
+
+    const { dispatch } = this.props;
+    const props = this.props;
+    const context = this;
+    //let error = null;
+
+    const formData = $('#CampaignForm').serializeJSON();
+    if(formData.start_date.trim() !== ''){
+      //formData.start_date = Moment(formData.start_date).unix();
+    }
+    if(formData.end_date.trim() !== ''){
+      //formData.end_date = Moment(formData.end_date).unix();
+    }
+    delete formData.start_date;
+    delete formData.end_date;
+    formData.paused = false;
+
+    const data = JSON.stringify(formData);
+
+    dispatch(createCampaign(data))
+      .then(function(response){
+        if(response.result === undefined){
+          if(_.isString(response.message)){
+            dispatch(displayMessage('error', 'Error: ' + response.message) );
+          }
+          else{
+            dispatch(displayMessage('error', 'Error: Validation Errors') );
+          }
+          dispatch(shownMessage());
+        }
+        else{
+          dispatch(displayMessage('success', 'Campaign Created Successfully') );
+          props.history.pushState(null, '/campaigns/' + response.result.id);
+        }
+      }
+    );
   }
 
   frontEndScripts(){

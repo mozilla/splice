@@ -7,8 +7,6 @@ import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
 
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
-import { AppHelpers } from 'helpers/AppHelpers';
-
 import TileDetails from 'components/Tiles/TileDetails/TileDetails';
 
 export default class TileViewPage extends Component {

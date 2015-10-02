@@ -47,8 +47,10 @@ export default class AccountViewPage extends Component {
       .catch(function(){
         props.history.pushState(null, '/error404');
       })
-    .then(() => {
-      pageVisit('Account - ' + this.props.Account.details.name, this);
+      .then(() => {
+        if(this.props.Account.details.name !== undefined){
+          pageVisit('Account - ' + this.props.Account.details.name, this);
+        }
     });
   }
 }

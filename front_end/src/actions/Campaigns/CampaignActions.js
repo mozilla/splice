@@ -7,8 +7,8 @@ if (typeof __DEVELOPMENT__ !== 'undefined' && __DEVELOPMENT__ === true) {
   apiUrl = __LIVEAPI__;
 }
 
-export const REQUEST_ADD_CAMPAIGN = 'REQUEST_ADD_CAMPAIGN';
-export const RECEIVE_ADD_CAMPAIGN = 'RECEIVE_ADD_CAMPAIGN';
+export const REQUEST_CREATE_CAMPAIGN = 'REQUEST_CREATE_CAMPAIGN';
+export const RECEIVE_CREATE_CAMPAIGN = 'RECEIVE_CREATE_CAMPAIGN';
 
 export const REQUEST_CAMPAIGNS = 'REQUEST_CAMPAIGNS';
 export const RECEIVE_CAMPAIGNS = 'RECEIVE_CAMPAIGNS';
@@ -16,21 +16,13 @@ export const RECEIVE_CAMPAIGNS = 'RECEIVE_CAMPAIGNS';
 export const REQUEST_CAMPAIGN = 'REQUEST_CAMPAIGN';
 export const RECEIVE_CAMPAIGN = 'RECEIVE_CAMPAIGN';
 
-export function requestAddCampaign() {
-  return {type: REQUEST_ADD_CAMPAIGN};
+export function requestCreateCampaign() {
+  return {type: REQUEST_CREATE_CAMPAIGN};
 }
 
-export function receiveAddCampaign(json) {
-  return {type: RECEIVE_ADD_CAMPAIGN, json};
-}
-
-export function requestCampaigns() {
-  return {type: REQUEST_CAMPAIGNS};
-}
-export function receiveCampaigns(json) {
+export function receiveCreateCampaign() {
   return {
-    type: RECEIVE_CAMPAIGNS,
-    rows: json.results
+    type: RECEIVE_CREATE_CAMPAIGN
   };
 }
 
@@ -40,7 +32,39 @@ export function requestCampaign() {
 export function receiveCampaign(json) {
   return {
     type: RECEIVE_CAMPAIGN,
-    details: json.result
+    details: json
+  };
+}
+
+export function requestCampaigns() {
+  return {type: REQUEST_CAMPAIGNS};
+}
+export function receiveCampaigns(json) {
+  return {
+    type: RECEIVE_CAMPAIGNS,
+    rows: json
+  };
+}
+
+export function createCampaign(data) {
+  // thunk middleware knows how to handle functions
+  return function next(dispatch) {
+    dispatch(requestCreateCampaign());
+    // Return a promise to wait for
+    return fetch(apiUrl + '/api/campaigns', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: data
+    })
+      .then(response => response.json())
+      .then((json) => new Promise(resolve => {
+        dispatch(receiveCreateCampaign());
+        resolve(json);
+      })
+    );
   };
 }
 
@@ -50,9 +74,15 @@ export function fetchCampaign(campaignId) {
     dispatch(requestCampaign());
     // Return a promise to wait for
     return fetch(apiUrl + '/api/campaigns/' + campaignId)
-      .then(response => response.json())
+      .then(function(response) {
+        if (response.status >= 400) {
+          dispatch(receiveCampaign({}) );
+          throw new Error('Bad response from server');
+        }
+        return response.json();
+      })
       .then(json => new Promise(resolve => {
-        dispatch(receiveCampaign(json));
+        dispatch(receiveCampaign(json.result));
         resolve();
       }));
   };
@@ -71,48 +101,8 @@ export function fetchCampaigns(accountId = null) {
     return fetch(apiUrl + '/api/campaigns' + params)
       .then(response => response.json())
       .then(json => {
-        dispatch(receiveCampaigns(json));
+        dispatch(receiveCampaigns(json.results));
       }
-    );
-  };
-}
-
-export function saveCampaign(data) {
-  // thunk middleware knows how to handle functions
-  return function next(dispatch) {
-    dispatch(requestAddCampaign());
-    // Return a promise to wait for
-    /*return fetch(apiUrl + '/api/campaigns', {
-     method: 'post',
-     headers: {
-     'Accept': 'application/json',
-     'Content-Type': 'application/json'
-     },
-     body: JSON.stringify({
-     name: data.text
-     })
-     }).then(response => response.json())
-     .then((json) => {
-     dispatch(receiveAddAccount({
-     'created_at': '',
-     'email': 'test@gmail.com',
-     'id': 99,
-     'name': data.text,
-     'phone': '+1(888)0000000'
-     }));
-     });*/
-    return fetch('http://localhost:9999/public/mock/campaigns.json')
-      .then(response => response.json())
-      .then(() =>
-        setTimeout(() => {
-          dispatch(receiveAddCampaign({
-            'created_at': '',
-            'email': 'test@gmail.com',
-            'id': 99,
-            'name': data.text,
-            'phone': '+1(888)0000000'
-          }));
-        }, 1000)
     );
   };
 }
