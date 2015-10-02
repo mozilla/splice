@@ -5,7 +5,7 @@ from tests.base import BaseTestCase
 from collections import defaultdict
 
 from flask import url_for, json
-from nose.tools import assert_equal, assert_true
+from nose.tools import assert_equal
 
 from splice.queries.campaign import insert_campaign, get_campaign
 from splice.queries.common import session_scope
@@ -32,15 +32,20 @@ class TestCampaignAPI(BaseTestCase):
         """Test the support for CORS"""
         url = url_for('api.campaign.campaigns')
         data = json.dumps(self.campaign_data)
-        res = self.client.post(url, data=data, content_type='application/json')
+        res = self.client.post(url,
+                               data=data,
+                               headers={"Origin": "foo.com"},
+                               content_type='application/json')
         assert_equal(res.status_code, 201)
-        assert_equal(res.headers['Access-Control-Allow-Origin'], '*')
-        assert_equal(res.headers['Access-Control-Max-Age'], '21600')
-        assert_true('HEAD' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('POS' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('GET' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('OPTIONS' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('CONTENT-TYPE' in res.headers['Access-Control-Allow-Headers'])
+        assert_equal(res.headers['Access-Control-Allow-Origin'], 'foo.com')
+
+        # test CORS gets set properly in failures
+        res = self.client.post(url,
+                               data=data,
+                               headers={"Origin": "foo.com"},
+                               content_type='application/json')
+        assert_equal(res.status_code, 400)
+        assert_equal(res.headers['Access-Control-Allow-Origin'], 'foo.com')
 
     def test_get_campaigns_by_account_id(self):
         """Test getting the list of campaigns by campaign via API (GET)."""

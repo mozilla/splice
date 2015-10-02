@@ -1,4 +1,4 @@
-from nose.tools import assert_equal, assert_true
+from nose.tools import assert_equal
 from flask import url_for, json
 from tests.base import BaseTestCase
 from tests.populate_database import parse_csv
@@ -28,15 +28,20 @@ class TestTile(BaseTestCase):
         """Test the support for CORS"""
         url = url_for('api.tile.tiles')
         data = json.dumps(self.new_tile)
-        res = self.client.post(url, data=data, content_type='application/json')
+        res = self.client.post(url,
+                               data=data,
+                               headers={"Origin": "foo.com"},
+                               content_type='application/json')
         assert_equal(res.status_code, 201)
-        assert_equal(res.headers['Access-Control-Allow-Origin'], '*')
-        assert_equal(res.headers['Access-Control-Max-Age'], '21600')
-        assert_true('HEAD' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('POS' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('GET' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('OPTIONS' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('CONTENT-TYPE' in res.headers['Access-Control-Allow-Headers'])
+        assert_equal(res.headers['Access-Control-Allow-Origin'], 'foo.com')
+
+        # test CORS gets set properly in failures
+        res = self.client.post(url,
+                               data=data,
+                               headers={"Origin": "foo.com"},
+                               content_type='application/json')
+        assert_equal(res.status_code, 400)
+        assert_equal(res.headers['Access-Control-Allow-Origin'], 'foo.com')
 
     def test_get_tiles_by_adgroup_id(self):
         """ Test for getting all tiles for a given adgroup id
