@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 
 import { updateDocTitle, displayMessage, shownMessage } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
-import { createCampaign } from 'actions/Campaigns/CampaignActions';
+import { updateCampaign } from 'actions/Campaigns/CampaignActions';
 import Moment from 'moment';
 
 import CampaignForm from 'components/Campaigns/CampaignForm/CampaignForm';
@@ -13,16 +13,14 @@ import $ from 'jquery';
 window.$ = $;
 require('jquery-serializejson');
 
-export default class CampaignCreatePage extends Component {
+export default class CampaignEditPage extends Component {
   componentDidMount() {
-    this.fetchAccountDetails(this.props);
-
-    this.frontEndScripts();
+    this.fetchCampaignDetails(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.params.accountId !== this.props.params.accountId) {
-      this.fetchAccountDetails(nextProps);
+    if (nextProps.params.campaignId !== this.props.params.campaignId) {
+      this.fetchCampaignDetails(nextProps);
     }
   }
 
@@ -34,28 +32,31 @@ export default class CampaignCreatePage extends Component {
 
     return (
       <div>
-        <h1>{this.props.Account.details.name}: Create Campaign</h1>
+        <h1>Edit Campaign - {this.props.Campaign.details.name}</h1>
         <div className="panel panel-default">
           <div className="panel-body">
-            <CampaignForm isSaving={this.props.Campaign.isSaving} handleFormSubmit={(id) => this.handleFormSubmit(id)} data={{account_id: this.props.Account.details.id}} editMode={false} />
+            {(this.props.Campaign.details.id !== undefined)
+              ? <CampaignForm isSaving={this.props.Campaign.isSaving} handleFormSubmit={(id) => this.handleFormSubmit(id)} data={this.props.Campaign.details} editMode={true} />
+              : null
+            }
           </div>
         </div>
       </div>
     );
   }
 
-  fetchAccountDetails(props) {
+  fetchCampaignDetails(props) {
     const { dispatch } = props;
 
-    updateDocTitle('Create Campaign');
+    updateDocTitle('Edit Campaign');
 
-    dispatch(fetchHierarchy('account', props))
+    dispatch(fetchHierarchy('campaign', props))
       .catch(function(){
         props.history.pushState(null, '/error404');
       })
       .then(() => {
-        if(this.props.Account.details.name !== undefined){
-          updateDocTitle(this.props.Account.details.name + ': Create Campaign');
+        if(this.props.Campaign.details.name !== undefined){
+          updateDocTitle('Edit Campaign - ' + this.props.Campaign.details.name);
         }
       });
   }
@@ -79,7 +80,7 @@ export default class CampaignCreatePage extends Component {
 
     const data = JSON.stringify(formData);
 
-    dispatch(createCampaign(data))
+    dispatch(updateCampaign(this.props.Campaign.details.id, data))
       .then(function(response){
         if(response.result === undefined){
           if(_.isString(response.message)){
@@ -91,19 +92,15 @@ export default class CampaignCreatePage extends Component {
           dispatch(shownMessage());
         }
         else{
-          dispatch(displayMessage('success', 'Campaign Created Successfully') );
-          props.history.pushState(null, '/campaigns/' + response.result.id);
+          dispatch(displayMessage('success', 'Campaign Updated Successfully') );
+          dispatch(shownMessage());
         }
       }
     );
   }
-
-  frontEndScripts(){
-
-  }
 }
 
-CampaignCreatePage.propTypes = {};
+CampaignEditPage.propTypes = {};
 
 // Which props do we want to inject, given the global state?
 function select(state) {
@@ -114,4 +111,4 @@ function select(state) {
 }
 
 // Wrap the component to inject dispatch and state into it
-export default connect(select)(CampaignCreatePage);
+export default connect(select)(CampaignEditPage);

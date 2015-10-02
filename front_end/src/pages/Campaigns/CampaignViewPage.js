@@ -57,7 +57,9 @@ export default class CampaignViewPage extends Component {
         props.history.pushState(null, '/error404');
       })
       .then(() => {
-        pageVisit('Campaign - ' + this.props.Campaign.details.name, this);
+        if(this.props.Campaign.details.name !== undefined) {
+          pageVisit('Campaign - ' + this.props.Campaign.details.name, this);
+        }
     });
   }
 }

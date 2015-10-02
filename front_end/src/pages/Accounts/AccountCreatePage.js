@@ -2,7 +2,7 @@ import React, { Component } from 'react/addons';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { displayMessage, shownMessage } from 'actions/App/AppActions';
+import { updateDocTitle, displayMessage, shownMessage } from 'actions/App/AppActions';
 import { createAccount, fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import AccountForm from 'components/Accounts/AccountForm/AccountForm';
@@ -12,6 +12,10 @@ window.$ = $;
 require('jquery-serializejson');
 
 export default class AccountCreatePage extends Component {
+  componentDidMount(){
+    updateDocTitle('Create Account');
+  }
+
   render() {
     return (
       <div>

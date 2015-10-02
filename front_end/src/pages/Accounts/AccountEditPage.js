@@ -69,7 +69,7 @@ export default class AccountEditPage extends Component {
   fetchAccountDetails(props) {
     const { dispatch } = props;
 
-    updateDocTitle('Account View');
+    updateDocTitle('Edit Account');
 
     dispatch(fetchHierarchy('account', props))
       .catch(function(){
@@ -77,7 +77,7 @@ export default class AccountEditPage extends Component {
       })
       .then(() => {
         if(this.props.Account.details.name !== undefined){
-          pageVisit('Account - ' + this.props.Account.details.name, this);
+          updateDocTitle('Edit Account - ' + this.props.Account.details.name);
         }
       });
   }
