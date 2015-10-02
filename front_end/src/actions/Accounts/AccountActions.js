@@ -76,7 +76,12 @@ export function createAccount(data) {
     })
       .then(response => response.json())
       .then((json) => new Promise(resolve => {
-        dispatch(receiveCreateAccount(json.result));
+        if(json.result !== undefined){
+          dispatch(receiveCreateAccount(json.result));
+        }
+        else{
+          dispatch(receiveCreateAccount(null));
+        }
         resolve(json);
       })
     );
@@ -98,7 +103,12 @@ export function updateAccount(accountId, data) {
     })
       .then(response => response.json())
       .then((json) => new Promise(resolve => {
-        dispatch(receiveUpdateAccount(json.result));
+        if(json.result !== undefined){
+          dispatch(receiveUpdateAccount(json.result));
+        }
+        else{
+          dispatch(receiveUpdateAccount(null));
+        }
         resolve(json);
       })
     );

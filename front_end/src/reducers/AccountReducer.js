@@ -23,8 +23,12 @@ export function Account(state = initialState, action = null) {
         isSaving: true
       });
     case RECEIVE_CREATE_ACCOUNT:
+      let rows = state.rows;
+      if(action.json !== null){
+        rows = [action.json, ...state.rows];
+      }
       return _.assign({}, state, {
-        rows: [action.json, ...state.rows],
+        rows: rows,
         isSaving: false
       });
     case REQUEST_UPDATE_ACCOUNT:
@@ -32,8 +36,12 @@ export function Account(state = initialState, action = null) {
         isSaving: true
       });
     case RECEIVE_UPDATE_ACCOUNT:
+      let details = state.details;
+      if(action.json !== null){
+        details = action.json;
+      }
       return _.assign({}, state, {
-        details: action.json,
+        details: details,
         isSaving: false
       });
     case REQUEST_ACCOUNTS:
