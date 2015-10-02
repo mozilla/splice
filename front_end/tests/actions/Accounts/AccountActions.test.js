@@ -13,7 +13,7 @@ describe('actions', () => {
     const json = {results: [{test: 'test'}]};
     const expectedAction = {
       type: actions.RECEIVE_ACCOUNTS,
-      rows: json.results
+      rows: json
     };
     expect(actions.receiveAccounts(json)).toEqual(expectedAction);
   });
@@ -29,7 +29,7 @@ describe('actions', () => {
     const json = {result: [{test: 'test'}]};
     const expectedAction = {
       type: actions.RECEIVE_ACCOUNT,
-      details: json.result
+      details: json
     };
     expect(actions.receiveAccount(json)).toEqual(expectedAction);
   });
@@ -45,8 +45,24 @@ describe('actions', () => {
     const json = {result: [{test: 'test'}]};
     const expectedAction = {
       type: actions.RECEIVE_CREATE_ACCOUNT,
-      json: json.result
+      json: json
     };
     expect(actions.receiveCreateAccount(json)).toEqual(expectedAction);
+  });
+
+  it('should request to update account', () => {
+    const expectedAction = {
+      type: actions.REQUEST_UPDATE_ACCOUNT
+    };
+    expect(actions.requestUpdateAccount()).toEqual(expectedAction);
+  });
+
+  it('should receive updated account', () => {
+    const json = {result: [{test: 'test'}]};
+    const expectedAction = {
+      type: actions.RECEIVE_UPDATE_ACCOUNT,
+      json: json
+    };
+    expect(actions.receiveUpdateAccount(json)).toEqual(expectedAction);
   });
 });

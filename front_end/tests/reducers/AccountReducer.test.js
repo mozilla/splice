@@ -61,4 +61,18 @@ describe('Account ', () => {
         {text: "Run the tests"}
       ]);
   });
+
+  it('should handle RECEIVE_UPDATE_ACCOUNT', () => {
+    //Test Updating when state is explicitly set
+    expect(
+      Account({
+        details: {name: "test"}
+      }, {
+        type: types.RECEIVE_UPDATE_ACCOUNT,
+        json: {name: "new name"}
+      }).details
+    ).toEqual(
+      {name: "new name"}
+    );
+  });
 });
