@@ -20,6 +20,7 @@ export default class CampaignRow extends Component {
 CampaignRow.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
+  channel_id: PropTypes.number.isRequired,
+  paused: PropTypes.bool.isRequired,
   created_at: PropTypes.string.isRequired
 };

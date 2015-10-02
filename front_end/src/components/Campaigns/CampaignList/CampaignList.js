@@ -42,7 +42,8 @@ CampaignList.propTypes = {
   rows: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
+    channel_id: PropTypes.number.isRequired,
+    paused: PropTypes.bool.isRequired,
     created_at: PropTypes.string.isRequired
   }).isRequired).isRequired
 };

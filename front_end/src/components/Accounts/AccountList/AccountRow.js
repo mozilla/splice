@@ -19,7 +19,7 @@ export default class AccountRow extends Component {
 
 AccountRow.propTypes = {
   name: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
-  phone: PropTypes.string.isRequired,
+  contact_email: PropTypes.string.isRequired,
+  contact_phone: PropTypes.string.isRequired,
   created_at: PropTypes.string.isRequired
 };
