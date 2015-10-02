@@ -76,7 +76,12 @@ export function createCampaign(data) {
     })
       .then(response => response.json())
       .then((json) => new Promise(resolve => {
-        dispatch(receiveCreateCampaign(json.result));
+        if(json.result !== undefined){
+          dispatch(receiveCreateCampaign(json.result));
+        }
+        else{
+          dispatch(receiveCreateCampaign(null));
+        }
         resolve(json);
       })
     );
@@ -98,7 +103,12 @@ export function updateCampaign(campaignId, data) {
     })
       .then(response => response.json())
       .then((json) => new Promise(resolve => {
-        dispatch(receiveUpdateCampaign(json.result));
+        if(json.result !== undefined){
+          dispatch(receiveUpdateCampaign(json.result));
+        }
+        else{
+          dispatch(receiveUpdateCampaign(null));
+        }
         resolve(json);
       })
     );
