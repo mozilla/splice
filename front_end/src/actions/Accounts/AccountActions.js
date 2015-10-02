@@ -20,10 +20,17 @@ export function requestCreateAccount() {
   return {type: REQUEST_CREATE_ACCOUNT};
 }
 
-export function receiveCreateAccount(json) {
+export function receiveCreateAccount() {
+  return {type: RECEIVE_CREATE_ACCOUNT};
+}
+
+export function requestAccount() {
+  return {type: REQUEST_ACCOUNT};
+}
+export function receiveAccount(json) {
   return {
-    type: RECEIVE_CREATE_ACCOUNT,
-    json: json.result
+    type: RECEIVE_ACCOUNT,
+    details: json
   };
 }
 
@@ -33,17 +40,29 @@ export function requestAccounts() {
 export function receiveAccounts(json) {
   return {
     type: RECEIVE_ACCOUNTS,
-    rows: json.results
+    rows: json
   };
 }
 
-export function requestAccount() {
-  return {type: REQUEST_ACCOUNT};
-}
-export function receiveAccount(json) {
-  return {
-    type: RECEIVE_ACCOUNT,
-    details: json.result
+export function createAccount(data) {
+  // thunk middleware knows how to handle functions
+  return function next(dispatch) {
+    dispatch(requestCreateAccount());
+    // Return a promise to wait for
+    return fetch(apiUrl + '/api/accounts', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: data
+    })
+      .then(response => response.json())
+      .then((json) => new Promise(resolve => {
+        dispatch(receiveCreateAccount());
+        resolve(json);
+      })
+    );
   };
 }
 
@@ -56,12 +75,13 @@ export function fetchAccount(accountId) {
     return fetch(apiUrl + '/api/accounts/' + accountId)
       .then(function(response) {
         if (response.status >= 400) {
+          dispatch(receiveAccount({}) );
           throw new Error('Bad response from server');
         }
         return response.json();
       })
       .then(json => new Promise(resolve => {
-        dispatch(receiveAccount(json));
+        dispatch(receiveAccount(json.result));
         resolve();
       })
     );
@@ -77,31 +97,8 @@ export function fetchAccounts() {
     return fetch(apiUrl + '/api/accounts')
       .then(response => response.json())
       .then(json => {
-        dispatch(receiveAccounts(json));
+        dispatch(receiveAccounts(json.results));
       }
-    );
-  };
-}
-
-export function createAccount(data) {
-  // thunk middleware knows how to handle functions
-  return function next(dispatch) {
-    dispatch(requestCreateAccount());
-    // Return a promise to wait for
-    return fetch(apiUrl + '/api/accounts', {
-    //return fetch('http://dev.sandbox.com/receiveFile.php', {
-      method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: data
-    })
-    .then(response => response.json())
-    .then((json) => new Promise(resolve => {
-      dispatch(receiveCreateAccount(json));
-        resolve();
-      })
     );
   };
 }

@@ -9,8 +9,8 @@ export default class CampaignList extends Component {
     let spinner;
 
     if (this.props.isFetching === false) {
-      rows = this.props.rows.map((campaignRow, index) =>
-          <CampaignRow {...campaignRow} key={index}/>
+      rows = this.props.rows.map((row, index) =>
+          <CampaignRow {...row} key={index}/>
       );
     } else {
       spinner = (<img src="./public/img/ajax-loader.gif"/>);

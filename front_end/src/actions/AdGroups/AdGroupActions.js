@@ -7,8 +7,8 @@ if (typeof __DEVELOPMENT__ !== 'undefined' && __DEVELOPMENT__ === true) {
   apiUrl = __LIVEAPI__;
 }
 
-export const REQUEST_ADD_ADGROUP = 'REQUEST_ADD_ADGROUP';
-export const RECEIVE_ADD_ADGROUP = 'RECEIVE_ADD_ADGROUP';
+export const REQUEST_CREATE_ADGROUP = 'REQUEST_CREATE_ADGROUP';
+export const RECEIVE_CREATE_ADGROUP = 'RECEIVE_CREATE_ADGROUP';
 
 export const REQUEST_ADGROUPS = 'REQUEST_ADGROUPS';
 export const RECEIVE_ADGROUPS = 'RECEIVE_ADGROUPS';
@@ -16,21 +16,14 @@ export const RECEIVE_ADGROUPS = 'RECEIVE_ADGROUPS';
 export const REQUEST_ADGROUP = 'REQUEST_ADGROUP';
 export const RECEIVE_ADGROUP = 'RECEIVE_ADGROUP';
 
-export function requestAddAdGroup() {
-  return {type: REQUEST_ADD_ADGROUP};
+export function requestCreateAdGroup() {
+  return {type: REQUEST_CREATE_ADGROUP};
 }
 
-export function receiveAddAdGroup(json) {
-  return {type: RECEIVE_ADD_ADGROUP, json};
-}
-
-export function requestAdGroups() {
-  return {type: REQUEST_ADGROUPS};
-}
-export function receiveAdGroups(json) {
+export function receiveCreateAdGroup(json) {
   return {
-    type: RECEIVE_ADGROUPS,
-    rows: json.results
+    type: RECEIVE_CREATE_ADGROUP,
+    json: json
   };
 }
 
@@ -40,7 +33,17 @@ export function requestAdGroup() {
 export function receiveAdGroup(json) {
   return {
     type: RECEIVE_ADGROUP,
-    details: json.result
+    details: json
+  };
+}
+
+export function requestAdGroups() {
+  return {type: REQUEST_ADGROUPS};
+}
+export function receiveAdGroups(json) {
+  return {
+    type: RECEIVE_ADGROUPS,
+    rows: json
   };
 }
 
@@ -52,7 +55,7 @@ export function fetchAdGroup(adGroupId) {
     return fetch(apiUrl + '/api/adgroups/' + adGroupId)
       .then(response => response.json())
       .then(json => new Promise(resolve => {
-        dispatch(receiveAdGroup(json));
+        dispatch(receiveAdGroup(json.result));
         resolve();
       }));
   };
@@ -71,16 +74,16 @@ export function fetchAdGroups(campaignId = null) {
     return fetch(apiUrl + '/api/adgroups' + params)
       .then(response => response.json())
       .then(json => {
-        dispatch(receiveAdGroups(json));
+        dispatch(receiveAdGroups(json.results));
       }
     );
   };
 }
 
-export function saveAdGroup(data) {
+export function createAdGroup(data) {
   // thunk middleware knows how to handle functions
   return function next(dispatch) {
-    dispatch(requestAddAdGroup());
+    dispatch(requestCreateAdGroup());
     // Return a promise to wait for
     /*return fetch(apiUrl + '/api/adgroups', {
      method: 'post',
@@ -93,7 +96,7 @@ export function saveAdGroup(data) {
      })
      }).then(response => response.json())
      .then((json) => {
-     dispatch(receiveAddAccount({
+     dispatch(receiveCreateAccount({
      'created_at': '',
      'email': 'test@gmail.com',
      'id': 99,
@@ -105,7 +108,7 @@ export function saveAdGroup(data) {
       .then(response => response.json())
       .then(() =>
         setTimeout(() => {
-          dispatch(receiveAddAdGroup({
+          dispatch(receiveCreateAdGroup({
             'created_at': '',
             'email': 'test@gmail.com',
             'id': 99,

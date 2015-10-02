@@ -18,15 +18,6 @@ export default class AccountNavigation extends Component {
           <div className="col-xs-3 button text-muted" >Campaigns</div>
           <div className="col-xs-3 button text-muted" >Ad Groups</div>
           <div className="col-xs-3 button text-muted" >Tiles</div>
-          {/*
-          <li className={(false) ? 'active' : ''}><Link
-            to={'/campaigns?accountId=' + accountId}>Campaigns</Link></li>
-          <li className={(false) ? 'active' : ''}><Link
-            to={'/adgroups?accountId=' + accountId}>Ad Groups</Link></li>
-          <li className={(false) === '/tiles' ? 'active' : ''}><Link
-            to={'/tiles?accountId=' + accountId}>Tiles</Link></li>
-            */
-          }
         </div>
       </div>
     );
