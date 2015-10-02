@@ -40,7 +40,8 @@ export default class AccountList extends Component {
 AccountList.propTypes = {
   rows: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired
+    contact_email: PropTypes.string.isRequired,
+    contact_phone: PropTypes.string.isRequired,
+    created_at: PropTypes.string.isRequired
   }).isRequired).isRequired
 };
