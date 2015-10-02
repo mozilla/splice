@@ -1,6 +1,5 @@
 from flask import Blueprint
 from flask_restful import Api, Resource, marshal, fields, reqparse
-from flask_restful.utils import cors
 
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
@@ -12,8 +11,7 @@ from splice.models import Adgroup
 
 
 adgroup_bp = Blueprint('api.adgroup', __name__, url_prefix='/api')
-api = Api(adgroup_bp,
-          decorators=[cors.crossdomain(origin='*', headers=['Content-Type'])])
+api = Api(adgroup_bp)
 
 adgroup_fields = {
     'id': fields.Integer,
@@ -64,10 +62,6 @@ class AdgroupListAPI(Resource):
 
         super(AdgroupListAPI, self).__init__()
 
-    def options(self):
-        """Placeholder for flask-restful cors"""
-        pass  # pragma: no cover
-
     def get(self):
         args = self.reqparse_get.parse_args()
         adgroups = get_adgroups_by_campaign_id(args['campaign_id'])
@@ -111,10 +105,6 @@ class AdgroupAPI(Resource):
                                    help='Adgroup status', location='json',
                                    store_missing=False)
         super(AdgroupAPI, self).__init__()
-
-    def options(self):
-        """Placeholder for flask-restful cors"""
-        pass  # pragma: no cover
 
     def get(self, adgroup_id):
         adgroup = get_adgroup(adgroup_id)
