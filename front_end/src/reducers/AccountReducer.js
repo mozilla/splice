@@ -1,6 +1,8 @@
 import {
   REQUEST_CREATE_ACCOUNT,
   RECEIVE_CREATE_ACCOUNT,
+  REQUEST_UPDATE_ACCOUNT,
+  RECEIVE_UPDATE_ACCOUNT,
   REQUEST_ACCOUNTS,
   RECEIVE_ACCOUNTS,
   REQUEST_ACCOUNT,
@@ -21,6 +23,14 @@ export function Account(state = initialState, action = null) {
         isSaving: true
       });
     case RECEIVE_CREATE_ACCOUNT:
+      return _.assign({}, state, {
+        isSaving: false
+      });
+    case REQUEST_UPDATE_ACCOUNT:
+      return _.assign({}, state, {
+        isSaving: true
+      });
+    case RECEIVE_UPDATE_ACCOUNT:
       return _.assign({}, state, {
         isSaving: false
       });

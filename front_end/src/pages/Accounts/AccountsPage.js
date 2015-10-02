@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { pageVisit } from 'actions/App/AppActions';
 import { saveAccount, fetchAccounts } from 'actions/Accounts/AccountActions';
 import AccountList from 'components/Accounts/AccountList/AccountList';
-import AccountForm from 'components/Accounts/AccountAdd/AccountForm';
 
 import { Link } from 'react-router';
 
@@ -25,12 +24,9 @@ export default class AccountsPage extends Component {
       <div>
         <div>
           <h1>Accounts</h1>
-
           <div className="pull-right">
             <Link to="/accounts/add">Add Account</Link>
           </div>
-          <AccountForm onAddClick={text => dispatch(saveAccount(text))}
-                       isSaving={this.props.Account.isSaving}/>
           <AccountList rows={this.props.Account.rows}
                        isFetching={this.props.Account.isFetching}/>
         </div>

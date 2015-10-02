@@ -12,7 +12,7 @@ export default class AccountDetails extends Component {
       details = (
         <div className="panel panel-default">
           <div className="panel-heading">{data.name}
-            <Link to={'/accounts/edit/' + data.id}> <i className="fa fa-pencil"></i></Link>
+            <Link to={'/accounts/' + data.id + '/edit/'}> <i className="fa fa-pencil"></i></Link>
             <p>ID: {data.id}</p>
           </div>
           <div className="panel-body">
