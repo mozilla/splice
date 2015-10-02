@@ -23,16 +23,22 @@ export function requestCreateAccount() {
   return {type: REQUEST_CREATE_ACCOUNT};
 }
 
-export function receiveCreateAccount() {
-  return {type: RECEIVE_CREATE_ACCOUNT};
+export function receiveCreateAccount(json) {
+  return {
+    type: RECEIVE_CREATE_ACCOUNT,
+    json: json
+  };
 }
 
 export function requestUpdateAccount() {
   return {type: REQUEST_UPDATE_ACCOUNT};
 }
 
-export function receiveUpdateAccount() {
-  return {type: RECEIVE_UPDATE_ACCOUNT};
+export function receiveUpdateAccount(json) {
+  return {
+    type: RECEIVE_UPDATE_ACCOUNT,
+    json: json
+  };
 }
 
 export function requestAccount() {
@@ -70,7 +76,7 @@ export function createAccount(data) {
     })
       .then(response => response.json())
       .then((json) => new Promise(resolve => {
-        dispatch(receiveCreateAccount());
+        dispatch(receiveCreateAccount(json.result));
         resolve(json);
       })
     );
@@ -92,7 +98,7 @@ export function updateAccount(accountId, data) {
     })
       .then(response => response.json())
       .then((json) => new Promise(resolve => {
-        dispatch(receiveUpdateAccount());
+        dispatch(receiveUpdateAccount(json.result));
         resolve(json);
       })
     );

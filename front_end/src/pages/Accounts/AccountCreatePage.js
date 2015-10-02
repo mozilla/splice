@@ -50,7 +50,7 @@ export default class AccountCreatePage extends Component {
         else{
           dispatch(fetchAccounts());
           dispatch(displayMessage('success', 'Account Created Successfully') );
-          props.history.pushState(null, '/accounts/' + response.id);
+          props.history.pushState(null, '/accounts/' + response.result.id);
         }
       }
     );

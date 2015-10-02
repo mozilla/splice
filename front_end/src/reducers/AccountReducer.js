@@ -24,6 +24,7 @@ export function Account(state = initialState, action = null) {
       });
     case RECEIVE_CREATE_ACCOUNT:
       return _.assign({}, state, {
+        rows: [action.json, ...state.rows],
         isSaving: false
       });
     case REQUEST_UPDATE_ACCOUNT:
@@ -32,6 +33,7 @@ export function Account(state = initialState, action = null) {
       });
     case RECEIVE_UPDATE_ACCOUNT:
       return _.assign({}, state, {
+        details: action.json,
         isSaving: false
       });
     case REQUEST_ACCOUNTS:
