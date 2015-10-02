@@ -4,15 +4,6 @@ import { Link } from 'react-router';
 import $ from 'jquery';
 
 export default class AccountForm extends Component {
-  componentDidMount() {
-    const context = this;
-    $('#AccountForm input').keydown(function(e){
-      if (e.which === 13) {
-        context.handleFormSubmit(e);
-      }
-    });
-  }
-
   render() {
     let spinner;
     if(this.props.isSaving){
@@ -41,7 +32,10 @@ export default class AccountForm extends Component {
           </div>
           <input onClick={(e) => this.handleFormSubmit(e)} type="submit" value="Save" className="btn btn-primary"/>
           &nbsp;
-          <Link to="/" className="btn btn-default">Cancel</Link>
+          {(this.props.editMode)
+            ? <Link to={'/accounts/' + this.props.data.id} className="btn btn-default">Cancel</Link>
+            : <Link to="/" className="btn btn-default">Cancel</Link>
+          }
           &nbsp;
           {spinner}
         </form>

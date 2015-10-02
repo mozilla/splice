@@ -1,6 +1,8 @@
 import {
   REQUEST_CREATE_CAMPAIGN,
   RECEIVE_CREATE_CAMPAIGN,
+  REQUEST_UPDATE_CAMPAIGN,
+  RECEIVE_UPDATE_CAMPAIGN,
   REQUEST_CAMPAIGNS,
   RECEIVE_CAMPAIGNS,
   REQUEST_CAMPAIGN,
@@ -21,6 +23,14 @@ export function Campaign(state = initialState, action = null) {
         isSaving: true
       });
     case RECEIVE_CREATE_CAMPAIGN:
+      return _.assign({}, state, {
+        isSaving: false
+      });
+    case REQUEST_UPDATE_CAMPAIGN:
+      return _.assign({}, state, {
+        isSaving: true
+      });
+    case RECEIVE_UPDATE_CAMPAIGN:
       return _.assign({}, state, {
         isSaving: false
       });

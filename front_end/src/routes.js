@@ -18,6 +18,7 @@ import {
   CampaignsPage,
   CampaignViewPage,
   CampaignCreatePage,
+  CampaignEditPage,
   CampaignBulkUploadPage,
   AdGroupsPage,
   AdGroupViewPage,
@@ -42,6 +43,7 @@ export default class App extends Component {
 
           <Route path="campaigns" title="Campaigns" component={CampaignsPage}></Route>
           <Route path="campaigns/:campaignId" title="Campaign View" component={CampaignViewPage}></Route>
+          <Route path="campaigns/:campaignId/Edit" title="Campaign Edit" component={CampaignEditPage}></Route>
           <Route path="campaigns/:campaignId/bulkupload" title="Campaign Bulk Upload" component={CampaignBulkUploadPage}></Route>
 
           <Route path="adgroups" title="Ad Groups" component={AdGroupsPage}></Route>

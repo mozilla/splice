@@ -26,7 +26,7 @@ export default class CampaignDetails extends Component {
               {(data.paused) ? 'PAUSED' : 'ACTIVE'}
             </div>
             <div className="pull-left">
-              <div>{data.name} <Link to={'/campaigns/edit/' + data.id}> <i className="fa fa-pencil"></i></Link></div>
+              <div>{data.name} <Link to={'/campaigns/' + data.id + '/edit'}> <i className="fa fa-pencil"></i></Link></div>
               <p>ID: {data.id}</p>
             </div>
 
