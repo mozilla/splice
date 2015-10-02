@@ -1,6 +1,5 @@
 from flask import Blueprint
 from flask_restful import Api, Resource, marshal, fields, reqparse
-from flask_restful.utils import cors
 from sqlalchemy.exc import IntegrityError
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -10,9 +9,7 @@ from splice.queries.account import (
 
 
 account_bp = Blueprint('api.account', __name__, url_prefix='/api')
-api = Api(account_bp,
-          decorators=[cors.crossdomain(origin='*', headers=['Content-Type'])])
-
+api = Api(account_bp)
 
 account_fields = {
     'id': fields.Integer,
@@ -46,10 +43,6 @@ class AccountListAPI(Resource):
         accounts = get_accounts()
         return {"results": marshal(accounts, account_fields)}
 
-    def options(self):
-        """Placeholder for flask-restful cors"""
-        pass  # pragma: no cover
-
     def post(self):
         """Creates an account."""
         args = self.reqparse.parse_args()
@@ -79,10 +72,6 @@ class AccountAPI(Resource):
                                    store_missing=False)
 
         super(AccountAPI, self).__init__()
-
-    def options(self):
-        """Placeholder for flask-restful cors"""
-        pass  # pragma: no cover
 
     def get(self, account_id):
         account = get_account(account_id)
