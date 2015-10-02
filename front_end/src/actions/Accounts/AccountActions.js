@@ -10,6 +10,9 @@ if (typeof __DEVELOPMENT__ !== 'undefined' && __DEVELOPMENT__ === true) {
 export const REQUEST_CREATE_ACCOUNT = 'REQUEST_CREATE_ACCOUNT';
 export const RECEIVE_CREATE_ACCOUNT = 'RECEIVE_CREATE_ACCOUNT';
 
+export const REQUEST_UPDATE_ACCOUNT = 'REQUEST_UPDATE_ACCOUNT';
+export const RECEIVE_UPDATE_ACCOUNT = 'RECEIVE_UPDATE_ACCOUNT';
+
 export const REQUEST_ACCOUNTS = 'REQUEST_ACCOUNTS';
 export const RECEIVE_ACCOUNTS = 'RECEIVE_ACCOUNTS';
 
@@ -22,6 +25,14 @@ export function requestCreateAccount() {
 
 export function receiveCreateAccount() {
   return {type: RECEIVE_CREATE_ACCOUNT};
+}
+
+export function requestUpdateAccount() {
+  return {type: REQUEST_UPDATE_ACCOUNT};
+}
+
+export function receiveUpdateAccount() {
+  return {type: RECEIVE_UPDATE_ACCOUNT};
 }
 
 export function requestAccount() {
@@ -60,6 +71,28 @@ export function createAccount(data) {
       .then(response => response.json())
       .then((json) => new Promise(resolve => {
         dispatch(receiveCreateAccount());
+        resolve(json);
+      })
+    );
+  };
+}
+
+export function updateAccount(accountId, data) {
+  // thunk middleware knows how to handle functions
+  return function next(dispatch) {
+    dispatch(requestUpdateAccount());
+    // Return a promise to wait for
+    return fetch(apiUrl + '/api/accounts/' + accountId, {
+      method: 'put',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: data
+    })
+      .then(response => response.json())
+      .then((json) => new Promise(resolve => {
+        dispatch(receiveUpdateAccount());
         resolve(json);
       })
     );
