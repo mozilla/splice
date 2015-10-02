@@ -24,6 +24,7 @@ export function Campaign(state = initialState, action = null) {
       });
     case RECEIVE_CREATE_CAMPAIGN:
       return _.assign({}, state, {
+        rows: [action.json, ...state.rows],
         isSaving: false
       });
     case REQUEST_UPDATE_CAMPAIGN:
@@ -32,6 +33,7 @@ export function Campaign(state = initialState, action = null) {
       });
     case RECEIVE_UPDATE_CAMPAIGN:
       return _.assign({}, state, {
+        details: action.json,
         isSaving: false
       });
     case REQUEST_CAMPAIGNS:

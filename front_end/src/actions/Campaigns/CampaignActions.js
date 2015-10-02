@@ -23,16 +23,22 @@ export function requestCreateCampaign() {
   return {type: REQUEST_CREATE_CAMPAIGN};
 }
 
-export function receiveCreateCampaign() {
-  return {type: RECEIVE_CREATE_CAMPAIGN};
+export function receiveCreateCampaign(json) {
+  return {
+    type: RECEIVE_CREATE_CAMPAIGN,
+    json: json
+  };
 }
 
 export function requestUpdateCampaign() {
   return {type: REQUEST_UPDATE_CAMPAIGN};
 }
 
-export function receiveUpdateCampaign() {
-  return {type: RECEIVE_UPDATE_CAMPAIGN};
+export function receiveUpdateCampaign(json) {
+  return {
+    type: RECEIVE_UPDATE_CAMPAIGN,
+    json: json
+  };
 }
 
 export function requestCampaign() {
@@ -70,7 +76,7 @@ export function createCampaign(data) {
     })
       .then(response => response.json())
       .then((json) => new Promise(resolve => {
-        dispatch(receiveCreateCampaign());
+        dispatch(receiveCreateCampaign(json.result));
         resolve(json);
       })
     );
@@ -92,7 +98,7 @@ export function updateCampaign(campaignId, data) {
     })
       .then(response => response.json())
       .then((json) => new Promise(resolve => {
-        dispatch(receiveUpdateCampaign());
+        dispatch(receiveUpdateCampaign(json.result));
         resolve(json);
       })
     );
