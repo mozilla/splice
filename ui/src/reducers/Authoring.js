@@ -3,7 +3,9 @@ import {
   REQUEST_INIT_DATA,
   RECEIVE_INIT_DATA,
   AUTHORING_SELECT_CHANNEL,
-  LOAD_DISTRIBUTION_FILE
+  LOAD_DISTRIBUTION_FILE_START,
+  LOAD_DISTRIBUTION_FILE_ERROR,
+  LOAD_DISTRIBUTION_FILE_SUCCESS
 } from '../actions/Authoring';
 
 function selectedChannel(state = 'desktop', action) {
@@ -45,7 +47,37 @@ function initData(state = {
   }
 }
 
+function distribution(state = {
+  isLoaded: false,
+  isLoading: false,
+  errorMessage: null
+}, action) {
+  switch (action.type) {
+  case LOAD_DISTRIBUTION_FILE_START:
+    return Object.assign({}, state, {
+      isLoaded: false,
+      isLoading: true,
+      errorMessage: null
+    });
+  case LOAD_DISTRIBUTION_FILE_ERROR:
+    return Object.assign({}, state, {
+      isLoaded: false,
+      isLoading: false,
+      errorMessage: 'Error loading distribution file'
+    });
+    case LOAD_DISTRIBUTION_FILE_SUCCESS:
+      return Object.assign({}, state, {
+        isLoaded: true,
+        isLoading: false,
+        errorMessage: null
+      });
+  default:
+    return state;
+  }
+}
+
 export const Authoring = combineReducers({
   initData,
-  selectedChannel
+  selectedChannel,
+  distribution
 });
