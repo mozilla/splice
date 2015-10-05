@@ -5,6 +5,8 @@ import { selectChannel, selectLocale, selectType, fetchInitDataIfNeeded, loadDis
 import FilePicker from '../components/FilePicker';
 import Picker from '../components/Picker';
 import Tiles from '../components/Tiles';
+import DateTime from 'react-datetime';
+import moment from 'moment';
 
 export default class Authoring extends Component {
   constructor(props) {
@@ -50,6 +52,11 @@ export default class Authoring extends Component {
       tiles
     } = this.props;
 
+    const yesterday = moment().subtract(1,'day');
+    function isValidDate(current) {
+      return current.isAfter(yesterday);
+    }
+
     return (
       <div>
         <h1>Authoring</h1>
@@ -64,11 +71,11 @@ export default class Authoring extends Component {
 
         {initData.isLoaded &&
           <div>
-          <Picker title="Channel" value={selectedChannel}
-                  onChange={this.handleChannelChange}
-                  options={initData.channels.map(x => x.name)} />
+            <Picker title="Channel" value={selectedChannel}
+                    onChange={this.handleChannelChange}
+                    options={initData.channels.map(x => x.name)} />
 
-          <FilePicker title="Load a new distribution from file" onChange={this.handleNewDistribution} />
+            <FilePicker title="Load a new distribution from file" onChange={this.handleNewDistribution} />
           </div>
         }
 
@@ -78,6 +85,19 @@ export default class Authoring extends Component {
 
         {distribution.errorMessage &&
           <p className="error">{distribution.errorMessage}</p>
+        }
+
+        {distribution.isLoaded &&
+          <div>
+            <h2>Publish Distribution:</h2>
+            <label>Datetime:</label>
+            <DateTime isValidDate={isValidDate} />
+            <button>Publish</button>
+          </div>
+        }
+
+        {distribution.isLoaded &&
+          <h2>Distribution Preview:</h2>
         }
 
         {selectedLocale &&

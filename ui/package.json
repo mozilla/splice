@@ -17,7 +17,9 @@
   "dependencies": {
     "history": "^1.9.1",
     "isomorphic-fetch": "^2.1.1",
+    "moment": "^2.10.6",
     "react": "^0.13.3",
+    "react-datetime": "^1.2.1",
     "react-redux": "^2.1.2",
     "react-router": "1.0.0-rc1",
     "redux": "^3.0.0",
