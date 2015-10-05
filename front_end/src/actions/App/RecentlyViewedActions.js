@@ -16,7 +16,7 @@ export function fetchRecentlyViewed() {
 
 export function saveRecentlyViewed(title, context) {
   //Limit recentlyViewed
-  const limit = 10;
+  const limit = 5;
   let recents = Cookie.load('recentlyViewed');
 
   if (recents === undefined) {

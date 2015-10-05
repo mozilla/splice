@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
+import { formatPsDateTime } from 'helpers/ViewHelpers';
+
 export default class AccountDetails extends Component {
   render() {
     const data = this.props.Account.details;
@@ -9,17 +11,18 @@ export default class AccountDetails extends Component {
     if (this.props.Account.isFetching === false) {
       details = (
         <div className="panel panel-default">
-          <div className="panel-heading">Account - {data.name}
-            <Link to={'/accounts/edit/' + data.id}> <i className="fa fa-pencil"></i></Link>
+          <div className="panel-heading">{data.name}
+            <Link to={'/accounts/' + data.id + '/edit/'}> <i className="fa fa-pencil"></i></Link>
+            <p>ID: {data.id}</p>
           </div>
           <div className="panel-body">
-            <p>Account ID: {data.id}</p>
+            <p><strong>Contact:</strong> {data.contact_name}</p>
 
-            <p>{data.phone}</p>
+            <p><strong>Phone:</strong> {data.contact_phone}</p>
 
-            <p>{data.email}</p>
+            <p><strong>Email:</strong> {data.contact_email}</p>
 
-            <p>Account Currency:</p>
+            <p><strong>Created:</strong> {formatPsDateTime(data.created_at, 'M/D/YYYY')}</p>
           </div>
         </div>
       );

@@ -9,8 +9,9 @@ export default class CampaignRow extends Component {
       <tr>
         <td>{this.props.id}</td>
         <td><Link to={'/campaigns/' + this.props.id}>{this.props.name}</Link></td>
-        <td>{this.props.status}</td>
-        <td>{formatPsDateTime(this.props.created_at, 'M/D/YYYY h:mma')}</td>
+        <td>{this.props.channel_id}</td>
+        <td>{(this.props.paused) ? 'Paused' : 'Active'}</td>
+        <td>{formatPsDateTime(this.props.created_at, 'M/D/YYYY')}</td>
       </tr>
     );
   }
@@ -19,6 +20,7 @@ export default class CampaignRow extends Component {
 CampaignRow.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
+  channel_id: PropTypes.number.isRequired,
+  paused: PropTypes.bool.isRequired,
   created_at: PropTypes.string.isRequired
 };

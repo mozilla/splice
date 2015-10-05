@@ -1,6 +1,8 @@
 import {
-  REQUEST_ADD_CAMPAIGN,
-  RECEIVE_ADD_CAMPAIGN,
+  REQUEST_CREATE_CAMPAIGN,
+  RECEIVE_CREATE_CAMPAIGN,
+  REQUEST_UPDATE_CAMPAIGN,
+  RECEIVE_UPDATE_CAMPAIGN,
   REQUEST_CAMPAIGNS,
   RECEIVE_CAMPAIGNS,
   REQUEST_CAMPAIGN,
@@ -16,13 +18,30 @@ const initialState = {
 
 export function Campaign(state = initialState, action = null) {
   switch (action.type) {
-    case REQUEST_ADD_CAMPAIGN:
+    case REQUEST_CREATE_CAMPAIGN:
       return _.assign({}, state, {
         isSaving: true
       });
-    case RECEIVE_ADD_CAMPAIGN:
+    case RECEIVE_CREATE_CAMPAIGN:
+      let rows = state.rows;
+      if(action.json !== null){
+        rows = [action.json, ...state.rows];
+      }
       return _.assign({}, state, {
-        rows: [...state.rows, action.json],
+        rows: rows,
+        isSaving: false
+      });
+    case REQUEST_UPDATE_CAMPAIGN:
+      return _.assign({}, state, {
+        isSaving: true
+      });
+    case RECEIVE_UPDATE_CAMPAIGN:
+      let details = state.details;
+      if(action.json !== null){
+        details = action.json;
+      }
+      return _.assign({}, state, {
+        details: details,
         isSaving: false
       });
     case REQUEST_CAMPAIGNS:

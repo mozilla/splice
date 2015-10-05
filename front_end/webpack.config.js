@@ -45,7 +45,6 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin('public/css/styles.css'),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({

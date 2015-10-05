@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
-import { fetchAccount } from 'actions/Accounts/AccountActions';
-import { fetchCampaigns } from 'actions/Campaigns/CampaignActions';
+import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
 import AccountDetails from 'components/Accounts/AccountDetails/AccountDetails';
 import CampaignList from 'components/Campaigns/CampaignList/CampaignList';
@@ -25,13 +24,14 @@ export default class AccountViewPage extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-xs-6">
             <h1>Account</h1>
             <AccountDetails Account={this.props.Account}/>
           </div>
         </div>
         <br/>
-        <strong>Campaigns</strong>
+        <p><Link className="btn btn-default" to={'/accounts/' + this.props.Account.details.id + '/createcampaign'}>Create Campaign <i className="fa fa-plus"></i></Link></p>
+        <div><strong>Campaigns</strong></div>
         <CampaignList rows={this.props.Campaign.rows}
                       isFetching={this.props.Campaign.isFetching}/>
       </div>
@@ -40,14 +40,17 @@ export default class AccountViewPage extends Component {
 
   fetchAccountDetails(props) {
     const { dispatch } = props;
-    const data = props.Account.details;
-    const accountId = parseInt(props.params.accountId, 10);
 
     updateDocTitle('Account View');
 
-    dispatch(fetchAccount(accountId)).then(() => {
-      pageVisit('Account - ' + this.props.Account.details.name, this);
-      dispatch(fetchCampaigns(this.props.Account.details.id));
+    dispatch(fetchHierarchy('account', props))
+      .catch(function(){
+        props.history.pushState(null, '/error404');
+      })
+      .then(() => {
+        if(this.props.Account.details.name !== undefined){
+          pageVisit('Account - ' + this.props.Account.details.name, this);
+        }
     });
   }
 }

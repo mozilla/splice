@@ -23,7 +23,9 @@ export default class AdGroupList extends Component {
           <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Locale</th>
             <th>Type</th>
+            <th>Status</th>
             <th>Created</th>
           </tr>
           </thead>

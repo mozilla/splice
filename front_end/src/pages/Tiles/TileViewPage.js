@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 
 import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
 
-import { fetchTile } from 'actions/Tiles/TileActions';
+import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
 import TileDetails from 'components/Tiles/TileDetails/TileDetails';
 
@@ -24,7 +24,7 @@ export default class TileViewPage extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-xs-6">
             <h1>Tile</h1>
             <TileDetails Tile={this.props.Tile}/>
           </div>
@@ -35,12 +35,10 @@ export default class TileViewPage extends Component {
 
   fetchTileDetails(props) {
     const { dispatch } = props;
-    const data = props.Tile.details;
-    const tileId = parseInt(props.params.tileId, 10);
 
     updateDocTitle('Tile View');
 
-    dispatch(fetchTile(tileId)).then(() => {
+    dispatch(fetchHierarchy('tile', props)).then(() => {
       pageVisit('Tile - ' + this.props.Tile.details.title, this);
     });
   }
@@ -51,6 +49,8 @@ TileViewPage.propTypes = {};
 function select(state) {
   return {
     Account: state.Account,
+    Campaign: state.Campaign,
+    AdGroup: state.AdGroup,
     Tile: state.Tile
   };
 }

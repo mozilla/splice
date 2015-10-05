@@ -1,6 +1,8 @@
 import {
-  REQUEST_ADD_ACCOUNT,
-  RECEIVE_ADD_ACCOUNT,
+  REQUEST_CREATE_ACCOUNT,
+  RECEIVE_CREATE_ACCOUNT,
+  REQUEST_UPDATE_ACCOUNT,
+  RECEIVE_UPDATE_ACCOUNT,
   REQUEST_ACCOUNTS,
   RECEIVE_ACCOUNTS,
   REQUEST_ACCOUNT,
@@ -16,13 +18,30 @@ const initialState = {
 
 export function Account(state = initialState, action = null) {
   switch (action.type) {
-    case REQUEST_ADD_ACCOUNT:
+    case REQUEST_CREATE_ACCOUNT:
       return _.assign({}, state, {
         isSaving: true
       });
-    case RECEIVE_ADD_ACCOUNT:
+    case RECEIVE_CREATE_ACCOUNT:
+      let rows = state.rows;
+      if(action.json !== null){
+        rows = [action.json, ...state.rows];
+      }
       return _.assign({}, state, {
-        rows: [...state.rows, action.json],
+        rows: rows,
+        isSaving: false
+      });
+    case REQUEST_UPDATE_ACCOUNT:
+      return _.assign({}, state, {
+        isSaving: true
+      });
+    case RECEIVE_UPDATE_ACCOUNT:
+      let details = state.details;
+      if(action.json !== null){
+        details = action.json;
+      }
+      return _.assign({}, state, {
+        details: details,
         isSaving: false
       });
     case REQUEST_ACCOUNTS:

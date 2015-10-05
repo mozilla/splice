@@ -31,11 +31,11 @@ describe('Account ', () => {
     );
   });
 
-  it('should handle RECEIVE_ADD_ACCOUNT', () => {
+  it('should handle RECEIVE_CREATE_ACCOUNT', () => {
     //Test adding to initial state
     expect(
       Account(undefined, {
-        type: types.RECEIVE_ADD_ACCOUNT,
+        type: types.RECEIVE_CREATE_ACCOUNT,
         json: {text: "Run the tests"}
       }).rows
     ).toEqual([
@@ -51,14 +51,28 @@ describe('Account ', () => {
           {text: "Run the tests"}
         ]
       }, {
-        type: types.RECEIVE_ADD_ACCOUNT,
+        type: types.RECEIVE_CREATE_ACCOUNT,
         json: {text: "Last test"}
       }).rows
     ).toEqual([
+        {text: "Last test"},
         {text: "Use Redux"},
         {text: "Learn to connect it to React"},
-        {text: "Run the tests"},
-        {text: "Last test"},
+        {text: "Run the tests"}
       ]);
+  });
+
+  it('should handle RECEIVE_UPDATE_ACCOUNT', () => {
+    //Test Updating when state is explicitly set
+    expect(
+      Account({
+        details: {name: "test"}
+      }, {
+        type: types.RECEIVE_UPDATE_ACCOUNT,
+        json: {name: "new name"}
+      }).details
+    ).toEqual(
+      {name: "new name"}
+    );
   });
 });

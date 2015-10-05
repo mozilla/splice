@@ -5,8 +5,7 @@ import { Link } from 'react-router';
 
 import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
 
-import { fetchAdGroup } from 'actions/AdGroups/AdGroupActions';
-import { fetchTiles } from 'actions/Tiles/TileActions';
+import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
 import AdGroupDetails from 'components/AdGroups/AdGroupDetails/AdGroupDetails';
 import TileList from 'components/Tiles/TileList/TileList';
@@ -26,7 +25,7 @@ export default class AdGroupViewPage extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-xs-6">
             <h1>Ad Group</h1>
             <AdGroupDetails AdGroup={this.props.AdGroup}/>
           </div>
@@ -41,14 +40,11 @@ export default class AdGroupViewPage extends Component {
 
   fetchAdGroupDetails(props) {
     const { dispatch } = props;
-    const data = props.AdGroup.details;
-    const adGroupId = parseInt(props.params.adGroupId, 10);
 
     updateDocTitle('Ad Group View');
 
-    dispatch(fetchAdGroup(adGroupId)).then(() => {
+    dispatch(fetchHierarchy('adGroup', props)).then(() => {
       pageVisit('Ad Group - ' + this.props.AdGroup.details.name, this);
-      dispatch(fetchTiles(this.props.AdGroup.details.id));
     });
   }
 }
