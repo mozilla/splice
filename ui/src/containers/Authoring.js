@@ -69,53 +69,62 @@ export default class Authoring extends Component {
 
         {initData.isLoaded &&
           <div>
-            <Picker title="Channel" value={selectedChannel}
-                    onChange={this.handleChannelChange}
-                    options={initData.channels.map(x => x.name)} />
+            <div id="env" className={initData.env + ' container'}>
+              <label>Environment:</label>
+              <span>{initData.env}</span>
+            </div>
 
-            <FilePicker title="Load a new distribution from file" onChange={this.handleNewDistribution} />
+            <div id="distribution-picker" className="container">
+              <Picker title="Channel" value={selectedChannel}
+                      onChange={this.handleChannelChange}
+                      options={initData.channels.map(x => x.name)} />
+
+              <FilePicker title="Load a new distribution from file" onChange={this.handleNewDistribution} />
+            </div>
           </div>
         }
 
-        {distribution.isLoading &&
-          <p className="status">Loading the distribution...</p>
-        }
+        <div className="container">
+          {distribution.isLoading &&
+            <p className="status">Loading the distribution...</p>
+          }
 
-        {distribution.errorMessage &&
-          <p className="error">{distribution.errorMessage}</p>
-        }
+          {distribution.errorMessage &&
+            <p className="error">{distribution.errorMessage}</p>
+          }
 
-        {distribution.isLoaded &&
-          <div>
-            <h2>Publish Distribution:</h2>
-            <label>Datetime:</label>
-            <DateTime isValidDate={isValidDate} />
-            <button>Publish</button>
-          </div>
-        }
+          {distribution.isLoaded &&
+            <div>
+              <h2>Publish Distribution:</h2>
+              <label>Datetime:</label>
+              <DateTime isValidDate={isValidDate} />
+              <button>Publish</button>
+            </div>
+          }
 
-        {distribution.isLoaded &&
-          <h2>Distribution Preview:</h2>
-        }
+          {distribution.isLoaded &&
+            <h2>Distribution Preview:</h2>
+          }
 
-        {selectedLocale &&
-          <Picker title="Country/Locale" value={selectedLocale}
-                  onChange={this.handleLocaleChange}
-                  options={Object.keys(distribution.tiles.ui)} />
-        }
-        {selectedType &&
-          <Picker title="Type" value={selectedType}
-                  onChange={this.handleTypeChange}
-                  options={types} />
-        }
+          {selectedLocale &&
+            <Picker title="Country/Locale" value={selectedLocale}
+                    onChange={this.handleLocaleChange}
+                    options={Object.keys(distribution.tiles.ui)} />
+          }
+          {selectedType &&
+            <Picker title="Type" value={selectedType}
+                    onChange={this.handleTypeChange}
+                    options={types} />
+          }
 
-        {distribution.isLoaded && tiles &&
-          tiles.length + ' tiles'
-        }
+          {distribution.isLoaded && tiles &&
+            tiles.length + ' tiles'
+          }
 
-        {tiles && tiles.length > 0 &&
-          <Tiles tiles={tiles} tilesType={selectedType} />
-        }
+          {tiles && tiles.length > 0 &&
+            <Tiles tiles={tiles} tilesType={selectedType} />
+          }
+        </div>
       </div>
     );
   }

@@ -5,7 +5,7 @@ export default class Picker extends Component {
     const { title, value, onChange, options } = this.props;
 
     return (
-      <span>
+      <span className="picker">
         <label>{title + ':'}</label>
         <select onChange={e => onChange(e.target.value)}
                 value={value}>

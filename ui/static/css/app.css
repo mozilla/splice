@@ -1,3 +1,9 @@
+label {
+  font-size: 13px;
+  font-weight: bold;
+  margin: 0 15px 0 0;
+}
+
 #page {
 
 }
@@ -47,6 +53,43 @@
 
 #view {
   padding: 25px
+}
+
+.container {
+  padding: 15px;
+}
+
+#env.dev,
+#env.test {
+  background: linear-gradient(to bottom, #D9EDF7 0px, #B9DEF0 100%);
+}
+
+#env.stage {
+  background: linear-gradient(to bottom, #FCF8E3 0px, #F8EFC0 100%);
+}
+
+#env.prod {
+  background: linear-gradient(to bottom, #F2DEDE 0px, #E7C3C3 100%);
+}
+
+.picker {
+  display: block;
+  padding: 10px 0;
+}
+
+/* error and status messages */
+p.status {
+  background: linear-gradient(to bottom, #FCF8E3 0px, #F8EFC0 100%);
+  border: solid 1px yellow;
+  margin: 0;
+  padding: 10px 15px;
+}
+
+p.error {
+  background: linear-gradient(to bottom, #F2DEDE 0px, #E7C3C3 100%);
+  border: solid 1px red;
+  margin: 0;
+  padding: 10px 15px;
 }
 
 
