@@ -59,8 +59,6 @@ export default class Authoring extends Component {
 
     return (
       <div>
-        <h1>Authoring</h1>
-
         {initData.isFetching &&
           <p className="status">Loading init data...</p>
         }
