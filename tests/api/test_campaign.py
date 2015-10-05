@@ -19,6 +19,8 @@ class TestCampaignAPI(BaseTestCase):
             'paused': False,
             'account_id': 1,
             'channel_id': 1,
+            'start_date': '2015-09-30T14:04:55+00:00',
+            'end_date': '2015-10-30T14:04:55+00:00',
             'countries': ['CA', 'US'],
         }
 
@@ -65,14 +67,18 @@ class TestCampaignAPI(BaseTestCase):
         data = json.dumps(self.campaign_data)
         response = self.client.post(url, data=data, content_type='application/json')
         assert_equal(response.status_code, 201)
-        campaign_id = json.loads(response.data)['result']['id']
+        new_campaign = json.loads(response.data)['result']
 
         # Verify the right data was stored to DB.
-        campaign = get_campaign(campaign_id)
-        for field in ['name', 'account_id', 'channel_id', 'countries', 'paused']:
-            assert_equal(campaign[field], self.campaign_data[field])
+        url = url_for('api.campaign.campaign', campaign_id=new_campaign['id'])
+        response = self.client.get(url)
+        assert_equal(response.status_code, 200)
+        resp = json.loads(response.data)
+        campaign = resp['result']
+        assert_equal(campaign, new_campaign)
 
         # Posting again with same name should fail with a 400.
+        url = url_for('api.campaign.campaigns')
         response = self.client.post(url, data=data, content_type='application/json')
         assert_equal(response.status_code, 400)
 
@@ -93,12 +99,15 @@ class TestCampaignAPI(BaseTestCase):
 
     def test_put_campaign(self):
         """Test updating a campaign via API (PUT)."""
+        from flask_restful.inputs import datetime_from_iso8601
         new_campaign_data = {
             'name': 'New Campaign Name',
             'paused': True,
             'account_id': 2,
             'channel_id': 2,
             'countries': ['CA', 'FR'],
+            'start_date': '2015-10-30T14:04:55+00:00',
+            'end_date': '2015-12-30T14:04:55+00:00',
         }
 
         # Create a new campaign.
@@ -115,3 +124,5 @@ class TestCampaignAPI(BaseTestCase):
         campaign = get_campaign(campaign_id)
         for field in ['name', 'account_id', 'channel_id', 'paused', 'countries']:
             assert_equal(campaign[field], new_campaign_data[field])
+        for field in ['start_date', 'end_date']:
+            assert_equal(campaign[field], datetime_from_iso8601(new_campaign_data[field]))

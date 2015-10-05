@@ -25,7 +25,7 @@ adgroup_fields = {
     'frequency_cap_daily': fields.Integer,
     'frequency_cap_total': fields.Integer,
     'paused': fields.Boolean,
-    'created_at': fields.DateTime
+    'created_at': fields.DateTime(dt_format='iso8601')
 }
 
 

@@ -23,7 +23,7 @@ tile_fields = {
     'status': fields.String,
     'image_uri': fields.String,
     'enhanced_image_uri': fields.String,
-    'created_at': fields.DateTime,
+    'created_at': fields.DateTime(dt_format='iso8601'),
     'bg_color': fields.String,
     'paused': fields.Boolean,
     'title_bg_color': fields.String
