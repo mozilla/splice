@@ -1,8 +1,11 @@
 import { combineReducers } from 'redux';
 import {
-  REQUEST_INIT_DATA,
-  RECEIVE_INIT_DATA,
+  INIT_DATA_START,
+  INIT_DATA_SUCCESS,
+  INIT_DATA_ERROR,
   AUTHORING_SELECT_CHANNEL,
+  AUTHORING_SELECT_LOCALE,
+  AUTHORING_SELECT_TYPE,
   LOAD_DISTRIBUTION_FILE_START,
   LOAD_DISTRIBUTION_FILE_ERROR,
   LOAD_DISTRIBUTION_FILE_SUCCESS
@@ -21,6 +24,7 @@ function initData(state = {
   url: '/api/authoring/init_data',
   isLoaded: false,
   isFetching: false,
+  errorMessage: null,
   env: null,
   channels: [],
   distributions: {},
@@ -28,11 +32,16 @@ function initData(state = {
   lastUpdated: null
 }, action) {
   switch (action.type) {
-  case REQUEST_INIT_DATA:
+  case INIT_DATA_START:
     return Object.assign({}, state, {
       isFetching: true
     });
-  case RECEIVE_INIT_DATA:
+  case INIT_DATA_ERROR:
+    return Object.assign({}, state, {
+      isFetching: false,
+      errorMessage: action.message
+    });
+  case INIT_DATA_SUCCESS:
     return Object.assign({}, state, {
       isFetching: false,
       isLoaded: true,
@@ -50,26 +59,44 @@ function initData(state = {
 function distribution(state = {
   isLoaded: false,
   isLoading: false,
-  errorMessage: null
+  errorMessage: null,
+  selectedLocale: null,
+  selectedType: null,
+  tiles: {}
 }, action) {
   switch (action.type) {
   case LOAD_DISTRIBUTION_FILE_START:
     return Object.assign({}, state, {
       isLoaded: false,
       isLoading: true,
-      errorMessage: null
+      errorMessage: null,
+      selectedLocale: null,
+      selectedType: null,
+      tiles: {}
     });
   case LOAD_DISTRIBUTION_FILE_ERROR:
     return Object.assign({}, state, {
       isLoaded: false,
       isLoading: false,
-      errorMessage: 'Error loading distribution file'
+      errorMessage: action.message,
+      tiles: {}
     });
     case LOAD_DISTRIBUTION_FILE_SUCCESS:
       return Object.assign({}, state, {
         isLoaded: true,
         isLoading: false,
-        errorMessage: null
+        errorMessage: null,
+        selectedLocale: Object.keys(action.tiles)[0],
+        selectedType: 'directory',
+        tiles: action.tiles
+      });
+    case AUTHORING_SELECT_LOCALE:
+      return Object.assign({}, state, {
+        selectedLocale: action.locale
+      });
+    case AUTHORING_SELECT_TYPE:
+      return Object.assign({}, state, {
+        selectedType: action.tileType
       });
   default:
     return state;

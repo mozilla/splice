@@ -106,7 +106,7 @@ function mapStateToProps(state) {
   const { locales } = channels[selectedChannel];
   const types = ['suggested', 'directory'];
   var tiles = [];
-  if (selectedChannel && selectedChannel && selectedLocale &&
+  if (selectedChannel && selectedLocale && selectedType &&
       state.WebtilesPreviewer.channels[selectedChannel].locales) {
     tiles = state.WebtilesPreviewer.channels[selectedChannel].locales[selectedLocale][selectedType + 'Tiles'];
   }
