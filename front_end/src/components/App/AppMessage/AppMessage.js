@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
-import { shownMessage } from 'actions/App/AppActions';
+import { shownMessage, removeMessage } from 'actions/App/AppActions';
+
+global.$ = require('jquery');
 
 export default class AppMessage extends Component {
   render() {
@@ -9,23 +11,32 @@ export default class AppMessage extends Component {
 
     let message;
     if(this.props.message.display){
-      let className;
+      let bgClass;
+      let textClass;
       switch(this.props.message.type){
         case 'success':
-          className = 'bg-success text-success';
+          bgClass = 'bg-success';
+          textClass = 'text-success';
           break;
         case 'error':
-          className = 'bg-danger text-danger';
+          bgClass = 'bg-danger';
+          textClass = 'text-danger';
           break;
         default:
-          className = 'bg-warning text-warning';
+          bgClass = 'bg-warning';
+          textClass = 'text-warning';
           break;
       }
 
       message = (
         <div className={'panel panel-default'}>
-          <div className={'panel-body ' + className}>
-            {this.props.message.body}
+          <div className={'panel-body ' + bgClass + ' ' + textClass}>
+            <div className="col-xs-11">
+              {this.props.message.body}
+            </div>
+            <div className="col-xs-1 text-right">
+              <a href="#" onClick={e => this.handleCloseClick(e)} className={textClass}><i className="fa fa-close"></i></a>
+            </div>
           </div>
         </div>
       );
@@ -36,5 +47,10 @@ export default class AppMessage extends Component {
         {message}
       </ReactCSSTransitionGroup>
     );
+  }
+
+  handleCloseClick(e){
+    e.preventDefault();
+    this.props.dispatch(removeMessage());
   }
 }
