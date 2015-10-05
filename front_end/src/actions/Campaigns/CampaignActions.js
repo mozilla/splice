@@ -75,7 +75,7 @@ export function createCampaign(data) {
       body: data
     })
       .then(response => response.json())
-      .then((json) => new Promise(resolve => {
+      .then(json => new Promise(resolve => {
         if(json.result !== undefined){
           dispatch(receiveCreateCampaign(json.result));
         }
@@ -102,7 +102,7 @@ export function updateCampaign(campaignId, data) {
       body: data
     })
       .then(response => response.json())
-      .then((json) => new Promise(resolve => {
+      .then(json => new Promise(resolve => {
         if(json.result !== undefined){
           dispatch(receiveUpdateCampaign(json.result));
         }
