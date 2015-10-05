@@ -1,7 +1,7 @@
 import jsonschema
 
 from flask import Blueprint
-from flask_restful import Api, Resource, marshal, fields, reqparse
+from flask_restful import Api, Resource, marshal, fields, reqparse, inputs
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from splice.schemas import API_TILE_SCHEMA_POST, API_TILE_SCHEMA_PUT
@@ -53,7 +53,7 @@ class TileListAPI(Resource):
                                    help='Background color', location='json')
         self.reqparse.add_argument('title_bg_color', type=str, default="",
                                    help='Background color of title', location='json')
-        self.reqparse.add_argument('paused', type=bool, required=True,
+        self.reqparse.add_argument('paused', type=inputs.boolean, required=True,
                                    help='Tile status', location='json')
         self.reqparse_get = reqparse.RequestParser()
         self.reqparse_get.add_argument('adgroup_id', type=int, required=True,
@@ -92,7 +92,7 @@ class TileAPI(Resource):
         self.reqparse.add_argument('status', type=str, required=False,
                                    choices=Tile.STATUS, store_missing=False,
                                    help='Tile approval state', location='json')
-        self.reqparse.add_argument('paused', type=bool, required=False,
+        self.reqparse.add_argument('paused', type=inputs.boolean, required=False,
                                    help='Tile status', location='json',
                                    store_missing=False)
         self.reqparse.add_argument('bg_color', type=str, required=False, store_missing=False,

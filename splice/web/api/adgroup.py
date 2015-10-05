@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_restful import Api, Resource, marshal, fields, reqparse
+from flask_restful import Api, Resource, marshal, fields, reqparse, inputs
 
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
@@ -54,7 +54,7 @@ class AdgroupListAPI(Resource):
                                    help='Adgroup type', location='json')
         self.reqparse.add_argument('categories', type=list, default=[],
                                    help='Category of suggested tile', location='json')
-        self.reqparse.add_argument('paused', type=bool, required=True,
+        self.reqparse.add_argument('paused', type=inputs.boolean, required=True,
                                    help='Campaign status', location='json')
         self.reqparse_get = reqparse.RequestParser()
         self.reqparse_get.add_argument('campaign_id', type=int, required=True,
@@ -101,7 +101,7 @@ class AdgroupAPI(Resource):
                                    help='Adgroup type', location='json')
         self.reqparse.add_argument('categories', type=list, default=[], store_missing=False,
                                    help='Category of suggested tile', location='json')
-        self.reqparse.add_argument('paused', type=bool, required=False,
+        self.reqparse.add_argument('paused', type=inputs.boolean, required=False,
                                    help='Adgroup status', location='json',
                                    store_missing=False)
         super(AdgroupAPI, self).__init__()
