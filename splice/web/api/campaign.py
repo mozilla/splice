@@ -1,7 +1,5 @@
-from datetime import datetime
-
 from flask import Blueprint
-from flask_restful import Api, Resource, marshal, fields, reqparse
+from flask_restful import Api, Resource, marshal, fields, reqparse, inputs
 from sqlalchemy.exc import IntegrityError
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -17,9 +15,9 @@ campaign_fields = {
     'id': fields.Integer,
     'name': fields.String,
     'countries': fields.List(fields.String),
-    'created_at': fields.DateTime,
-    'start_date': fields.DateTime,
-    'end_date': fields.DateTime,
+    'created_at': fields.DateTime(dt_format='iso8601'),
+    'start_date': fields.DateTime(dt_format='iso8601'),
+    'end_date': fields.DateTime(dt_format='iso8601'),
     'paused': fields.Boolean,
     'channel_id': fields.Integer,
     'account_id': fields.Integer,
@@ -33,10 +31,10 @@ campaign_parser.add_argument(
 campaign_parser.add_argument(
     'countries', type=list, required=True, default=["STAR"], help='List of countries', location='json')
 campaign_parser.add_argument(
-    'start_date', type=datetime, required=False, help='Start date', location='json',
+    'start_date', type=inputs.datetime_from_iso8601, required=False, help='Start date', location='json',
     store_missing=False)
 campaign_parser.add_argument(
-    'end_date', type=datetime, required=False, help='End date', location='json',
+    'end_date', type=inputs.datetime_from_iso8601, required=False, help='End date', location='json',
     store_missing=False)
 campaign_parser.add_argument(
     'paused', type=bool, required=True, help='Campaign status', location='json',

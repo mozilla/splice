@@ -14,7 +14,7 @@ api = Api(account_bp)
 account_fields = {
     'id': fields.Integer,
     'name': fields.String,
-    'created_at': fields.DateTime,
+    'created_at': fields.DateTime(dt_format='iso8601'),
     'contact_name': fields.String,
     'contact_email': fields.String,
     'contact_phone': fields.String,
