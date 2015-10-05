@@ -75,7 +75,7 @@ export function createAccount(data) {
       body: data
     })
       .then(response => response.json())
-      .then((json) => new Promise(resolve => {
+      .then(json => new Promise(resolve => {
         if(json.result !== undefined){
           dispatch(receiveCreateAccount(json.result));
         }
@@ -102,7 +102,7 @@ export function updateAccount(accountId, data) {
       body: data
     })
       .then(response => response.json())
-      .then((json) => new Promise(resolve => {
+      .then(json => new Promise(resolve => {
         if(json.result !== undefined){
           dispatch(receiveUpdateAccount(json.result));
         }
