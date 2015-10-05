@@ -10,6 +10,9 @@ export const AUTHORING_SELECT_TYPE = 'AUTHORING_SELECT_TYPE';
 export const LOAD_DISTRIBUTION_FILE_START = 'LOAD_DISTRIBUTION_FILE_START'
 export const LOAD_DISTRIBUTION_FILE_ERROR = 'LOAD_DISTRIBUTION_FILE_ERROR';
 export const LOAD_DISTRIBUTION_FILE_SUCCESS = 'LOAD_DISTRIBUTION_FILE_SUCCESS';
+export const AUTHORING_PUBLISH_START = 'AUTHORING_PUBLISH_START';
+export const AUTHORING_PUBLISH_SUCCESS = 'AUTHORING_PUBLISH_SUCCESS';
+export const AUTHORING_PUBLISH_ERROR = 'AUTHORING_PUBLISH_ERROR';
 
 function requestInitData() {
   return {
@@ -89,10 +92,12 @@ export function loadDistributionFile(file) {
   return (dispatch, getState) => {
     var reader = new FileReader();
 
-    reader.onerror = (e) => ({
-      type: LOAD_DISTRIBUTION_FILE_ERROR,
-      message: 'Error loading file.'
-    });
+    reader.onerror = (e) => {
+      dispatch((() => ({
+        type: LOAD_DISTRIBUTION_FILE_ERROR,
+        message: 'Error loading file.'
+      }))());
+    };
 
     reader.onload = () => {
       // Parse the file (JSON).
@@ -143,12 +148,13 @@ export function loadDistributionFile(file) {
   };
 }
 
+// Helper for processing distribution files
 function separateTilesTypes(data, assets) {
   // Separate Tiles types from a list of tiles in 2 groups: suggested, directory
   var output = {raw: data, ui: {}};
 
   for (var locale in output.raw) {
-    let tiles = data[locale];
+    var tiles = data[locale];
 
     output.ui[locale] = {
       suggestedTiles: [],
@@ -156,7 +162,7 @@ function separateTilesTypes(data, assets) {
     };
 
     for (var i = 0; i < tiles.length; i++) {
-      let tile = tiles[i];
+      var tile = tiles[i];
 
       // populate the imageURI and enhancedImageURI if tile is in compact format
       if (tile.hasOwnProperty('imageURI') && assets.hasOwnProperty(tile.imageURI)) {
@@ -176,3 +182,129 @@ function separateTilesTypes(data, assets) {
 
   return output;
 }
+
+export function publishDistribution() {
+  return (dispatch, getState) => {
+  /**
+   * Send tiles to backend for publication.
+   * Assumes data is correct.
+   */
+   dispatch((() => ({type: AUTHORING_PUBLISH_START}))());
+
+   var state = getState().Authoring;
+   var compressedTiles = compressPayload(state.distribution.tiles.raw);
+   var scheduled = state.distribution.scheduled;
+   var channelId = state.initData.channels.find((element, index, array) => {return element.name === state.selectedChannel;}).id;
+
+   // TODO: reimplement code with fetch
+
+  // spliceData.postTiles(compressPayload(tiles.raw), $scope.channelSelect.id, $scope.deployConfig)
+  //   .success(function(data) {
+  //     var deployed = data.deployed;
+  //     var msg = '<ol>';
+  //     for (var url of data.urls) {
+  //
+  //       var uploadStatus = "cached";
+  //       var uploadClass = "text-muted";
+  //
+  //       if (url[1] == true) {
+  //         uploadStatus = "new";
+  //         uploadClass = "text-success";
+  //       }
+  //
+  //       msg += '<li><strong class="' + uploadClass + '">' + uploadStatus + '</strong> <a href="' + url[0] + '">' + url[0] + '</a> </li>';
+  //     }
+  //     msg += '</ol>';
+  //     $scope.uploadMessage = {
+  //       success: true,
+  //       deployed: deployed,
+  //       msg: msg
+  //     };
+  //
+  //     var urls = data.urls;
+  //     $scope.deployConfig.now = false;
+  //     $scope.clearScheduledDate();
+  //     $scope.refreshDistributions();
+  //   })
+  //   .error(function(data, status, headers, config, statusText) {
+  //     var errors = data.err;
+  //     var msg = '<ol>';
+  //     if (errors != null) {
+  //       for (var error of errors) {
+  //         if (error.path) {
+  //           msg += "<li>In <strong>" + error.path + "</strong>: " + error.msg + "</li>";
+  //         }
+  //         else {
+  //           msg += "<li>" + error.msg + "</li>";
+  //         }
+  //       }
+  //     }
+  //     msg += "</ol>";
+  //     $scope.uploadMessage = {
+  //       success: false,
+  //       status: status,
+  //       statusText: statusText,
+  //       msg: msg,
+  //     };
+  //   }).finally(function() {
+  //     $scope.uploadInProgress = false;
+  //     $scope.uploadModal.$promise.then($scope.uploadModal.show);
+  //   });
+  };
+};
+
+// Helper for publishing tiles
+function cloneTile(tile) {
+  var copy = JSON.parse(JSON.stringify(tile));
+  return copy;
+};
+
+// Helper for publishing tiles
+function compressPayload(tiles) {
+  /* *
+   * compress the payload for publishing. Note that the tiles might be cached,
+   * therefore we create a copy here
+   */
+  var copies = {};
+  var uri2id = {};
+  var assets = {};
+  var id = 0;
+
+  for (var locale in tiles) {
+    copies[locale] = [];
+    var locale_tiles = tiles[locale];
+    for (var i = 0, len = locale_tiles.length; i < len; i++) {
+      var tile = locale_tiles[i];
+      var imageURI = tile.imageURI;
+      var copy = cloneTile(tile);
+
+      copies[locale].push(copy);
+      if (imageURI in uri2id) {
+        copy.imageURI = uri2id[imageURI];
+      } else {
+        uri2id[imageURI] = copy.imageURI = id.toString();
+        id++;
+      }
+      if (tile.hasOwnProperty('enhancedImageURI')) {
+        imageURI = tile.enhancedImageURI;
+        if (imageURI in uri2id) {
+          copy.enhancedImageURI = uri2id[imageURI];
+        } else {
+          uri2id[imageURI] = copy.enhancedImageURI = id.toString();
+          id++;
+        }
+      }
+    }
+  }
+
+  for (var uri in uri2id) {
+    if (uri2id.hasOwnProperty(uri)) {
+      assets[uri2id[uri]] = uri;
+    }
+  }
+
+  return {
+    assets,
+    distributions: copies
+  };
+};

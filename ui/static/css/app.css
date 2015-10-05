@@ -77,18 +77,23 @@ label {
   padding: 10px 0;
 }
 
+/* datetime picker */
+.rdt {
+  display: inline-block;
+}
+
 /* error and status messages */
 p.status {
   background: linear-gradient(to bottom, #FCF8E3 0px, #F8EFC0 100%);
   border: solid 1px yellow;
-  margin: 0;
+  margin: 10px 0;
   padding: 10px 15px;
 }
 
 p.error {
   background: linear-gradient(to bottom, #F2DEDE 0px, #E7C3C3 100%);
   border: solid 1px red;
-  margin: 0;
+  margin: 10px 0;
   padding: 10px 15px;
 }
 

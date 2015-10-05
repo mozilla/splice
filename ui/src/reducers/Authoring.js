@@ -8,7 +8,10 @@ import {
   AUTHORING_SELECT_TYPE,
   LOAD_DISTRIBUTION_FILE_START,
   LOAD_DISTRIBUTION_FILE_ERROR,
-  LOAD_DISTRIBUTION_FILE_SUCCESS
+  LOAD_DISTRIBUTION_FILE_SUCCESS,
+  AUTHORING_PUBLISH_START,
+  AUTHORING_PUBLISH_SUCCESS,
+  AUTHORING_PUBLISH_ERROR
 } from '../actions/Authoring';
 
 function selectedChannel(state = 'desktop', action) {
@@ -57,9 +60,12 @@ function initData(state = {
 }
 
 function distribution(state = {
+  publishUrl: '/api/authoring/all_tiles',
   isLoaded: false,
   isLoading: false,
+  isPublishing: false,
   errorMessage: null,
+  scheduled: '',
   selectedLocale: null,
   selectedType: null,
   tiles: {}
@@ -97,6 +103,19 @@ function distribution(state = {
     case AUTHORING_SELECT_TYPE:
       return Object.assign({}, state, {
         selectedType: action.tileType
+      });
+    case AUTHORING_PUBLISH_START:
+      return Object.assign({}, state, {
+        isPublishing: true
+      });
+    case AUTHORING_PUBLISH_ERROR:
+      return Object.assign({}, state, {
+        isPublishing: false,
+        errorMessage: action.message
+      });
+    case AUTHORING_PUBLISH_SUCCESS:
+      return Object.assign({}, state, {
+        isPublishing: false
       });
   default:
     return state;

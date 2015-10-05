@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { selectChannel, selectLocale, selectType, fetchInitDataIfNeeded, loadDistributionFile } from '../actions/Authoring';
+import { selectChannel, selectLocale, selectType, fetchInitDataIfNeeded, loadDistributionFile, publishDistribution } from '../actions/Authoring';
 import FilePicker from '../components/FilePicker';
 import Picker from '../components/Picker';
 import Tiles from '../components/Tiles';
@@ -15,6 +15,7 @@ export default class Authoring extends Component {
     this.handleLocaleChange = this.handleLocaleChange.bind(this);
     this.handleTypeChange = this.handleTypeChange.bind(this);
     this.handleNewDistribution = this.handleNewDistribution.bind(this);
+    this.handlePublish = this.handlePublish.bind(this);
   }
 
   componentDidMount() {
@@ -39,6 +40,10 @@ export default class Authoring extends Component {
 
   handleNewDistribution(file) {
     this.props.dispatch(loadDistributionFile(file));
+  }
+
+  handlePublish() {
+    this.props.dispatch(publishDistribution());
   }
 
   render () {
@@ -98,8 +103,12 @@ export default class Authoring extends Component {
               <h2>Publish Distribution:</h2>
               <label>Datetime:</label>
               <DateTime isValidDate={isValidDate} />
-              <button>Publish</button>
+              <button onClick={this.handlePublish}>Publish</button>
             </div>
+          }
+
+          {distribution.isPublishing &&
+            <p className="status">Compressing and publishing the distribution...</p>
           }
 
           {distribution.isLoaded &&
