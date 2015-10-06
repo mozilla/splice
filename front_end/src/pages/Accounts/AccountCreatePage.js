@@ -21,37 +21,10 @@ export default class AccountCreatePage extends Component {
         <h1>Create Account</h1>
         <div className="panel panel-default">
           <div className="panel-body">
-            <AccountForm isSaving={this.props.Account.isSaving} handleFormSubmit={(id) => this.handleFormSubmit(id)} data={{}} editMode={false} dispatch={this.props.dispatch}/>
+            <AccountForm isSaving={this.props.Account.isSaving} data={{}} editMode={false} dispatch={this.props.dispatch} history={this.props.history}/>
           </div>
         </div>
       </div>
-    );
-  }
-
-  handleFormSubmit(id){
-    const { dispatch } = this.props;
-    const props = this.props;
-    const context = this;
-
-    const data = JSON.stringify($(id).serializeJSON());
-
-    dispatch(createAccount(data))
-      .then(function(response){
-        if(response.result === undefined){
-          if(_.isString(response.message)){
-            dispatch(displayMessage('error', 'Error: ' + response.message) );
-          }
-          else{
-            dispatch(displayMessage('error', 'Error: Validation Errors') );
-          }
-          dispatch(shownMessage());
-        }
-        else{
-          dispatch(fetchAccounts());
-          dispatch(displayMessage('success', 'Account Created Successfully') );
-          props.history.pushState(null, '/accounts/' + response.result.id);
-        }
-      }
     );
   }
 }

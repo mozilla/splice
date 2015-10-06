@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import { displayMessage, shownMessage } from 'actions/App/AppActions';
+import { createAccount, updateAccount, fetchAccounts } from 'actions/Accounts/AccountActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
 
 window.$ = require('jquery');
@@ -60,7 +61,14 @@ export default class AccountForm extends Component {
     const form = $('#AccountForm').parsley();
 
     if(form.validate()){
-      this.props.handleFormSubmit('#AccountForm');
+      const data = JSON.stringify($('#AccountForm').serializeJSON());
+
+      if(this.props.editMode){
+        this.handleUpdate(data);
+      }
+      else{
+        this.handleCreate(data);
+      }
     }
     else{
       const { dispatch } = this.props;
@@ -68,12 +76,59 @@ export default class AccountForm extends Component {
       dispatch(shownMessage());
     }
   }
+
+  handleCreate(data){
+    const { dispatch } = this.props;
+    const context = this;
+
+    dispatch(createAccount(data))
+      .then(function(response){
+        context.handleResponse(response);
+      });
+  }
+
+  handleUpdate(data){
+    const { dispatch } = this.props;
+    const context = this;
+
+    dispatch(updateAccount(this.props.data.id, data))
+      .then(function(response){
+        context.handleResponse(response);
+      }
+    );
+  }
+
+  handleResponse(response){
+    const { dispatch, history } = this.props;
+
+    if(response.result === undefined){
+      if(_.isString(response.message)){
+        dispatch(displayMessage('error', 'Error: ' + response.message) );
+      }
+      else{
+        dispatch(displayMessage('error', 'Error: Validation Errors') );
+      }
+      dispatch(shownMessage());
+    }
+    else{
+      if(this.props.editMode){
+        dispatch(fetchAccounts());
+        dispatch(displayMessage('success', 'Account Updated Successfully') );
+        dispatch(shownMessage());
+      }
+      else{
+        dispatch(fetchAccounts());
+        dispatch(displayMessage('success', 'Account Created Successfully') );
+        history.pushState(null, '/accounts/' + response.result.id);
+      }
+    }
+  }
 }
 
 AccountForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
   editMode: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
-  handleFormSubmit: PropTypes.func.isRequired,
   isSaving: PropTypes.bool.isRequired
 };
