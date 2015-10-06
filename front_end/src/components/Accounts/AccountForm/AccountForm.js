@@ -7,6 +7,7 @@ import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
 
 window.$ = require('jquery');
 window.jQuery = $;
+require('jquery-serializejson');
 
 bindFormConfig();
 require('parsleyjs');

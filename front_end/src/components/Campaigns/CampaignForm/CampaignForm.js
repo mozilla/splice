@@ -4,12 +4,16 @@ import { Link } from 'react-router';
 import { displayMessage, shownMessage } from 'actions/App/AppActions';
 import { createCampaign, updateCampaign} from 'actions/Campaigns/CampaignActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
+import { formatDate, apiDate } from 'helpers/DateHelpers';
 import Moment from 'moment';
 
 window.$ = require('jquery');
 window.jQuery = $;
 require('select2');
 require('select2/dist/css/select2.min.css');
+require('eonasdan-bootstrap-datetimepicker');
+require('eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
+require('jquery-serializejson');
 
 bindFormConfig();
 require('parsleyjs');
@@ -19,6 +23,14 @@ require('../../../styles/app/forms.scss');
 export default class CampaignForm extends Component {
   componentDidMount() {
     $('#CampaignCountries').select2();
+
+    const options = {
+      useCurrent: false,
+      format: 'YYYY-MM-DD',
+      showTodayButton: true
+    };
+    $('#CampaignStartDate').datetimepicker(options);
+    $('#CampaignEndDate').datetimepicker(options);
 
     bindFormValidators();
   }
@@ -39,11 +51,11 @@ export default class CampaignForm extends Component {
           </div>
           <div className="form-group">
             <label htmlFor="CampaignStartDate">Start Date</label>
-            <input className="form-control" type="text" id="CampaignStartDate" name="start_date" ref="start_date" defaultValue={this.props.data.start_date} data-parsley-dateformat data-parsley-required />
+            <input className="form-control" type="text" id="CampaignStartDate" name="start_date" ref="start_date" defaultValue={formatDate(this.props.data.start_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
           </div>
           <div className="form-group">
             <label htmlFor="CampaignEndDate">End Date</label>
-            <input className="form-control" type="text" id="CampaignEndDate" name="end_date" ref="end_date" defaultValue={this.props.data.end_date} data-parsley-dateformat data-parsley-required />
+            <input className="form-control" type="text" id="CampaignEndDate" name="end_date" ref="end_date" defaultValue={formatDate(this.props.data.end_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
           </div>
           <div className="form-group">
             <label htmlFor="CampaignCountries">Countries</label><br/>
@@ -82,12 +94,12 @@ export default class CampaignForm extends Component {
     if(form.validate()){
       const formData = $('#CampaignForm').serializeJSON();
       if(formData.start_date.trim() !== ''){
-        //formData.start_date = Moment(formData.start_date).unix();
+        formData.start_date = apiDate(formData.start_date);
       }
       if(formData.end_date.trim() !== ''){
-        //formData.end_date = Moment(formData.end_date).unix();
+        formData.end_date = apiDate(formData.end_date);
       }
-      delete formData.start_date;
+      //delete formData.start_date;
       delete formData.end_date;
       formData.paused = false;
 

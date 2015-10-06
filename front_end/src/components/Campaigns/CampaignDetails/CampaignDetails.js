@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-import { formatPsDateTime } from 'helpers/ViewHelpers';
+import { formatDate } from 'helpers/DateHelpers';
 
 export default class CampaignDetails extends Component {
   render() {
@@ -37,11 +37,11 @@ export default class CampaignDetails extends Component {
 
             <p><strong>Countries:</strong> {countries}</p>
 
-            <p><strong>Start Date:</strong> {(data.start_date !== null) ? formatPsDateTime(data.start_date, 'M/D/YYYY') : ''}</p>
+            <p><strong>Start Date:</strong> {(data.start_date !== null) ? formatDate(data.start_date, 'M/D/YYYY') : ''}</p>
 
-            <p><strong>End Date:</strong> {(data.end_date !== null) ? formatPsDateTime(data.end_date, 'M/D/YYYY') : ''}</p>
+            <p><strong>End Date:</strong> {(data.end_date !== null) ? formatDate(data.end_date, 'M/D/YYYY') : ''}</p>
 
-            <p><strong>Created:</strong> {formatPsDateTime(data.created_at, 'M/D/YYYY')}</p>
+            <p><strong>Created:</strong> {formatDate(data.created_at, 'M/D/YYYY')}</p>
           </div>
         </div>
       );

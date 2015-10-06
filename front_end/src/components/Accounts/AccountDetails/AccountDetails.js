@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-import { formatPsDateTime } from 'helpers/ViewHelpers';
+import { formatDate } from 'helpers/DateHelpers';
 
 export default class AccountDetails extends Component {
   render() {
@@ -22,7 +22,7 @@ export default class AccountDetails extends Component {
 
             <p><strong>Email:</strong> {data.contact_email}</p>
 
-            <p><strong>Created:</strong> {formatPsDateTime(data.created_at, 'M/D/YYYY')}</p>
+            <p><strong>Created:</strong> {formatDate(data.created_at, 'M/D/YYYY')}</p>
           </div>
         </div>
       );
