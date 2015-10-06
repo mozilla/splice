@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import $ from 'jquery';
+
+window.$ = require('jquery');
 
 import SideBar from 'components/App/Navigation/SideBar.js';
 import './TopBar.scss';

@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-import $ from 'jquery';
-window.$ = $;
+window.$ = require('jquery');
 require('select2');
 require('select2/dist/css/select2.min.css');
 

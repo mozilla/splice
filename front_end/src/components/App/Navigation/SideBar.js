@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
-import $ from 'jquery';
+window.$ = require('jquery');
 import './SideBar.scss';
 
 export default class SideBar extends Component {
