@@ -1,7 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { selectChannel, selectLocale, selectType, fetchInitDataIfNeeded, loadDistributionFile, publishDistribution } from '../actions/Authoring';
+import {
+  selectChannel,
+  selectLocale,
+  selectType,
+  fetchInitDataIfNeeded,
+  loadDistributionFile,
+  setPublishDate,
+  setDeployNow,
+  publishDistribution } from '../actions/Authoring';
 import FilePicker from '../components/FilePicker';
 import Picker from '../components/Picker';
 import Tiles from '../components/Tiles';
@@ -15,6 +23,8 @@ export default class Authoring extends Component {
     this.handleLocaleChange = this.handleLocaleChange.bind(this);
     this.handleTypeChange = this.handleTypeChange.bind(this);
     this.handleNewDistribution = this.handleNewDistribution.bind(this);
+    this.handlePublishDateChange = this.handlePublishDateChange.bind(this);
+    this.handleDeployNowChange = this.handleDeployNowChange.bind(this);
     this.handlePublish = this.handlePublish.bind(this);
   }
 
@@ -42,6 +52,14 @@ export default class Authoring extends Component {
     this.props.dispatch(loadDistributionFile(file));
   }
 
+  handlePublishDateChange(momentObj) {
+    this.props.dispatch(setPublishDate(momentObj));
+  }
+
+  handleDeployNowChange(event) {
+    this.props.dispatch(setDeployNow(event.target.checked));
+  }
+
   handlePublish() {
     this.props.dispatch(publishDistribution());
   }
@@ -57,7 +75,7 @@ export default class Authoring extends Component {
       tiles
     } = this.props;
 
-    const yesterday = moment().subtract(1,'day');
+    const yesterday = moment().subtract(1, 'day');
     function isValidDate(current) {
       return current.isAfter(yesterday);
     }
@@ -100,9 +118,24 @@ export default class Authoring extends Component {
 
           {distribution.isLoaded &&
             <div>
-              <h2>Publish Distribution:</h2>
-              <label>Datetime:</label>
-              <DateTime isValidDate={isValidDate} />
+              <h2>Publish:</h2>
+
+              <div>
+                <label>Datetime:</label>
+                <DateTime isValidDate={isValidDate}
+                          onChange={this.handlePublishDateChange}
+                          dateFormat="dddd, MMMM Do YYYY,"
+                          timeFormat="h:mma (UTCZ)"
+                          value={distribution.scheduled} />
+              </div>
+
+              {distribution.scheduled === '' &&
+                <div>
+                  <label>Deploy Now:</label>
+                  <input type="checkbox" checked={distribution.deployNow} onChange={this.handleDeployNowChange} />
+                </div>
+              }
+
               <button onClick={this.handlePublish}>Publish</button>
             </div>
           }
@@ -111,8 +144,33 @@ export default class Authoring extends Component {
             <p className="status">Compressing and publishing the distribution...</p>
           }
 
+          {distribution.publishResults &&
+            <div>
+              <h2>Results:</h2>
+              <p className="success">Publish successful!</p>
+
+              <label>Deployed:</label>
+              <span>{distribution.publishResults.deployed ? 'Yes' : 'No'}</span>
+
+              <br/>
+
+              <label>URLs:</label>
+              <ul>
+                {distribution.publishResults.urls.map(function(val, i){
+                    return (
+                      <li>
+                        <strong>{val[1] ? 'New' : 'Cached'}</strong>
+                        <a href={val[0]}>{val[0]}</a>
+                      </li>
+                    );
+                })}
+              </ul>
+
+            </div>
+          }
+
           {distribution.isLoaded &&
-            <h2>Distribution Preview:</h2>
+            <h2>Preview:</h2>
           }
 
           {selectedLocale &&

@@ -10,6 +10,8 @@ export const AUTHORING_SELECT_TYPE = 'AUTHORING_SELECT_TYPE';
 export const LOAD_DISTRIBUTION_FILE_START = 'LOAD_DISTRIBUTION_FILE_START'
 export const LOAD_DISTRIBUTION_FILE_ERROR = 'LOAD_DISTRIBUTION_FILE_ERROR';
 export const LOAD_DISTRIBUTION_FILE_SUCCESS = 'LOAD_DISTRIBUTION_FILE_SUCCESS';
+export const AUTHORING_SET_PUBLISH_DATE = 'AUTHORING_SET_PUBLISH_DATE';
+export const AUTHORING_SET_DEPLOY_NOW = 'AUTHORING_SET_DEPLOY_NOW';
 export const AUTHORING_PUBLISH_START = 'AUTHORING_PUBLISH_START';
 export const AUTHORING_PUBLISH_SUCCESS = 'AUTHORING_PUBLISH_SUCCESS';
 export const AUTHORING_PUBLISH_ERROR = 'AUTHORING_PUBLISH_ERROR';
@@ -20,34 +22,34 @@ function requestInitData() {
   };
 }
 
-function receiveInitData(data) {
-  return {
-    type: INIT_DATA_SUCCESS,
-    env: data.d.env,
-    channels: data.d.chans,
-    distributions: data.d.dists,
-    schema: data.d.schema,
-    receivedAt: Date.now()
-  };
-}
-
-function initDataError(message) {
-  return {
-    type: INIT_DATA_ERROR,
-    message: 'Initialization failed. Refresh to try again. Error: ' + message
-  };
+function checkStatus(response){
+  if (response.status >= 200 && response.status < 300) {
+    return response.json();
+  } else {
+    throw new Error('HTTP ' + response.status + ' - ' + response.statusText);
+  }
 }
 
 function fetchInitData(state) {
   return dispatch => {
     dispatch(requestInitData());
     return fetch(state.initData.url)
-      .then(function(response){
-        if (response.status >= 200 && response.status < 300) {
-          response.json().then(json => dispatch(receiveInitData(json)))
-        } else {
-          dispatch(initDataError(response.statusText));
-        }
+      .then(checkStatus)
+      .then(json => {
+        dispatch((() => ({
+          type: INIT_DATA_SUCCESS,
+          env: json.d.env,
+          channels: json.d.chans,
+          distributions: json.d.dists,
+          schema: json.d.schema,
+          receivedAt: Date.now()
+        }))());
+      })
+      .catch(error => {
+        dispatch((() => ({
+          type: INIT_DATA_ERROR,
+          message: 'Initialization failed. Refresh to try again. ' + error
+        }))());
       });
   };
 }
@@ -183,6 +185,27 @@ function separateTilesTypes(data, assets) {
   return output;
 }
 
+export function setPublishDate(momentObj) {
+  return (dispatch, getState) => {
+    // If the moment isn't an empty string, we set deployNow to 0.
+    if (momentObj !== '') {
+      dispatch(setDeployNow(0));
+    }
+
+    dispatch((() => ({
+      type: AUTHORING_SET_PUBLISH_DATE,
+      moment: momentObj
+    }))());
+  };
+}
+
+export function setDeployNow(deployNow) {
+  return {
+    type: AUTHORING_SET_DEPLOY_NOW,
+    deployNow
+  };
+}
+
 export function publishDistribution() {
   return (dispatch, getState) => {
   /**
@@ -194,62 +217,54 @@ export function publishDistribution() {
    var state = getState().Authoring;
    var compressedTiles = compressPayload(state.distribution.tiles.raw);
    var scheduled = state.distribution.scheduled;
-   var channelId = state.initData.channels.find((element, index, array) => {return element.name === state.selectedChannel;}).id;
+   var params = {
+     deploy: state.distribution.deployNow,
+     channelId: state.initData.channels.find((element, index, array) => {return element.name === state.selectedChannel;}).id
+   };
+   if (scheduled) {
+      // timestamp in seconds
+      params['scheduledTS'] = scheduled.toDate().getTime() / 1000 | 0;
+   }
 
-   // TODO: reimplement code with fetch
+   var url = state.distribution.publishUrl;
+   url = url + '?' + encodeQueryParams(params);
 
-  // spliceData.postTiles(compressPayload(tiles.raw), $scope.channelSelect.id, $scope.deployConfig)
-  //   .success(function(data) {
-  //     var deployed = data.deployed;
-  //     var msg = '<ol>';
-  //     for (var url of data.urls) {
-  //
-  //       var uploadStatus = "cached";
-  //       var uploadClass = "text-muted";
-  //
-  //       if (url[1] == true) {
-  //         uploadStatus = "new";
-  //         uploadClass = "text-success";
-  //       }
-  //
-  //       msg += '<li><strong class="' + uploadClass + '">' + uploadStatus + '</strong> <a href="' + url[0] + '">' + url[0] + '</a> </li>';
-  //     }
-  //     msg += '</ol>';
-  //     $scope.uploadMessage = {
-  //       success: true,
-  //       deployed: deployed,
-  //       msg: msg
-  //     };
-  //
-  //     var urls = data.urls;
-  //     $scope.deployConfig.now = false;
-  //     $scope.clearScheduledDate();
-  //     $scope.refreshDistributions();
-  //   })
-  //   .error(function(data, status, headers, config, statusText) {
-  //     var errors = data.err;
-  //     var msg = '<ol>';
-  //     if (errors != null) {
-  //       for (var error of errors) {
-  //         if (error.path) {
-  //           msg += "<li>In <strong>" + error.path + "</strong>: " + error.msg + "</li>";
-  //         }
-  //         else {
-  //           msg += "<li>" + error.msg + "</li>";
-  //         }
-  //       }
-  //     }
-  //     msg += "</ol>";
-  //     $scope.uploadMessage = {
-  //       success: false,
-  //       status: status,
-  //       statusText: statusText,
-  //       msg: msg,
-  //     };
-  //   }).finally(function() {
-  //     $scope.uploadInProgress = false;
-  //     $scope.uploadModal.$promise.then($scope.uploadModal.show);
-  //   });
+   fetch(url, {
+     method: 'POST',
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json'
+       //,'X-CSRFToken': document.querySelector('meta[name=csrf-token]').attributes['content'].value
+     },
+     body: JSON.stringify(compressedTiles)
+   })
+     .then(response => {
+       response.json()
+         .then(json => {
+           if ('err' in json) { // error!
+             dispatch((() => ({
+               type: AUTHORING_PUBLISH_ERROR,
+               message: 'Publishing Failed. Error: ' + json.err[0].msg +
+                        ' (HTTP ' + response.status + ' - ' +
+                        response.statusText + ')',
+             }))());
+           } else { // success!
+             dispatch((() => ({
+               type: AUTHORING_PUBLISH_SUCCESS,
+               results: json
+             }))());
+           }
+         })
+         .catch(error => {
+           throw new Error('HTTP ' + response.status + ' - ' + response.statusText);
+         });
+     })
+     .catch(error => {
+       dispatch((() => ({
+         type: AUTHORING_PUBLISH_ERROR,
+         message: 'Publishing Failed. ' + error
+       }))());
+      });
   };
 };
 
@@ -308,3 +323,12 @@ function compressPayload(tiles) {
     distributions: copies
   };
 };
+
+function encodeQueryParams(params)
+{
+  var ret = [];
+  for (var d in params) {
+    ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(params[d]));
+  }
+  return ret.join('&');
+}

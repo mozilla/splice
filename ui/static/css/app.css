@@ -82,17 +82,28 @@ label {
   display: inline-block;
 }
 
+.rdt input {
+  width: 450px;
+}
+
 /* error and status messages */
 p.status {
-  background: linear-gradient(to bottom, #FCF8E3 0px, #F8EFC0 100%);
-  border: solid 1px yellow;
+  background: #FCF8E3;
+  border: solid 1px #FAEBCC;
   margin: 10px 0;
   padding: 10px 15px;
 }
 
 p.error {
-  background: linear-gradient(to bottom, #F2DEDE 0px, #E7C3C3 100%);
-  border: solid 1px red;
+  background: #F2DEDE;
+  border: solid 1px #EBCCD1;
+  margin: 10px 0;
+  padding: 10px 15px;
+}
+
+p.success {
+  background: #DFF0D8;
+  border: solid 1px #D6E9C6;
   margin: 10px 0;
   padding: 10px 15px;
 }

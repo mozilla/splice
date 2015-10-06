@@ -9,6 +9,8 @@ import {
   LOAD_DISTRIBUTION_FILE_START,
   LOAD_DISTRIBUTION_FILE_ERROR,
   LOAD_DISTRIBUTION_FILE_SUCCESS,
+  AUTHORING_SET_PUBLISH_DATE,
+  AUTHORING_SET_DEPLOY_NOW,
   AUTHORING_PUBLISH_START,
   AUTHORING_PUBLISH_SUCCESS,
   AUTHORING_PUBLISH_ERROR
@@ -66,6 +68,8 @@ function distribution(state = {
   isPublishing: false,
   errorMessage: null,
   scheduled: '',
+  deployNow: 0, // 0=false, 1=true
+  publishResults: null,
   selectedLocale: null,
   selectedType: null,
   tiles: {}
@@ -78,7 +82,8 @@ function distribution(state = {
       errorMessage: null,
       selectedLocale: null,
       selectedType: null,
-      tiles: {}
+      tiles: {},
+      publishResults: null
     });
   case LOAD_DISTRIBUTION_FILE_ERROR:
     return Object.assign({}, state, {
@@ -92,7 +97,7 @@ function distribution(state = {
         isLoaded: true,
         isLoading: false,
         errorMessage: null,
-        selectedLocale: Object.keys(action.tiles)[0],
+        selectedLocale: Object.keys(action.tiles.ui)[0],
         selectedType: 'directory',
         tiles: action.tiles
       });
@@ -104,9 +109,19 @@ function distribution(state = {
       return Object.assign({}, state, {
         selectedType: action.tileType
       });
+    case AUTHORING_SET_PUBLISH_DATE:
+      return Object.assign({}, state, {
+        scheduled: action.moment
+      });
+    case AUTHORING_SET_DEPLOY_NOW:
+      return Object.assign({}, state, {
+        deployNow: action.deployNow
+      });
     case AUTHORING_PUBLISH_START:
       return Object.assign({}, state, {
-        isPublishing: true
+        isPublishing: true,
+        errorMessage: null,
+        publishResults: null
       });
     case AUTHORING_PUBLISH_ERROR:
       return Object.assign({}, state, {
@@ -115,7 +130,8 @@ function distribution(state = {
       });
     case AUTHORING_PUBLISH_SUCCESS:
       return Object.assign({}, state, {
-        isPublishing: false
+        isPublishing: false,
+        publishResults: action.results
       });
   default:
     return state;
