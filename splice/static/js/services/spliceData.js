@@ -3,8 +3,6 @@
 (function() {
   angular.module('spliceApp').service("spliceData", function($http) {
     this.postTiles = function(data, channelId, deployConfig) {
-      var csrfToken = document.querySelector('meta[name=csrf-token]').attributes['content'].value;
-
       var deployParam = 0;
       if (deployConfig.now) {
         deployParam = 1;
@@ -20,8 +18,7 @@
         method: 'POST',
         url: "/api/authoring/all_tiles",
         data: data,
-        params: {'deploy': deployParam, 'channelId': channelId, 'scheduledTS': scheduledTS},
-        headers: {'X-CSRFToken': csrfToken}
+        params: {'deploy': deployParam, 'channelId': channelId, 'scheduledTS': scheduledTS}
       });
     };
 
