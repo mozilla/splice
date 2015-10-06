@@ -131,8 +131,8 @@ class Environment(object):
         with open(self.config.COUNTRY_FIXTURE_PATH, 'rb') as f:
             reader = csv.reader(f)
             data = [line for line in reader]
-        data.append(("ERROR", "ERROR"))
-        data.append(("STAR", "All Countries"))
+        data.append(["STAR", "All Countries"])
+        data.append(["ERROR", "ERROR"])
         return data
 
     def _load_fixtures(self):
