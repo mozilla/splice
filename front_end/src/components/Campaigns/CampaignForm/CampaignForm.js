@@ -1,13 +1,24 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
+import { displayMessage, shownMessage } from 'actions/App/AppActions';
+import { createCampaign, updateCampaign} from 'actions/Campaigns/CampaignActions';
+import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
+import Moment from 'moment';
+
 window.$ = require('jquery');
+window.jQuery = $;
 require('select2');
 require('select2/dist/css/select2.min.css');
+
+bindFormConfig();
+require('parsleyjs');
 
 export default class CampaignForm extends Component {
   componentDidMount() {
     $('#CampaignCountries').select2();
+
+    bindFormValidators();
   }
 
   render() {
@@ -61,13 +72,81 @@ export default class CampaignForm extends Component {
   handleFormSubmit(e) {
     e.preventDefault();
 
-    this.props.handleFormSubmit('#CampaignForm');
+    const form = $('#CampaignForm').parsley();
+    if(form.validate()){
+      const formData = $('#CampaignForm').serializeJSON();
+      if(formData.start_date.trim() !== ''){
+        //formData.start_date = Moment(formData.start_date).unix();
+      }
+      if(formData.end_date.trim() !== ''){
+        //formData.end_date = Moment(formData.end_date).unix();
+      }
+      delete formData.start_date;
+      delete formData.end_date;
+      formData.paused = false;
+
+      const data = JSON.stringify(formData);
+
+      //Handle Update or Create
+      if(this.props.editMode){
+        this.handleUpdate(data);
+      }
+      else{
+        this.handleCreate(data);
+      }
+    }
+    else{
+      const { dispatch } = this.props;
+      dispatch(displayMessage('error', 'Error: Validation Errors') );
+      dispatch(shownMessage());
+    }
+  }
+
+  handleCreate(data){
+    const { dispatch } = this.props;
+    const context = this;
+
+    dispatch(createCampaign(data))
+      .then(function(response){
+        context.handleResponse(response);
+      }
+    );
+  }
+
+  handleUpdate(data){
+    const { dispatch } = this.props;
+    const context = this;
+
+    dispatch(updateCampaign(this.props.data.id, data))
+      .then(function(response){
+        context.handleResponse(response);
+      });
+  }
+
+  handleResponse(response){
+    const { dispatch, history } = this.props;
+
+    if(response.result === undefined){
+      dispatch(displayMessage('error', response.message) );
+      dispatch(shownMessage());
+    }
+    else{
+      if(this.props.editMode){
+        dispatch(displayMessage('success', 'Campaign Updated Successfully') );
+        dispatch(shownMessage());
+      }
+      else{
+        dispatch(displayMessage('success', 'Campaign Created Successfully') );
+        history.pushState(null, '/campaigns/' + response.result.id);
+      }
+    }
   }
 }
 
 CampaignForm.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
   editMode: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
-  handleFormSubmit: PropTypes.func.isRequired,
   isSaving: PropTypes.bool.isRequired
 };

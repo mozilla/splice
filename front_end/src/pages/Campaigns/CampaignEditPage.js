@@ -2,15 +2,10 @@ import React, { Component } from 'react/addons';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { updateDocTitle, displayMessage, shownMessage } from 'actions/App/AppActions';
+import { updateDocTitle } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
-import { updateCampaign } from 'actions/Campaigns/CampaignActions';
-import Moment from 'moment';
 
 import CampaignForm from 'components/Campaigns/CampaignForm/CampaignForm';
-
-window.$ = require('jquery');
-require('jquery-serializejson');
 
 export default class CampaignEditPage extends Component {
   componentDidMount() {
@@ -35,7 +30,7 @@ export default class CampaignEditPage extends Component {
         <div className="panel panel-default">
           <div className="panel-body">
             {(this.props.Campaign.details.id !== undefined)
-              ? <CampaignForm isSaving={this.props.Campaign.isSaving} handleFormSubmit={(id) => this.handleFormSubmit(id)} data={this.props.Campaign.details} editMode={true} />
+              ? <CampaignForm isSaving={this.props.Campaign.isSaving} data={this.props.Campaign.details} editMode={true} dispatch={this.props.dispatch} history={this.props.history}/>
               : null
             }
           </div>
@@ -58,44 +53,6 @@ export default class CampaignEditPage extends Component {
           updateDocTitle('Edit Campaign - ' + this.props.Campaign.details.name);
         }
       });
-  }
-
-  handleFormSubmit(id){
-    const { dispatch } = this.props;
-    const props = this.props;
-    const context = this;
-    //let error = null;
-
-    const formData = $(id).serializeJSON();
-    if(formData.start_date.trim() !== ''){
-      //formData.start_date = Moment(formData.start_date).unix();
-    }
-    if(formData.end_date.trim() !== ''){
-      //formData.end_date = Moment(formData.end_date).unix();
-    }
-    delete formData.start_date;
-    delete formData.end_date;
-    formData.paused = false;
-
-    const data = JSON.stringify(formData);
-
-    dispatch(updateCampaign(this.props.Campaign.details.id, data))
-      .then(function(response){
-        if(response.result === undefined){
-          if(_.isString(response.message)){
-            dispatch(displayMessage('error', 'Error: ' + response.message) );
-          }
-          else{
-            dispatch(displayMessage('error', 'Error: Validation Errors') );
-          }
-          dispatch(shownMessage());
-        }
-        else{
-          dispatch(displayMessage('success', 'Campaign Updated Successfully') );
-          dispatch(shownMessage());
-        }
-      }
-    );
   }
 }
 

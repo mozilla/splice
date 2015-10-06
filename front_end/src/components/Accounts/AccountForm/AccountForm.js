@@ -63,6 +63,7 @@ export default class AccountForm extends Component {
     if(form.validate()){
       const data = JSON.stringify($('#AccountForm').serializeJSON());
 
+      //Handle Update or Create
       if(this.props.editMode){
         this.handleUpdate(data);
       }
@@ -102,12 +103,7 @@ export default class AccountForm extends Component {
     const { dispatch, history } = this.props;
 
     if(response.result === undefined){
-      if(_.isString(response.message)){
-        dispatch(displayMessage('error', 'Error: ' + response.message) );
-      }
-      else{
-        dispatch(displayMessage('error', 'Error: Validation Errors') );
-      }
+      dispatch(displayMessage('error', response.message) );
       dispatch(shownMessage());
     }
     else{
