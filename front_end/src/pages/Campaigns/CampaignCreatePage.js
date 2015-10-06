@@ -9,8 +9,7 @@ import Moment from 'moment';
 
 import CampaignForm from 'components/Campaigns/CampaignForm/CampaignForm';
 
-import $ from 'jquery';
-window.$ = $;
+window.$ = require('jquery');
 require('jquery-serializejson');
 
 export default class CampaignCreatePage extends Component {

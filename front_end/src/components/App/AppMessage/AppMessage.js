@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 import { shownMessage, removeMessage } from 'actions/App/AppActions';
 
-global.$ = require('jquery');
+window.$ = require('jquery');
 
 export default class AppMessage extends Component {
   render() {

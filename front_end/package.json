@@ -60,6 +60,7 @@
     "moment": "^2.10.6",
     "node-sass": "^3.3.2",
     "normalize.css": "~3.0.3",
+    "parsleyjs": "^2.1.2",
     "phantomjs": "^1.9.18",
     "radium": "^0.13.7",
     "raw-loader": "^0.5.1",

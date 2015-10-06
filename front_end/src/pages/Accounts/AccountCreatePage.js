@@ -7,8 +7,7 @@ import { createAccount, fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import AccountForm from 'components/Accounts/AccountForm/AccountForm';
 
-import $ from 'jquery';
-window.$ = $;
+window.$ = require('jquery');
 require('jquery-serializejson');
 
 export default class AccountCreatePage extends Component {
@@ -22,7 +21,7 @@ export default class AccountCreatePage extends Component {
         <h1>Create Account</h1>
         <div className="panel panel-default">
           <div className="panel-body">
-            <AccountForm isSaving={this.props.Account.isSaving} handleFormSubmit={(id) => this.handleFormSubmit(id)} data={{}} editMode={false} />
+            <AccountForm isSaving={this.props.Account.isSaving} handleFormSubmit={(id) => this.handleFormSubmit(id)} data={{}} editMode={false} dispatch={this.props.dispatch}/>
           </div>
         </div>
       </div>

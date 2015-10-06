@@ -8,8 +8,7 @@ import { updateAccount, fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import AccountForm from 'components/Accounts/AccountForm/AccountForm';
 
-import $ from 'jquery';
-window.$ = $;
+window.$ = require('jquery');
 require('jquery-serializejson');
 
 export default class AccountEditPage extends Component {
@@ -30,7 +29,7 @@ export default class AccountEditPage extends Component {
         <div className="panel panel-default">
           <div className="panel-body">
             { (this.props.Account.details.id !== undefined)
-              ? <AccountForm isSaving={this.props.Account.isSaving} handleFormSubmit={(id) => this.handleFormSubmit(id)} data={this.props.Account.details} editMode={true} />
+              ? <AccountForm isSaving={this.props.Account.isSaving} handleFormSubmit={(id) => this.handleFormSubmit(id)} data={this.props.Account.details} editMode={true} dispatch={this.props.dispatch}/>
               : null
             }
           </div>
