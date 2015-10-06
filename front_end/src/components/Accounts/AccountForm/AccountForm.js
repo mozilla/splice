@@ -73,7 +73,7 @@ export default class AccountForm extends Component {
     }
     else{
       const { dispatch } = this.props;
-      dispatch(displayMessage('error', 'Error: Validation Errors') );
+      dispatch(displayMessage('error', 'Validation Errors') );
       dispatch(shownMessage());
     }
   }

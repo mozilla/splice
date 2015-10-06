@@ -4,6 +4,11 @@ export function bindFormConfig() {
   window.ParsleyConfig = {
     classHandler: function(elem, isRadioOrCheckbox){
       // specify where parsley error-success classes are set
+      console.log($(elem.$element).parents('.form-group'));
+      return $(elem.$element).parents('.form-group');
+    },
+    errorsContainer: function(elem, isRadioOrCheckbox){
+      // specify where parsley error-success classes are set
       return $(elem.$element).parents('.form-group');
     },
     errorsWrapper: '<span class="help-block"></span>',
