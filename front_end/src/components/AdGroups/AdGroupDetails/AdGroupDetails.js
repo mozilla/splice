@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-import { formatPsDateTime } from 'helpers/ViewHelpers';
+import { formatDate } from 'helpers/DateHelpers';
 
 export default class AdGroupDetails extends Component {
   render() {
@@ -38,7 +38,7 @@ export default class AdGroupDetails extends Component {
             <p><strong>Frequency Cap Total:</strong> {data.frequency_cap_total}</p>
             <p><strong>Locale:</strong> {data.locale}</p>
             <p><strong>Type:</strong> {_.capitalize(data.type)}</p>
-            <p><strong>Created:</strong> {formatPsDateTime(data.created_at, 'M/D/YYYY')}</p>
+            <p><strong>Created:</strong> {formatDate(data.created_at, 'M/D/YYYY')}</p>
           </div>
         </div>
       );

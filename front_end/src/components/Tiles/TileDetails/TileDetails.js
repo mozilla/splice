@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-import { formatPsDateTime } from 'helpers/ViewHelpers';
+import { formatDate } from 'helpers/DateHelpers';
 
 export default class TileDetails extends Component {
 	render() {
@@ -29,7 +29,7 @@ export default class TileDetails extends Component {
 						<p><strong>Image URI:</strong> {data.image_uri}</p>
 						<p><strong>BG Color:</strong> {data.bg_color}</p>
 						<p><strong>Title BG Color:</strong> {data.title_bg_color}</p>
-						<p><strong>Created:</strong> {formatPsDateTime(data.created_at, 'M/D/YYYY')}</p>
+						<p><strong>Created:</strong> {formatDate(data.created_at, 'M/D/YYYY')}</p>
 					</div>
 				</div>
 			);
