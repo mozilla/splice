@@ -2,14 +2,10 @@ import React, { Component } from 'react/addons';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { updateDocTitle, pageVisit, displayMessage, shownMessage } from 'actions/App/AppActions';
+import { updateDocTitle } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
-import { updateAccount, fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import AccountForm from 'components/Accounts/AccountForm/AccountForm';
-
-window.$ = require('jquery');
-require('jquery-serializejson');
 
 export default class AccountEditPage extends Component {
   componentWillMount() {
