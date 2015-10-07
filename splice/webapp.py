@@ -15,6 +15,9 @@ def setup_routes(app):
     splice.web.api.heartbeat.register_routes(app)
 
     if not register_flask_restful:
+        import splice.web.api.init
+        splice.web.api.init.register_routes(app)
+
         import splice.web.api.account
         splice.web.api.account.register_routes(app)
 

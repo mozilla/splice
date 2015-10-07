@@ -14,6 +14,7 @@ depends_on = None
 
 from alembic import op
 import sqlalchemy as sa
+from splice.environment import Environment
 
 
 def upgrade(engine_name):
@@ -25,6 +26,12 @@ def downgrade(engine_name):
 
 
 
+def populate_countries(table):
+    countries = Environment.instance()._load_countries()
+    op.bulk_insert(
+        table,
+        [{"country_code": code, "country_name": name} for code, name in countries]
+    )
 
 
 def upgrade_():
@@ -38,11 +45,12 @@ def upgrade_():
     sa.Column('created_at', sa.DateTime(), server_default=sa.text(u'now()'), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('countries',
+    table_countries = op.create_table('countries',
     sa.Column('country_code', sa.String(length=255), nullable=False),
     sa.Column('country_name', sa.String(length=255), nullable=True),
     sa.PrimaryKeyConstraint('country_code')
     )
+    populate_countries(table_countries)
     op.create_table('campaigns',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('locale', sa.String(length=14), nullable=False),
