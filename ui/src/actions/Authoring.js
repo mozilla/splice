@@ -1,15 +1,15 @@
 import fetch from 'isomorphic-fetch';
 import tv4 from 'tv4';
 
-export const INIT_DATA_START = 'INIT_DATA_START';
-export const INIT_DATA_SUCCESS = 'INIT_DATA_SUCCESS';
-export const INIT_DATA_ERROR = 'INIT_DATA_ERROR';
+export const AUTHORING_INIT_DATA_START = 'AUTHORING_INIT_DATA_START';
+export const AUTHORING_INIT_DATA_SUCCESS = 'AUTHORING_INIT_DATA_SUCCESS';
+export const AUTHORING_INIT_DATA_ERROR = 'AUTHORING_INIT_DATA_ERROR';
 export const AUTHORING_SELECT_CHANNEL = 'AUTHORING_SELECT_CHANNEL';
 export const AUTHORING_SELECT_LOCALE = 'AUTHORING_SELECT_LOCALE';
 export const AUTHORING_SELECT_TYPE = 'AUTHORING_SELECT_TYPE';
-export const LOAD_DISTRIBUTION_FILE_START = 'LOAD_DISTRIBUTION_FILE_START'
-export const LOAD_DISTRIBUTION_FILE_ERROR = 'LOAD_DISTRIBUTION_FILE_ERROR';
-export const LOAD_DISTRIBUTION_FILE_SUCCESS = 'LOAD_DISTRIBUTION_FILE_SUCCESS';
+export const AUTHORING_LOAD_FILE_START = 'AUTHORING_LOAD_FILE_START'
+export const AUTHORING_LOAD_FILE_ERROR = 'AUTHORING_LOAD_FILE_ERROR';
+export const AUTHORING_LOAD_FILE_SUCCESS = 'AUTHORING_LOAD_FILE_SUCCESS';
 export const AUTHORING_SET_PUBLISH_DATE = 'AUTHORING_SET_PUBLISH_DATE';
 export const AUTHORING_SET_DEPLOY_NOW = 'AUTHORING_SET_DEPLOY_NOW';
 export const AUTHORING_PUBLISH_START = 'AUTHORING_PUBLISH_START';
@@ -18,7 +18,7 @@ export const AUTHORING_PUBLISH_ERROR = 'AUTHORING_PUBLISH_ERROR';
 
 function requestInitData() {
   return {
-    type: INIT_DATA_START
+    type: AUTHORING_INIT_DATA_START
   };
 }
 
@@ -37,7 +37,7 @@ function fetchInitData(state) {
       .then(checkStatus)
       .then(json => {
         dispatch((() => ({
-          type: INIT_DATA_SUCCESS,
+          type: AUTHORING_INIT_DATA_SUCCESS,
           env: json.d.env,
           channels: json.d.chans,
           distributions: json.d.dists,
@@ -47,7 +47,7 @@ function fetchInitData(state) {
       })
       .catch(error => {
         dispatch((() => ({
-          type: INIT_DATA_ERROR,
+          type: AUTHORING_INIT_DATA_ERROR,
           message: 'Initialization failed. Refresh to try again. ' + error
         }))());
       });
@@ -96,7 +96,7 @@ export function loadDistributionFile(file) {
 
     reader.onerror = (e) => {
       dispatch((() => ({
-        type: LOAD_DISTRIBUTION_FILE_ERROR,
+        type: AUTHORING_LOAD_FILE_ERROR,
         message: 'Error loading file.'
       }))());
     };
@@ -107,7 +107,7 @@ export function loadDistributionFile(file) {
         var data = JSON.parse(reader.result);
       } catch(e) {
         dispatch((() => ({
-          type: LOAD_DISTRIBUTION_FILE_ERROR,
+          type: AUTHORING_LOAD_FILE_ERROR,
           message: 'Error parsing file. Verify that it is valid JSON.'
         }))());
         return;
@@ -129,7 +129,7 @@ export function loadDistributionFile(file) {
 
       if (!results.valid) {
         dispatch((() => ({
-          type: LOAD_DISTRIBUTION_FILE_ERROR,
+          type: AUTHORING_LOAD_FILE_ERROR,
           message: 'Validation failed: ' + results.error.message + ' at ' + results.error.dataPath
         }))());
         return;
@@ -140,12 +140,12 @@ export function loadDistributionFile(file) {
 
       // And that's all folks. Let the World know.
       dispatch((() => ({
-        type: LOAD_DISTRIBUTION_FILE_SUCCESS,
+        type: AUTHORING_LOAD_FILE_SUCCESS,
         tiles: tiles
       }))());
     };
 
-    dispatch((() => ({type: LOAD_DISTRIBUTION_FILE_START}))());
+    dispatch((() => ({type: AUTHORING_LOAD_FILE_START}))());
     reader.readAsText(file);
   };
 }

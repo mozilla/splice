@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
 import {
-  INIT_DATA_START,
-  INIT_DATA_SUCCESS,
-  INIT_DATA_ERROR,
+  AUTHORING_INIT_DATA_START,
+  AUTHORING_INIT_DATA_SUCCESS,
+  AUTHORING_INIT_DATA_ERROR,
   AUTHORING_SELECT_CHANNEL,
   AUTHORING_SELECT_LOCALE,
   AUTHORING_SELECT_TYPE,
-  LOAD_DISTRIBUTION_FILE_START,
-  LOAD_DISTRIBUTION_FILE_ERROR,
-  LOAD_DISTRIBUTION_FILE_SUCCESS,
+  AUTHORING_LOAD_FILE_START,
+  AUTHORING_LOAD_FILE_ERROR,
+  AUTHORING_LOAD_FILE_SUCCESS,
   AUTHORING_SET_PUBLISH_DATE,
   AUTHORING_SET_DEPLOY_NOW,
   AUTHORING_PUBLISH_START,
@@ -37,16 +37,16 @@ function initData(state = {
   lastUpdated: null
 }, action) {
   switch (action.type) {
-  case INIT_DATA_START:
+  case AUTHORING_INIT_DATA_START:
     return Object.assign({}, state, {
       isFetching: true
     });
-  case INIT_DATA_ERROR:
+  case AUTHORING_INIT_DATA_ERROR:
     return Object.assign({}, state, {
       isFetching: false,
       errorMessage: action.message
     });
-  case INIT_DATA_SUCCESS:
+  case AUTHORING_INIT_DATA_SUCCESS:
     return Object.assign({}, state, {
       isFetching: false,
       isLoaded: true,
@@ -75,7 +75,7 @@ function distribution(state = {
   tiles: {}
 }, action) {
   switch (action.type) {
-  case LOAD_DISTRIBUTION_FILE_START:
+  case AUTHORING_LOAD_FILE_START:
     return Object.assign({}, state, {
       isLoaded: false,
       isLoading: true,
@@ -85,14 +85,14 @@ function distribution(state = {
       tiles: {},
       publishResults: null
     });
-  case LOAD_DISTRIBUTION_FILE_ERROR:
+  case AUTHORING_LOAD_FILE_ERROR:
     return Object.assign({}, state, {
       isLoaded: false,
       isLoading: false,
       errorMessage: action.message,
       tiles: {}
     });
-    case LOAD_DISTRIBUTION_FILE_SUCCESS:
+    case AUTHORING_LOAD_FILE_SUCCESS:
       return Object.assign({}, state, {
         isLoaded: true,
         isLoading: false,
