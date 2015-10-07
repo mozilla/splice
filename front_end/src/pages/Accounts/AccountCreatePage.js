@@ -2,6 +2,8 @@ import React, { Component } from 'react/addons';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
+import { updateDocTitle } from 'actions/App/AppActions';
+
 import AccountForm from 'components/Accounts/AccountForm/AccountForm';
 
 export default class AccountCreatePage extends Component {
@@ -15,7 +17,7 @@ export default class AccountCreatePage extends Component {
         <h1>Create Account</h1>
         <div className="panel panel-default">
           <div className="panel-body">
-            <AccountForm isSaving={this.props.Account.isSaving} data={{}} editMode={false} dispatch={this.props.dispatch} history={this.props.history}/>
+            <AccountForm editMode={false} {...this.props}/>
           </div>
         </div>
       </div>

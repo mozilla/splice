@@ -1,15 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { formatDate } from 'helpers/DateHelpers';
+import { getChannel } from 'actions/Init/InitActions';
 
 export default class CampaignRow extends Component {
   render() {
-    //console.log(this.props.id);
+    const channel = getChannel(this.props.channel_id, this.props.channels);
+
     return (
       <tr>
         <td>{this.props.id}</td>
         <td><Link to={'/campaigns/' + this.props.id}>{this.props.name}</Link></td>
-        <td>{this.props.channel_id}</td>
+        <td>{(channel) ? _.capitalize(channel.name) : ''}</td>
         <td>{(this.props.paused) ? 'Paused' : 'Active'}</td>
         <td>{formatDate(this.props.created_at, 'M/D/YYYY')}</td>
       </tr>

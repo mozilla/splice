@@ -19,37 +19,40 @@ export default class AccountForm extends Component {
 
   render() {
     let spinner;
-    if(this.props.isSaving){
+    if(this.props.Account.isSaving){
       spinner = <img src="/public/img/ajax-loader.gif" />;
+    }
+
+    let data = this.props.Account.details;
+    if(this.props.editMode === false){
+      data = {};
     }
 
     return (
       <div>
         <form id="AccountForm" ref="form">
-          {(this.props.editMode) ? (<input type="hidden" id="AccountId" name="id" ref="id" value={this.props.data.id}/>) : null}
+          {(this.props.editMode) ? (<input type="hidden" id="AccountId" name="id" ref="id" value={data.id}/>) : null}
           <div className="form-group">
             <label htmlFor="AccountName">Name</label>
-            <input className="form-control" type="text" id="AccountName" name="name" ref="name" defaultValue={this.props.data.name} data-parsley-required/>
+            <input className="form-control" type="text" id="AccountName" name="name" ref="name" defaultValue={data.name} data-parsley-required/>
           </div>
           <div className="form-group">
             <label htmlFor="AccountContactName">Contact Name</label>
-            <input className="form-control" type="text" id="AccountContactName" name="contact_name" ref="contact_name" defaultValue={this.props.data.contact_name} />
+            <input className="form-control" type="text" id="AccountContactName" name="contact_name" ref="contact_name" defaultValue={data.contact_name} />
           </div>
           <div className="form-group">
             <label htmlFor="AccountContactEmail">Contact Email</label>
-            <input className="form-control" type="text" id="AccountContactEmail" name="contact_email" ref="contact_email" defaultValue={this.props.data.contact_email} data-parsley-type="email"/>
+            <input className="form-control" type="text" id="AccountContactEmail" name="contact_email" ref="contact_email" defaultValue={data.contact_email} data-parsley-type="email"/>
           </div>
           <div className="form-group">
             <label htmlFor="AccountContactPhone">Contact Phone</label>
-            <input className="form-control" type="text" id="AccountContactPhone" name="contact_phone" ref="contact_phone" defaultValue={this.props.data.contact_phone} />
+            <input className="form-control" type="text" id="AccountContactPhone" name="contact_phone" ref="contact_phone" defaultValue={data.contact_phone} />
           </div>
           <input onClick={(e) => this.handleFormSubmit(e)} type="submit" value="Save" className="btn btn-primary"/>
-          &nbsp;
           {(this.props.editMode)
-            ? <Link to={'/accounts/' + this.props.data.id} className="btn btn-default">Cancel</Link>
+            ? <Link to={'/accounts/' + data.id} className="btn btn-default">Cancel</Link>
             : <Link to="/" className="btn btn-default">Cancel</Link>
           }
-          &nbsp;
           {spinner}
         </form>
       </div>
@@ -93,7 +96,7 @@ export default class AccountForm extends Component {
     const { dispatch } = this.props;
     const context = this;
 
-    dispatch(updateAccount(this.props.data.id, data))
+    dispatch(updateAccount(this.props.Account.details.id, data))
       .then(function(response){
         context.handleResponse(response);
       }
@@ -123,9 +126,5 @@ export default class AccountForm extends Component {
 }
 
 AccountForm.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
-  editMode: PropTypes.bool.isRequired,
-  data: PropTypes.object.isRequired,
-  isSaving: PropTypes.bool.isRequired
+  editMode: PropTypes.bool.isRequired
 };

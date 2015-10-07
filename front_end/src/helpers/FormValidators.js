@@ -18,9 +18,11 @@ export function bindFormConfig() {
 }
 
 export function bindFormValidators() {
-  window.ParsleyValidator
-    .addValidator('dateformat', function(value, requirement) {
-      return Moment(value, 'YYYY-MM-DD', true).isValid();
-    })
-    .addMessage('en', 'dateformat', 'Invalid date format.');
+  if(window.ParsleyValidator.validators.dateformat === undefined){
+    window.ParsleyValidator
+      .addValidator('dateformat', function(value, requirement) {
+        return Moment(value, 'YYYY-MM-DD', true).isValid();
+      })
+      .addMessage('en', 'dateformat', 'Invalid date format.');
+  }
 }

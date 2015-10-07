@@ -31,7 +31,7 @@ export default class CampaignViewPage extends Component {
         </div>
         <div className="row">
           <div className="col-xs-6">
-            <CampaignDetails Campaign={this.props.Campaign}/>
+            <CampaignDetails Campaign={this.props.Campaign} Init={this.props.Init}/>
           </div>
           <div className="col-xs-6">
             <div className="pull-right">
@@ -70,7 +70,8 @@ function select(state) {
   return {
     Account: state.Account,
     Campaign: state.Campaign,
-    AdGroup: state.AdGroup
+    AdGroup: state.AdGroup,
+    Init: state.Init
   };
 }
 

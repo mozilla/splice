@@ -30,7 +30,7 @@ export default class CampaignEditPage extends Component {
         <div className="panel panel-default">
           <div className="panel-body">
             {(this.props.Campaign.details.id !== undefined)
-              ? <CampaignForm isSaving={this.props.Campaign.isSaving} data={this.props.Campaign.details} editMode={true} dispatch={this.props.dispatch} history={this.props.history}/>
+              ? <CampaignForm editMode={true} {...this.props} />
               : null
             }
           </div>
@@ -62,7 +62,8 @@ CampaignEditPage.propTypes = {};
 function select(state) {
   return {
     Campaign: state.Campaign,
-    Account: state.Account
+    Account: state.Account,
+    Init: state.Init
   };
 }
 

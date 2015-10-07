@@ -29,7 +29,7 @@ export default class CampaignCreatePage extends Component {
         <h1>{this.props.Account.details.name}: Create Campaign</h1>
         <div className="panel panel-default">
           <div className="panel-body">
-            <CampaignForm isSaving={this.props.Campaign.isSaving} data={{account_id: this.props.Account.details.id}} editMode={false} dispatch={this.props.dispatch} history={this.props.history} />
+            <CampaignForm editMode={false} {...this.props} />
           </div>
         </div>
       </div>
@@ -59,7 +59,8 @@ CampaignCreatePage.propTypes = {};
 function select(state) {
   return {
     Campaign: state.Campaign,
-    Account: state.Account
+    Account: state.Account,
+    Init: state.Init
   };
 }
 

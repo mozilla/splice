@@ -1,8 +1,9 @@
 import React, { PropTypes, Component } from 'react/addons';
 import { connect } from 'react-redux';
 
-import { fetchAccounts } from 'actions/Accounts/AccountActions';
 import { shownMessage, removeMessage } from 'actions/App/AppActions';
+import { fetchInit } from 'actions/Init/InitActions';
+import { fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import TopBar from 'components/App/Navigation/TopBar.js';
 import AccountNavigation from 'components/App/Navigation/AccountNavigation.js';
@@ -14,6 +15,10 @@ export default class AppPage extends Component {
     const { dispatch } = this.props;
     if (this.props.Account.rows.length === 0) {
       dispatch(fetchAccounts());
+    }
+
+    if(_.isEmpty(this.props.Init.channels) ){
+      dispatch(fetchInit());
     }
   }
 

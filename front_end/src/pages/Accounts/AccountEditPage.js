@@ -25,7 +25,7 @@ export default class AccountEditPage extends Component {
         <div className="panel panel-default">
           <div className="panel-body">
             { (this.props.Account.details.id !== undefined)
-              ? <AccountForm isSaving={this.props.Account.isSaving} data={this.props.Account.details} editMode={true} dispatch={this.props.dispatch} history={this.props.history}/>
+              ? <AccountForm editMode={true} {...this.props} />
               : null
             }
           </div>
