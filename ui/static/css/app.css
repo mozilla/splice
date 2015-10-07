@@ -1,7 +1,38 @@
+body {
+  background: #f0f0f0;
+}
+
 label {
+  display: inline-block;
   font-size: 13px;
   font-weight: bold;
-  margin: 0 15px 0 0;
+  margin: 5px 15px 5px 0;
+}
+
+button {
+  color: #FFF;
+  background-color: #337AB7;
+  border-color: #2E6DA4;
+  display: inline-block;
+  margin: 10px 0;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  -moz-user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+button:hover {
+  color: #FFF;
+  background-color: #286090;
+  border-color: #204D74;
 }
 
 #page {
@@ -10,7 +41,7 @@ label {
 
 #nav {
   background: #000;
-  color: #fff;
+  color: #f0f0f0;
   font-size: 22px;
 }
 
@@ -42,12 +73,12 @@ label {
 }
 
 #nav a {
-  color: #fff;
+  color: #f0f0f0;
   text-decoration: none;
 }
 
 #nav a.active {
-  background: #F9F9F9;
+  background: #f0f0f0;
   color: #000;
 }
 
@@ -56,7 +87,13 @@ label {
 }
 
 .container {
+  background: #fff;
+  margin: 15px 0;
   padding: 15px;
+}
+
+.container:empty {
+  display: none;
 }
 
 #env.dev,

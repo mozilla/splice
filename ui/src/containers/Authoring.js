@@ -144,10 +144,16 @@ export default class Authoring extends Component {
             <p className="status">Compressing and publishing the distribution...</p>
           }
 
+
+          {distribution.publishResults &&
+            <p className="success">Publish successful!</p>
+          }
+        </div>
+
+        <div className="container">
           {distribution.publishResults &&
             <div>
               <h2>Results:</h2>
-              <p className="success">Publish successful!</p>
 
               <label>Deployed:</label>
               <span>{distribution.publishResults.deployed ? 'Yes' : 'No'}</span>
@@ -168,7 +174,9 @@ export default class Authoring extends Component {
 
             </div>
           }
+        </div>
 
+        <div className="container">
           {distribution.isLoaded &&
             <h2>Preview:</h2>
           }
