@@ -54,10 +54,10 @@ def downgrade_():
                existing_type=sa.VARCHAR(length=255),
                nullable=True)
     op.drop_constraint('UQ_CAMPAIGN_ACCOUNT_ID_NAME', 'campaigns', type_='unique')
-    op.add_column('tiles', sa.Column('locale', sa.VARCHAR(length=14), autoincrement=False, nullable=False))
+    op.add_column('tiles', sa.Column('locale', sa.VARCHAR(length=14), autoincrement=False, nullable=True))
     op.drop_column('tiles', 'status')
     op.drop_column('tiles', 'paused')
-    op.add_column('campaigns', sa.Column('locale', sa.VARCHAR(length=14), autoincrement=False, nullable=False))
+    op.add_column('campaigns', sa.Column('locale', sa.VARCHAR(length=14), autoincrement=False, nullable=True))
     op.add_column('adgroups', sa.Column('start_date_dt', postgresql.TIMESTAMP(), autoincrement=False, nullable=True))
     op.add_column('adgroups', sa.Column('end_date', sa.VARCHAR(length=30), autoincrement=False, nullable=True))
     op.add_column('adgroups', sa.Column('end_date_dt', postgresql.TIMESTAMP(), autoincrement=False, nullable=True))
