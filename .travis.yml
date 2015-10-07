@@ -19,6 +19,6 @@ before_script:
 # command to run the build
 script:
   - fab build
-  - cd front_end && npm install && npm test
+  - cd front_end && npm install && npm test && cd ..
 after_success:
   - coveralls
