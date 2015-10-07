@@ -22,61 +22,76 @@ require('../../../styles/app/forms.scss');
 
 export default class CampaignForm extends Component {
   componentDidMount() {
+    bindFormValidators();
+
     $('#CampaignCountries').select2();
 
     const options = {
-      useCurrent: false,
+      useCurrent: true,
       format: 'YYYY-MM-DD',
       showTodayButton: true
     };
     $('#CampaignStartDate').datetimepicker(options);
     $('#CampaignEndDate').datetimepicker(options);
-
-    bindFormValidators();
   }
 
   render() {
     let spinner;
-    if(this.props.isSaving){
+    if(this.props.Campaign.isSaving){
       spinner = <img src="/public/img/ajax-loader.gif" />;
     }
+
+    let data = this.props.Campaign.details;
+    if(this.props.editMode === false){
+      data = {};
+    }
+    if(data.account_id === undefined){
+      data.account_id = this.props.params.accountId;
+    }
+
+    const channels = this.props.Init.channels.map((row, index) =>
+        <option key={'channel-' + index} value={row.id}>{_.capitalize(row.name)}</option>
+    );
+
+    const countries = this.props.Init.countries.map((row, index) =>
+        <option key={'country-' + index} value={row.country_code}>{row.country_name}</option>
+    );
 
     return (
       <div>
         <form id="CampaignForm" ref="form">
-          <input type="hidden" name="account_id" ref="account_id" value={this.props.data.account_id} />
+          {(this.props.editMode) ? (<input type="hidden" name="id" ref="id" value={data.id}/>) : null}
+          <input type="hidden" name="account_id" ref="account_id" value={data.account_id} />
+          <input type="hidden" name="paused" ref="paused" value={(data.paused !== undefined) ? data.paused : false} />
           <div className="form-group">
             <label htmlFor="CampaignName">Name</label>
-            <input className="form-control" type="text" id="CampaignName" name="name" ref="name" defaultValue={this.props.data.name} data-parsley-required />
+            <input className="form-control" type="text" id="CampaignName" name="name" ref="name" defaultValue={data.name} data-parsley-required />
           </div>
           <div className="form-group">
             <label htmlFor="CampaignStartDate">Start Date</label>
-            <input className="form-control" type="text" id="CampaignStartDate" name="start_date" ref="start_date" defaultValue={formatDate(this.props.data.start_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
+            <input className="form-control" type="text" id="CampaignStartDate" name="start_date" ref="start_date" defaultValue={formatDate(data.start_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
           </div>
           <div className="form-group">
             <label htmlFor="CampaignEndDate">End Date</label>
-            <input className="form-control" type="text" id="CampaignEndDate" name="end_date" ref="end_date" defaultValue={formatDate(this.props.data.end_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
+            <input className="form-control" type="text" id="CampaignEndDate" name="end_date" ref="end_date" defaultValue={formatDate(data.end_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
           </div>
           <div className="form-group">
             <label htmlFor="CampaignCountries">Countries</label><br/>
-            <select className="form-control" style={{width: '100%', display: 'none'}} type="text" id="CampaignCountries" name="countries[]" ref="countries" multiple="multiple" defaultValue={this.props.data.countries} data-parsley-required>
-              <option value="US" >US</option>
-              <option value="STAR" >STAR</option>
+            <select className="form-control" style={{width: '100%', display: 'none'}} type="text" id="CampaignCountries" name="countries[]" ref="countries" multiple="multiple" defaultValue={data.countries} data-parsley-required>
+              {countries}
             </select>
           </div>
           <div className="form-group">
             <label htmlFor="CampaignChannelId">Channel</label>
-            <select className="form-control" id="CampaignChannelId" name="channel_id" ref="channel_id" defaultValue={this.props.data.channel_id} data-parsley-required >
-              <option value="1">1</option>
+            <select className="form-control" id="CampaignChannelId" name="channel_id" ref="channel_id" defaultValue={data.channel_id} data-parsley-required >
+              {channels}
             </select>
           </div>
           <input onClick={(e) => this.handleFormSubmit(e)} type="submit" value="Submit" className="btn btn-primary"/>
-          &nbsp;
           {(this.props.editMode)
-            ? <Link to={'/campaigns/' + this.props.data.id} className="btn btn-default">Cancel</Link>
-            : <Link to={'/accounts/' + this.props.data.account_id} className="btn btn-default">Cancel</Link>
+            ? <Link to={'/campaigns/' + data.id} className="btn btn-default">Cancel</Link>
+            : <Link to={'/accounts/' + data.account_id} className="btn btn-default">Cancel</Link>
           }
-          &nbsp;
           {spinner}
         </form>
       </div>
@@ -99,9 +114,6 @@ export default class CampaignForm extends Component {
       if(formData.end_date.trim() !== ''){
         formData.end_date = apiDate(formData.end_date);
       }
-      //delete formData.start_date;
-      delete formData.end_date;
-      formData.paused = false;
 
       const data = JSON.stringify(formData);
 
@@ -135,7 +147,7 @@ export default class CampaignForm extends Component {
     const { dispatch } = this.props;
     const context = this;
 
-    dispatch(updateCampaign(this.props.data.id, data))
+    dispatch(updateCampaign(this.props.Campaign.details.id, data))
       .then(function(response){
         context.handleResponse(response);
       });
@@ -162,9 +174,5 @@ export default class CampaignForm extends Component {
 }
 
 CampaignForm.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
-  editMode: PropTypes.bool.isRequired,
-  data: PropTypes.object.isRequired,
-  isSaving: PropTypes.bool.isRequired
+  editMode: PropTypes.bool.isRequired
 };

@@ -33,7 +33,8 @@ export default class AccountViewPage extends Component {
         <p><Link className="btn btn-default" to={'/accounts/' + this.props.Account.details.id + '/createcampaign'}>Create Campaign <i className="fa fa-plus"></i></Link></p>
         <div><strong>Campaigns</strong></div>
         <CampaignList rows={this.props.Campaign.rows}
-                      isFetching={this.props.Campaign.isFetching}/>
+                      isFetching={this.props.Campaign.isFetching}
+                      channels={this.props.Init.channels}/>
       </div>
     );
   }
@@ -60,7 +61,8 @@ AccountViewPage.propTypes = {};
 function select(state) {
   return {
     Account: state.Account,
-    Campaign: state.Campaign
+    Campaign: state.Campaign,
+    Init: state.Init
   };
 }
 

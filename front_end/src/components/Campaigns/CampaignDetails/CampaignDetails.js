@@ -2,20 +2,34 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import { formatDate } from 'helpers/DateHelpers';
+import { getChannel, getCountry } from 'actions/Init/InitActions';
 
 export default class CampaignDetails extends Component {
-  render() {
+  getCountries(){
     const data = this.props.Campaign.details;
+    const context = this;
 
     let countries = '';
-    if(data.countries !== undefined && data.countries.length > 0){
+    if(data.countries !== undefined && data.countries.length > 0 &&  this.props.Init.countries.length > 0){
       data.countries.map(function(val, index){
         if(index !== 0){
           countries += ', ';
         }
-        countries += val;
+        const country = getCountry(val, context.props.Init.countries);
+        if(country) {
+          countries += country.country_name;
+        }
       });
     }
+    return countries;
+  }
+
+  render() {
+    const data = this.props.Campaign.details;
+
+    const countries = this.getCountries();
+
+    const channel = getChannel(data.channel_id, this.props.Init.channels);
 
     let details;
     if (this.props.Campaign.isFetching === false) {
@@ -33,7 +47,7 @@ export default class CampaignDetails extends Component {
             <div className="clearfix"></div>
           </div>
           <div className="panel-body">
-            <p><strong>Channel ID:</strong> {data.channel_id}</p>
+            <p><strong>Channel:</strong> {(channel) ? _.capitalize(channel.name) : ''}</p>
 
             <p><strong>Countries:</strong> {countries}</p>
 
