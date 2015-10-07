@@ -9,9 +9,9 @@ from collections import defaultdict
 from itertools import chain
 from splice.environment import Environment
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.sql import select, insert, update
+from sqlalchemy.sql import insert, update
 from sqlalchemy import create_engine
-from splice.models import Tile, Adgroup, Country, Account, Campaign, CampaignCountry
+from splice.models import Adgroup, Country, Account, CampaignCountry
 from tld import get_tld
 
 ARBITRARY_FUTURE = datetime.datetime.strptime('2525-01-01', "%Y-%m-%d").date()
