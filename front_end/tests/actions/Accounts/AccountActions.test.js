@@ -13,7 +13,7 @@ describe('actions', () => {
     const json = {results: [{test: 'test'}]};
     const expectedAction = {
       type: actions.RECEIVE_ACCOUNTS,
-      rows: json
+      json: json
     };
     expect(actions.receiveAccounts(json)).toEqual(expectedAction);
   });
@@ -29,7 +29,7 @@ describe('actions', () => {
     const json = {result: [{test: 'test'}]};
     const expectedAction = {
       type: actions.RECEIVE_ACCOUNT,
-      details: json
+      json: json
     };
     expect(actions.receiveAccount(json)).toEqual(expectedAction);
   });

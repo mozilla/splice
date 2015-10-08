@@ -76,12 +76,7 @@ export function createCampaign(data) {
     })
       .then(response => response.json())
       .then(json => new Promise(resolve => {
-        if(json.result !== undefined){
-          dispatch(receiveCreateCampaign(json.result));
-        }
-        else{
-          dispatch(receiveCreateCampaign(null));
-        }
+        dispatch(receiveCreateCampaign(json));
         resolve(json);
       })
     );
@@ -103,12 +98,7 @@ export function updateCampaign(campaignId, data) {
     })
       .then(response => response.json())
       .then(json => new Promise(resolve => {
-        if(json.result !== undefined){
-          dispatch(receiveUpdateCampaign(json.result));
-        }
-        else{
-          dispatch(receiveUpdateCampaign(null));
-        }
+        dispatch(receiveUpdateCampaign(json.result));
         resolve(json);
       })
     );
@@ -121,16 +111,10 @@ export function fetchCampaign(campaignId) {
     dispatch(requestCampaign());
     // Return a promise to wait for
     return fetch(apiUrl + '/api/campaigns/' + campaignId)
-      .then(function(response) {
-        if (response.status >= 400) {
-          dispatch(receiveCampaign({}) );
-          throw new Error('Bad response from server');
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(json => new Promise(resolve => {
-        dispatch(receiveCampaign(json.result));
-        resolve();
+        dispatch(receiveCampaign(json));
+        resolve(json);
       }));
   };
 }
@@ -140,16 +124,11 @@ export function fetchCampaigns(accountId = null) {
   return function next(dispatch) {
     dispatch(requestCampaigns());
     // Return a promise to wait for
-    let params = '';
-    if (accountId !== null) {
-      params = '?account_id=' + accountId;
-    }
-
-    return fetch(apiUrl + '/api/campaigns' + params)
+    return fetch(apiUrl + '/api/campaigns' + '?account_id=' + accountId)
       .then(response => response.json())
-      .then(json => {
-        dispatch(receiveCampaigns(json.results));
-      }
-    );
+      .then(json => new Promise(resolve => {
+        dispatch(receiveCampaigns(json));
+        resolve(json);
+      }));
   };
 }

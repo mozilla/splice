@@ -24,8 +24,8 @@ export function Campaign(state = initialState, action = null) {
       });
     case RECEIVE_CREATE_CAMPAIGN:
       let rows = state.rows;
-      if(action.json !== null){
-        rows = [action.json, ...state.rows];
+      if(action.json.result !== null){
+        rows = [action.json.result, ...state.rows];
       }
       return _.assign({}, state, {
         rows: rows,
@@ -37,8 +37,8 @@ export function Campaign(state = initialState, action = null) {
       });
     case RECEIVE_UPDATE_CAMPAIGN:
       let details = state.details;
-      if(action.json !== null){
-        details = action.json;
+      if(action.json.result !== null){
+        details = action.json.result;
       }
       return _.assign({}, state, {
         details: details,
@@ -50,7 +50,7 @@ export function Campaign(state = initialState, action = null) {
       });
     case RECEIVE_CAMPAIGNS:
       return _.assign({}, state, {
-        rows: action.rows,
+        rows: action.json.results,
         isFetching: false
       });
     case REQUEST_CAMPAIGN:
@@ -59,7 +59,7 @@ export function Campaign(state = initialState, action = null) {
       });
     case RECEIVE_CAMPAIGN:
       return _.assign({}, state, {
-        details: action.details,
+        details: action.json.result,
         isFetching: false
       });
     default:
