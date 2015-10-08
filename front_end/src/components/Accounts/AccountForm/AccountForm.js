@@ -34,7 +34,7 @@ export default class AccountForm extends Component {
           {(this.props.editMode) ? (<input type="hidden" id="AccountId" name="id" ref="id" value={data.id}/>) : null}
           <div className="form-group">
             <label htmlFor="AccountName">Name</label>
-            <input className="form-control" type="text" id="AccountName" name="name" ref="name" defaultValue={data.name} data-parsley-required/>
+            <input className="form-control" type="text" id="AccountName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
           </div>
           <div className="form-group">
             <label htmlFor="AccountContactName">Contact Name</label>
