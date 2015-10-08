@@ -20,14 +20,20 @@ export default class AdGroupDetails extends Component {
     let details;
     if (this.props.AdGroup.isFetching === false) {
       details = (
-        <div className="panel panel-default">
+        <div className="panel panel-default details-panel">
           <div className="panel-heading">
             <div className="pull-right">
               {(data.paused) ? 'PAUSED' : 'ACTIVE'}
             </div>
             <div className="pull-left">
-              <div>{data.name} <Link to={'/adgroups/edit/' + data.id}> <i className="fa fa-pencil"></i></Link></div>
-              <p>ID: {data.id}</p>
+              <h2>{data.name}</h2>
+              <Link to={'/adgroups/edit/' + data.id} title="Edit">
+                <span className="fa-stack fa-md">
+                <i className="fa fa-square fa-stack-2x"></i>
+                <i className="fa fa-pencil fa-stack-1x fa-inverse"></i>
+              </span>
+              </Link>
+              <p className="text-muted">ID: {data.id}</p>
             </div>
             <div className="clearfix"></div>
           </div>
