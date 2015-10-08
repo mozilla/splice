@@ -47,7 +47,7 @@ export function requestAccount() {
 export function receiveAccount(json) {
   return {
     type: RECEIVE_ACCOUNT,
-    details: json
+    json: json
   };
 }
 
@@ -57,7 +57,7 @@ export function requestAccounts() {
 export function receiveAccounts(json) {
   return {
     type: RECEIVE_ACCOUNTS,
-    rows: json
+    json: json
   };
 }
 
@@ -76,12 +76,7 @@ export function createAccount(data) {
     })
       .then(response => response.json())
       .then(json => new Promise(resolve => {
-        if(json.result !== undefined){
-          dispatch(receiveCreateAccount(json.result));
-        }
-        else{
-          dispatch(receiveCreateAccount(null));
-        }
+        dispatch(receiveCreateAccount(json));
         resolve(json);
       })
     );
@@ -103,12 +98,7 @@ export function updateAccount(accountId, data) {
     })
       .then(response => response.json())
       .then(json => new Promise(resolve => {
-        if(json.result !== undefined){
-          dispatch(receiveUpdateAccount(json.result));
-        }
-        else{
-          dispatch(receiveUpdateAccount(null));
-        }
+        dispatch(receiveUpdateAccount(json));
         resolve(json);
       })
     );
@@ -122,15 +112,9 @@ export function fetchAccount(accountId) {
     // Return a promise to wait for
     //return fetch('http://localhost:9999/public/mock/account_' + accountId + '.json')
     return fetch(apiUrl + '/api/accounts/' + accountId)
-      .then(function(response) {
-        if (response.status >= 400) {
-          dispatch(receiveAccount({}) );
-          throw new Error('Bad response from server');
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(json => new Promise(resolve => {
-        dispatch(receiveAccount(json.result));
+        dispatch(receiveAccount(json));
         resolve();
       })
     );
@@ -145,9 +129,9 @@ export function fetchAccounts() {
     //return fetch('http://localhost:9999/public/mock/accounts.json')
     return fetch(apiUrl + '/api/accounts')
       .then(response => response.json())
-      .then(json => {
-        dispatch(receiveAccounts(json.results));
-      }
-    );
+      .then(json => new Promise(resolve => {
+        dispatch(receiveAccounts(json));
+        resolve(json);
+      }));
   };
 }

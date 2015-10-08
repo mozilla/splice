@@ -24,8 +24,8 @@ export function Account(state = initialState, action = null) {
       });
     case RECEIVE_CREATE_ACCOUNT:
       let rows = state.rows;
-      if(action.json !== null){
-        rows = [action.json, ...state.rows];
+      if(action.json.result !== null){
+        rows = [action.json.result, ...state.rows];
       }
       return _.assign({}, state, {
         rows: rows,
@@ -37,8 +37,8 @@ export function Account(state = initialState, action = null) {
       });
     case RECEIVE_UPDATE_ACCOUNT:
       let details = state.details;
-      if(action.json !== null){
-        details = action.json;
+      if(action.json.result !== null){
+        details = action.json.result;
       }
       return _.assign({}, state, {
         details: details,
@@ -50,7 +50,7 @@ export function Account(state = initialState, action = null) {
       });
     case RECEIVE_ACCOUNTS:
       return _.assign({}, state, {
-        rows: action.rows,
+        rows: action.json.results,
         isFetching: false
       });
     case REQUEST_ACCOUNT:
@@ -59,7 +59,7 @@ export function Account(state = initialState, action = null) {
       });
     case RECEIVE_ACCOUNT:
       return _.assign({}, state, {
-        details: action.details,
+        details: action.json.result,
         isFetching: false
       });
     default:
