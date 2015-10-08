@@ -47,7 +47,7 @@ export function requestCampaign() {
 export function receiveCampaign(json) {
   return {
     type: RECEIVE_CAMPAIGN,
-    details: json
+    json: json
   };
 }
 
@@ -57,7 +57,7 @@ export function requestCampaigns() {
 export function receiveCampaigns(json) {
   return {
     type: RECEIVE_CAMPAIGNS,
-    rows: json
+    json: json
   };
 }
 
