@@ -6,8 +6,7 @@ import { fetchInit } from 'actions/Init/InitActions';
 import { fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import TopBar from 'components/App/Navigation/TopBar.js';
-import AccountNavigation from 'components/App/Navigation/AccountNavigation.js';
-import BreadCrumbs from 'components/App/Navigation/BreadCrumbs.js';
+
 import AppMessage from 'components/App/AppMessage/AppMessage.js';
 
 export default class AppPage extends Component {
@@ -37,24 +36,6 @@ export default class AppPage extends Component {
     }
   }
 
-  getNavigations(){
-    const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
-    let output = '';
-    if (this.props.location.pathname.match(/\/accounts\/\d.*/) ||
-      this.props.location.pathname.match(/\/campaigns\/.*/) ||
-      this.props.location.pathname.match(/\/adgroups\/.*/) ||
-      this.props.location.pathname.match(/\/tiles\/.*/) ) {
-      output = (
-        <div>
-          <AccountNavigation {...this.props} key="account-navigation"/>
-          <BreadCrumbs {...this.props} key="bread-crumbs"/>
-        </div>
-      );
-    }
-    return output;
-  }
-
   render() {
     const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
     const key = this.props.location.pathname;
@@ -62,10 +43,6 @@ export default class AppPage extends Component {
     return (
       <div className="app-container" style={{minWidth: '1170px'}}>
         <TopBar {...this.props} />
-
-        <ReactCSSTransitionGroup transitionName="fade" transitionAppear={true} transitionLeave={false}>
-          {this.getNavigations()}
-        </ReactCSSTransitionGroup>
 
         <div className="container-fluid">
           <div className="row">

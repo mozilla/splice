@@ -1,5 +1,6 @@
 .account-navigation{
   display: block;
+  width: 100%;
 
   .row{
     margin: 0;
@@ -8,6 +9,8 @@
     border: 1px solid darkgray;
     border-left:0px;
     padding: 10px 20px;
+    background-color: #fff;
+    white-space: nowrap;
   }
   .button.active{
     background-color: darkgray;
