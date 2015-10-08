@@ -18,8 +18,6 @@ require('jquery-serializejson');
 bindFormConfig();
 require('parsleyjs');
 
-require('../../../styles/app/forms.scss');
-
 export default class CampaignForm extends Component {
   componentDidMount() {
     bindFormValidators();
@@ -62,11 +60,21 @@ export default class CampaignForm extends Component {
         <form id="CampaignForm" ref="form">
           {(this.props.editMode) ? (<input type="hidden" name="id" ref="id" value={data.id}/>) : null}
           <input type="hidden" name="account_id" ref="account_id" value={data.account_id} />
-          <input type="hidden" name="paused" ref="paused" value={(data.paused !== undefined) ? data.paused : false} />
+
           <div className="form-group">
             <label htmlFor="CampaignName">Name</label>
             <input className="form-control" type="text" id="CampaignName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
           </div>
+          {(this.props.editMode)
+            ? (<div className="form-group">
+                <label htmlFor="AccountPaused">Paused</label>
+                <div className="onoffswitch">
+                  <input type="checkbox" name="paused" ref="paused" className="onoffswitch-checkbox" id="AccountPaused" defaultChecked={data.paused} value="true"/>
+                  <label className="onoffswitch-label" htmlFor="AccountPaused"></label>
+                </div>
+              </div>)
+            : <input type="hidden" name="paused" ref="paused" value={false}/>
+          }
           <div className="form-group">
             <label htmlFor="CampaignStartDate">Start Date</label>
             <input className="form-control" type="text" id="CampaignStartDate" name="start_date" ref="start_date" defaultValue={formatDate(data.start_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
@@ -113,6 +121,9 @@ export default class CampaignForm extends Component {
       }
       if(formData.end_date.trim() !== ''){
         formData.end_date = apiDate(formData.end_date);
+      }
+      if(this.props.editMode && formData.paused === undefined) {
+        formData.paused = false;
       }
 
       const data = JSON.stringify(formData);
