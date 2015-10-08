@@ -98,7 +98,7 @@ export function updateCampaign(campaignId, data) {
     })
       .then(response => response.json())
       .then(json => new Promise(resolve => {
-        dispatch(receiveUpdateCampaign(json.result));
+        dispatch(receiveUpdateCampaign(json));
         resolve(json);
       })
     );
