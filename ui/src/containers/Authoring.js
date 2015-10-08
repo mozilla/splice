@@ -136,7 +136,7 @@ export default class Authoring extends Component {
                 </div>
               }
 
-              <button onClick={this.handlePublish}>Publish</button>
+              <button className="publish" onClick={this.handlePublish}>Publish</button>
             </div>
           }
 
