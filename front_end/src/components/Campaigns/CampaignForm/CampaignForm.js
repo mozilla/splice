@@ -65,7 +65,7 @@ export default class CampaignForm extends Component {
           <input type="hidden" name="paused" ref="paused" value={(data.paused !== undefined) ? data.paused : false} />
           <div className="form-group">
             <label htmlFor="CampaignName">Name</label>
-            <input className="form-control" type="text" id="CampaignName" name="name" ref="name" defaultValue={data.name} data-parsley-required />
+            <input className="form-control" type="text" id="CampaignName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
           </div>
           <div className="form-group">
             <label htmlFor="CampaignStartDate">Start Date</label>
