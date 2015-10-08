@@ -112,15 +112,13 @@ export default class AccountForm extends Component {
     }
     else{
       if(this.props.editMode){
-        dispatch(fetchAccounts());
         dispatch(displayMessage('success', 'Account Updated Successfully') );
-        dispatch(shownMessage());
       }
       else{
-        dispatch(fetchAccounts());
         dispatch(displayMessage('success', 'Account Created Successfully') );
-        history.pushState(null, '/accounts/' + response.result.id);
       }
+      dispatch(fetchAccounts());
+      history.pushState(null, '/accounts/' + response.result.id);
     }
   }
 }

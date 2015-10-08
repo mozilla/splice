@@ -163,12 +163,11 @@ export default class CampaignForm extends Component {
     else{
       if(this.props.editMode){
         dispatch(displayMessage('success', 'Campaign Updated Successfully') );
-        dispatch(shownMessage());
       }
       else{
         dispatch(displayMessage('success', 'Campaign Created Successfully') );
-        history.pushState(null, '/campaigns/' + response.result.id);
       }
+      history.pushState(null, '/campaigns/' + response.result.id);
     }
   }
 }
