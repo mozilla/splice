@@ -26,9 +26,9 @@ export default class CampaignCreatePage extends Component {
 
     return (
       <div>
-        <h1>{this.props.Account.details.name}: Create Campaign</h1>
         <div className="panel panel-default">
           <div className="panel-body">
+            <h2>{this.props.Account.details.name}: Create Campaign</h2>
             <CampaignForm editMode={false} {...this.props} />
           </div>
         </div>

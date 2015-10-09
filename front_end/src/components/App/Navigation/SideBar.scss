@@ -1,9 +1,11 @@
 @import '../../../styles/variables';
 
 .side-bar{
+  display: block;
   position: absolute;
   z-index: 1000;
   display: none;
+  @include right-shadow();
 
   .accounts-list{
     position: relative;

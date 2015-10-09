@@ -14,9 +14,9 @@ export default class AccountCreatePage extends Component {
   render() {
     return (
       <div>
-        <h1>Create Account</h1>
         <div className="panel panel-default">
           <div className="panel-body">
+            <h2>Create Account</h2>
             <AccountForm editMode={false} {...this.props}/>
           </div>
         </div>

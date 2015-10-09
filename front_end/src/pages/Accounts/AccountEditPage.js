@@ -21,9 +21,9 @@ export default class AccountEditPage extends Component {
   render() {
     return (
       <div>
-        <h1>Edit Account - {this.props.Account.details.name}</h1>
         <div className="panel panel-default">
           <div className="panel-body">
+            <h2>Edit Account - {this.props.Account.details.name}</h2>
             { (this.props.Account.details.id !== undefined)
               ? <AccountForm editMode={true} {...this.props} />
               : null
