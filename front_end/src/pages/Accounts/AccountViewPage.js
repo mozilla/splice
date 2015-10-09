@@ -25,13 +25,10 @@ export default class AccountViewPage extends Component {
       <div>
         <div className="row">
           <div className="col-xs-6">
-            <h1>Account</h1>
             <AccountDetails Account={this.props.Account}/>
           </div>
         </div>
-        <br/>
         <p><Link className="btn btn-default" to={'/accounts/' + this.props.Account.details.id + '/createcampaign'}>Create Campaign <i className="fa fa-plus"></i></Link></p>
-        <div><strong>Campaigns</strong></div>
         <CampaignList rows={this.props.Campaign.rows}
                       isFetching={this.props.Campaign.isFetching}
                       channels={this.props.Init.channels}/>

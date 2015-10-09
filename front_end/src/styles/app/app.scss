@@ -4,15 +4,72 @@ html body{
   font-family: $font-default;
   font-size: 12px;
   background-color: $color-navy;
+  color: #363755;
 }
 .app-container{
   min-width: 1170px;
 
   .content-container{
-    padding: 15px 85px 0 85px;
+    padding: 30px 85px 0 85px;
   }
 }
 
 .btn {
   margin-right: 10px;
+}
+
+select.styled{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 0px 55px 0 40px;
+  border-radius: 0px;
+  height: 30px;
+  background: $color-dark-gray url(/public/img/select-downarrow.png) no-repeat right center;
+}
+
+.module{
+  margin: 0 0 40px 0;
+
+  .module-header{
+    background-color: $color-dark-gray;
+    height: 50px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 50px;
+    vertical-align: middle;
+    padding-left: 15px;
+  }
+  .module-table{
+    width: 100%;
+
+    thead{
+      tr th{
+        height: 50px;
+        padding: 0 15px;
+        font-size: 14px;
+        background-color: $color-pink;
+        color: #fff;
+      }
+    }
+
+    tbody{
+      tr td{
+        height: 40px;
+        background-color: $color-light-gray;
+        padding:0 15px;
+        font-size: 14px;
+      }
+      tr:nth-child(even) td{
+        background-color: #fff;
+      }
+    }
+  }
+
+  .module-table.data-table{
+    tbody tr td{
+      font-size: 12px;
+    }
+  }
 }

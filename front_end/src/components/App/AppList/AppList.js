@@ -16,7 +16,7 @@ export default class AppList extends Component {
 
     return (
       <div>
-        <select ref="typeSelector" onChange={(e) => this.selectType(e)}>
+        <select className="styled" ref="typeSelector" onChange={(e) => this.selectType(e)}>
           <option value="accounts">Accounts</option>
           <option value="campaigns">Campaigns</option>
           <option value="ad_groups">Ad Groups</option>
