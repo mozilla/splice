@@ -15,16 +15,16 @@ export default class RecentlyViewedList extends Component {
     }
 
     return (
-      <table className="table">
-        <thead>
-        <tr>
-          <th>Recently Viewed</th>
-        </tr>
-        </thead>
-        <ReactCSSTransitionGroup component="tbody" transitionName="fade" transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
-          {rows}
-        </ReactCSSTransitionGroup>
-      </table>
+      <div className="module">
+        <div className="module-header">
+          Recently Viewed
+        </div>
+        <table className="module-table">
+          <tbody>
+            {rows}
+          </tbody>
+        </table>
+      </div>
     );
   }
 }

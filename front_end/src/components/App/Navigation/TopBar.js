@@ -21,7 +21,7 @@ export default class TopBar extends Component {
   render() {
     const ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
-    let height = 40;
+    let height = 50;
     if(this.showTabsAndBreadCrumbs()){
       height = 134;
     }

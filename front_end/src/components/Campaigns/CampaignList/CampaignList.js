@@ -17,8 +17,8 @@ export default class CampaignList extends Component {
     }
 
     return (
-      <div>
-        <table className="table">
+      <div className="module">
+        <table className="module-table data-table">
           <thead>
           <tr>
             <th>ID</th>
@@ -28,9 +28,9 @@ export default class CampaignList extends Component {
             <th>Created</th>
           </tr>
           </thead>
-          <ReactCSSTransitionGroup component="tbody" transitionName="fade" transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+          <tbody>
             {rows}
-          </ReactCSSTransitionGroup>
+          </tbody>
         </table>
         {spinner}
       </div>

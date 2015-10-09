@@ -25,11 +25,6 @@ export default class CampaignViewPage extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-xs-12">
-            <h1>Campaign</h1>
-          </div>
-        </div>
-        <div className="row">
           <div className="col-xs-6">
             <CampaignDetails Campaign={this.props.Campaign} Init={this.props.Init}/>
           </div>
@@ -39,8 +34,6 @@ export default class CampaignViewPage extends Component {
             </div>
           </div>
         </div>
-        <br/>
-        <div><strong>Ad Groups</strong></div>
         <AdGroupList rows={this.props.AdGroup.rows}
                      isFetching={this.props.AdGroup.isFetching}/>
       </div>

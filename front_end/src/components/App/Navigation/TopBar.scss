@@ -29,7 +29,7 @@
     font-family: $font-heading;
   }
   h1 a{
-    color: #000;
+    color: $font-color-default;
     text-decoration: none;
   }
   .navigation-toggle{
@@ -39,7 +39,7 @@
     color: white;
     cursor: pointer;
     height: 50px;
-    width: 84px;
+    width: 85px;
   }
 }
 

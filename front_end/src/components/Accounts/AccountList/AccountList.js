@@ -12,24 +12,24 @@ export default class AccountList extends Component {
           <AccountRow {...row} key={index}/>
       );
     } else {
-      spinner = (<img src="./public/img/ajax-loader.gif"/>);
+      spinner = (<img src="./public/img/ajax-loader-navy.gif"/>);
     }
 
     return (
-      <div>
-        <table className="table">
+      <div className="module">
+        <table className="module-table data-table">
           <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Created</th>
-          </tr>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Created</th>
+            </tr>
           </thead>
-          <ReactCSSTransitionGroup component="tbody" transitionName="fade" transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+          <tbody>
             {rows}
-          </ReactCSSTransitionGroup>
+          </tbody>
         </table>
         {spinner}
       </div>

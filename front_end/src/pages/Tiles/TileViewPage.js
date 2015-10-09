@@ -25,7 +25,6 @@ export default class TileViewPage extends Component {
       <div>
         <div className="row">
           <div className="col-xs-6">
-            <h1>Tile</h1>
             <TileDetails Tile={this.props.Tile}/>
           </div>
         </div>

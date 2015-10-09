@@ -25,11 +25,6 @@ export default class HomePage extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-xs-12">
-            <h1>Dashboard</h1>
-          </div>
-        </div>
-        <div className="row">
           <div className="col-xs-3">
             <RecentlyViewedList recentlyViewedRows={this.props.App.recentlyViewed}/>
           </div>
