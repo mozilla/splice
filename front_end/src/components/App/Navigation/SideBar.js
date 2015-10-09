@@ -88,7 +88,7 @@ export default class SideBar extends Component {
   handleResize(){
     const h = window.innerHeight;
 
-    const maxHeight = h - 166;
+    const maxHeight = h - 168;
     $('.accounts-list').css('max-height', maxHeight);
   }
 }
