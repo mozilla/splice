@@ -7,8 +7,17 @@ import SideBar from 'components/App/Navigation/SideBar.js';
 import AccountNavigation from 'components/App/Navigation/AccountNavigation.js';
 import BreadCrumbs from 'components/App/Navigation/BreadCrumbs.js';
 import './TopBar.scss';
+import './HamburgerIcon.scss';
+
+import Ps from 'perfect-scrollbar';
 
 export default class TopBar extends Component {
+  componentDidMount(){
+    $(window).scroll(function(){
+      $('.fixed-navigation').css('top', $(window).scrollTop());
+    });
+  }
+
   render() {
     const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -19,9 +28,13 @@ export default class TopBar extends Component {
 
     return (
       <div className="fixed-navigation-container" style={{height: height}}>
-        <div className="fixed-navigation" style={{position: 'fixed', zIndex: '1000', width: '100%'}}>
+        <div className="fixed-navigation">
           <div className="header-bar">
-            <div className="navigation-toggle" onClick={this.handleNavigationToggle}><i className="fa fa-bars"></i></div>
+            <div className="navigation-toggle" onClick={this.handleNavigationToggle}>
+              <button className="c-hamburger c-hamburger--htx">
+                <span>toggle menu</span>
+              </button>
+            </div>
             <h1><Link to="/">SPLICE</Link></h1>
           </div>
           <SideBar {...this.props} />
@@ -50,11 +63,16 @@ export default class TopBar extends Component {
 
   handleNavigationToggle(){
     const display = $('.side-bar').css('display');
+
     if(display === 'none'){
       $('.side-bar').slideDown();
+      $('.c-hamburger').addClass('is-active');
+
+      Ps.update($('.accounts-list').get(0));
     }
     else{
       $('.side-bar').slideUp();
+      $('.c-hamburger').removeClass('is-active');
     }
   }
 }
