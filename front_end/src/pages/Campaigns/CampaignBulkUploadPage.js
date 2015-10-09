@@ -1,4 +1,4 @@
-import React, { Component, findDOMNode } from '../../../node_modules/react/addons';
+import React, { Component, findDOMNode } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 

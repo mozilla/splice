@@ -1,4 +1,4 @@
-import React, { Component } from 'react/addons';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { updateDocTitle, listTypeSelect } from 'actions/App/AppActions';

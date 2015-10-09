@@ -3,7 +3,7 @@ import TileRow from './TileRow';
 
 export default class TileList extends Component {
 	render() {
-		const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+		const ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
 		let rows;
 		let spinner;
@@ -29,7 +29,7 @@ export default class TileList extends Component {
 						<th>Created</th>
 					</tr>
 					</thead>
-					<ReactCSSTransitionGroup component="tbody" transitionName="fade" transitionLeave={false} >
+					<ReactCSSTransitionGroup component="tbody" transitionName="fade" transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeaveTimeout={300} >
 						{rows}
 					</ReactCSSTransitionGroup>
 				</table>
