@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import tv4 from 'tv4';
+import { separateTilesTypes } from '../utils/Distributions';
 
 export const AUTHORING_INIT_DATA_START = 'AUTHORING_INIT_DATA_START';
 export const AUTHORING_INIT_DATA_SUCCESS = 'AUTHORING_INIT_DATA_SUCCESS';
@@ -24,7 +25,7 @@ function requestInitData() {
 
 function checkStatus(response){
   if (response.status >= 200 && response.status < 300) {
-    return response.json();
+    return response;
   } else {
     throw new Error('HTTP ' + response.status + ' - ' + response.statusText);
   }
@@ -35,6 +36,7 @@ function fetchInitData(state) {
     dispatch(requestInitData());
     return fetch(state.initData.url)
       .then(checkStatus)
+      .then(response => response.json())
       .then(json => {
         dispatch((() => ({
           type: AUTHORING_INIT_DATA_SUCCESS,
@@ -148,41 +150,6 @@ export function loadDistributionFile(file) {
     dispatch((() => ({type: AUTHORING_LOAD_FILE_START}))());
     reader.readAsText(file);
   };
-}
-
-// Helper for processing distribution files
-function separateTilesTypes(data, assets) {
-  // Separate Tiles types from a list of tiles in 2 groups: suggested, directory
-  var output = {raw: data, ui: {}};
-
-  for (var locale in output.raw) {
-    var tiles = data[locale];
-
-    output.ui[locale] = {
-      suggestedTiles: [],
-      directoryTiles: []
-    };
-
-    for (var i = 0; i < tiles.length; i++) {
-      var tile = tiles[i];
-
-      // populate the imageURI and enhancedImageURI if tile is in compact format
-      if (tile.hasOwnProperty('imageURI') && assets.hasOwnProperty(tile.imageURI)) {
-        tile.imageURI = assets[tile.imageURI];
-      }
-      if (tile.hasOwnProperty('enhancedImageURI') && assets.hasOwnProperty(tile.enhancedImageURI)) {
-        tile.enhancedImageURI = assets[tile.enhancedImageURI];
-      }
-      if (tile.frecent_sites) {
-        output.ui[locale].suggestedTiles.push(tile);
-      }
-      else {
-        output.ui[locale].directoryTiles.push(tile);
-      }
-    }
-  }
-
-  return output;
 }
 
 export function setPublishDate(momentObj) {
@@ -324,8 +291,8 @@ function compressPayload(tiles) {
   };
 };
 
-function encodeQueryParams(params)
-{
+// TODO: refactor to remove duplication
+function encodeQueryParams(params) {
   var ret = [];
   for (var d in params) {
     ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(params[d]));

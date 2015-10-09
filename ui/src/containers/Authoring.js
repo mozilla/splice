@@ -120,23 +120,21 @@ export default class Authoring extends Component {
             <div>
               <h2>Publish:</h2>
 
-              <div>
-                <label>Datetime:</label>
-                <DateTime isValidDate={isValidDate}
-                          onChange={this.handlePublishDateChange}
-                          dateFormat="dddd, MMMM Do YYYY,"
-                          timeFormat="h:mma (UTCZ)"
-                          value={distribution.scheduled} />
-              </div>
+              <label>Datetime:</label>
+              <DateTime isValidDate={isValidDate}
+                        onChange={this.handlePublishDateChange}
+                        dateFormat="dddd, MMMM Do YYYY,"
+                        timeFormat="h:mma (UTCZ)"
+                        value={distribution.scheduled} />
 
               {distribution.scheduled === '' &&
-                <div>
+                <span>
                   <label>Deploy Now:</label>
                   <input type="checkbox" checked={distribution.deployNow} onChange={this.handleDeployNowChange} />
-                </div>
+                </span>
               }
 
-              <button className="publish" onClick={this.handlePublish}>Publish</button>
+              <button className="nice" onClick={this.handlePublish}>Publish</button>
             </div>
           }
 

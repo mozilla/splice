@@ -9,6 +9,14 @@ label {
   margin: 5px 15px 5px 0;
 }
 
+h2 {
+  margin: 0;
+}
+
+input {
+  margin: 0 25px 0 0;
+}
+
 #page {
 
 }
@@ -84,7 +92,8 @@ label {
 }
 
 .picker {
-  display: block;
+  display: inline-block;
+  margin: 0 10px 0 0;
   padding: 10px 0;
 }
 
@@ -119,33 +128,32 @@ p.success {
   padding: 10px 15px;
 }
 
-/* publish button */
-button.publish {
-  color: #FFF;
+/* nice button */
+button.nice {
   background-color: #337AB7;
-  border-color: #2E6DA4;
-  display: inline-block;
-  margin: 10px 0;
-  padding: 6px 12px;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.42857;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: pointer;
-  -moz-user-select: none;
   background-image: none;
   border: 1px solid transparent;
   border-radius: 4px;
+  border-color: #2E6DA4;
+  color: #FFF;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857;
+  margin: 10px 0;
+  padding: 3px 9px;
+  text-align: center;
+  white-space: nowrap;
+  -moz-user-select: none;
+  vertical-align: middle;
 }
 
-button.publish:hover {
-  color: #FFF;
+button.nice:hover {
   background-color: #286090;
   border-color: #204D74;
+  color: #FFF;
 }
-
 
 /* Tile filtering and previewing */
 #pickers {
@@ -194,3 +202,25 @@ button.publish:hover {
  .newtab-site.suggested .newtab-suggested {
    display: table;
  }
+
+/* distributions table */
+.distributions table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+.distributions th {
+  border-bottom: solid 2px #ccc;
+  padding: 5px 15px;
+  text-align: left;
+}
+
+.distributions td {
+  border-bottom: solid 1px #ccc;
+  padding: 0 15px;
+  text-align: left;
+}
+
+.distributions td.actions a {
+  margin: 0 25px 0 0;
+}
