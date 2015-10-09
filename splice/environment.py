@@ -135,6 +135,17 @@ class Environment(object):
         data.append(["ERROR", "ERROR"])
         return data
 
+    def _load_category_bucketer(self):
+        import json
+        with open(self.config.BUCKETER_FIXTURE_PATH, 'rb') as f:
+            return json.loads(f.read())
+
+    def _load_categories(self):
+        bucketer = self._load_category_bucketer()
+        categories = [bucket["name"] for bucket in bucketer]
+        categories.sort()
+        return categories
+
     def _load_fixtures(self):
         locales = set(self._load_locales())
 
