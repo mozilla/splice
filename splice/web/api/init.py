@@ -22,10 +22,15 @@ channel_fields = {
     'created_at': fields.DateTime(dt_format='iso8601'),
 }
 
+category_fields = {
+    'results': fields.List(fields.String),
+}
+
 all_fields = {
     "countries": fields.List(fields.Nested(country_fields)),
     "locales": fields.List(fields.String),
-    "channels": fields.List(fields.Nested(channel_fields))
+    "channels": fields.List(fields.Nested(channel_fields)),
+    "categories": fields.List(fields.String),
 }
 
 
@@ -45,10 +50,12 @@ class InitAPI(Resource):
             countries = Environment.instance()._load_countries()[:-1]
             country_items = [{"country_code": code, "country_name": name} for code, name in countries]
             channels = get_channels()
+            categories = Environment.instance()._load_categories()
             data = {
                 "countries": country_items,
                 "channels": channels,
-                "locales": locales
+                "locales": locales,
+                "categories": categories,
             }
             return {'result': marshal(data, all_fields)}
         elif target == "locales":
@@ -64,6 +71,9 @@ class InitAPI(Resource):
         elif target == "channels":
             channels = get_channels()
             return {'results': marshal(channels, channel_fields)}
+        elif target == "categories":
+            categories = Environment.instance()._load_categories()
+            return marshal({"results": categories}, category_fields)
         else:
             return {"message": "Unknown target, must be one of [all|locales|countries|channels]"}, 404
 

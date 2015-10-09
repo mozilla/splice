@@ -29,6 +29,16 @@ class TestCountryLocale(BaseTestCase):
             channel_api = channels[i]
             assert_equal(channel_api["name"], channel["name"])
 
+    def test_get_all_categories(self):
+        """ Test for getting all categories"""
+        url = url_for('api.init.init', target="categories")
+        response = self.client.get(url)
+        assert_equal(response.status_code, 200)
+        categories = json.loads(response.data)['results']
+
+        categories_fixture = Environment.instance()._load_categories()
+        assert_equal(categories, categories_fixture)
+
     def test_get_all_countries(self):
         """ Test for getting all countries"""
         url = url_for('api.init.init', target="countries")
@@ -62,9 +72,15 @@ class TestCountryLocale(BaseTestCase):
         assert_equal(response.status_code, 200)
         channels = json.loads(response.data)['results']
 
+        url = url_for('api.init.init', target="categories")
+        response = self.client.get(url)
+        assert_equal(response.status_code, 200)
+        categories = json.loads(response.data)['results']
+
         assert_equal(combo["locales"], locales)
         assert_equal(combo["channels"], channels)
         assert_equal(combo["countries"], countries)
+        assert_equal(combo["categories"], categories)
 
     def test_get_unknown(self):
         """ Test for getting unknown init data"""

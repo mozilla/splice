@@ -23,6 +23,7 @@ class DefaultConfig(object):
 
     COUNTRY_FIXTURE_PATH = os.path.join(FIXTURES_DIR, "iso3166.csv")
     LOCALE_FIXTURE_PATH = os.path.join(FIXTURES_DIR, "all-locales.mozilla-aurora")
+    BUCKETER_FIXTURE_PATH = os.path.join(FIXTURES_DIR, "category_bucketer.json")
 
     SQLALCHEMY_DATABASE_URI = "postgres://localhost/mozsplice_campaigns"
     SQLALCHEMY_BINDS = {
