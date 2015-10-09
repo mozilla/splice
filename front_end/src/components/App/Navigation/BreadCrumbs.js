@@ -1,4 +1,4 @@
-import React, { Component } from 'react/addons';
+import React, { Component } from 'react';
 import { Link } from 'react-router';
 
 export default class BreadCrumbs extends Component {

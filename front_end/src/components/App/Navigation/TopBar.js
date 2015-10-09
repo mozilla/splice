@@ -19,7 +19,7 @@ export default class TopBar extends Component {
   }
 
   render() {
-    const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+    const ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
     let height = 40;
     if(this.showTabsAndBreadCrumbs()){
@@ -40,11 +40,11 @@ export default class TopBar extends Component {
           <SideBar {...this.props} />
           <div className="clearfix"></div>
 
-          <ReactCSSTransitionGroup transitionName="fade" transitionAppear={true} transitionLeave={false}>
+          <ReactCSSTransitionGroup transitionName="fade" transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
             {(this.showTabsAndBreadCrumbs() )
-              ? (<div>
+              ? (<div key="tabs-and-breadcrumbs">
                    <AccountNavigation {...this.props} key="account-navigation"/>
-                   <BreadCrumbs {...this.props} key="bread-crumbs"/>
+                   <BreadCrumbs {...this.props} key="breadcrumbs"/>
                  </div>
               )
               : null }

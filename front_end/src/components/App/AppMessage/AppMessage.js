@@ -36,7 +36,7 @@ export default class AppMessage extends Component {
   }
 
   render() {
-    const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+    const ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
     let message;
     if(this.props.message.display){
@@ -58,7 +58,7 @@ export default class AppMessage extends Component {
       }
 
       message = (
-        <div className={'panel panel-default'}>
+        <div className={'panel panel-default'} key="app-message">
           <div className={'panel-body ' + bgClass + ' ' + textClass}>
             <div className="col-xs-11">
               {this.getBodyMessage()}
@@ -72,7 +72,7 @@ export default class AppMessage extends Component {
     }
 
     return (
-      <ReactCSSTransitionGroup transitionName="fade" transitionAppear={true} transitionLeave={false}>
+      <ReactCSSTransitionGroup transitionName="fade" transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
         {message}
       </ReactCSSTransitionGroup>
     );

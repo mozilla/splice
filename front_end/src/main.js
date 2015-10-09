@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+
 import { combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 
@@ -33,7 +35,7 @@ export default class App extends Component {
     return (
       <div>
         <Provider store={store}>
-          {() => <Routes />}
+          <Routes />
         </Provider>
         {devtools}
       </div>
@@ -41,4 +43,4 @@ export default class App extends Component {
   }
 }
 
-React.render(<App />, document.body);
+ReactDOM.render(<App />, document.getElementById('content'));

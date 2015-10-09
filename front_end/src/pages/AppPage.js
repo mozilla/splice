@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react/addons';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
 import { shownMessage, removeMessage } from 'actions/App/AppActions';
@@ -37,7 +37,7 @@ export default class AppPage extends Component {
   }
 
   render() {
-    const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+    const ReactCSSTransitionGroup = require('react-addons-css-transition-group');
     const key = this.props.location.pathname;
 
     return (
@@ -48,7 +48,7 @@ export default class AppPage extends Component {
           <div className="row">
             <div className="col-xs-12">
               <AppMessage message={this.props.App.message} dispatch={this.props.dispatch}/>
-              <ReactCSSTransitionGroup transitionName="page-transition" transitionAppear={true} transitionLeave={false}>
+              <ReactCSSTransitionGroup transitionName="page-transition" transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeave={false} transitionLeaveTimeout={300}>
                 {React.cloneElement(this.props.children || <div />, {key: key})}
               </ReactCSSTransitionGroup>
             </div>
