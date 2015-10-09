@@ -6,11 +6,18 @@
   width: 100%;
   min-width: 1170px;
   top: 0px;
+
+  .ps-container.ps-active-y>.ps-scrollbar-y-rail,
+  .ps-container.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail{
+    background-color: transparent;
+    opacity: 0.6;
+    margin-right: 2px;
+  }
 }
 
 .header-bar{
   overflow: auto;
-  background-color: $color-gray;
+  background-color: $color-light-gray;
   height: 50px;
 
   h1{
@@ -35,3 +42,4 @@
     width: 84px;
   }
 }
+

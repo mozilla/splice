@@ -44,15 +44,13 @@ export default class AppPage extends Component {
       <div className="app-container">
         <TopBar {...this.props} />
 
-        <div className="container-fluid">
+        <div className="container-fluid content-container">
           <div className="row">
             <div className="col-xs-12">
-              <div className="content-container">
-                <AppMessage message={this.props.App.message} dispatch={this.props.dispatch}/>
-                <ReactCSSTransitionGroup transitionName="page-transition" transitionAppear={true} transitionLeave={false}>
-                  {React.cloneElement(this.props.children || <div />, {key: key})}
-                </ReactCSSTransitionGroup>
-              </div>
+              <AppMessage message={this.props.App.message} dispatch={this.props.dispatch}/>
+              <ReactCSSTransitionGroup transitionName="page-transition" transitionAppear={true} transitionLeave={false}>
+                {React.cloneElement(this.props.children || <div />, {key: key})}
+              </ReactCSSTransitionGroup>
             </div>
           </div>
         </div>

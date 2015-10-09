@@ -7,12 +7,17 @@
 
   .accounts-list{
     position: relative;
+    border-top:1px solid white;
 
     ul{
       list-style: none;
       padding: 0;
       margin: 0;
-      background: linear-gradient($color-pink, #595b6c);
+      background: linear-gradient($color-pink, $color-dark-gray);
+
+      :first-child{
+        border-top:0px;
+      }
 
       li{
         border-top:1px solid white;

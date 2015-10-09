@@ -3,13 +3,16 @@
 html body{
   font-family: $font-default;
   font-size: 12px;
+  background-color: $color-navy;
 }
 .app-container{
   min-width: 1170px;
+
+  .content-container{
+    padding: 15px 85px 0 85px;
+  }
 }
-.content-container{
-  padding-top: 15px;
-}
+
 .btn {
   margin-right: 10px;
 }
