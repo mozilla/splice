@@ -9,3 +9,15 @@ $color-dark-gray: #5c5e6f;
 $color-pink: #cf375f;
 $color-aqua: #01d3b6;
 $color-navy: #263b4f;
+
+@mixin top-inset-shadow() {
+  -webkit-box-shadow: inset 0px 15px 5px -10px rgba(0,0,0,0.3);
+  -moz-box-shadow: inset 0px 15px 5px -10px rgba(0,0,0,0.3);
+  box-shadow: inset 0px 15px 5px -10px rgba(0,0,0,0.3);
+}
+
+@mixin right-shadow() {
+  -webkit-box-shadow: 5px 2px 5px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: 5px 2px 5px 0px rgba(0,0,0,0.3);
+  box-shadow: 5px 2px 5px 0px rgba(0,0,0,0.3);
+}

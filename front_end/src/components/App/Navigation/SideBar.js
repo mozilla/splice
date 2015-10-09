@@ -11,6 +11,7 @@ export default class SideBar extends Component {
   componentDidMount(){
     $(document).on('click', '.side-bar a', function(){
       $('.side-bar').slideUp();
+      $('.c-hamburger').removeClass('is-active');
     });
 
     const context = this;
@@ -44,38 +45,6 @@ export default class SideBar extends Component {
         <div className="accounts-list">
           <ul className="">
             {accountLinks}
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
-            <li><a>Account</a></li>
           </ul>
         </div>
 

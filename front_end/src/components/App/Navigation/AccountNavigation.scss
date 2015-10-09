@@ -22,6 +22,7 @@
     background-color: $color-pink;
   }
   .button a{
+    @include top-inset-shadow();
     display: block;
     color: #fff;
     width: 100%;
