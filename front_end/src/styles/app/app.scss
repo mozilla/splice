@@ -1,5 +1,11 @@
-.app-container{
+@import '../variables';
 
+html body{
+  font-family: $font-default;
+  font-size: 12px;
+}
+.app-container{
+  min-width: 1170px;
 }
 .content-container{
   padding-top: 15px;

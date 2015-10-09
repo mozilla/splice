@@ -1,19 +1,37 @@
+@import '../../../styles/variables';
+
+.fixed-navigation{
+  position: absolute;
+  z-index: 1000;
+  width: 100%;
+  min-width: 1170px;
+  top: 0px;
+}
+
 .header-bar{
   overflow: auto;
-  background-color: #fff;
+  background-color: $color-gray;
+  height: 50px;
 
   h1{
     font-size: 18px;
     float:left;
     margin: 0;
-    padding-top: 10px;
+    line-height: 50px;
+    vertical-align: middle;
+    font-family: $font-heading;
+  }
+  h1 a{
+    color: #000;
+    text-decoration: none;
   }
   .navigation-toggle{
     float:left;
     margin: 0 15px 0 0;
     background-color: darkgray;
     color: white;
-    padding: 10px 20px;
     cursor: pointer;
+    height: 50px;
+    width: 84px;
   }
 }

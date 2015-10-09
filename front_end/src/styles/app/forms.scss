@@ -1,3 +1,9 @@
 .form-group.has-error .select2-selection{
   border-color: #a94442;
 }
+select.js-select{
+  display:none;
+}
+.js-select{
+  width: 100%;
+}

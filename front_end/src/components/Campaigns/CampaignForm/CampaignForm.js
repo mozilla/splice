@@ -22,7 +22,7 @@ export default class CampaignForm extends Component {
   componentDidMount() {
     bindFormValidators();
 
-    $('#CampaignCountries').select2();
+    $('.js-select').select2();
 
     const options = {
       useCurrent: true,
@@ -85,7 +85,7 @@ export default class CampaignForm extends Component {
           </div>
           <div className="form-group">
             <label htmlFor="CampaignCountries">Countries</label><br/>
-            <select className="form-control" style={{width: '100%', display: 'none'}} type="text" id="CampaignCountries" name="countries[]" ref="countries" multiple="multiple" defaultValue={data.countries} data-parsley-required>
+            <select className="form-control js-select" style={{width: '100%'}} type="text" id="CampaignCountries" name="countries[]" ref="countries" multiple="multiple" defaultValue={data.countries} data-parsley-required>
               {countries}
             </select>
           </div>
