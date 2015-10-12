@@ -1,13 +1,36 @@
+@import '../variables';
+
 .details-panel{
-  .panel-heading{
-    h2{
-      margin: 5px 10px 5px 0;
+  margin: 0px 0px 40px 0px;
+
+  .details-panel-header{
+    background-color: $color-pink;
+    color: #fff;
+
+    h2.details-panel-name{
+      margin: 10px 10px 10px 15px;
       display: inline-block;
     }
-    a{
-      display: inline-block;
-      position: relative;
-      top: -5px;
+    .details-panel-id{
+      padding: 0px 0 10px 15px;
     }
+    .details-edit-link{
+      background-color: $color-aqua;
+      color: #fff;
+      height: 30px;
+      width: 30px;
+      display: block;
+      position: absolute;
+      top: 0px;
+      right: 15px;
+      text-align: center;
+      vertical-align: middle;
+      line-height: 30px;
+      font-size: 20px;
+    }
+  }
+  .details-panel-body{
+    background-color: #fff;
+    @include top-inset-shadow();
   }
 }
