@@ -13,7 +13,8 @@ import {
   AUTHORING_SET_DEPLOY_NOW,
   AUTHORING_PUBLISH_START,
   AUTHORING_PUBLISH_SUCCESS,
-  AUTHORING_PUBLISH_ERROR
+  AUTHORING_PUBLISH_ERROR,
+  AUTHORING_TOGGLE_URL_RESULTS
 } from '../actions/Authoring';
 
 function selectedChannel(state = 'desktop', action) {
@@ -70,6 +71,7 @@ function distribution(state = {
   scheduled: '',
   deployNow: 0, // 0=false, 1=true
   publishResults: null,
+  collapsedResults: true,
   selectedLocale: null,
   selectedType: null,
   tiles: {}
@@ -132,6 +134,10 @@ function distribution(state = {
       return Object.assign({}, state, {
         isPublishing: false,
         publishResults: action.results
+      });
+    case AUTHORING_TOGGLE_URL_RESULTS:
+      return Object.assign({}, state, {
+        collapsedResults: !state.collapsedResults
       });
   default:
     return state;

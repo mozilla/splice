@@ -2,10 +2,6 @@ body {
   background: #f0f0f0;
 }
 
-div.busy * {
-  cursor: wait !important;
-}
-
 label {
   display: inline-block;
   font-size: 13px;
@@ -19,6 +15,20 @@ h2 {
 
 input {
   margin: 0 25px 0 0;
+}
+
+a,
+a:visited {
+  color: #0095DD;
+  text-decoration: none;
+}
+
+ul.collapse {
+  display: none;
+}
+
+div.busy * {
+  cursor: wait !important;
 }
 
 #page {

@@ -9,7 +9,8 @@ import {
   loadDistributionFile,
   setPublishDate,
   setDeployNow,
-  publishDistribution } from '../actions/Authoring';
+  publishDistribution,
+  toggleUrlResults} from '../actions/Authoring';
 import FilePicker from '../components/FilePicker';
 import Picker from '../components/Picker';
 import Tiles from '../components/Tiles';
@@ -26,6 +27,7 @@ export default class Authoring extends Component {
     this.handlePublishDateChange = this.handlePublishDateChange.bind(this);
     this.handleDeployNowChange = this.handleDeployNowChange.bind(this);
     this.handlePublish = this.handlePublish.bind(this);
+    this.handleToggleUrlResults = this.handleToggleUrlResults.bind(this);
   }
 
   componentDidMount() {
@@ -62,6 +64,11 @@ export default class Authoring extends Component {
 
   handlePublish() {
     this.props.dispatch(publishDistribution());
+  }
+
+  handleToggleUrlResults(ev) {
+    ev.preventDefault();
+    this.props.dispatch(toggleUrlResults());
   }
 
   render () {
@@ -168,8 +175,21 @@ export default class Authoring extends Component {
 
               <br/>
 
-              <label>URLs:</label>
-              <ul>
+              <label>
+                URLs:
+                {' ' + distribution.publishResults.urls.reduce(function(previousValue, currentValue, index, array) {
+                  return previousValue + currentValue[1];
+                }, 0)} New and
+                {' ' + distribution.publishResults.urls.reduce(function(previousValue, currentValue, index, array) {
+                  return previousValue + (currentValue[1] ? 0 : 1);
+                }, 0)} Cached
+              </label>
+
+              <a className="toggle" href="#" onClick={this.handleToggleUrlResults}>
+                {distribution.collapsedResults ? '+ expand' : '- collapse'}
+              </a>
+
+              <ul className={distribution.collapsedResults ? 'collapse' : ''}>
                 {distribution.publishResults.urls.map(function(val, i){
                     return (
                       <li>

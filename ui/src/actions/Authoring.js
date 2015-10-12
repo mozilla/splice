@@ -16,6 +16,7 @@ export const AUTHORING_SET_DEPLOY_NOW = 'AUTHORING_SET_DEPLOY_NOW';
 export const AUTHORING_PUBLISH_START = 'AUTHORING_PUBLISH_START';
 export const AUTHORING_PUBLISH_SUCCESS = 'AUTHORING_PUBLISH_SUCCESS';
 export const AUTHORING_PUBLISH_ERROR = 'AUTHORING_PUBLISH_ERROR';
+export const AUTHORING_TOGGLE_URL_RESULTS = 'AUTHORING_TOGGLE_URL_RESULTS';
 
 function requestInitData() {
   return {
@@ -298,4 +299,10 @@ function encodeQueryParams(params) {
     ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(params[d]));
   }
   return ret.join('&');
+}
+
+export function toggleUrlResults() {
+  return {
+    type: AUTHORING_TOGGLE_URL_RESULTS
+  };
 }
