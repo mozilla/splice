@@ -12,7 +12,7 @@ export default class CampaignRow extends Component {
         <td>{this.props.id}</td>
         <td><Link to={'/campaigns/' + this.props.id}>{this.props.name}</Link></td>
         <td>{(channel) ? _.capitalize(channel.name) : ''}</td>
-        <td>{(this.props.paused) ? 'Paused' : 'Active'}</td>
+        <td className={'status ' + ((this.props.paused) ? 'paused' : 'active')}>{(this.props.paused) ? 'Paused' : 'Active'}</td>
         <td>{formatDate(this.props.created_at, 'M/D/YYYY')}</td>
       </tr>
     );
