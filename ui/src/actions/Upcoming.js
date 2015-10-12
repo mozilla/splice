@@ -63,6 +63,8 @@ export function fetchInitDataIfNeeded() {
   return (dispatch, getState) => {
     if (shouldFetchInitData(getState().Upcoming)) {
       return dispatch(fetchInitData(getState().Upcoming));
+    } else {
+      return dispatch(refreshDistributions());
     }
   };
 }
