@@ -26,9 +26,9 @@ export default class CampaignEditPage extends Component {
 
     return (
       <div>
-        <div className="panel panel-default">
-          <div className="panel-body">
-            <h2>Edit Campaign - {this.props.Campaign.details.name}</h2>
+        <div className="module">
+          <div className="module-header">Edit Campaign - {this.props.Campaign.details.name}</div>
+          <div className="module-body">
             {(this.props.Campaign.details.id && this.props.Init.countries.length)
               ? <CampaignForm editMode={true} {...this.props} />
               : null
