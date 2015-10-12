@@ -60,11 +60,13 @@ export default class AppMessage extends Component {
       message = (
         <div className={'panel panel-default'} key="app-message">
           <div className={'panel-body ' + bgClass + ' ' + textClass}>
-            <div className="col-xs-11">
-              {this.getBodyMessage()}
-            </div>
-            <div className="col-xs-1 text-right">
-              <a href="#" onClick={e => this.handleCloseClick(e)} className={textClass}><i className="fa fa-close"></i></a>
+            <div className="row">
+              <div className="col-xs-11">
+                {this.getBodyMessage()}
+              </div>
+              <div className="col-xs-1 text-right">
+                <a href="#" onClick={e => this.handleCloseClick(e)} className={textClass}><i className="fa fa-close"></i></a>
+              </div>
             </div>
           </div>
         </div>
