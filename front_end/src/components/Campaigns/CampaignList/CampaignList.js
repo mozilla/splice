@@ -13,7 +13,7 @@ export default class CampaignList extends Component {
           <CampaignRow {...row} key={index} channels={this.props.channels}/>
       );
     } else {
-      spinner = (<img src="./public/img/ajax-loader.gif"/>);
+      spinner = (<img src="./public/img/ajax-loader-navy.gif"/>);
     }
 
     return (

@@ -19,11 +19,6 @@ export default class CampaignCreatePage extends Component {
   }
 
   render() {
-    let spinner;
-    if(this.props.Campaign.isSaving){
-      spinner = <img src="/public/img/ajax-loader.gif" />;
-    }
-
     return (
       <div>
         <div className="module">

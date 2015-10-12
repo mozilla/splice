@@ -86,7 +86,7 @@ export default class CampaignDetails extends Component {
         </div>
       );
     } else {
-      details = <img src="./public/img/ajax-loader.gif"/>;
+      details = <img src="./public/img/ajax-loader-navy.gif"/>;
     }
 
     return (<div>{details}</div>);

@@ -58,7 +58,6 @@ select.styled{
 
 .module{
   margin: 0 0 40px 0;
-  background-color: #fff;
 
   .module-header{
     background-color: $color-dark-gray;
@@ -71,6 +70,7 @@ select.styled{
   }
   .module-body{
     padding: 15px;
+    background-color: #fff;
   }
   .module-table{
     width: 100%;
