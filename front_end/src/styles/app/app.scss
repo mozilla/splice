@@ -12,10 +12,10 @@ html body{
   .content-container{
     padding: 30px 85px 0 85px;
   }
-}
-
-.btn {
-  margin-right: 10px;
+  .btn {
+    margin-right: 10px;
+    border-radius: 0px;
+  }
 }
 
 select.styled{
@@ -54,6 +54,7 @@ select.styled{
 
 .module{
   margin: 0 0 40px 0;
+  background-color: #fff;
 
   .module-header{
     background-color: $color-dark-gray;
@@ -63,6 +64,9 @@ select.styled{
     line-height: 50px;
     vertical-align: middle;
     padding-left: 15px;
+  }
+  .module-body{
+    padding: 15px;
   }
   .module-table{
     width: 100%;
