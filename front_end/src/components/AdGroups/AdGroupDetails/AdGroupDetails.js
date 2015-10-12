@@ -20,24 +20,21 @@ export default class AdGroupDetails extends Component {
     let details;
     if (this.props.AdGroup.isFetching === false) {
       details = (
-        <div className="panel panel-default details-panel">
-          <div className="panel-heading">
-            <div className="pull-right">
-              {(data.paused) ? 'PAUSED' : 'ACTIVE'}
+        <div className="details-panel">
+          <div className="details-panel-header">
+            <div className={'details-panel-status ' + ((data.paused) ? 'paused' : 'active')}>{(data.paused) ? 'PAUSED' : 'ACTIVE'}</div>
+            <div className="table-cell">
+              <h2 className="details-panel-name">{data.name}</h2>
+              <div className="details-panel-id">ID: {data.id}</div>
             </div>
-            <div className="pull-left">
-              <h2>{data.name}</h2>
-              <Link to={'/adgroups/edit/' + data.id} title="Edit">
-                <span className="fa-stack fa-md">
-                <i className="fa fa-square fa-stack-2x"></i>
-                <i className="fa fa-pencil fa-stack-1x fa-inverse"></i>
-              </span>
+
+            <div className="details-edit-link">
+              <Link className="" to={'/adgroups/' + data.id + '/edit'} title="Edit">
+                <i className="fa fa-pencil"></i>
               </Link>
-              <p className="text-muted">ID: {data.id}</p>
             </div>
-            <div className="clearfix"></div>
           </div>
-          <div className="panel-body">
+          <div className="details-panel-body">
             <p><strong>Categories:</strong> {categories}</p>
             <p><strong>Explanation:</strong> {data.explanation}</p>
             <p><strong>Frequency Cap Daily:</strong> {data.frequency_cap_daily}</p>

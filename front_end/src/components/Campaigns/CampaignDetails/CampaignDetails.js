@@ -34,34 +34,54 @@ export default class CampaignDetails extends Component {
     let details;
     if (this.props.Campaign.isFetching === false) {
       details = (
-        <div className="panel panel-default details-panel">
-          <div className="panel-heading">
-            <div className="pull-right">
-              <div className="">{(data.paused) ? 'PAUSED' : 'ACTIVE'}</div>
+        <div className="details-panel campaign-details">
+          <div className="details-panel-header">
+            <div className={'details-panel-status ' + ((data.paused) ? 'paused' : 'active')}>{(data.paused) ? 'PAUSED' : 'ACTIVE'}</div>
+
+            <div className="table-cell">
+              <h2 className="details-panel-name">{data.name}</h2>
+              <div className="details-panel-id">ID: {data.id}</div>
             </div>
-            <div className="pull-left">
-              <h2>{data.name}</h2>
-              <Link to={'/campaigns/' + data.id + '/edit'} title="Edit">
-                <span className="fa-stack fa-md">
-                <i className="fa fa-square fa-stack-2x"></i>
-                <i className="fa fa-pencil fa-stack-1x fa-inverse"></i>
-              </span>
+
+            <div className="details-edit-link">
+              <Link className="" to={'/campaigns/' + data.id + '/edit'} title="Edit">
+                <i className="fa fa-pencil"></i>
               </Link>
-              <p className="text-muted">ID: {data.id}</p>
             </div>
-
-            <div className="clearfix"></div>
           </div>
-          <div className="panel-body">
-            <p><strong>Channel:</strong> {(channel) ? _.capitalize(channel.name) : ''}</p>
-
-            <p><strong>Countries:</strong> {countries}</p>
-
-            <p><strong>Start Date:</strong> {(data.start_date !== null) ? formatDate(data.start_date, 'M/D/YYYY') : ''}</p>
-
-            <p><strong>End Date:</strong> {(data.end_date !== null) ? formatDate(data.end_date, 'M/D/YYYY') : ''}</p>
-
-            <p><strong>Created:</strong> {formatDate(data.created_at, 'M/D/YYYY')}</p>
+          <div className="details-panel-body">
+            <div className="row">
+              <div className="col-xs-4">
+                <div className="data-value">
+                  <strong>Channel</strong>
+                  {(channel) ? _.capitalize(channel.name) : ''}
+                </div>
+              </div>
+              <div className="col-xs-4">
+                <div className="data-value">
+                  <strong>Countries</strong>
+                  {countries}
+                </div>
+              </div>
+              <div className="col-xs-4">
+                <div className="data-value">
+                  <strong>Schedule</strong>
+                  <div>Start</div>
+                  <div className="small">{(data.start_date !== null) ? formatDate(data.start_date, 'M/D/YYYY') : ''}</div>
+                  <div>|</div>
+                  <div>End</div>
+                  <div className="small">{(data.end_date !== null) ? formatDate(data.end_date, 'M/D/YYYY') : ''}</div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-xs-4">
+                <div className="data-value">
+                  <strong>Created</strong>
+                  {formatDate(data.created_at, 'M/D/YYYY')}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       );

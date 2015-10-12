@@ -14,11 +14,15 @@ export default class AccountDetails extends Component {
       details = (
         <div className="details-panel account-details">
           <div className="details-panel-header">
-            <h2 className="details-panel-name">{data.name}</h2>
-            <Link className="details-edit-link" to={'/accounts/' + data.id + '/edit/'} title="Edit">
-                <i className="fa fa-pencil"></i>
-            </Link>
-            <div className="details-panel-id">ID: {data.id}</div>
+            <div className="table-cell">
+              <h2 className="details-panel-name">{data.name}</h2>
+              <div className="details-panel-id">ID: {data.id}</div>
+            </div>
+            <div className="details-edit-link">
+              <Link className="" to={'/accounts/' + data.id + '/edit/'} title="Edit">
+                  <i className="fa fa-pencil"></i>
+              </Link>
+            </div>
           </div>
           <div className="details-panel-body">
             <div className="row">
