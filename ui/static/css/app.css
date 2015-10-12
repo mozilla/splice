@@ -2,6 +2,10 @@ body {
   background: #f0f0f0;
 }
 
+div.busy * {
+  cursor: wait !important;
+}
+
 label {
   display: inline-block;
   font-size: 13px;
@@ -18,7 +22,6 @@ input {
 }
 
 #page {
-
 }
 
 #nav {
@@ -108,10 +111,10 @@ input {
 
 /* error and status messages */
 p.status {
-  background: #FCF8E3;
+  background: #FCF8E3 url(../img/ajax-loader.gif) no-repeat 10px center;
   border: solid 1px #FAEBCC;
   margin: 10px 0;
-  padding: 10px 15px;
+  padding: 10px 15px 10px 35px;
 }
 
 p.error {
@@ -153,6 +156,12 @@ button.nice:hover {
   background-color: #286090;
   border-color: #204D74;
   color: #FFF;
+}
+
+button.nice:disabled {
+  background-color: #ccc;
+  border-color: #bbb;
+  cursor:wait;
 }
 
 /* Tile filtering and previewing */

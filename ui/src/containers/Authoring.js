@@ -81,7 +81,7 @@ export default class Authoring extends Component {
     }
 
     return (
-      <div>
+      <div className={(initData.isFetching || distribution.isLoading || distribution.isPublishing) ? 'busy': ''}>
         {initData.isFetching &&
           <p className="status">Loading init data...</p>
         }
@@ -100,16 +100,19 @@ export default class Authoring extends Component {
             <div id="distribution-picker" className="container">
               <Picker title="Channel" value={selectedChannel}
                       onChange={this.handleChannelChange}
-                      options={initData.channels.map(x => x.name)} />
+                      options={initData.channels.map(x => x.name)}
+                      disabled={distribution.isLoading || distribution.isPublishing} />
 
-              <FilePicker title="Load a new distribution from file" onChange={this.handleNewDistribution} />
+              <FilePicker title="Load a new distribution from file"
+                          onChange={this.handleNewDistribution}
+                          disabled={distribution.isLoading || distribution.isPublishing} />
             </div>
           </div>
         }
 
         <div className="container">
           {distribution.isLoading &&
-            <p className="status">Loading the distribution...</p>
+            <p className="status">Loading the distribution. Please be patient...</p>
           }
 
           {distribution.errorMessage &&
@@ -130,16 +133,23 @@ export default class Authoring extends Component {
               {distribution.scheduled === '' &&
                 <span>
                   <label>Deploy Now:</label>
-                  <input type="checkbox" checked={distribution.deployNow} onChange={this.handleDeployNowChange} />
+                  <input type="checkbox"
+                         checked={distribution.deployNow}
+                         onChange={this.handleDeployNowChange}
+                         disabled={distribution.isLoading || distribution.isPublishing} />
                 </span>
               }
 
-              <button className="nice" onClick={this.handlePublish}>Publish</button>
+              <button className="nice"
+                      onClick={this.handlePublish}
+                      disabled={distribution.isLoading || distribution.isPublishing}>
+                Publish
+              </button>
             </div>
           }
 
           {distribution.isPublishing &&
-            <p className="status">Compressing and publishing the distribution...</p>
+            <p className="status">Compressing and publishing the distribution. Please be patient...</p>
           }
 
 
