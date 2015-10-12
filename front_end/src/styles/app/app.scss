@@ -34,6 +34,24 @@ select.styled{
   }
 }
 
+.create-link{
+  height: 35px;
+  display: inline-block;
+  border: 1px solid #fff;
+  padding: 0 25px;
+  line-height: 35px;
+  vertical-align: middle;
+  background-color: $color-pink;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.create-link:hover{
+  color: #fff;
+  text-decoration: none;
+}
+
 .module{
   margin: 0 0 40px 0;
 
