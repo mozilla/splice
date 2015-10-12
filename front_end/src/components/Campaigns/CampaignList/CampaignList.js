@@ -23,7 +23,7 @@ export default class CampaignList extends Component {
           <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Channel ID</th>
+            <th>Channel</th>
             <th>Status</th>
             <th>Created</th>
           </tr>
