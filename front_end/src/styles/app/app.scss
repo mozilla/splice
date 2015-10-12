@@ -76,7 +76,7 @@ select.styled{
     width: 100%;
 
     thead{
-      tr th{
+      th{
         padding: 15px 15px;
         font-size: 14px;
         font-weight: normal;
@@ -89,19 +89,33 @@ select.styled{
       tr:first-child td{
         @include top-inset-shadow();
       }
-      tr td{
-        background-color: $color-light-gray;
+      td{
+        background-color: #f0f0f1;
         padding: 10px 15px;
         font-size: 14px;
       }
       tr:nth-child(even) td{
         background-color: #fff;
       }
+      td.status{
+        text-transform: uppercase;
+      }
+      td.status.active, td.status.approved{
+        background-color: $color-aqua;
+      }
+      td.status.paused, td.status.pending{
+        background-color: $color-gray;
+        color: #fff;
+      }
+      td.status.disapproved{
+        background-color: #000;
+        color: #fff;
+      }
     }
   }
 
   .module-table.data-table{
-    tbody tr td{
+    tbody td{
       font-size: 12px;
     }
   }
