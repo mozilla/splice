@@ -3,8 +3,6 @@ import AdGroupRow from './AdGroupRow';
 
 export default class AdGroupList extends Component {
   render() {
-    const ReactCSSTransitionGroup = require('react-addons-css-transition-group');
-
     let rows;
     let spinner;
 

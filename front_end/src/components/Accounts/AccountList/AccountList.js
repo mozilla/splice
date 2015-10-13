@@ -3,8 +3,6 @@ import AccountRow from './AccountRow';
 
 export default class AccountList extends Component {
   render() {
-    const ReactCSSTransitionGroup = require('react-addons-css-transition-group');
-
     let rows;
     let spinner;
     if (this.props.isFetching === false) {

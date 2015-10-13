@@ -3,8 +3,6 @@ import RecentlyViewedRow from './RecentlyViewedRow';
 
 export default class RecentlyViewedList extends Component {
   render() {
-    const ReactCSSTransitionGroup = require('react-addons-css-transition-group');
-
     let rows;
     if (this.props.recentlyViewedRows !== undefined && this.props.recentlyViewedRows.length > 0) {
       rows = this.props.recentlyViewedRows.map((recentlyViewedRow, index) =>
