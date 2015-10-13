@@ -37,14 +37,10 @@ export function fetchInit() {
 }
 
 export function getChannel(id, rows){
-  return _.find(rows, function(row) {
-    return row.id === id;
-  });
+  return rows.find(row => row.id === id);
 }
 
 export function getCountry(id, rows){
-  return _.find(rows, function(row) {
-    return row.country_code === id;
-  });
+  return rows.find(row => row.country_code === id);
 }
 
