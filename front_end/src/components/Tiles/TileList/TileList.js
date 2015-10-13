@@ -3,8 +3,6 @@ import TileRow from './TileRow';
 
 export default class TileList extends Component {
 	render() {
-		const ReactCSSTransitionGroup = require('react-addons-css-transition-group');
-
 		let rows;
 		let spinner;
 

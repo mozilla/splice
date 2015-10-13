@@ -3,8 +3,6 @@ import CampaignRow from './CampaignRow';
 
 export default class CampaignList extends Component {
   render() {
-    const ReactCSSTransitionGroup = require('react-addons-css-transition-group');
-
     let rows;
     let spinner;
 
