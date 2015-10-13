@@ -19,9 +19,9 @@ export function Init(state = initialState, action = null) {
     }
     case RECEIVE_INIT:
       return _.assign({}, state, {
-        channels: action.json.channels,
-        countries: action.json.countries,
-        locales: action.json.locales,
+        channels: action.json.result.channels,
+        countries: action.json.result.countries,
+        locales: action.json.result.locales,
         isFetching: false
       });
     default:

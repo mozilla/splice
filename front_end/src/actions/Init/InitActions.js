@@ -29,7 +29,7 @@ export function fetchInit() {
     return fetch(apiUrl + '/api/init/all')
       .then(response => response.json())
       .then(json => new Promise(resolve => {
-        dispatch(receiveInit(json.result));
+        dispatch(receiveInit(json));
         resolve();
       })
     );

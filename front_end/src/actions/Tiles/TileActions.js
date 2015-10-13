@@ -10,6 +10,9 @@ if (typeof __DEVELOPMENT__ !== 'undefined' && __DEVELOPMENT__ === true) {
 export const REQUEST_CREATE_TILE = 'REQUEST_CREATE_TILE';
 export const RECEIVE_CREATE_TILE = 'RECEIVE_CREATE_TILE';
 
+export const REQUEST_UPDATE_TILE = 'REQUEST_UPDATE_TILE';
+export const RECEIVE_UPDATE_TILE = 'RECEIVE_UPDATE_TILE';
+
 export const REQUEST_TILES = 'REQUEST_TILES';
 export const RECEIVE_TILES = 'RECEIVE_TILES';
 
@@ -27,13 +30,24 @@ export function receiveCreateTile(json) {
   };
 }
 
+export function requestUpdateTile() {
+  return {type: REQUEST_UPDATE_TILE};
+}
+
+export function receiveUpdateTile(json) {
+  return {
+    type: RECEIVE_UPDATE_TILE,
+    json: json
+  };
+}
+
 export function requestTile() {
   return {type: REQUEST_TILE};
 }
 export function receiveTile(json) {
   return {
     type: RECEIVE_TILE,
-    details: json
+    json: json
   };
 }
 
@@ -43,7 +57,51 @@ export function requestTiles() {
 export function receiveTiles(json) {
   return {
     type: RECEIVE_TILES,
-    rows: json
+    json: json
+  };
+}
+
+export function createTile(data) {
+  // thunk middleware knows how to handle functions
+  return function next(dispatch) {
+    dispatch(requestCreateTile());
+    // Return a promise to wait for
+    return fetch(apiUrl + '/api/tiles', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: data
+    })
+      .then(response => response.json())
+      .then(json => new Promise(resolve => {
+        dispatch(receiveCreateTile(json));
+        resolve(json);
+      })
+    );
+  };
+}
+
+export function updateTile(tileId, data) {
+  // thunk middleware knows how to handle functions
+  return function next(dispatch) {
+    dispatch(requestUpdateTile());
+    // Return a promise to wait for
+    return fetch(apiUrl + '/api/tiles/' + tileId, {
+      method: 'put',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: data
+    })
+      .then(response => response.json())
+      .then(json => new Promise(resolve => {
+        dispatch(receiveUpdateTile(json));
+        resolve(json);
+      })
+    );
   };
 }
 
@@ -55,7 +113,7 @@ export function fetchTile(tileId) {
     return fetch(apiUrl + '/api/tiles/' + tileId)
       .then(response => response.json())
       .then(json => new Promise(resolve => {
-        dispatch(receiveTile(json.result));
+        dispatch(receiveTile(json));
         resolve();
       }));
   };
@@ -73,49 +131,9 @@ export function fetchTiles(adGroupId = null) {
 
     return fetch(apiUrl + '/api/tiles' + params)
       .then(response => response.json())
-      .then(json => {
-        dispatch(receiveTiles(json.results));
-      }
-    );
-  };
-}
-
-export function saveTile(data) {
-  // thunk middleware knows how to handle functions
-  return function next(dispatch) {
-    dispatch(requestCreateTile());
-    // Return a promise to wait for
-    /*return fetch(apiUrl + '/api/tiles', {
-     method: 'post',
-     headers: {
-     'Accept': 'application/json',
-     'Content-Type': 'application/json'
-     },
-     body: JSON.stringify({
-     name: data.text
-     })
-     }).then(response => response.json())
-     .then((json) => {
-     dispatch(receiveCreateAccount({
-     'created_at': '',
-     'email': 'test@gmail.com',
-     'id': 99,
-     'name': data.text,
-     'phone': '+1(888)0000000'
-     }));
-     });*/
-    return fetch('http://localhost:9999/public/mock/tiles.json')
-      .then(response => response.json())
-      .then(() =>
-        setTimeout(() => {
-          dispatch(receiveCreateTile({
-            'created_at': '',
-            'email': 'test@gmail.com',
-            'id': 99,
-            'name': data.text,
-            'phone': '+1(888)0000000'
-          }));
-        }, 1000)
-    );
+      .then(json => new Promise(resolve => {
+        dispatch(receiveTiles(json));
+        resolve();
+      }));
   };
 }

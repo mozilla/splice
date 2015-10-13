@@ -1,6 +1,8 @@
 import {
-  REQUEST_ADD_ADGROUP,
-  RECEIVE_ADD_ADGROUP,
+  REQUEST_CREATE_ADGROUP,
+  RECEIVE_CREATE_ADGROUP,
+  REQUEST_UPDATE_ADGROUP,
+  RECEIVE_UPDATE_ADGROUP,
   REQUEST_ADGROUPS,
   RECEIVE_ADGROUPS,
   REQUEST_ADGROUP,
@@ -16,13 +18,30 @@ const initialState = {
 
 export function AdGroup(state = initialState, action = null) {
   switch (action.type) {
-    case REQUEST_ADD_ADGROUP:
+    case REQUEST_CREATE_ADGROUP:
       return _.assign({}, state, {
         isSaving: true
       });
-    case RECEIVE_ADD_ADGROUP:
+    case RECEIVE_CREATE_ADGROUP:
+      let rows = state.rows;
+      if(action.json.result !== null){
+        rows = [action.json.result, ...state.rows];
+      }
       return _.assign({}, state, {
-        rows: [...state.rows, action.json],
+        rows: rows,
+        isSaving: false
+      });
+    case REQUEST_UPDATE_ADGROUP:
+      return _.assign({}, state, {
+        isSaving: true
+      });
+    case RECEIVE_UPDATE_ADGROUP:
+      let details = state.details;
+      if(action.json.result !== null){
+        details = action.json.result;
+      }
+      return _.assign({}, state, {
+        details: details,
         isSaving: false
       });
     case REQUEST_ADGROUPS:
@@ -31,7 +50,7 @@ export function AdGroup(state = initialState, action = null) {
       });
     case RECEIVE_ADGROUPS:
       return _.assign({}, state, {
-        rows: action.rows,
+        rows: action.json.results,
         isFetching: false
       });
     case REQUEST_ADGROUP:
@@ -40,7 +59,7 @@ export function AdGroup(state = initialState, action = null) {
       });
     case RECEIVE_ADGROUP:
       return _.assign({}, state, {
-        details: action.details,
+        details: action.json.result,
         isFetching: false
       });
     default:

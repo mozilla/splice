@@ -1,40 +1,40 @@
 import expect from 'expect';
-import { Account } from 'reducers/AccountReducer';
-import * as types from 'actions/Accounts/AccountActions';
+import { Campaign } from 'reducers/CampaignReducer';
+import * as types from 'actions/Campaigns/CampaignActions';
 import _ from 'lodash';
 
-describe('Account ', () => {
+describe('Campaign ', () => {
   //Test initial state
   it('should return the initial state', () => {
     expect(
-      Account(undefined, {}).rows).toEqual([]);
+      Campaign(undefined, {}).rows).toEqual([]);
   });
 
-  it('should handle RECEIVE_ACCOUNTS', () => {
+  it('should handle RECEIVE_CAMPAIGNS', () => {
     expect(
-      Account(undefined, {
-        type: types.RECEIVE_ACCOUNTS,
+      Campaign(undefined, {
+        type: types.RECEIVE_CAMPAIGNS,
         json: {results: [{text: "Run the tests"}] }
       }).rows).toEqual(
       [{text: "Run the tests"}]
     );
   });
 
-  it('should handle RECEIVE_ACCOUNT', () => {
+  it('should handle RECEIVE_CAMPAIGN', () => {
     expect(
-      Account(undefined, {
-        type: types.RECEIVE_ACCOUNT,
+      Campaign(undefined, {
+        type: types.RECEIVE_CAMPAIGN,
         json: { result: {text: "Run the tests"} }
       }).details).toEqual(
       {text: "Run the tests"}
     );
   });
 
-  it('should handle RECEIVE_CREATE_ACCOUNT', () => {
+  it('should handle RECEIVE_CREATE_CAMPAIGN', () => {
     //Test adding to initial state
     expect(
-      Account(undefined, {
-        type: types.RECEIVE_CREATE_ACCOUNT,
+      Campaign(undefined, {
+        type: types.RECEIVE_CREATE_CAMPAIGN,
         json: {result: {text: "Run the tests"} }
       }).rows
     ).toEqual([
@@ -43,14 +43,14 @@ describe('Account ', () => {
 
     //Test adding when state is explicitly set
     expect(
-      Account({
+      Campaign({
         rows: [
           {text: "Use Redux"},
           {text: "Learn to connect it to React"},
           {text: "Run the tests"}
         ]
       }, {
-        type: types.RECEIVE_CREATE_ACCOUNT,
+        type: types.RECEIVE_CREATE_CAMPAIGN,
         json: {result: {text: "Last test"} }
       }).rows
     ).toEqual([
@@ -61,13 +61,13 @@ describe('Account ', () => {
       ]);
   });
 
-  it('should handle RECEIVE_UPDATE_ACCOUNT', () => {
+  it('should handle RECEIVE_UPDATE_CAMPAIGN', () => {
     //Test Updating when state is explicitly set
     expect(
-      Account({
+      Campaign({
         details: {name: "test"}
       }, {
-        type: types.RECEIVE_UPDATE_ACCOUNT,
+        type: types.RECEIVE_UPDATE_CAMPAIGN,
         json: {result: {name: "new name"} }
       }).details
     ).toEqual(
