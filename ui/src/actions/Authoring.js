@@ -238,8 +238,7 @@ export function publishDistribution() {
 
 // Helper for publishing tiles
 function cloneTile(tile) {
-  var copy = JSON.parse(JSON.stringify(tile));
-  return copy;
+  return Object.assign({}, tile);;
 };
 
 // Helper for publishing tiles
