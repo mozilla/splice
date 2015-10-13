@@ -1,40 +1,40 @@
 import expect from 'expect';
-import { Account } from 'reducers/AccountReducer';
-import * as types from 'actions/Accounts/AccountActions';
+import { Tile } from 'reducers/TileReducer';
+import * as types from 'actions/Tiles/TileActions';
 import _ from 'lodash';
 
-describe('Account ', () => {
+describe('Tile ', () => {
   //Test initial state
   it('should return the initial state', () => {
     expect(
-      Account(undefined, {}).rows).toEqual([]);
+      Tile(undefined, {}).rows).toEqual([]);
   });
 
-  it('should handle RECEIVE_ACCOUNTS', () => {
+  it('should handle RECEIVE_TILES', () => {
     expect(
-      Account(undefined, {
-        type: types.RECEIVE_ACCOUNTS,
+      Tile(undefined, {
+        type: types.RECEIVE_TILES,
         json: {results: [{text: "Run the tests"}] }
       }).rows).toEqual(
       [{text: "Run the tests"}]
     );
   });
 
-  it('should handle RECEIVE_ACCOUNT', () => {
+  it('should handle RECEIVE_TILE', () => {
     expect(
-      Account(undefined, {
-        type: types.RECEIVE_ACCOUNT,
+      Tile(undefined, {
+        type: types.RECEIVE_TILE,
         json: { result: {text: "Run the tests"} }
       }).details).toEqual(
       {text: "Run the tests"}
     );
   });
 
-  it('should handle RECEIVE_CREATE_ACCOUNT', () => {
+  it('should handle RECEIVE_CREATE_TILE', () => {
     //Test adding to initial state
     expect(
-      Account(undefined, {
-        type: types.RECEIVE_CREATE_ACCOUNT,
+      Tile(undefined, {
+        type: types.RECEIVE_CREATE_TILE,
         json: {result: {text: "Run the tests"} }
       }).rows
     ).toEqual([
@@ -43,14 +43,14 @@ describe('Account ', () => {
 
     //Test adding when state is explicitly set
     expect(
-      Account({
+      Tile({
         rows: [
           {text: "Use Redux"},
           {text: "Learn to connect it to React"},
           {text: "Run the tests"}
         ]
       }, {
-        type: types.RECEIVE_CREATE_ACCOUNT,
+        type: types.RECEIVE_CREATE_TILE,
         json: {result: {text: "Last test"} }
       }).rows
     ).toEqual([
@@ -61,13 +61,13 @@ describe('Account ', () => {
       ]);
   });
 
-  it('should handle RECEIVE_UPDATE_ACCOUNT', () => {
+  it('should handle RECEIVE_UPDATE_TILE', () => {
     //Test Updating when state is explicitly set
     expect(
-      Account({
+      Tile({
         details: {name: "test"}
       }, {
-        type: types.RECEIVE_UPDATE_ACCOUNT,
+        type: types.RECEIVE_UPDATE_TILE,
         json: {result: {name: "new name"} }
       }).details
     ).toEqual(

@@ -1,40 +1,40 @@
 import expect from 'expect';
-import { Account } from 'reducers/AccountReducer';
-import * as types from 'actions/Accounts/AccountActions';
+import { AdGroup } from 'reducers/AdGroupReducer';
+import * as types from 'actions/AdGroups/AdGroupActions';
 import _ from 'lodash';
 
-describe('Account ', () => {
+describe('AdGroup ', () => {
   //Test initial state
   it('should return the initial state', () => {
     expect(
-      Account(undefined, {}).rows).toEqual([]);
+      AdGroup(undefined, {}).rows).toEqual([]);
   });
 
-  it('should handle RECEIVE_ACCOUNTS', () => {
+  it('should handle RECEIVE_ADGROUPS', () => {
     expect(
-      Account(undefined, {
-        type: types.RECEIVE_ACCOUNTS,
+      AdGroup(undefined, {
+        type: types.RECEIVE_ADGROUPS,
         json: {results: [{text: "Run the tests"}] }
       }).rows).toEqual(
       [{text: "Run the tests"}]
     );
   });
 
-  it('should handle RECEIVE_ACCOUNT', () => {
+  it('should handle RECEIVE_ADGROUP', () => {
     expect(
-      Account(undefined, {
-        type: types.RECEIVE_ACCOUNT,
+      AdGroup(undefined, {
+        type: types.RECEIVE_ADGROUP,
         json: { result: {text: "Run the tests"} }
       }).details).toEqual(
       {text: "Run the tests"}
     );
   });
 
-  it('should handle RECEIVE_CREATE_ACCOUNT', () => {
+  it('should handle RECEIVE_CREATE_ADGROUP', () => {
     //Test adding to initial state
     expect(
-      Account(undefined, {
-        type: types.RECEIVE_CREATE_ACCOUNT,
+      AdGroup(undefined, {
+        type: types.RECEIVE_CREATE_ADGROUP,
         json: {result: {text: "Run the tests"} }
       }).rows
     ).toEqual([
@@ -43,14 +43,14 @@ describe('Account ', () => {
 
     //Test adding when state is explicitly set
     expect(
-      Account({
+      AdGroup({
         rows: [
           {text: "Use Redux"},
           {text: "Learn to connect it to React"},
           {text: "Run the tests"}
         ]
       }, {
-        type: types.RECEIVE_CREATE_ACCOUNT,
+        type: types.RECEIVE_CREATE_ADGROUP,
         json: {result: {text: "Last test"} }
       }).rows
     ).toEqual([
@@ -61,13 +61,13 @@ describe('Account ', () => {
       ]);
   });
 
-  it('should handle RECEIVE_UPDATE_ACCOUNT', () => {
+  it('should handle RECEIVE_UPDATE_ADGROUP', () => {
     //Test Updating when state is explicitly set
     expect(
-      Account({
+      AdGroup({
         details: {name: "test"}
       }, {
-        type: types.RECEIVE_UPDATE_ACCOUNT,
+        type: types.RECEIVE_UPDATE_ADGROUP,
         json: {result: {name: "new name"} }
       }).details
     ).toEqual(

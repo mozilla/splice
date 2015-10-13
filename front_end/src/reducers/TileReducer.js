@@ -1,6 +1,8 @@
 import {
-  REQUEST_ADD_TILE,
-  RECEIVE_ADD_TILE,
+  REQUEST_CREATE_TILE,
+  RECEIVE_CREATE_TILE,
+  REQUEST_UPDATE_TILE,
+  RECEIVE_UPDATE_TILE,
   REQUEST_TILES,
   RECEIVE_TILES,
   REQUEST_TILE,
@@ -16,13 +18,30 @@ const initialState = {
 
 export function Tile(state = initialState, action = null) {
   switch (action.type) {
-    case REQUEST_ADD_TILE:
+    case REQUEST_CREATE_TILE:
       return _.assign({}, state, {
         isSaving: true
       });
-    case RECEIVE_ADD_TILE:
+    case RECEIVE_CREATE_TILE:
+      let rows = state.rows;
+      if(action.json.result !== null){
+        rows = [action.json.result, ...state.rows];
+      }
       return _.assign({}, state, {
-        rows: [...state.rows, action.json],
+        rows: rows,
+        isSaving: false
+      });
+    case REQUEST_UPDATE_TILE:
+      return _.assign({}, state, {
+        isSaving: true
+      });
+    case RECEIVE_UPDATE_TILE:
+      let details = state.details;
+      if(action.json.result !== null){
+        details = action.json.result;
+      }
+      return _.assign({}, state, {
+        details: details,
         isSaving: false
       });
     case REQUEST_TILES:
@@ -31,7 +50,7 @@ export function Tile(state = initialState, action = null) {
       });
     case RECEIVE_TILES:
       return _.assign({}, state, {
-        rows: action.rows,
+        rows: action.json.results,
         isFetching: false
       });
     case REQUEST_TILE:
@@ -40,7 +59,7 @@ export function Tile(state = initialState, action = null) {
       });
     case RECEIVE_TILE:
       return _.assign({}, state, {
-        details: action.details,
+        details: action.json.result,
         isFetching: false
       });
     default:
