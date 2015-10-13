@@ -2,7 +2,7 @@
 
 html body{
   font-family: $font-default;
-  font-size: 12px;
+  font-size: 14px;
   background-color: $color-navy;
   color: #363755;
 }
@@ -27,14 +27,15 @@ select.styled{
   -moz-appearance: none;
   border: 1px solid #fff;
   color: #fff;
-  padding: 0px 55px 0 40px;
+  padding: 0px 60px 0 40px;
   border-radius: 0px;
   height: 35px;
   background: $color-dark-gray url(/public/img/select-downarrow.png) no-repeat right center;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: normal;
 
   option{
-    padding: 10px 0 10px 15px;
+    padding: 5px 0px 5px 15px;
   }
 }
 
@@ -48,7 +49,8 @@ select.styled{
   background-color: $color-pink;
   color: #fff;
   text-decoration: none;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   text-transform: uppercase;
 }
 .create-link:hover{
@@ -116,7 +118,7 @@ select.styled{
 
   .module-table.data-table{
     tbody td{
-      font-size: 12px;
+      font-size: 14px;
     }
   }
 }
