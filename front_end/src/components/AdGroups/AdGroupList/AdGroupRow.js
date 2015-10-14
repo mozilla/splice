@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import { formatPsDateTime } from 'helpers/ViewHelpers';
+import { formatDate } from 'helpers/DateHelpers';
 
 export default class AdGroupRow extends Component {
   render() {
@@ -11,8 +11,8 @@ export default class AdGroupRow extends Component {
         <td><Link to={'/adgroups/' + this.props.id}>{this.props.name}</Link></td>
         <td>{this.props.locale}</td>
         <td>{_.capitalize(this.props.type)}</td>
-        <td>{(this.props.paused) ? 'Paused' : 'Active'}</td>
-        <td>{formatPsDateTime(this.props.created_at, 'M/D/YYYY')}</td>
+        <td className={'status ' + ((this.props.paused) ? 'paused' : 'active')}>{(this.props.paused) ? 'Paused' : 'Active'}</td>
+        <td>{formatDate(this.props.created_at, 'M/D/YYYY')}</td>
       </tr>
     );
   }

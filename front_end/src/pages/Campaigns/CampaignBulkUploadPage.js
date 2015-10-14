@@ -1,5 +1,7 @@
-import React, { Component, findDOMNode } from '../../../node_modules/react/addons';
+import React, { Component, findDOMNode } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
+
 import fetch from 'isomorphic-fetch';
 
 import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
@@ -27,6 +29,7 @@ export default class CampaignBulkUploadPage extends Component {
               <input type="file" name="bulkUpload" id="bulkUpload" ref="bulkUpload" />
               <br/>
               <input onClick={(e) => this.handleFileUpload(e)} type="submit" className="btn btn-primary" value="Submit" />
+              <Link to={'/campaigns/' + this.props.Campaign.details.id} className="btn btn-default">Cancel</Link>
             </form>
           </div>
         </div>

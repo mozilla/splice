@@ -3,8 +3,6 @@ import AdGroupRow from './AdGroupRow';
 
 export default class AdGroupList extends Component {
   render() {
-    const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
     let rows;
     let spinner;
 
@@ -13,12 +11,12 @@ export default class AdGroupList extends Component {
           <AdGroupRow {...row} key={index}/>
       );
     } else {
-      spinner = (<img src="./public/img/ajax-loader.gif"/>);
+      spinner = (<img src="./public/img/ajax-loader-navy.gif"/>);
     }
 
     return (
-      <div>
-        <table className="table">
+      <div className="module">
+        <table className="module-table data-table">
           <thead>
           <tr>
             <th>ID</th>
@@ -29,9 +27,9 @@ export default class AdGroupList extends Component {
             <th>Created</th>
           </tr>
           </thead>
-          <ReactCSSTransitionGroup component="tbody" transitionName="fade" transitionLeave={false}>
+          <tbody>
             {rows}
-          </ReactCSSTransitionGroup>
+          </tbody>
         </table>
         {spinner}
       </div>

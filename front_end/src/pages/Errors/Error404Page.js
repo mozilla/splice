@@ -1,4 +1,4 @@
-import React, { Component } from 'react/addons';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { updateDocTitle } from 'actions/App/AppActions';
@@ -10,10 +10,15 @@ export default class Error404Page extends Component {
 
   render() {
     return (
-      <div>
-        <div className="row">
-          <div className="col-xs-12">
-            <h1>Page Not Found</h1>
+      <div className="module">
+        <div className="module-header">
+          Page Not Found
+        </div>
+        <div className="module-body">
+          <div className="row">
+            <div className="col-xs-12">
+              <p>The page you are looking for does not exist.</p>
+            </div>
           </div>
         </div>
       </div>

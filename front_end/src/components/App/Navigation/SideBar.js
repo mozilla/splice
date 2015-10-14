@@ -1,29 +1,26 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
-import $ from 'jquery';
+import Ps from 'perfect-scrollbar';
+require('perfect-scrollbar/dist/css/perfect-scrollbar.min.css');
+
+window.$ = require('jquery');
 import './SideBar.scss';
 
 export default class SideBar extends Component {
   componentDidMount(){
     $(document).on('click', '.side-bar a', function(){
       $('.side-bar').slideUp();
+      $('.c-hamburger').removeClass('is-active');
     });
 
-    let maxHeight;
+    const context = this;
     $(window).resize(function(){
-      let h;
-      const app = $('.app-container');
-      if(window.innerHeight > app.outerHeight() ){
-        h = window.innerHeight;
-      }
-      else{
-        h = app.outerHeight();
-      }
-
-      maxHeight = h - ($('.top-bar .navigation-toggle').outerHeight() + $('.side-bar .create').outerHeight() + $('.side-bar .approval').outerHeight() );
-      $('.accounts-list').css('max-height', maxHeight);
+      context.handleResize();
     });
+    this.handleResize();
+
+    Ps.initialize($('.accounts-list').get(0));
   }
 
   render() {
@@ -51,9 +48,16 @@ export default class SideBar extends Component {
           </ul>
         </div>
 
-        <div className="create button text-center"><Link to="/accounts/create">Create <i className="fa fa-plus"></i></Link></div>
-        <div className="approval button text-center"><Link to={'/approvals'} >Approval Queue <i className="fa fa-check"></i></Link></div>
+        <div className="create button"><Link to="/accounts/create">Create <i className="fa fa-plus"></i></Link></div>
+        <div className="approval button"><Link to={'/approvals'} >Approval Queue <i className="fa fa-check"></i></Link></div>
       </div>
     );
+  }
+
+  handleResize(){
+    const h = window.innerHeight;
+
+    const maxHeight = h - 168;
+    $('.accounts-list').css('max-height', maxHeight);
   }
 }

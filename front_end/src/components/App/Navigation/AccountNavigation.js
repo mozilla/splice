@@ -15,9 +15,15 @@ export default class AccountNavigation extends Component {
         <div className="row">
           <div className={'col-xs-3 button ' + accountActive}><Link
             to={'/accounts/' + this.props.Account.details.id}>{this.props.Account.details.name}</Link></div>
-          <div className="col-xs-3 button text-muted" >Campaigns</div>
-          <div className="col-xs-3 button text-muted" >Ad Groups</div>
-          <div className="col-xs-3 button text-muted" >Tiles</div>
+          <div className="col-xs-3 button text-muted" >
+            <a>Campaigns</a>
+          </div>
+          <div className="col-xs-3 button text-muted" >
+            <a>Ad Groups</a>
+          </div>
+          <div className="col-xs-3 button text-muted" >
+            <a>Tiles</a>
+          </div>
         </div>
       </div>
     );

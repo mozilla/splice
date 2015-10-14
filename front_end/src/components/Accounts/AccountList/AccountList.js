@@ -3,8 +3,6 @@ import AccountRow from './AccountRow';
 
 export default class AccountList extends Component {
   render() {
-    const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
     let rows;
     let spinner;
     if (this.props.isFetching === false) {
@@ -12,24 +10,24 @@ export default class AccountList extends Component {
           <AccountRow {...row} key={index}/>
       );
     } else {
-      spinner = (<img src="./public/img/ajax-loader.gif"/>);
+      spinner = (<img src="./public/img/ajax-loader-navy.gif"/>);
     }
 
     return (
-      <div>
-        <table className="table">
+      <div className="module">
+        <table className="module-table data-table">
           <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Created</th>
-          </tr>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Created</th>
+            </tr>
           </thead>
-          <ReactCSSTransitionGroup component="tbody" transitionName="fade" transitionLeave={false}>
+          <tbody>
             {rows}
-          </ReactCSSTransitionGroup>
+          </tbody>
         </table>
         {spinner}
       </div>

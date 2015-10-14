@@ -1,4 +1,4 @@
-import React, { Component } from 'react/addons';
+import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -24,16 +24,14 @@ export default class AccountViewPage extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-xs-6">
-            <h1>Account</h1>
+          <div className="col-xs-3">
             <AccountDetails Account={this.props.Account}/>
           </div>
         </div>
-        <br/>
-        <p><Link className="btn btn-default" to={'/accounts/' + this.props.Account.details.id + '/createcampaign'}>Create Campaign <i className="fa fa-plus"></i></Link></p>
-        <div><strong>Campaigns</strong></div>
+        <Link className="create-link" to={'/accounts/' + this.props.Account.details.id + '/createcampaign'}>Create Campaign <i className="fa fa-plus"></i></Link>
         <CampaignList rows={this.props.Campaign.rows}
-                      isFetching={this.props.Campaign.isFetching}/>
+                      isFetching={this.props.Campaign.isFetching}
+                      channels={this.props.Init.channels}/>
       </div>
     );
   }
@@ -60,7 +58,8 @@ AccountViewPage.propTypes = {};
 function select(state) {
   return {
     Account: state.Account,
-    Campaign: state.Campaign
+    Campaign: state.Campaign,
+    Init: state.Init
   };
 }
 

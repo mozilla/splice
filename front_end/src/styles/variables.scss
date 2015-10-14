@@ -1,0 +1,31 @@
+$font-default: 'Open Sans', sans-serif;
+$font-heading: 'Montserrat', sans-serif;
+
+$font-color-default: #363755;
+$font-color-dark: #797a87;
+$font-color-light: #a6a6a6;
+
+$color-gray: #878893;
+$color-light-gray: #e6e6e6;
+$color-dark-gray: #5c5e6f;
+$color-pink: #cf375f;
+$color-aqua: #7dd9ae;
+$color-navy: #263b4f;
+
+@mixin top-inset-shadow() {
+  -webkit-box-shadow: inset 0px 15px 5px -10px rgba(0,0,0,0.3);
+  -moz-box-shadow: inset 0px 15px 5px -10px rgba(0,0,0,0.3);
+  box-shadow: inset 0px 15px 5px -10px rgba(0,0,0,0.3);
+}
+
+@mixin bottom-shadow() {
+  -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+  box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+}
+
+@mixin right-shadow() {
+  -webkit-box-shadow: 5px 2px 5px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: 5px 2px 5px 0px rgba(0,0,0,0.3);
+  box-shadow: 5px 2px 5px 0px rgba(0,0,0,0.3);
+}

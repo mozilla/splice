@@ -1,16 +1,11 @@
-import React, { Component } from 'react/addons';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { updateDocTitle, pageVisit, displayMessage, shownMessage } from 'actions/App/AppActions';
+import { updateDocTitle } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
-import { updateAccount, fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import AccountForm from 'components/Accounts/AccountForm/AccountForm';
-
-import $ from 'jquery';
-window.$ = $;
-require('jquery-serializejson');
 
 export default class AccountEditPage extends Component {
   componentWillMount() {
@@ -26,43 +21,16 @@ export default class AccountEditPage extends Component {
   render() {
     return (
       <div>
-        <h1>Edit Account - {this.props.Account.details.name}</h1>
-        <div className="panel panel-default">
-          <div className="panel-body">
+        <div className="module">
+          <div className="module-header">Edit Account - {this.props.Account.details.name}</div>
+          <div className="module-body">
             { (this.props.Account.details.id !== undefined)
-              ? <AccountForm isSaving={this.props.Account.isSaving} handleFormSubmit={(id) => this.handleFormSubmit(id)} data={this.props.Account.details} editMode={true} />
+              ? <AccountForm editMode={true} {...this.props} />
               : null
             }
           </div>
         </div>
       </div>
-    );
-  }
-
-  handleFormSubmit(id){
-    const { dispatch } = this.props;
-    const props = this.props;
-    const context = this;
-
-    const data = JSON.stringify($(id).serializeJSON());
-
-    dispatch(updateAccount(this.props.Account.details.id, data))
-      .then(function(response){
-        if(response.result === undefined){
-          if(_.isString(response.message)){
-            dispatch(displayMessage('error', 'Error: ' + response.message) );
-          }
-          else{
-            dispatch(displayMessage('error', 'Error: Validation Errors') );
-          }
-          dispatch(shownMessage());
-        }
-        else{
-          dispatch(fetchAccounts());
-          dispatch(displayMessage('success', 'Account Updated Successfully') );
-          dispatch(shownMessage());
-        }
-      }
     );
   }
 

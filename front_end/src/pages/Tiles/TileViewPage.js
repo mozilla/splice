@@ -1,4 +1,4 @@
-import React, { Component } from 'react/addons';
+import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -24,8 +24,7 @@ export default class TileViewPage extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-xs-6">
-            <h1>Tile</h1>
+          <div className="col-xs-12">
             <TileDetails Tile={this.props.Tile}/>
           </div>
         </div>

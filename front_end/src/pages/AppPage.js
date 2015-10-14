@@ -1,12 +1,12 @@
-import React, { PropTypes, Component } from 'react/addons';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
-import { fetchAccounts } from 'actions/Accounts/AccountActions';
 import { shownMessage, removeMessage } from 'actions/App/AppActions';
+import { fetchInit } from 'actions/Init/InitActions';
+import { fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import TopBar from 'components/App/Navigation/TopBar.js';
-import AccountNavigation from 'components/App/Navigation/AccountNavigation.js';
-import BreadCrumbs from 'components/App/Navigation/BreadCrumbs.js';
+
 import AppMessage from 'components/App/AppMessage/AppMessage.js';
 
 export default class AppPage extends Component {
@@ -14,6 +14,10 @@ export default class AppPage extends Component {
     const { dispatch } = this.props;
     if (this.props.Account.rows.length === 0) {
       dispatch(fetchAccounts());
+    }
+
+    if(_.isEmpty(this.props.Init.channels) ){
+      dispatch(fetchInit());
     }
   }
 
@@ -32,45 +36,21 @@ export default class AppPage extends Component {
     }
   }
 
-  getNavigations(){
-    const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
-    let output = '';
-    if (this.props.location.pathname.match(/\/accounts\/\d.*/) ||
-      this.props.location.pathname.match(/\/campaigns\/.*/) ||
-      this.props.location.pathname.match(/\/adgroups\/.*/) ||
-      this.props.location.pathname.match(/\/tiles\/.*/) ) {
-      output = (
-        <div>
-          <AccountNavigation {...this.props} key="account-navigation"/>
-          <BreadCrumbs {...this.props} key="bread-crumbs"/>
-        </div>
-      );
-    }
-    return output;
-  }
-
   render() {
-    const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+    const ReactCSSTransitionGroup = require('react-addons-css-transition-group');
     const key = this.props.location.pathname;
 
     return (
-      <div className="app-container" style={{minWidth: '1170px'}}>
+      <div className="app-container">
         <TopBar {...this.props} />
 
-        <ReactCSSTransitionGroup transitionName="fade" transitionAppear={true} transitionLeave={false}>
-          {this.getNavigations()}
-        </ReactCSSTransitionGroup>
-
-        <div className="container-fluid">
+        <div className="container-fluid content-container">
           <div className="row">
             <div className="col-xs-12">
-              <div className="content-container">
-                <AppMessage message={this.props.App.message} dispatch={this.props.dispatch}/>
-                <ReactCSSTransitionGroup transitionName="page-transition" transitionAppear={true} transitionLeave={false}>
-                  {React.cloneElement(this.props.children || <div />, {key: key})}
-                </ReactCSSTransitionGroup>
-              </div>
+              <AppMessage message={this.props.App.message} dispatch={this.props.dispatch}/>
+              <ReactCSSTransitionGroup transitionName="page-transition" transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeave={false} transitionLeaveTimeout={300}>
+                {React.cloneElement(this.props.children || <div />, {key: key})}
+              </ReactCSSTransitionGroup>
             </div>
           </div>
         </div>

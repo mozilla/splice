@@ -1,4 +1,4 @@
-import React, { Component } from 'react/addons';
+import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -26,12 +26,10 @@ export default class AdGroupViewPage extends Component {
       <div>
         <div className="row">
           <div className="col-xs-6">
-            <h1>Ad Group</h1>
             <AdGroupDetails AdGroup={this.props.AdGroup}/>
           </div>
         </div>
-        <br/>
-        <strong>Tiles</strong>
+
         <TileList rows={this.props.Tile.rows}
                   isFetching={this.props.Tile.isFetching}/>
       </div>

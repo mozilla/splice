@@ -1,4 +1,4 @@
-import React, { Component } from 'react/addons';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { updateDocTitle, listTypeSelect } from 'actions/App/AppActions';
@@ -24,11 +24,6 @@ export default class HomePage extends Component {
   render() {
     return (
       <div>
-        <div className="row">
-          <div className="col-xs-12">
-            <h1>Dashboard</h1>
-          </div>
-        </div>
         <div className="row">
           <div className="col-xs-3">
             <RecentlyViewedList recentlyViewedRows={this.props.App.recentlyViewed}/>

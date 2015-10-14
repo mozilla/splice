@@ -1,4 +1,4 @@
-import React, { Component } from 'react/addons';
+import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -25,13 +25,8 @@ export default class CampaignViewPage extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-xs-12">
-            <h1>Campaign</h1>
-          </div>
-        </div>
-        <div className="row">
           <div className="col-xs-6">
-            <CampaignDetails Campaign={this.props.Campaign}/>
+            <CampaignDetails Campaign={this.props.Campaign} Init={this.props.Init}/>
           </div>
           <div className="col-xs-6">
             <div className="pull-right">
@@ -39,8 +34,6 @@ export default class CampaignViewPage extends Component {
             </div>
           </div>
         </div>
-        <br/>
-        <div><strong>Ad Groups</strong></div>
         <AdGroupList rows={this.props.AdGroup.rows}
                      isFetching={this.props.AdGroup.isFetching}/>
       </div>
@@ -70,7 +63,8 @@ function select(state) {
   return {
     Account: state.Account,
     Campaign: state.Campaign,
-    AdGroup: state.AdGroup
+    AdGroup: state.AdGroup,
+    Init: state.Init
   };
 }
 

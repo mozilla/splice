@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import { formatPsDateTime } from 'helpers/ViewHelpers';
+import { formatDate } from 'helpers/DateHelpers';
 
 export default class TileRow extends Component {
 	render() {
@@ -10,9 +10,9 @@ export default class TileRow extends Component {
 				<td>{this.props.id}</td>
 				<td><Link to={'/tiles/' + this.props.id}>{this.props.title}</Link></td>
 				<td>{_.capitalize(this.props.type)}</td>
-				<td>{(this.props.paused) ? 'Paused' : 'Active'}</td>
-				<td>{_.capitalize(this.props.status)}</td>
-				<td>{formatPsDateTime(this.props.created_at, 'M/D/YYYY')}</td>
+				<td className={'status ' + ((this.props.paused) ? 'paused' : 'active')}>{(this.props.paused) ? 'Paused' : 'Active'}</td>
+				<td className={'status ' + this.props.status}>{_.capitalize(this.props.status)}</td>
+				<td>{formatDate(this.props.created_at, 'M/D/YYYY')}</td>
 			</tr>
 		);
 	}

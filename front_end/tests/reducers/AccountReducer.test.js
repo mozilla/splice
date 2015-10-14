@@ -15,7 +15,7 @@ describe('Account ', () => {
     expect(
       Account(undefined, {
         type: types.RECEIVE_ACCOUNTS,
-        rows: [{text: "Run the tests"}]
+        json: {results: [{text: "Run the tests"}] }
       }).rows).toEqual(
       [{text: "Run the tests"}]
     );
@@ -25,7 +25,7 @@ describe('Account ', () => {
     expect(
       Account(undefined, {
         type: types.RECEIVE_ACCOUNT,
-        details: {text: "Run the tests"}
+        json: { result: {text: "Run the tests"} }
       }).details).toEqual(
       {text: "Run the tests"}
     );
@@ -36,7 +36,7 @@ describe('Account ', () => {
     expect(
       Account(undefined, {
         type: types.RECEIVE_CREATE_ACCOUNT,
-        json: {text: "Run the tests"}
+        json: {result: {text: "Run the tests"} }
       }).rows
     ).toEqual([
         {text: "Run the tests"}
@@ -52,7 +52,7 @@ describe('Account ', () => {
         ]
       }, {
         type: types.RECEIVE_CREATE_ACCOUNT,
-        json: {text: "Last test"}
+        json: {result: {text: "Last test"} }
       }).rows
     ).toEqual([
         {text: "Last test"},
@@ -69,7 +69,7 @@ describe('Account ', () => {
         details: {name: "test"}
       }, {
         type: types.RECEIVE_UPDATE_ACCOUNT,
-        json: {name: "new name"}
+        json: {result: {name: "new name"} }
       }).details
     ).toEqual(
       {name: "new name"}

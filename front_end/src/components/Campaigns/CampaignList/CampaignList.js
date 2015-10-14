@@ -3,34 +3,32 @@ import CampaignRow from './CampaignRow';
 
 export default class CampaignList extends Component {
   render() {
-    const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
     let rows;
     let spinner;
 
     if (this.props.isFetching === false) {
       rows = this.props.rows.map((row, index) =>
-          <CampaignRow {...row} key={index}/>
+          <CampaignRow {...row} key={index} channels={this.props.channels}/>
       );
     } else {
-      spinner = (<img src="./public/img/ajax-loader.gif"/>);
+      spinner = (<img src="./public/img/ajax-loader-navy.gif"/>);
     }
 
     return (
-      <div>
-        <table className="table">
+      <div className="module">
+        <table className="module-table data-table">
           <thead>
           <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Channel ID</th>
+            <th>Channel</th>
             <th>Status</th>
             <th>Created</th>
           </tr>
           </thead>
-          <ReactCSSTransitionGroup component="tbody" transitionName="fade" transitionLeave={false}>
+          <tbody>
             {rows}
-          </ReactCSSTransitionGroup>
+          </tbody>
         </table>
         {spinner}
       </div>
@@ -45,5 +43,6 @@ CampaignList.propTypes = {
     channel_id: PropTypes.number.isRequired,
     paused: PropTypes.bool.isRequired,
     created_at: PropTypes.string.isRequired
-  }).isRequired).isRequired
+  }).isRequired).isRequired,
+  channels: PropTypes.array.isRequired
 };

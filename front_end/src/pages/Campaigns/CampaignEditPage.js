@@ -1,17 +1,11 @@
-import React, { Component } from 'react/addons';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { updateDocTitle, displayMessage, shownMessage } from 'actions/App/AppActions';
+import { updateDocTitle } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
-import { updateCampaign } from 'actions/Campaigns/CampaignActions';
-import Moment from 'moment';
 
 import CampaignForm from 'components/Campaigns/CampaignForm/CampaignForm';
-
-import $ from 'jquery';
-window.$ = $;
-require('jquery-serializejson');
 
 export default class CampaignEditPage extends Component {
   componentDidMount() {
@@ -25,18 +19,13 @@ export default class CampaignEditPage extends Component {
   }
 
   render() {
-    let spinner;
-    if(this.props.Campaign.isSaving){
-      spinner = <img src="/public/img/ajax-loader.gif" />;
-    }
-
     return (
       <div>
-        <h1>Edit Campaign - {this.props.Campaign.details.name}</h1>
-        <div className="panel panel-default">
-          <div className="panel-body">
-            {(this.props.Campaign.details.id !== undefined)
-              ? <CampaignForm isSaving={this.props.Campaign.isSaving} handleFormSubmit={(id) => this.handleFormSubmit(id)} data={this.props.Campaign.details} editMode={true} />
+        <div className="module">
+          <div className="module-header">Edit Campaign - {this.props.Campaign.details.name}</div>
+          <div className="module-body">
+            {(this.props.Campaign.details.id && this.props.Init.countries.length)
+              ? <CampaignForm editMode={true} {...this.props} />
               : null
             }
           </div>
@@ -60,44 +49,6 @@ export default class CampaignEditPage extends Component {
         }
       });
   }
-
-  handleFormSubmit(id){
-    const { dispatch } = this.props;
-    const props = this.props;
-    const context = this;
-    //let error = null;
-
-    const formData = $(id).serializeJSON();
-    if(formData.start_date.trim() !== ''){
-      //formData.start_date = Moment(formData.start_date).unix();
-    }
-    if(formData.end_date.trim() !== ''){
-      //formData.end_date = Moment(formData.end_date).unix();
-    }
-    delete formData.start_date;
-    delete formData.end_date;
-    formData.paused = false;
-
-    const data = JSON.stringify(formData);
-
-    dispatch(updateCampaign(this.props.Campaign.details.id, data))
-      .then(function(response){
-        if(response.result === undefined){
-          if(_.isString(response.message)){
-            dispatch(displayMessage('error', 'Error: ' + response.message) );
-          }
-          else{
-            dispatch(displayMessage('error', 'Error: Validation Errors') );
-          }
-          dispatch(shownMessage());
-        }
-        else{
-          dispatch(displayMessage('success', 'Campaign Updated Successfully') );
-          dispatch(shownMessage());
-        }
-      }
-    );
-  }
 }
 
 CampaignEditPage.propTypes = {};
@@ -106,7 +57,8 @@ CampaignEditPage.propTypes = {};
 function select(state) {
   return {
     Campaign: state.Campaign,
-    Account: state.Account
+    Account: state.Account,
+    Init: state.Init
   };
 }
 

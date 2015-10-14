@@ -1,15 +1,10 @@
-import React, { Component } from 'react/addons';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { updateDocTitle, displayMessage, shownMessage } from 'actions/App/AppActions';
-import { createAccount, fetchAccounts } from 'actions/Accounts/AccountActions';
+import { updateDocTitle } from 'actions/App/AppActions';
 
 import AccountForm from 'components/Accounts/AccountForm/AccountForm';
-
-import $ from 'jquery';
-window.$ = $;
-require('jquery-serializejson');
 
 export default class AccountCreatePage extends Component {
   componentDidMount(){
@@ -19,40 +14,13 @@ export default class AccountCreatePage extends Component {
   render() {
     return (
       <div>
-        <h1>Create Account</h1>
-        <div className="panel panel-default">
-          <div className="panel-body">
-            <AccountForm isSaving={this.props.Account.isSaving} handleFormSubmit={(id) => this.handleFormSubmit(id)} data={{}} editMode={false} />
+        <div className="module">
+          <div className="module-header">Create Account</div>
+          <div className="module-body">
+            <AccountForm editMode={false} {...this.props}/>
           </div>
         </div>
       </div>
-    );
-  }
-
-  handleFormSubmit(id){
-    const { dispatch } = this.props;
-    const props = this.props;
-    const context = this;
-
-    const data = JSON.stringify($(id).serializeJSON());
-
-    dispatch(createAccount(data))
-      .then(function(response){
-        if(response.result === undefined){
-          if(_.isString(response.message)){
-            dispatch(displayMessage('error', 'Error: ' + response.message) );
-          }
-          else{
-            dispatch(displayMessage('error', 'Error: Validation Errors') );
-          }
-          dispatch(shownMessage());
-        }
-        else{
-          dispatch(fetchAccounts());
-          dispatch(displayMessage('success', 'Account Created Successfully') );
-          props.history.pushState(null, '/accounts/' + response.result.id);
-        }
-      }
     );
   }
 }

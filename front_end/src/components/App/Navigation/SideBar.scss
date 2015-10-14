@@ -1,28 +1,44 @@
+@import '../../../styles/variables';
+
 .side-bar{
+  display: block;
   position: absolute;
-  /*background: linear-gradient(darkgray, dimgray);*/
-  background: darkgray;
   z-index: 1000;
   display: none;
+  @include right-shadow();
 
   .accounts-list{
-    overflow: auto;
+    position: relative;
+    border-top:1px solid white;
 
     ul{
       list-style: none;
       padding: 0;
       margin: 0;
+      background: linear-gradient($color-pink, $color-dark-gray);
+
+      :first-child{
+        border-top:0px;
+      }
 
       li{
         border-top:1px solid white;
 
         a{
-          padding: 5px 10px;
+          min-width: 210px;
+          padding: 0px 10px;
+          height: 58px;
+          line-height: 58px;
+          text-align: center;
+          vertical-align: middle;
+          text-transform: uppercase;
+          font-size: 14px;
           color: white;
           display: block;
         }
         a:hover{
-          background-color: rgba(255, 255, 255, .25);
+          background-color: rgba(255, 255, 255, .10);
+          text-decoration: none;
         }
       }
     }
@@ -31,12 +47,26 @@
     border-top:1px solid white;
 
     a{
-      padding: 5px 10px;
+      min-width: 210px;
+      padding: 0px 10px;
+      height: 58px;
+      line-height: 58px;
+      text-align: center;
+      vertical-align: middle;
+      text-transform: uppercase;
+      font-size: 14px;
       color: white;
       display: block;
     }
     a:hover{
-      background-color: rgba(255, 255, 255, .25);
+      background-color: rgba(255, 255, 255, .10);
+      text-decoration: none;
     }
+  }
+  .button.create{
+    background-color: $color-pink;
+  }
+  .button.approval{
+    background-color: $color-aqua;
   }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from '../../../node_modules/react/addons';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { pageVisit } from 'actions/App/AppActions';
 

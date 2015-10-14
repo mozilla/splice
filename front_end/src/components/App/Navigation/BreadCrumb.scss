@@ -1,0 +1,102 @@
+@import '../../../styles/variables';
+
+.breadcrumbs-container{
+  @include bottom-shadow();
+}
+.navbar.breadcrumbs{
+  background-color: $color-light-gray;
+  border-radius: 0 !important;
+  padding-left: 145px;
+  border:0;
+  min-height: 40px;
+  @include top-inset-shadow();
+
+  .navbar-nav li.top-level{
+    padding-bottom: 4px;
+    background-color: transparent !important;
+
+    a.dropdown-toggle{
+      color: #b2b2b2;
+      padding: 8px 10px 2px 20px !important;
+      font-size: 12px;
+      text-transform: uppercase;
+      border-bottom: 3px solid transparent;
+      margin: 0 0 5px -10px;
+
+      background-color: transparent !important;
+
+      .down-arrow{
+        height: 7px;
+        width: 17px;
+        display: inline-block;
+        background: url(/public/img/breadcrumbs/breadcrumb-arrow.png) no-repeat center center;
+        position: relative;
+        top: -2px;
+        margin-left: 3px;
+      }
+    }
+
+    a.dropdown-toggle:hover{
+      color: #b2b2b2;
+      border-color: #b2b2b2;
+    }
+  }
+  .navbar-nav li.top-level.parent{
+    a.dropdown-toggle {
+      color: $color-pink;
+
+      .down-arrow{
+        background: url(/public/img/breadcrumbs/breadcrumb-arrow-active.png) no-repeat center center;
+      }
+    }
+    a.dropdown-toggle:hover{
+      color: $color-pink;
+      border-color: $color-pink;
+    }
+  }
+  .navbar-nav li.top-level.active{
+    a.dropdown-toggle{
+      color: $color-pink;
+      border-color: $color-pink;
+
+      .down-arrow{
+        background: url(/public/img/breadcrumbs/breadcrumb-arrow-active.png) no-repeat center center;
+      }
+    }
+
+    a.dropdown-toggle:hover{
+      color: $color-pink;
+      border-color: $color-pink;
+    }
+  }
+
+  .branch{
+    padding-left: 120px;
+    background: url(/public/img/breadcrumbs/breadcrumb-branch-short.png) no-repeat left top;
+  }
+  .branch.active, .branch.parent{
+    background: url(/public/img/breadcrumbs/breadcrumb-branch-short-active.png) no-repeat left top;
+  }
+  .line{
+    padding-left: 120px;
+    background: url(/public/img/breadcrumbs/breadcrumb-line.png) no-repeat left top;
+  }
+  .line.active, .line.parent{
+    background: url(/public/img/breadcrumbs/breadcrumb-line-active.png) no-repeat left top;
+  }
+  .dropdown-menu{
+    left: 110px;
+    width: auto;
+    padding: 0px;
+    max-height: 300px;
+    overflow: auto;
+
+    li a{
+      padding: 5px 20px;
+    }
+
+    li.active a{
+      background-color: $color-pink;
+    }
+  }
+}

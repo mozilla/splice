@@ -1,0 +1,86 @@
+@import '../variables';
+
+.details-panel{
+  margin: 0px 0px 40px 0px;
+
+  .details-panel-header{
+    background-color: $color-pink;
+    display: table;
+    color: #fff;
+    width: 100%;
+    border: 0px;
+
+    h2.details-panel-name{
+      margin: 10px 10px 0px 15px;
+      display: inline-block;
+      font-size: 18px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .details-panel-id{
+      padding: 0px 0 10px 15px;
+    }
+    .details-edit-link{
+      display: table-cell;
+      vertical-align: top;
+      width: 30px;
+
+      a{
+        display: block;
+        background-color: $color-aqua;
+        color: #fff;
+        height: 30px;
+        width: 30px;
+        text-align: center;
+        line-height: 30px;
+        font-size: 20px;
+      }
+    }
+    .details-panel-status{
+      vertical-align: middle;
+      padding: 0 25px;
+      text-transform: uppercase;
+      font-size: 18px;
+      font-weight: 600;
+      display: table-cell;
+      width: 120px;
+    }
+    .details-panel-status.active{
+      background-color: $color-aqua;
+      color: $color-navy;
+    }
+    .details-panel-status.paused{
+      background-color: $color-gray;
+      color: #fff;
+    }
+  }
+  .details-panel-body{
+    background-color: #fff;
+    @include top-inset-shadow();
+
+    padding: 30px 30px;
+    font-weight: 600;
+
+    strong{
+      color: $font-color-light;
+      font-weight: 600;
+    }
+    .data-value{
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      color: $font-color-dark;
+
+      strong{
+        display: block;
+        font-size: 14px;
+        font-weight: normal;
+        margin: 0 0 5px 0;
+      }
+      .small{
+        font-size: 14px;
+        font-weight: normal;
+      }
+    }
+  }
+}
