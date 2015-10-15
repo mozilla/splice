@@ -117,7 +117,7 @@ function distribution(state = {
       });
     case AUTHORING_SET_DEPLOY_NOW:
       return Object.assign({}, state, {
-        deployNow: action.deployNow
+        deployNow: action.deployNow ? 1 : 0
       });
     case AUTHORING_PUBLISH_START:
       return Object.assign({}, state, {
