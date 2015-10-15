@@ -202,7 +202,6 @@ export function publishDistribution() {
      headers: {
        'Accept': 'application/json',
        'Content-Type': 'application/json'
-       //,'X-CSRFToken': document.querySelector('meta[name=csrf-token]').attributes['content'].value
      },
      body: JSON.stringify(compressedTiles)
    })

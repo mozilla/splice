@@ -102,7 +102,6 @@ export function unscheduleDistribution(distributionId) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-        //,'X-CSRFToken': document.querySelector('meta[name=csrf-token]').attributes['content'].value
       }
     })
       .then(checkStatus)
