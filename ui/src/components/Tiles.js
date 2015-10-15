@@ -59,7 +59,7 @@ Tiles.propTypes = {
       title: PropTypes.string.isRequired,
       imageURI: PropTypes.string.isRequired,
       enhancedImageURI: PropTypes.string,
-      type: PropTypes.string,
+      type: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
       frecent_sites: PropTypes.arrayOf(PropTypes.string),
       explanation: PropTypes.string
