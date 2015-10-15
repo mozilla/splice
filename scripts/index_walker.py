@@ -127,6 +127,8 @@ _ids = {
     632: ("Mozilla", "fennec Tiles"),
 }
 
+insane_identity_counter = 0
+
 
 def derive_account_campaign(tid, title, url):
 
@@ -144,7 +146,11 @@ def derive_account_campaign(tid, title, url):
             return rval
 
     tld = get_tld(url)
-    return tld, tld
+
+    global insane_identity_counter
+    insane_identity_counter += 1
+    return tld, "%s/%s" % (tld, insane_identity_counter)
+
 
 
 def safe_str(obj):
@@ -177,17 +183,17 @@ def main():
     in campaigns that are in the *past*.  Active adgroups are placed in campaigns that start on their
     adgroup creation date and end at some far distant future date.
 
+    We are using some data structures developed by the Zenko project to build the derive_account_campaign()
+    function in order to identify existing campaigns from our tile data.
+
     Campaign objects are considered unique by grouping together the following keys in the adgroup:
-    * the TLD+1 of the target_url
+    * the name of the campaign and account returned by derive_account_campaign()
     * the channel of the adgroup
     * the 'active' flag (determined as explained above) of the adgroup
 
     One campaign row will be assigned for each unique campaign detected.
 
     The script will populate the adgroup.campaign_id with the campaign that the adgroup fits into.
-
-    Account objects are considered unique by considering the TLD+1 of the campaign.  All campaigns that
-    share the same TLD+1 will be grouped into the same Account.
 
     All writes to the database are transactional.
 
@@ -243,9 +249,10 @@ def main():
         # collate/generate campaign and account data
         # stmt = select([Adgroup.id, Tile.target_url, Adgroup.channel_id, Adgroup.created_at]). \
         #     where(Tile.adgroup_id == Adgroup.id)
-        stmt = """SELECT a.id, t.target_url, t.title, a.channel_id, a.created_at
+        stmt = """SELECT a.id, t.target_url, t.title, a.channel_id, a.created_at, c.name
                   FROM adgroups a
-                  JOIN tiles t on t.adgroup_id = a.id"""
+                  JOIN tiles t on t.adgroup_id = a.id
+                  JOIN channels c on a.channel_id = c.id"""
         result = connection.execute(stmt)
 
         campaign_id = 0
@@ -255,7 +262,7 @@ def main():
         countries = defaultdict(set)
         accounts = dict()
 
-        for adgroup_id, url, title, channel, created_at in result:
+        for adgroup_id, url, title, channel, created_at, channel_name in result:
             assert all(x is not None for x in (adgroup_id, url, channel)), \
                 "Some of %s is None" % str((adgroup_id, url, channel))
 
@@ -283,8 +290,9 @@ def main():
                 else:
                     next_account_id = accounts[account_name]
 
+                active_name = '' if active else ' (Closed)'
                 ctuple = (campaign_id, start_date, end_date,
-                          "%s/%s" % (safe_str(campaign_name), campaign_id),
+                          "%s %s%s" % (safe_str(campaign_name), channel_name, active_name),
                           False, channel, next_account_id)
                 campaigns[curr] = ctuple
 
