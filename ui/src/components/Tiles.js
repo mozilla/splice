@@ -62,7 +62,12 @@ Tiles.propTypes = {
       type: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
       frecent_sites: PropTypes.arrayOf(PropTypes.string),
-      explanation: PropTypes.string
+      explanation: PropTypes.string,
+      adgroup_categories: PropTypes.arrayOf(PropTypes.string),
+      frequency_caps: PropTypes.shape({
+        daily: React.PropTypes.number,
+        total: React.PropTypes.number
+      })
     })
   ).isRequired,
   tilesType: PropTypes.string
