@@ -75,7 +75,7 @@ export default class AdGroupForm extends Component {
           }
           <div className="form-group">
             <label htmlFor="AdGroupExplanation">Explanation</label>
-            <input className="form-control" type="text" id="AdGroupExplanation" name="explanation" ref="explanation" defaultValue={data.explanation} />
+            <textarea className="form-control" type="text" id="AdGroupExplanation" name="explanation" ref="explanation" defaultValue={data.explanation} />
           </div>
           <div className="form-group">
             <label htmlFor="AdGroupFrequencyCapDaily">Frequency Cap Daily</label>

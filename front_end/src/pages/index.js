@@ -15,6 +15,8 @@ import AdGroupCreatePage from './AdGroups/AdGroupCreatePage.js';
 import AdGroupEditPage from './AdGroups/AdGroupEditPage.js';
 import TilesPage from './Tiles/TilesPage.js';
 import TileViewPage from './Tiles/TileViewPage.js';
+import TileCreatePage from './Tiles/TileCreatePage.js';
+import TileEditPage from './Tiles/TileEditPage.js';
 import ApprovalsPage from './Approvals/ApprovalsPage.js';
 import Error404Page from './Errors/Error404Page.js';
 
@@ -36,6 +38,8 @@ export {
   AdGroupEditPage,
   TilesPage,
   TileViewPage,
+  TileCreatePage,
+  TileEditPage,
   ApprovalsPage,
   Error404Page
 };
