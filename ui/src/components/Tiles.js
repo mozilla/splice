@@ -11,14 +11,7 @@ export default class Tiles extends Component {
       var enhancedThumbStyle = {
         backgroundImage: 'url(' + webtile.enhancedImageURI + ')'
       };
-      var frecent = [];
-      if (tilesType === 'suggested') {
-        webtile.frecent_sites.forEach(function(url){
-          frecent.push(
-            <li>{url}</li>
-          );
-        });
-      }
+
       rows.push(
         <div key={webtile.directoryId} className="newtab-cell">
           <div className={'newtab-site ' + tilesType} type={webtile.type}>
@@ -34,11 +27,34 @@ export default class Tiles extends Component {
             </span>
           </div>
           {tilesType === 'suggested' &&
-            <div className="frecent-sites">
-              <strong>Frecent Sites:</strong>
-              <ul>
-                {frecent}
-              </ul>
+            <div className="suggested-metadata">
+              {webtile.adgroup_categories &&
+                <div>
+                  <strong>Adgroup Categories:</strong>
+                  <ul>
+                    {webtile.adgroup_categories.map(category => <li>{category}</li>)}
+                  </ul>
+                </div>
+              }
+
+              {webtile.frequency_caps &&
+                <div>
+                  <strong>Frequency Caps:</strong>
+                  <ul>
+                    <li>Daily: {webtile.frequency_caps.daily}</li>
+                    <li>Total: {webtile.frequency_caps.total}</li>
+                  </ul>
+                </div>
+              }
+
+              {webtile.frecent_sites &&
+                <div>
+                  <strong>Frecent Sites:</strong>
+                  <ul>
+                    {webtile.frecent_sites.map(url => <li>{url}</li>)}
+                  </ul>
+                </div>
+              }
             </div>
           }
         </div>
