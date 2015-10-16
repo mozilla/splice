@@ -16,7 +16,7 @@
     background-color: transparent !important;
 
     a.dropdown-toggle{
-      color: #b2b2b2;
+      color: $color-dark-gray;
       padding: 8px 10px 2px 20px !important;
       font-size: 12px;
       text-transform: uppercase;
@@ -37,8 +37,8 @@
     }
 
     a.dropdown-toggle:hover{
-      color: #b2b2b2;
-      border-color: #b2b2b2;
+      color: $color-dark-gray;
+      border-color: $color-dark-gray;
     }
   }
   .navbar-nav li.top-level.active,
