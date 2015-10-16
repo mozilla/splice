@@ -16,6 +16,11 @@ export default class AccountForm extends Component {
   componentDidMount(){
     bindFormValidators();
   }
+  componentDidUpdate(prevProps) {
+    if (prevProps.Account.details.id !== this.props.Account.details.id ){
+      bindFormValidators();
+    }
+  }
 
   render() {
     let spinner;
@@ -30,7 +35,7 @@ export default class AccountForm extends Component {
 
     return (
       <div>
-        <form id="AccountForm" ref="form">
+        <form id="AccountForm" ref="form" key={'campaignform-' + ((this.props.editMode) ? 'edit-' + data.id : 'create')}>
           {(this.props.editMode) ? (<input type="hidden" id="AccountId" name="id" ref="id" value={data.id}/>) : null}
           <div className="form-group">
             <label htmlFor="AccountName">Name</label>

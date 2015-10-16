@@ -20,17 +20,14 @@ require('parsleyjs');
 
 export default class CampaignForm extends Component {
   componentDidMount() {
-    bindFormValidators();
+    this.frontEndScripts();
+  }
 
-    $('.js-select').select2();
-
-    const options = {
-      useCurrent: true,
-      format: 'YYYY-MM-DD',
-      showTodayButton: true
-    };
-    $('#CampaignStartDate').datetimepicker(options);
-    $('#CampaignEndDate').datetimepicker(options);
+  componentDidUpdate(prevProps) {
+    if (prevProps.Campaign.details.id !== this.props.Campaign.details.id ||
+        prevProps.Account.details.id !== this.props.Account.details.id ){
+      this.frontEndScripts();
+    }
   }
 
   render() {
@@ -57,7 +54,7 @@ export default class CampaignForm extends Component {
 
     return (
       <div>
-        <form id="CampaignForm" ref="form">
+        <form id="CampaignForm" ref="form" key={'campaignform-' + ((this.props.editMode) ? 'edit-' + data.id : 'create-' + data.account_id )}>
           {(this.props.editMode) ? (<input type="hidden" name="id" ref="id" value={data.id}/>) : null}
           <input type="hidden" name="account_id" ref="account_id" value={data.account_id} />
 
@@ -104,6 +101,20 @@ export default class CampaignForm extends Component {
         </form>
       </div>
     );
+  }
+
+  frontEndScripts(){
+    bindFormValidators();
+
+    $('.js-select').select2();
+
+    const options = {
+      useCurrent: true,
+      format: 'YYYY-MM-DD',
+      showTodayButton: true
+    };
+    $('#CampaignStartDate').datetimepicker(options);
+    $('#CampaignEndDate').datetimepicker(options);
   }
 
   handleFormSubmit(e) {
