@@ -11,6 +11,8 @@ import CampaignEditPage from './Campaigns/CampaignEditPage.js';
 import CampaignBulkUploadPage from './Campaigns/CampaignBulkUploadPage.js';
 import AdGroupsPage from './AdGroups/AdGroupsPage.js';
 import AdGroupViewPage from './AdGroups/AdGroupViewPage.js';
+import AdGroupCreatePage from './AdGroups/AdGroupCreatePage.js';
+import AdGroupEditPage from './AdGroups/AdGroupEditPage.js';
 import TilesPage from './Tiles/TilesPage.js';
 import TileViewPage from './Tiles/TileViewPage.js';
 import ApprovalsPage from './Approvals/ApprovalsPage.js';
@@ -30,6 +32,8 @@ export {
   CampaignBulkUploadPage,
   AdGroupsPage,
   AdGroupViewPage,
+  AdGroupCreatePage,
+  AdGroupEditPage,
   TilesPage,
   TileViewPage,
   ApprovalsPage,

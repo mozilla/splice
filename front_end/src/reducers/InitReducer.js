@@ -4,6 +4,7 @@ import {
 } from 'actions/Init/InitActions';
 
 const initialState = {
+  categories: [],
   channels: [],
   countries: [],
   locales: [],
@@ -19,6 +20,7 @@ export function Init(state = initialState, action = null) {
     }
     case RECEIVE_INIT:
       return _.assign({}, state, {
+        categories: action.json.result.categories,
         channels: action.json.result.channels,
         countries: action.json.result.countries,
         locales: action.json.result.locales,

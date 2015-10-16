@@ -85,7 +85,7 @@ export default class CampaignForm extends Component {
           </div>
           <div className="form-group">
             <label htmlFor="CampaignCountries">Countries</label><br/>
-            <select className="form-control js-select" style={{width: '100%'}} type="text" id="CampaignCountries" name="countries[]" ref="countries" multiple="multiple" defaultValue={data.countries} data-parsley-required>
+            <select className="form-control js-select" style={{width: '100%'}} id="CampaignCountries" name="countries[]" ref="countries" multiple="multiple" defaultValue={data.countries} data-parsley-required>
               {countries}
             </select>
           </div>
@@ -121,9 +121,6 @@ export default class CampaignForm extends Component {
       }
       if(formData.end_date.trim() !== ''){
         formData.end_date = apiDate(formData.end_date);
-      }
-      if(this.props.editMode && formData.paused === undefined) {
-        formData.paused = false;
       }
 
       const data = JSON.stringify(formData);

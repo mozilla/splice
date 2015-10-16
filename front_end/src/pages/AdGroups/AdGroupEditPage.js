@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
-
+import { updateDocTitle } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
-import AdGroupDetails from 'components/AdGroups/AdGroupDetails/AdGroupDetails';
-import TileList from 'components/Tiles/TileList/TileList';
+import AdGroupForm from 'components/AdGroups/AdGroupForm/AdGroupForm';
 
-export default class AdGroupViewPage extends Component {
+export default class AdGroupEditPage extends Component {
   componentWillMount() {
     this.fetchAdGroupDetails(this.props);
   }
@@ -27,48 +24,49 @@ export default class AdGroupViewPage extends Component {
     if(this.props.AdGroup.details) {
       output = (
         <div>
-          <div className="row">
-            <div className="col-xs-6">
-              <AdGroupDetails AdGroup={this.props.AdGroup}/>
+          <div className="module">
+            <div className="module-header">Edit AdGroup - {this.props.AdGroup.details.name}</div>
+            <div className="module-body">
+              { (this.props.AdGroup.details.id && this.props.Init.categories.length)
+                ? <AdGroupForm editMode={true} {...this.props} />
+                : null
+              }
             </div>
           </div>
-
-          <TileList rows={this.props.Tile.rows}
-                    isFetching={this.props.Tile.isFetching}/>
         </div>
       );
     }
-
     return output;
   }
 
   fetchAdGroupDetails(props) {
     const { dispatch } = props;
 
-    updateDocTitle('Ad Group View');
+    updateDocTitle('Edit AdGroup');
 
     dispatch(fetchHierarchy('adGroup', props))
       .catch(function(){
         props.history.replaceState(null, '/error404');
       })
       .then(() => {
-        if(this.props.AdGroup.details) {
-          pageVisit('Ad Group - ' + this.props.AdGroup.details.name, this);
+        if(this.props.AdGroup.details !== undefined){
+          updateDocTitle('Edit AdGroup - ' + this.props.AdGroup.details.name);
         }
-    });
+      });
   }
 }
 
-AdGroupViewPage.propTypes = {};
+AdGroupEditPage.propTypes = {};
 
+// Which props do we want to inject, given the global state?
 function select(state) {
   return {
+    Init: state.Init,
     Account: state.Account,
     Campaign: state.Campaign,
-    AdGroup: state.AdGroup,
-    Tile: state.Tile
+    AdGroup: state.AdGroup
   };
 }
 
 // Wrap the component to inject dispatch and state into it
-export default connect(select)(AdGroupViewPage);
+export default connect(select)(AdGroupEditPage);

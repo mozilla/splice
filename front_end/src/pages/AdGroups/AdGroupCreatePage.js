@@ -5,11 +5,11 @@ import { Link } from 'react-router';
 import { updateDocTitle } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
-import CampaignForm from 'components/Campaigns/CampaignForm/CampaignForm';
+import AdGroupForm from 'components/AdGroups/AdGroupForm/AdGroupForm';
 
-export default class CampaignEditPage extends Component {
-  componentDidMount() {
-    this.fetchCampaignDetails(this.props);
+export default class AdGroupCreatePage extends Component {
+  componentDidMount(){
+    this.fetchAdGroupDetails(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -25,48 +25,45 @@ export default class CampaignEditPage extends Component {
       output = (
         <div>
           <div className="module">
-            <div className="module-header">Edit Campaign - {this.props.Campaign.details.name}</div>
+            <div className="module-header">{this.props.Campaign.details.name}: Create Ad Group</div>
             <div className="module-body">
-              {(this.props.Campaign.details.id && this.props.Init.countries.length)
-                ? <CampaignForm editMode={true} {...this.props} />
-                : null
-              }
+              <AdGroupForm editMode={false} {...this.props}/>
             </div>
           </div>
         </div>
       );
     }
-
     return output;
   }
 
-  fetchCampaignDetails(props) {
+  fetchAdGroupDetails(props) {
     const { dispatch } = props;
 
-    updateDocTitle('Edit Campaign');
+    updateDocTitle('Edit AdGroup');
 
     dispatch(fetchHierarchy('campaign', props))
       .catch(function(){
         props.history.replaceState(null, '/error404');
       })
       .then(() => {
-        if(this.props.Campaign.details){
-          updateDocTitle('Edit Campaign - ' + this.props.Campaign.details.name);
+        if(this.props.Campaign.details !== undefined){
+          updateDocTitle(this.props.Campaign.details.name + ': Create Ad Group');
         }
       });
   }
 }
 
-CampaignEditPage.propTypes = {};
+AdGroupCreatePage.propTypes = {};
 
 // Which props do we want to inject, given the global state?
 function select(state) {
   return {
-    Campaign: state.Campaign,
     Account: state.Account,
+    Campaign: state.Campaign,
+    AdGroup: state.AdGroup,
     Init: state.Init
   };
 }
 
 // Wrap the component to inject dispatch and state into it
-export default connect(select)(CampaignEditPage);
+export default connect(select)(AdGroupCreatePage);

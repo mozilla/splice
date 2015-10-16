@@ -66,7 +66,7 @@ export function createAdGroup(data) {
   return function next(dispatch) {
     dispatch(requestCreateAdGroup());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/adgroups/', {
+    return fetch(apiUrl + '/api/adgroups', {
       method: 'post',
       headers: {
         'Accept': 'application/json',
@@ -76,7 +76,7 @@ export function createAdGroup(data) {
     })
       .then(response => response.json())
       .then(json => new Promise(resolve => {
-        dispatch(receiveCreateCampaign(json));
+        dispatch(receiveCreateAdGroup(json));
         resolve(json);
       })
     );

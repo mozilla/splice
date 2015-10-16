@@ -63,7 +63,6 @@
     "parsleyjs": "^2.1.2",
     "perfect-scrollbar": "^0.6.7",
     "phantomjs": "^1.9.18",
-    "radium": "^0.13.7",
     "raw-loader": "^0.5.1",
     "react": "^0.14.0",
     "react-addons-css-transition-group": "^0.14.0",
