@@ -105,7 +105,7 @@ select.styled{
       td.status.active, td.status.approved{
         background-color: $color-aqua;
       }
-      td.status.paused, td.status.pending{
+      td.status.paused, td.status.unapproved{
         background-color: $color-gray;
         color: #fff;
       }
