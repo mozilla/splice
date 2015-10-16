@@ -21,15 +21,20 @@ export default class TileViewPage extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="row">
-          <div className="col-xs-12">
-            <TileDetails Tile={this.props.Tile}/>
+    let output = (<div/>);
+
+    if(this.props.Tile.details) {
+      output = (
+        <div>
+          <div className="row">
+            <div className="col-xs-12">
+              <TileDetails Tile={this.props.Tile}/>
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+    return output;
   }
 
   fetchTileDetails(props) {
@@ -37,8 +42,14 @@ export default class TileViewPage extends Component {
 
     updateDocTitle('Tile View');
 
-    dispatch(fetchHierarchy('tile', props)).then(() => {
-      pageVisit('Tile - ' + this.props.Tile.details.title, this);
+    dispatch(fetchHierarchy('tile', props))
+      .catch(function(){
+        props.history.replaceState(null, '/error404');
+      })
+      .then(() => {
+        if(this.props.Tile.details) {
+          pageVisit('Tile - ' + this.props.Tile.details.title, this);
+        }
     });
   }
 }

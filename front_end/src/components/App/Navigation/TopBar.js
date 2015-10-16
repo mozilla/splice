@@ -56,7 +56,7 @@ export default class TopBar extends Component {
 
   showTabsAndBreadCrumbs(){
     return this.props.location.pathname.match(/\/accounts\/\d.*/) ||
-      this.props.location.pathname.match(/\/campaigns\/.*/) ||
+      this.props.location.pathname.match(/\/campaigns\/\d.*/) ||
       this.props.location.pathname.match(/\/adgroups\/.*/) ||
       this.props.location.pathname.match(/\/tiles\/.*/);
   }

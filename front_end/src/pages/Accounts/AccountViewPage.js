@@ -21,19 +21,25 @@ export default class AccountViewPage extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="row">
-          <div className="col-xs-3">
-            <AccountDetails Account={this.props.Account}/>
+    let output = (<div/>);
+
+    if(this.props.Account.details) {
+      output = (
+        <div>
+          <div className="row">
+            <div className="col-xs-3">
+              <AccountDetails Account={this.props.Account}/>
+            </div>
           </div>
+          <Link className="create-link" to={'/accounts/' + this.props.Account.details.id + '/createcampaign'}>Create Campaign <i className="fa fa-plus"></i></Link>
+          <CampaignList rows={this.props.Campaign.rows}
+                        isFetching={this.props.Campaign.isFetching}
+                        channels={this.props.Init.channels}/>
         </div>
-        <Link className="create-link" to={'/accounts/' + this.props.Account.details.id + '/createcampaign'}>Create Campaign <i className="fa fa-plus"></i></Link>
-        <CampaignList rows={this.props.Campaign.rows}
-                      isFetching={this.props.Campaign.isFetching}
-                      channels={this.props.Init.channels}/>
-      </div>
-    );
+      );
+    }
+
+    return output;
   }
 
   fetchAccountDetails(props) {
@@ -43,10 +49,10 @@ export default class AccountViewPage extends Component {
 
     dispatch(fetchHierarchy('account', props))
       .catch(function(){
-        props.history.pushState(null, '/error404');
+        props.history.replaceState(null, '/error404');
       })
       .then(() => {
-        if(this.props.Account.details.name !== undefined){
+        if(this.props.Account.details){
           pageVisit('Account - ' + this.props.Account.details.name, this);
         }
     });

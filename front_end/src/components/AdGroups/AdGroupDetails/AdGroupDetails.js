@@ -8,7 +8,7 @@ export default class AdGroupDetails extends Component {
     const data = this.props.AdGroup.details;
 
     let categories = '';
-    if(data.categories !== undefined && data.categories.length > 0){
+    if(data !== undefined && data.categories !== undefined && data.categories.length > 0){
       data.categories.map(function(val, index){
         if(index !== 0){
           categories += ', ';
@@ -18,7 +18,7 @@ export default class AdGroupDetails extends Component {
     }
 
     let details;
-    if (this.props.AdGroup.isFetching === false) {
+    if (this.props.AdGroup.details !== undefined) {
       details = (
         <div className="details-panel">
           <div className="details-panel-header">
