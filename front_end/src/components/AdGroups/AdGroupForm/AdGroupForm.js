@@ -20,8 +20,14 @@ export default class AdGroupForm extends Component {
 
     $('.js-select').select2();
   }
-  componentDidUpdate() {
-    $('.js-select').select2();
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.AdGroup.details.id !== this.props.AdGroup.details.id ||
+        prevProps.Campaign.details.id !== this.props.Campaign.details.id){
+      bindFormValidators();
+
+      $('.js-select').select2();
+    }
   }
 
   render() {
