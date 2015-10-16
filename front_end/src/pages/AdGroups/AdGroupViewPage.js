@@ -32,7 +32,7 @@ export default class AdGroupViewPage extends Component {
               <AdGroupDetails AdGroup={this.props.AdGroup}/>
             </div>
           </div>
-
+          <Link className="create-link" to={'/adgroups/' + this.props.AdGroup.details.id + '/createtile'}>Create Tile <i className="fa fa-plus"></i></Link>
           <TileList rows={this.props.Tile.rows}
                     isFetching={this.props.Tile.isFetching}/>
         </div>
