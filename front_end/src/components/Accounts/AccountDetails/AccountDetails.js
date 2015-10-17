@@ -45,7 +45,7 @@ export default class AccountDetails extends Component {
       details = <img src="./public/img/ajax-loader-navy.gif"/>;
     }
 
-    return (<div>{details}</div>);
+    return details;
   }
 }
 

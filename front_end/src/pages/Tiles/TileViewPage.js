@@ -8,6 +8,7 @@ import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
 import TileDetails from 'components/Tiles/TileDetails/TileDetails';
+import TilePreview from 'components/Tiles/TilePreview/TilePreview';
 
 export default class TileViewPage extends Component {
   componentWillMount() {
@@ -25,11 +26,10 @@ export default class TileViewPage extends Component {
 
     if(this.props.Tile.details) {
       output = (
-        <div>
-          <div className="row">
-            <div className="col-xs-12">
-              <TileDetails Tile={this.props.Tile}/>
-            </div>
+        <div className="row">
+          <div className="col-xs-12">
+            <TileDetails Tile={this.props.Tile}/>
+            <TilePreview Tile={this.props.Tile}/>
           </div>
         </div>
       );
