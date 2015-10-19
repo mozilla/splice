@@ -1,12 +1,21 @@
 @import '../../../styles/variables';
 
-.tile-preview-container{
+.tiles-container{
   text-align: center;
-  margin: 0 0 40px 0;
+  margin: 0 0 20px 0;
+
+  .tile-preview-container{
+    display: inline-block;
+    color: #fff;
+    font-weight: normal;
+    font-size: 14px;
+  }
 
   .tile-preview{
     padding: 0;
-    display: inline-block;
+    @include all-shadow();
+    border-radius: 10px;
+    margin-bottom: 15px;
 
     .tile-image{
       height: 200px;
@@ -15,6 +24,7 @@
       border-top-right-radius: 10px;
       background-position: center;
       background-repeat: no-repeat;
+      background-color: #bbb;
     }
     .tile-title{
       width: 390px;
@@ -26,9 +36,31 @@
       line-height: 1em;
       color: #ffffff;
       font-weight: normal;
+      background-color: #bbb;
     }
   }
   .tile-default{
-    margin: 0 30px 0 0;
+    margin-right: 30px;
+  }
+}
+.tile-status-buttons{
+  text-align: center;
+  margin-bottom: 40px;
+
+  .btn{
+    width: 115px;
+  }
+
+  .btn.disapprove{
+    margin-right: 30px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 5px;
+  }
+  .btn.approve{
+    margin-right: 0px;
+    background-color: $color-aqua;
+    color: $font-color-default;
+    border-radius: 5px;
   }
 }
