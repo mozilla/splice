@@ -1,7 +1,50 @@
 @import '../variables';
 
-.panel .panel-body h2{
-  margin-top: 0px;
+.form-module {
+  margin: 0 0 40px 0;
+
+  .form-module-header {
+    font-family: $font-heading;
+    font-weight: 700;
+    background-color: $color-pink;
+    color: #fff;
+    font-size: 18px;
+    text-transform: uppercase;
+    padding: 15px;
+    text-align: center;
+  }
+  .form-module-body {
+    background-color: $color-dark-gray;
+    @include top-inset-shadow();
+
+    .field-container{
+      @include bottom-inset-shadow();
+      padding-top: 30px;
+      padding-bottom: 30px;
+    }
+
+    label{
+      color: #fff;
+      font-weight: normal;
+    }
+
+    .form-submit{
+      width: 100%;
+      background-color: $color-aqua;
+      color: $font-color-default;
+      border: 0;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 18px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .text-danger{
+      color: red;
+    }
+  }
 }
 .form-group.has-error .select2-selection{
   border-color: #a94442;

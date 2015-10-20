@@ -24,9 +24,9 @@ export default class CampaignCreatePage extends Component {
     if(this.props.Account.details){
       output = (
         <div>
-          <div className="module">
-            <div className="module-header">{this.props.Account.details.name}: Create Campaign</div>
-            <div className="module-body">
+          <div className="form-module">
+            <div className="form-module-header">{this.props.Account.details.name}: Create Campaign</div>
+            <div className="form-module-body">
               <CampaignForm editMode={false} {...this.props} />
             </div>
           </div>
