@@ -24,9 +24,9 @@ export default class AdGroupEditPage extends Component {
     if(this.props.AdGroup.details) {
       output = (
         <div>
-          <div className="module">
-            <div className="module-header">Edit AdGroup - {this.props.AdGroup.details.name}</div>
-            <div className="module-body">
+          <div className="form-module">
+            <div className="form-module-header">Edit AdGroup - {this.props.AdGroup.details.name}</div>
+            <div className="form-module-body">
               { (this.props.AdGroup.details.id && this.props.Init.categories.length)
                 ? <AdGroupForm editMode={true} {...this.props} />
                 : null

@@ -24,9 +24,9 @@ export default class AdGroupCreatePage extends Component {
     if(this.props.Campaign.details){
       output = (
         <div>
-          <div className="module">
-            <div className="module-header">{this.props.Campaign.details.name}: Create Ad Group</div>
-            <div className="module-body">
+          <div className="form-module">
+            <div className="form-module-header">{this.props.Campaign.details.name}: Create Ad Group</div>
+            <div className="form-module-body">
               <AdGroupForm editMode={false} {...this.props}/>
             </div>
           </div>

@@ -1,3 +1,5 @@
+@import '../variables';
+
 .onoffswitch {
   position: relative; width: 43px;
   -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
@@ -25,10 +27,10 @@
   transition: all 0.3s 0s;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label {
-  background-color: #49E845;
+  background-color: $color-aqua;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
-  border-color: #49E845;
+  border-color: $color-aqua;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label:before {
   right: 0px;

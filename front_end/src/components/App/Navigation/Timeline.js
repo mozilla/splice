@@ -84,16 +84,16 @@ export default class Timeline extends Component {
 
   handleSave(e){
     if(this.isAccount()){
-      $('#AccountForm input[type="submit"]').click();
+      $('#AccountForm .form-submit').click();
     }
     if(this.isCampaign()){
-      $('#CampaignForm input[type="submit"]').click();
+      $('#CampaignForm .form-submit').click();
     }
     if(this.isAdGroup()){
-      $('#AdGroupForm input[type="submit"]').click();
+      $('#AdGroupForm .form-submit').click();
     }
     if(this.isTile()){
-      $('#TileForm input[type="submit"]').click();
+      $('#TileForm .form-submit').click();
     }
   }
 

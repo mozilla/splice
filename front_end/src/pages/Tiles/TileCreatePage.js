@@ -24,9 +24,9 @@ export default class TileCreatePage extends Component {
     if(this.props.AdGroup.details){
       output = (
         <div>
-          <div className="module">
-            <div className="module-header">{this.props.AdGroup.details.name}: Create Tile</div>
-            <div className="module-body">
+          <div className="form-module">
+            <div className="form-module-header">{this.props.AdGroup.details.name}: Create Tile</div>
+            <div className="form-module-body">
               <TileForm editMode={false} {...this.props}/>
             </div>
           </div>

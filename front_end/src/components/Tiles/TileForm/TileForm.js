@@ -35,7 +35,7 @@ export default class TileForm extends Component {
   render() {
     let spinner;
     if(this.props.Tile.isSaving){
-      spinner = <img src="/public/img/ajax-loader.gif" />;
+      spinner = <img src="/public/img/ajax-loader-aqua.gif" />;
     }
 
     let data = this.props.Tile.details;
@@ -61,70 +61,72 @@ export default class TileForm extends Component {
         <form id="TileForm" ref="form" key={'tileform-' + ((this.props.editMode) ? 'edit-' + data.id : 'create-' + data.adgroup_id )}>
           {(this.props.editMode) ? (<input type="hidden" id="TileId" name="id" ref="id" value={data.id}/>) : null}
           <input type="hidden" name="adgroup_id" ref="adgroup_id" value={data.adgroup_id} />
-          <div className="form-group">
-            <label htmlFor="TileTitle">Title</label>
-            <input className="form-control" type="text" id="TileTitle" name="title" ref="title" defaultValue={data.title} data-parsley-required data-parsley-minlength="2"/>
-          </div>
-          {(this.props.editMode)
-            ? (<div className="form-group">
-            <label htmlFor="TilePaused">Paused</label>
-            <div className="onoffswitch">
-              <input type="checkbox" name="paused" ref="paused" className="onoffswitch-checkbox" id="TilePaused" defaultChecked={data.paused} value="true"/>
-              <label className="onoffswitch-label" htmlFor="TilePaused"></label>
-            </div>
-          </div>)
-            : <input type="hidden" name="paused" ref="paused" value={false}/>
-          }
-          <div className="form-group">
-            <label htmlFor="TileTargetUrl">Target URL</label>
-            <input className="form-control" type="text" id="TileTargetUrl" name="target_url" ref="target_url" defaultValue={data.target_url} data-parsley-required data-parsley-type="url"/>
-          </div>
-          <div className="form-group">
-            <label htmlFor="TileImageUri">Image URI</label>
-            <input className="form-control" type="text" id="TileImageUri" name="image_uri" ref="image_uri" defaultValue={data.image_uri} data-parsley-required data-parsley-type="url"/>
-          </div>
-          <div className="form-group">
-            <label htmlFor="TileEnhancedImageUri">Enhanced Image URI</label>
-            <input className="form-control" type="text" id="TileEnhancedImageUri" name="enhanced_image_uri" ref="enhanced_image_uri" defaultValue={data.enhanced_image_uri} data-parsley-required data-parsley-type="url"/>
-          </div>
-          <div className="form-group">
-            <label htmlFor="TileBgColor">Background Color</label>
-            <div className="input-group colorpicker-input-group">
-              <span className="input-group-addon"><i></i></span>
-              <input className="form-control" type="text" id="TileBgColor" name="bg_color" ref="bg_color" defaultValue={data.bg_color} data-parsley-required/>
-            </div>
-          </div>
-          <div className="form-group">
-            <label htmlFor="TileTitleBgColor">Title Background Color</label>
-            <div className="input-group colorpicker-input-group">
-              <span className="input-group-addon"><i></i></span>
-              <input className="form-control" type="text" id="TileTitleBgColor" name="title_bg_color" ref="title_bg_color" defaultValue={data.title_bg_color} data-parsley-required/>
-            </div>
-          </div>
-          <div className="form-group">
-            <label htmlFor="TileType">Type</label>
-            <select className="form-control" id="TileType" name="type" ref="type" defaultValue={data.type} >
-              <option value="affiliate">Affiliate</option>
-              <option value="sponsored">Sponsored</option>
-            </select>
-          </div>
-          {(this.props.editMode)
-            ? (<div className="form-group">
-              <label htmlFor="TileStatus">Approval Status</label>
-              <select className="form-control" id="TileStatus" name="status" ref="status" defaultValue={data.status} >
-                <option value="unapproved">Unapproved</option>
-                <option value="disapproved">Disapproved</option>
-                <option value="approved">Approved</option>
-              </select>
-            </div>)
-            : <input type="hidden" name="status" ref="status" value="unapproved"/>}
 
-          <input onClick={(e) => this.handleFormSubmit(e)} type="submit" value="Save" className="btn btn-primary"/>
-          {(this.props.editMode)
-            ? <Link to={'/tiles/' + data.id} className="btn btn-default">Cancel</Link>
-            : <Link to={'/adgroups/' + data.adgroup_id} className="btn btn-default">Cancel</Link>
-          }
-          {spinner}
+          <div className="container-fluid field-container">
+            <div className="row">
+              <div className="col-xs-4">
+                <div className="form-group">
+                  <label htmlFor="TileTitle">Title</label>
+                  <input className="form-control" type="text" id="TileTitle" name="title" ref="title" defaultValue={data.title} data-parsley-required data-parsley-minlength="2"/>
+                </div>
+                {(this.props.editMode)
+                  ? (<div className="form-group">
+                  <label htmlFor="TilePaused">Paused</label>
+                  <div className="onoffswitch">
+                    <input type="checkbox" name="paused" ref="paused" className="onoffswitch-checkbox" id="TilePaused" defaultChecked={data.paused} value="true"/>
+                    <label className="onoffswitch-label" htmlFor="TilePaused"></label>
+                  </div>
+                </div>)
+                  : <input type="hidden" name="paused" ref="paused" value={false}/>
+                }
+                <div className="form-group">
+                  <label htmlFor="TileTargetUrl">Target URL</label>
+                  <input className="form-control" type="text" id="TileTargetUrl" name="target_url" ref="target_url" defaultValue={data.target_url} data-parsley-required data-parsley-type="url"/>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="TileImageUri">Image URI</label>
+                  <input className="form-control" type="text" id="TileImageUri" name="image_uri" ref="image_uri" defaultValue={data.image_uri} data-parsley-required data-parsley-type="url"/>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="TileEnhancedImageUri">Enhanced Image URI</label>
+                  <input className="form-control" type="text" id="TileEnhancedImageUri" name="enhanced_image_uri" ref="enhanced_image_uri" defaultValue={data.enhanced_image_uri} data-parsley-required data-parsley-type="url"/>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="TileBgColor">Background Color</label>
+                  <div className="input-group colorpicker-input-group">
+                    <span className="input-group-addon"><i></i></span>
+                    <input className="form-control" type="text" id="TileBgColor" name="bg_color" ref="bg_color" defaultValue={data.bg_color} data-parsley-required/>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="TileTitleBgColor">Title Background Color</label>
+                  <div className="input-group colorpicker-input-group">
+                    <span className="input-group-addon"><i></i></span>
+                    <input className="form-control" type="text" id="TileTitleBgColor" name="title_bg_color" ref="title_bg_color" defaultValue={data.title_bg_color} data-parsley-required/>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="TileType">Type</label>
+                  <select className="form-control" id="TileType" name="type" ref="type" defaultValue={data.type} >
+                    <option value="affiliate">Affiliate</option>
+                    <option value="sponsored">Sponsored</option>
+                  </select>
+                </div>
+                {(this.props.editMode)
+                  ? (<div className="form-group">
+                  <label htmlFor="TileStatus">Approval Status</label>
+                  <select className="form-control" id="TileStatus" name="status" ref="status" defaultValue={data.status} >
+                    <option value="unapproved">Unapproved</option>
+                    <option value="disapproved">Disapproved</option>
+                    <option value="approved">Approved</option>
+                  </select>
+                </div>)
+                  : <input type="hidden" name="status" ref="status" value="unapproved"/>}
+              </div>
+            </div>
+          </div>
+
+          <div onClick={(e) => this.handleFormSubmit(e)} className="form-submit">Save {spinner}</div>
         </form>
       </div>
     );
