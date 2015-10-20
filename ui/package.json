@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "description": "The new Splice UI. Built with redux.",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "bundle": "./node_modules/webpack/bin/webpack.js && cp -r static/ ../splice/static/build/"
   },
   "repository": {
     "type": "git",

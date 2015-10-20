@@ -1,3 +1,13 @@
-{% extends 'base.jinja2' %}
-
-{% block title %}Firefox Tiles - Authoring{% endblock %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Splice - Redux edition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='build/css/newtab.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='build/css/datetime.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='build/css/app.css') }}">
+  </head>
+  <body>
+    <div id="root">Loading...</div>
+    <script src="{{ url_for('static', filename='build/js/bundle.js') }}"></script>
+  </body>
+</html>
