@@ -56,11 +56,13 @@
     background-color: #000;
     color: #fff;
     border-radius: 5px;
+    text-transform: uppercase;
   }
   .btn.approve{
     margin-right: 0px;
     background-color: $color-aqua;
     color: $font-color-default;
     border-radius: 5px;
+    text-transform: uppercase;
   }
 }
