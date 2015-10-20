@@ -103,11 +103,23 @@ export default class AdGroupForm extends Component {
             <div className="row">
               <div className="col-xs-4">
                 <div className="form-group">
-                  <label htmlFor="AdGroupType">Type</label>
-                  <select className="form-control" id="AdGroupType" name="type" ref="type" defaultValue={data.type} >
-                    <option value="directory">Directory</option>
-                    <option value="suggested">Suggested</option>
-                  </select>
+                  <label htmlFor="AdGroupType">Product Type</label>
+                  <div className="switch-group">
+                    <div className="switch-option switch-option-one">
+                      Directory
+                    </div>
+                    <div className="onoffswitch transparent">
+                      <input type="checkbox" name="type" ref="type" className="onoffswitch-checkbox" id="AdGroupType" defaultChecked={(data.type === 'suggested') ? true : false} value="true"/>
+                      <label className="onoffswitch-label" htmlFor="AdGroupType"></label>
+                    </div>
+                    <div className="switch-option switch-option-two">
+                      Suggested
+                    </div>
+                    <div className="clearfix" ></div>
+                    <div className="switch-copy" >
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec cursus nulla et hendrerit mollis. Vivamus ullamcorper, lectus eget vestibulum placerat, leo erat ultrices tortor, eget tincidunt elit nulla sit amet metus.
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -155,7 +167,15 @@ export default class AdGroupForm extends Component {
     const form = $('#AdGroupForm').parsley();
 
     if(form.validate()){
-      const data = JSON.stringify($('#AdGroupForm').serializeJSON());
+      const formData = $('#AdGroupForm').serializeJSON();
+      if(formData.type === undefined){
+        formData.type = 'directory';
+      }
+      else{
+        formData.type = 'suggested';
+      }
+
+      const data = JSON.stringify(formData);
 
       //Handle Update or Create
       if(this.props.editMode){
