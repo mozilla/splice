@@ -6,6 +6,7 @@ window.$ = require('jquery');
 import SideBar from 'components/App/Navigation/SideBar.js';
 import AccountNavigation from 'components/App/Navigation/AccountNavigation.js';
 import BreadCrumbs from 'components/App/Navigation/BreadCrumbs.js';
+import Timeline from 'components/App/Navigation/Timeline.js';
 import './TopBar.scss';
 import './HamburgerIcon.scss';
 
@@ -22,7 +23,10 @@ export default class TopBar extends Component {
     const ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
     let height = 50;
-    if(this.showTabsAndBreadCrumbs()){
+    if(this.showTimeline()) {
+      height = 110;
+    }
+    else if(this.showTabsAndBreadCrumbs()){
       height = 134;
     }
 
@@ -40,25 +44,52 @@ export default class TopBar extends Component {
           <SideBar {...this.props} />
           <div className="clearfix"></div>
 
-          <ReactCSSTransitionGroup transitionName="fade" transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
-            {(this.showTabsAndBreadCrumbs() )
-              ? (<div key="tabs-and-breadcrumbs">
-                   <AccountNavigation {...this.props} key="account-navigation"/>
-                   <BreadCrumbs {...this.props} key="breadcrumbs"/>
-                 </div>
-              )
-              : null }
+          <ReactCSSTransitionGroup transitionName="fade" transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeave={false} transitionLeaveTimeout={0}>
+            {this.showBar()}
           </ReactCSSTransitionGroup>
         </div>
       </div>
     );
   }
 
+  showBar(){
+    let output;
+
+    if(this.showTimeline()){
+      output = (
+        <div key="timeline-container">
+          <Timeline {...this.props} key="timeline" />
+        </div>
+      );
+    }
+    else if(this.showTabsAndBreadCrumbs()){
+      output = (
+        <div key="tabs-and-breadcrumbs">
+          <AccountNavigation {...this.props} key="account-navigation"/>
+          <BreadCrumbs {...this.props} key="breadcrumbs"/>
+        </div>
+      );
+    }
+
+    return output;
+  }
+
   showTabsAndBreadCrumbs(){
     return this.props.location.pathname.match(/\/accounts\/\d.*/) ||
       this.props.location.pathname.match(/\/campaigns\/\d.*/) ||
-      this.props.location.pathname.match(/\/adgroups\/.*/) ||
-      this.props.location.pathname.match(/\/tiles\/.*/);
+      this.props.location.pathname.match(/\/adgroups\/\d.*/) ||
+      this.props.location.pathname.match(/\/tiles\/\d.*/);
+  }
+
+  showTimeline(){
+    return this.props.location.pathname.match(/\/accounts\/create/) ||
+      this.props.location.pathname.match(/\/accounts\/\d\/edit/) ||
+      this.props.location.pathname.match(/\/accounts\/\d\/createcampaign/) ||
+      this.props.location.pathname.match(/\/campaigns\/\d\/edit/) ||
+      this.props.location.pathname.match(/\/campaigns\/\d\/createadgroup/) ||
+      this.props.location.pathname.match(/\/adgroups\/\d\/edit/) ||
+      this.props.location.pathname.match(/\/adgroups\/\d\/createtile/) ||
+      this.props.location.pathname.match(/\/tiles\/\d\/edit/);
   }
 
   handleNavigationToggle(){
