@@ -1,3 +1,7 @@
+1.1.35
+======
+* Issue #113 - Port existing Splice UI to new redux stack
+
 1.1.34
 =====
  * Bug 1205832 - Splice's tile_index_crawl.py script doesn't work with SNI
