@@ -22,22 +22,29 @@ export default class CampaignViewPage extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="row">
-          <div className="col-xs-6">
-            <CampaignDetails Campaign={this.props.Campaign} Init={this.props.Init}/>
-          </div>
-          <div className="col-xs-6">
-            <div className="pull-right">
-              <Link className="btn btn-default" to={'/campaigns/' + this.props.Campaign.details.id + '/bulkupload'}>Bulk Upload <i className="fa fa-upload"></i></Link>
+    let output = (<div/>);
+
+    if(this.props.Campaign.details){
+      output = (
+        <div>
+          <div className="row">
+            <div className="col-xs-6">
+              <CampaignDetails Campaign={this.props.Campaign} Init={this.props.Init}/>
+            </div>
+            <div className="col-xs-6">
+              <div className="pull-right">
+                <Link className="btn btn-default" to={'/campaigns/' + this.props.Campaign.details.id + '/bulkupload'}>Bulk Upload <i className="fa fa-upload"></i></Link>
+              </div>
             </div>
           </div>
+          <Link className="create-link" to={'/campaigns/' + this.props.Campaign.details.id + '/createadgroup'}>Create Ad Group <i className="fa fa-plus"></i></Link>
+          <AdGroupList rows={this.props.AdGroup.rows}
+                       isFetching={this.props.AdGroup.isFetching}/>
         </div>
-        <AdGroupList rows={this.props.AdGroup.rows}
-                     isFetching={this.props.AdGroup.isFetching}/>
-      </div>
-    );
+      );
+    }
+
+    return output;
   }
 
   fetchCampaignDetails(props) {
@@ -47,10 +54,10 @@ export default class CampaignViewPage extends Component {
 
     dispatch(fetchHierarchy('campaign', props))
       .catch(function(){
-        props.history.pushState(null, '/error404');
+        props.history.replaceState(null, '/error404');
       })
       .then(() => {
-        if(this.props.Campaign.details.name !== undefined) {
+        if(this.props.Campaign.details) {
           pageVisit('Campaign - ' + this.props.Campaign.details.name, this);
         }
     });

@@ -11,8 +11,12 @@ import CampaignEditPage from './Campaigns/CampaignEditPage.js';
 import CampaignBulkUploadPage from './Campaigns/CampaignBulkUploadPage.js';
 import AdGroupsPage from './AdGroups/AdGroupsPage.js';
 import AdGroupViewPage from './AdGroups/AdGroupViewPage.js';
+import AdGroupCreatePage from './AdGroups/AdGroupCreatePage.js';
+import AdGroupEditPage from './AdGroups/AdGroupEditPage.js';
 import TilesPage from './Tiles/TilesPage.js';
 import TileViewPage from './Tiles/TileViewPage.js';
+import TileCreatePage from './Tiles/TileCreatePage.js';
+import TileEditPage from './Tiles/TileEditPage.js';
 import ApprovalsPage from './Approvals/ApprovalsPage.js';
 import Error404Page from './Errors/Error404Page.js';
 
@@ -30,8 +34,12 @@ export {
   CampaignBulkUploadPage,
   AdGroupsPage,
   AdGroupViewPage,
+  AdGroupCreatePage,
+  AdGroupEditPage,
   TilesPage,
   TileViewPage,
+  TileCreatePage,
+  TileEditPage,
   ApprovalsPage,
   Error404Page
 };

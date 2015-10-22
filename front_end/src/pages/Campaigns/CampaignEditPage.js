@@ -19,19 +19,25 @@ export default class CampaignEditPage extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="module">
-          <div className="module-header">Edit Campaign - {this.props.Campaign.details.name}</div>
-          <div className="module-body">
-            {(this.props.Campaign.details.id && this.props.Init.countries.length)
-              ? <CampaignForm editMode={true} {...this.props} />
-              : null
-            }
+    let output = (<div/>);
+
+    if(this.props.Campaign.details){
+      output = (
+        <div>
+          <div className="form-module">
+            <div className="form-module-header">Edit Campaign - {this.props.Campaign.details.name}</div>
+            <div className="form-module-body">
+              {(this.props.Campaign.details.id && this.props.Init.countries.length)
+                ? <CampaignForm editMode={true} {...this.props} />
+                : null
+              }
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+
+    return output;
   }
 
   fetchCampaignDetails(props) {
@@ -41,10 +47,10 @@ export default class CampaignEditPage extends Component {
 
     dispatch(fetchHierarchy('campaign', props))
       .catch(function(){
-        props.history.pushState(null, '/error404');
+        props.history.replaceState(null, '/error404');
       })
       .then(() => {
-        if(this.props.Campaign.details.name !== undefined){
+        if(this.props.Campaign.details){
           updateDocTitle('Edit Campaign - ' + this.props.Campaign.details.name);
         }
       });

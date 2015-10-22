@@ -6,7 +6,7 @@
 .navbar.breadcrumbs{
   background-color: $color-light-gray;
   border-radius: 0 !important;
-  padding-left: 145px;
+  padding-left: 12.5%;
   border:0;
   min-height: 40px;
   @include top-inset-shadow();
@@ -16,7 +16,7 @@
     background-color: transparent !important;
 
     a.dropdown-toggle{
-      color: #b2b2b2;
+      color: $color-dark-gray;
       padding: 8px 10px 2px 20px !important;
       font-size: 12px;
       text-transform: uppercase;
@@ -37,35 +37,32 @@
     }
 
     a.dropdown-toggle:hover{
-      color: #b2b2b2;
-      border-color: #b2b2b2;
+      color: $color-dark-gray;
+      border-color: $color-dark-gray;
+    }
+  }
+  .navbar-nav li.top-level.active,
+  .navbar-nav li.top-level.parent{
+    a.dropdown-toggle{
+      color: $color-pink;
+      border-color: $color-pink;
+      font-weight: 700;
+
+      .down-arrow{
+        background: url(/public/img/breadcrumbs/breadcrumb-arrow-active.png) no-repeat center center;
+      }
+    }
+
+    a.dropdown-toggle:hover{
+      color: $color-pink;
+      border-color: $color-pink;
     }
   }
   .navbar-nav li.top-level.parent{
     a.dropdown-toggle {
-      color: $color-pink;
-
-      .down-arrow{
-        background: url(/public/img/breadcrumbs/breadcrumb-arrow-active.png) no-repeat center center;
-      }
+      border-color: transparent;
     }
     a.dropdown-toggle:hover{
-      color: $color-pink;
-      border-color: $color-pink;
-    }
-  }
-  .navbar-nav li.top-level.active{
-    a.dropdown-toggle{
-      color: $color-pink;
-      border-color: $color-pink;
-
-      .down-arrow{
-        background: url(/public/img/breadcrumbs/breadcrumb-arrow-active.png) no-repeat center center;
-      }
-    }
-
-    a.dropdown-toggle:hover{
-      color: $color-pink;
       border-color: $color-pink;
     }
   }
@@ -90,6 +87,7 @@
     padding: 0px;
     max-height: 300px;
     overflow: auto;
+    border: 0px;
 
     li a{
       padding: 5px 20px;

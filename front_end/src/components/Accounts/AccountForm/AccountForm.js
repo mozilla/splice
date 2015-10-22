@@ -16,11 +16,16 @@ export default class AccountForm extends Component {
   componentDidMount(){
     bindFormValidators();
   }
+  componentDidUpdate(prevProps) {
+    if (prevProps.Account.details.id !== this.props.Account.details.id ){
+      bindFormValidators();
+    }
+  }
 
   render() {
     let spinner;
     if(this.props.Account.isSaving){
-      spinner = <img src="/public/img/ajax-loader.gif" />;
+      spinner = <img src="/public/img/ajax-loader-aqua.gif" />;
     }
 
     let data = this.props.Account.details;
@@ -30,30 +35,40 @@ export default class AccountForm extends Component {
 
     return (
       <div>
-        <form id="AccountForm" ref="form">
+        <form id="AccountForm" ref="form" key={'campaignform-' + ((this.props.editMode) ? 'edit-' + data.id : 'create')}>
           {(this.props.editMode) ? (<input type="hidden" id="AccountId" name="id" ref="id" value={data.id}/>) : null}
-          <div className="form-group">
-            <label htmlFor="AccountName">Name</label>
-            <input className="form-control" type="text" id="AccountName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
+          <div className="container-fluid field-container">
+            <div className="row">
+              <div className="col-xs-4">
+                <div className="form-group">
+                  <label htmlFor="AccountName">Account Name</label>
+                  <input className="form-control" type="text" id="AccountName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-xs-4">
+                <div className="form-group">
+                  <label htmlFor="AccountContactName">Contact Name</label>
+                  <input className="form-control" type="text" id="AccountContactName" name="contact_name" ref="contact_name" defaultValue={data.contact_name} />
+                </div>
+              </div>
+              <div className="col-xs-4">
+                <div className="form-group">
+                  <label htmlFor="AccountContactEmail">Contact Email</label>
+                  <input className="form-control" type="text" id="AccountContactEmail" name="contact_email" ref="contact_email" defaultValue={data.contact_email} data-parsley-type="email"/>
+                </div>
+              </div>
+              <div className="col-xs-4">
+                <div className="form-group">
+                  <label htmlFor="AccountContactPhone">Contact Phone</label>
+                  <input className="form-control" type="text" id="AccountContactPhone" name="contact_phone" ref="contact_phone" defaultValue={data.contact_phone} />
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="AccountContactName">Contact Name</label>
-            <input className="form-control" type="text" id="AccountContactName" name="contact_name" ref="contact_name" defaultValue={data.contact_name} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="AccountContactEmail">Contact Email</label>
-            <input className="form-control" type="text" id="AccountContactEmail" name="contact_email" ref="contact_email" defaultValue={data.contact_email} data-parsley-type="email"/>
-          </div>
-          <div className="form-group">
-            <label htmlFor="AccountContactPhone">Contact Phone</label>
-            <input className="form-control" type="text" id="AccountContactPhone" name="contact_phone" ref="contact_phone" defaultValue={data.contact_phone} />
-          </div>
-          <input onClick={(e) => this.handleFormSubmit(e)} type="submit" value="Save" className="btn btn-primary"/>
-          {(this.props.editMode)
-            ? <Link to={'/accounts/' + data.id} className="btn btn-default">Cancel</Link>
-            : <Link to="/" className="btn btn-default">Cancel</Link>
-          }
-          {spinner}
+
+          <div onClick={(e) => this.handleFormSubmit(e)} className="form-submit">Save {spinner}</div>
         </form>
       </div>
     );

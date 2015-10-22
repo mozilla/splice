@@ -19,19 +19,25 @@ export default class AccountEditPage extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="module">
-          <div className="module-header">Edit Account - {this.props.Account.details.name}</div>
-          <div className="module-body">
-            { (this.props.Account.details.id !== undefined)
-              ? <AccountForm editMode={true} {...this.props} />
-              : null
-            }
+    let output = (<div/>);
+
+    if(this.props.Account.details){
+      output = (
+        <div>
+          <div className="form-module">
+            <div className="form-module-header">Edit Account - {this.props.Account.details.name}</div>
+            <div className="form-module-body">
+              { (this.props.Account.details.id !== undefined)
+                ? <AccountForm editMode={true} {...this.props} />
+                : null
+              }
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+
+    return output;
   }
 
   fetchAccountDetails(props) {
@@ -41,10 +47,10 @@ export default class AccountEditPage extends Component {
 
     dispatch(fetchHierarchy('account', props))
       .catch(function(){
-        props.history.pushState(null, '/error404');
+        props.history.replaceState(null, '/error404');
       })
       .then(() => {
-        if(this.props.Account.details.name !== undefined){
+        if(this.props.Account.details){
           updateDocTitle('Edit Account - ' + this.props.Account.details.name);
         }
       });

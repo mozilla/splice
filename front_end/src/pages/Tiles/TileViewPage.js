@@ -3,11 +3,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
+
+import { updateDocTitle, pageVisit, displayMessage, shownMessage } from 'actions/App/AppActions';
+import { updateTile } from 'actions/Tiles/TileActions';
 
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
 import TileDetails from 'components/Tiles/TileDetails/TileDetails';
+import TilePreview from 'components/Tiles/TilePreview/TilePreview';
 
 export default class TileViewPage extends Component {
   componentWillMount() {
@@ -21,15 +24,19 @@ export default class TileViewPage extends Component {
   }
 
   render() {
-    return (
-      <div>
+    let output = (<div/>);
+
+    if(this.props.Tile.details) {
+      output = (
         <div className="row">
           <div className="col-xs-12">
             <TileDetails Tile={this.props.Tile}/>
+            <TilePreview Tile={this.props.Tile} handleApprove={() => this.handleApprove()} handleDisapprove={() => this.handleDisapprove()}/>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+    return output;
   }
 
   fetchTileDetails(props) {
@@ -37,10 +44,42 @@ export default class TileViewPage extends Component {
 
     updateDocTitle('Tile View');
 
-    dispatch(fetchHierarchy('tile', props)).then(() => {
-      pageVisit('Tile - ' + this.props.Tile.details.title, this);
+    dispatch(fetchHierarchy('tile', props))
+      .catch(function(){
+        props.history.replaceState(null, '/error404');
+      })
+      .then(() => {
+        if(this.props.Tile.details) {
+          pageVisit('Tile - ' + this.props.Tile.details.title, this);
+        }
     });
   }
+
+  handleApprove(){
+    const { dispatch } = this.props;
+
+    const data = JSON.stringify({id: this.props.Tile.details.id, status: 'approved'});
+
+    dispatch(updateTile(this.props.Tile.details.id, data))
+      .then(function(response){
+        dispatch(displayMessage('success', 'Tile has been Approved.') );
+        dispatch(shownMessage());
+      });
+  }
+
+  handleDisapprove(){
+    const { dispatch } = this.props;
+
+    const data = JSON.stringify({id: this.props.Tile.details.id, status: 'disapproved'});
+
+    dispatch(updateTile(this.props.Tile.details.id, data))
+      .then(function(response){
+        dispatch(displayMessage('success', 'Tile has been Disapproved.') );
+        dispatch(shownMessage());
+      });
+  }
+
+
 }
 
 TileViewPage.propTypes = {};

@@ -19,16 +19,22 @@ export default class CampaignCreatePage extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="module">
-          <div className="module-header">{this.props.Account.details.name}: Create Campaign</div>
-          <div className="module-body">
-            <CampaignForm editMode={false} {...this.props} />
+    let output = (<div/>);
+
+    if(this.props.Account.details){
+      output = (
+        <div>
+          <div className="form-module">
+            <div className="form-module-header">{this.props.Account.details.name}: Create Campaign</div>
+            <div className="form-module-body">
+              <CampaignForm editMode={false} {...this.props} />
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+
+    return output;
   }
 
   fetchAccountDetails(props) {
@@ -38,10 +44,10 @@ export default class CampaignCreatePage extends Component {
 
     dispatch(fetchHierarchy('account', props))
       .catch(function(){
-        props.history.pushState(null, '/error404');
+        props.history.replaceState(null, '/error404');
       })
       .then(() => {
-        if(this.props.Account.details.name !== undefined){
+        if(this.props.Account.details){
           updateDocTitle(this.props.Account.details.name + ': Create Campaign');
         }
       });

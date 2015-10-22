@@ -66,18 +66,22 @@ export default class BreadCrumbs extends Component {
   }
 
   generateCrumb(data, active, parent, url, branch){
-    return (
-      <li className={'dropdown top-level ' + parent + ' ' + active + ' ' + ((branch) ? 'branch' : 'line')}>
-        <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{(data.details.name !== undefined) ? data.details.name : data.details.title } <span className="down-arrow"></span></a>
-        <ul className="dropdown-menu">
-          <li className="active"><Link to={url + data.details.id} >{(data.details.name !== undefined) ? data.details.name : data.details.title }</Link></li>
-          {data.rows.map(function(object, i){
-            if(data.details.id !== object.id){
-              return <li key={'bread-crumb-' + i}><Link to={url + object.id} >{(object.name !== undefined) ? object.name : object.title }</Link></li>;
-            }
-          })}
-        </ul>
-      </li>
-    );
+    let output;
+    if(data.details){
+      output = (
+        <li className={'dropdown top-level ' + parent + ' ' + active + ' ' + ((branch) ? 'branch' : 'line')}>
+          <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{(data.details.name !== undefined) ? data.details.name : data.details.title } <span className="down-arrow"></span></a>
+          <ul className="dropdown-menu">
+            <li className="active"><Link to={url + data.details.id} >{(data.details.name !== undefined) ? data.details.name : data.details.title }</Link></li>
+            {data.rows.map(function(object, i){
+              if(data.details.id !== object.id){
+                return <li key={'bread-crumb-' + i}><Link to={url + object.id} >{(object.name !== undefined) ? object.name : object.title }</Link></li>;
+              }
+            })}
+          </ul>
+        </li>
+      );
+    }
+    return output;
   }
 }

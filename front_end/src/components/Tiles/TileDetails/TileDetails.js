@@ -18,20 +18,20 @@ export default class TileDetails extends Component {
 							<div className="details-panel-id">ID: {data.id}</div>
 						</div>
 
-						<div className="details-edit-link">
+						{/*<div className="details-edit-link">
 							<Link className="" to={'/tiles/' + data.id + '/edit'} title="Edit">
 								<i className="fa fa-pencil"></i>
 							</Link>
-						</div>
+						</div>*/}
 					</div>
 					<div className="details-panel-body">
 						<p><strong>Status:</strong> {_.capitalize(data.status)}</p>
-						<p><strong>Url:</strong> {data.target_url}</p>
-						<p><strong>Type:</strong> {_.capitalize(data.type)}</p>
+						<p><strong>Target Url:</strong> {data.target_url}</p>
 						<p><strong>Enhanced Image URI:</strong> {data.enhanced_image_uri}</p>
 						<p><strong>Image URI:</strong> {data.image_uri}</p>
 						<p><strong>BG Color:</strong> {data.bg_color}</p>
 						<p><strong>Title BG Color:</strong> {data.title_bg_color}</p>
+						<p><strong>Type:</strong> {_.capitalize(data.type)}</p>
 						<p><strong>Created:</strong> {formatDate(data.created_at, 'M/D/YYYY')}</p>
 					</div>
 				</div>
@@ -40,7 +40,7 @@ export default class TileDetails extends Component {
 			details = <img src="./public/img/ajax-loader-navy.gif"/>;
 		}
 
-		return (<div>{details}</div>);
+		return details;
 	}
 }
 

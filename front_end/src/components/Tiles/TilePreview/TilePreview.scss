@@ -1,0 +1,68 @@
+@import '../../../styles/variables';
+
+.tiles-container{
+  text-align: center;
+  margin: 0 0 20px 0;
+
+  .tile-preview-container{
+    display: inline-block;
+    color: #fff;
+    font-weight: normal;
+    font-size: 14px;
+  }
+
+  .tile-preview{
+    padding: 0;
+    @include all-shadow();
+    border-radius: 10px;
+    margin-bottom: 15px;
+
+    .tile-image{
+      height: 200px;
+      width: 390px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #bbb;
+    }
+    .tile-title{
+      width: 390px;
+      height: 40px;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      padding: 10px 5px;
+      font-size: 18px;
+      line-height: 1em;
+      color: #ffffff;
+      font-weight: normal;
+      background-color: #bbb;
+    }
+  }
+  .tile-default{
+    margin-right: 30px;
+  }
+}
+.tile-status-buttons{
+  text-align: center;
+  margin-bottom: 40px;
+
+  .btn{
+    width: 115px;
+  }
+
+  .btn.disapprove{
+    margin-right: 30px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 5px;
+    text-transform: uppercase;
+  }
+  .btn.approve{
+    margin-right: 0px;
+    background-color: $color-aqua;
+    color: $font-color-default;
+    border-radius: 5px;
+    text-transform: uppercase;
+  }
+}

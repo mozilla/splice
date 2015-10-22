@@ -22,18 +22,24 @@ export default class AdGroupViewPage extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="row">
-          <div className="col-xs-6">
-            <AdGroupDetails AdGroup={this.props.AdGroup}/>
-          </div>
-        </div>
+    let output = (<div/>);
 
-        <TileList rows={this.props.Tile.rows}
-                  isFetching={this.props.Tile.isFetching}/>
-      </div>
-    );
+    if(this.props.AdGroup.details) {
+      output = (
+        <div>
+          <div className="row">
+            <div className="col-xs-6">
+              <AdGroupDetails AdGroup={this.props.AdGroup}/>
+            </div>
+          </div>
+          <Link className="create-link" to={'/adgroups/' + this.props.AdGroup.details.id + '/createtile'}>Create Tile <i className="fa fa-plus"></i></Link>
+          <TileList rows={this.props.Tile.rows}
+                    isFetching={this.props.Tile.isFetching}/>
+        </div>
+      );
+    }
+
+    return output;
   }
 
   fetchAdGroupDetails(props) {
@@ -41,8 +47,14 @@ export default class AdGroupViewPage extends Component {
 
     updateDocTitle('Ad Group View');
 
-    dispatch(fetchHierarchy('adGroup', props)).then(() => {
-      pageVisit('Ad Group - ' + this.props.AdGroup.details.name, this);
+    dispatch(fetchHierarchy('adGroup', props))
+      .catch(function(){
+        props.history.replaceState(null, '/error404');
+      })
+      .then(() => {
+        if(this.props.AdGroup.details) {
+          pageVisit('Ad Group - ' + this.props.AdGroup.details.name, this);
+        }
     });
   }
 }

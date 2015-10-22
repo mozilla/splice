@@ -11,11 +11,18 @@ $color-dark-gray: #5c5e6f;
 $color-pink: #cf375f;
 $color-aqua: #7dd9ae;
 $color-navy: #263b4f;
+$color-light-navy: #4f5f6f;
 
 @mixin top-inset-shadow() {
   -webkit-box-shadow: inset 0px 15px 5px -10px rgba(0,0,0,0.3);
   -moz-box-shadow: inset 0px 15px 5px -10px rgba(0,0,0,0.3);
   box-shadow: inset 0px 15px 5px -10px rgba(0,0,0,0.3);
+}
+
+@mixin bottom-inset-shadow() {
+  -webkit-box-shadow: inset 0px -15px 5px -10px rgba(0,0,0,0.3);
+  -moz-box-shadow: inset 0px -15px 5px -10px rgba(0,0,0,0.3);
+  box-shadow: inset 0px -15px 5px -10px rgba(0,0,0,0.3);
 }
 
 @mixin bottom-shadow() {
@@ -28,4 +35,10 @@ $color-navy: #263b4f;
   -webkit-box-shadow: 5px 2px 5px 0px rgba(0,0,0,0.3);
   -moz-box-shadow: 5px 2px 5px 0px rgba(0,0,0,0.3);
   box-shadow: 5px 2px 5px 0px rgba(0,0,0,0.3);
+}
+
+@mixin all-shadow() {
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
 }

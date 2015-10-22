@@ -20,23 +20,20 @@ require('parsleyjs');
 
 export default class CampaignForm extends Component {
   componentDidMount() {
-    bindFormValidators();
+    this.frontEndScripts();
+  }
 
-    $('.js-select').select2();
-
-    const options = {
-      useCurrent: true,
-      format: 'YYYY-MM-DD',
-      showTodayButton: true
-    };
-    $('#CampaignStartDate').datetimepicker(options);
-    $('#CampaignEndDate').datetimepicker(options);
+  componentDidUpdate(prevProps) {
+    if (prevProps.Campaign.details.id !== this.props.Campaign.details.id ||
+        prevProps.Account.details.id !== this.props.Account.details.id ){
+      this.frontEndScripts();
+    }
   }
 
   render() {
     let spinner;
     if(this.props.Campaign.isSaving){
-      spinner = <img src="/public/img/ajax-loader.gif" />;
+      spinner = <img src="/public/img/ajax-loader-aqua.gif" />;
     }
 
     let data = this.props.Campaign.details;
@@ -57,53 +54,84 @@ export default class CampaignForm extends Component {
 
     return (
       <div>
-        <form id="CampaignForm" ref="form">
+        <form id="CampaignForm" ref="form" key={'campaignform-' + ((this.props.editMode) ? 'edit-' + data.id : 'create-' + data.account_id )}>
           {(this.props.editMode) ? (<input type="hidden" name="id" ref="id" value={data.id}/>) : null}
           <input type="hidden" name="account_id" ref="account_id" value={data.account_id} />
 
-          <div className="form-group">
-            <label htmlFor="CampaignName">Name</label>
-            <input className="form-control" type="text" id="CampaignName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
-          </div>
-          {(this.props.editMode)
-            ? (<div className="form-group">
-                <label htmlFor="AccountPaused">Paused</label>
-                <div className="onoffswitch">
-                  <input type="checkbox" name="paused" ref="paused" className="onoffswitch-checkbox" id="AccountPaused" defaultChecked={data.paused} value="true"/>
-                  <label className="onoffswitch-label" htmlFor="AccountPaused"></label>
+          <div className="container-fluid field-container">
+            <div className="row">
+              <div className="col-xs-4">
+                <div className="form-group">
+                  <label htmlFor="CampaignName">Campaign Name</label>
+                  <input className="form-control" type="text" id="CampaignName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
                 </div>
-              </div>)
-            : <input type="hidden" name="paused" ref="paused" value={false}/>
-          }
-          <div className="form-group">
-            <label htmlFor="CampaignStartDate">Start Date</label>
-            <input className="form-control" type="text" id="CampaignStartDate" name="start_date" ref="start_date" defaultValue={formatDate(data.start_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
+                {(this.props.editMode)
+                  ? (<div className="form-group">
+                  <label htmlFor="AccountPaused">Paused</label>
+                  <div className="onoffswitch">
+                    <input type="checkbox" name="paused" ref="paused" className="onoffswitch-checkbox" id="AccountPaused" defaultChecked={data.paused} value="true"/>
+                    <label className="onoffswitch-label" htmlFor="AccountPaused"></label>
+                  </div>
+                </div>)
+                  : <input type="hidden" name="paused" ref="paused" value={false}/>
+                }
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-xs-4">
+                <div className="form-group">
+                  <label htmlFor="CampaignStartDate">Start Date</label>
+                  <input className="form-control" type="text" id="CampaignStartDate" name="start_date" ref="start_date" defaultValue={formatDate(data.start_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
+                </div>
+              </div>
+              <div className="col-xs-4">
+                <div className="form-group">
+                  <label htmlFor="CampaignEndDate">End Date</label>
+                  <input className="form-control" type="text" id="CampaignEndDate" name="end_date" ref="end_date" defaultValue={formatDate(data.end_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-xs-8">
+                <div className="form-group">
+                  <label htmlFor="CampaignCountries">Countries</label><br/>
+                  <select className="form-control js-select" style={{width: '100%'}} id="CampaignCountries" name="countries[]" ref="countries" multiple="multiple" defaultValue={data.countries} data-parsley-required>
+                    {countries}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-xs-4">
+                <div className="form-group">
+                  <label htmlFor="CampaignChannelId">Channel</label>
+                  <select className="form-control" id="CampaignChannelId" name="channel_id" ref="channel_id" defaultValue={data.channel_id} data-parsley-required >
+                    {channels}
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="CampaignEndDate">End Date</label>
-            <input className="form-control" type="text" id="CampaignEndDate" name="end_date" ref="end_date" defaultValue={formatDate(data.end_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="CampaignCountries">Countries</label><br/>
-            <select className="form-control js-select" style={{width: '100%'}} type="text" id="CampaignCountries" name="countries[]" ref="countries" multiple="multiple" defaultValue={data.countries} data-parsley-required>
-              {countries}
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="CampaignChannelId">Channel</label>
-            <select className="form-control" id="CampaignChannelId" name="channel_id" ref="channel_id" defaultValue={data.channel_id} data-parsley-required >
-              {channels}
-            </select>
-          </div>
-          <input onClick={(e) => this.handleFormSubmit(e)} type="submit" value="Submit" className="btn btn-primary"/>
-          {(this.props.editMode)
-            ? <Link to={'/campaigns/' + data.id} className="btn btn-default">Cancel</Link>
-            : <Link to={'/accounts/' + data.account_id} className="btn btn-default">Cancel</Link>
-          }
-          {spinner}
+
+          <div onClick={(e) => this.handleFormSubmit(e)} className="form-submit" >Save {spinner}</div>
+
         </form>
       </div>
     );
+  }
+
+  frontEndScripts(){
+    bindFormValidators();
+
+    $('.js-select').select2();
+
+    const options = {
+      useCurrent: true,
+      format: 'YYYY-MM-DD',
+      showTodayButton: true
+    };
+    $('#CampaignStartDate').datetimepicker(options);
+    $('#CampaignEndDate').datetimepicker(options);
   }
 
   handleFormSubmit(e) {
@@ -121,9 +149,6 @@ export default class CampaignForm extends Component {
       }
       if(formData.end_date.trim() !== ''){
         formData.end_date = apiDate(formData.end_date);
-      }
-      if(this.props.editMode && formData.paused === undefined) {
-        formData.paused = false;
       }
 
       const data = JSON.stringify(formData);

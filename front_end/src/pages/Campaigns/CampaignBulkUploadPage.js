@@ -19,22 +19,27 @@ export default class CampaignBulkUploadPage extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <h1>Bulk Upload - {this.props.Campaign.details.name}</h1>
-        <div className="panel panel-default">
-          <div className="panel-body">
-            <form >
-              <label htmlFor="bulkUpload">Upload File</label>
-              <input type="file" name="bulkUpload" id="bulkUpload" ref="bulkUpload" />
-              <br/>
-              <input onClick={(e) => this.handleFileUpload(e)} type="submit" className="btn btn-primary" value="Submit" />
-              <Link to={'/campaigns/' + this.props.Campaign.details.id} className="btn btn-default">Cancel</Link>
-            </form>
+    let output = (<div/>);
+
+    if(this.props.Campaign.details){
+      output = (
+        <div>
+          <h1>Bulk Upload - {this.props.Campaign.details.name}</h1>
+          <div className="panel panel-default">
+            <div className="panel-body">
+              <form >
+                <label htmlFor="bulkUpload">Upload File</label>
+                <input type="file" name="bulkUpload" id="bulkUpload" ref="bulkUpload" />
+                <br/>
+                <input onClick={(e) => this.handleFileUpload(e)} type="submit" className="btn btn-primary" value="Submit" />
+                <Link to={'/campaigns/' + this.props.Campaign.details.id} className="btn btn-default">Cancel</Link>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+    return output;
   }
 
   fetchCampaignDetails(props) {
@@ -42,8 +47,14 @@ export default class CampaignBulkUploadPage extends Component {
 
     updateDocTitle('Campaign Bulk Upload');
 
-    dispatch(fetchHierarchy('campaign', props)).then(() => {
-      updateDocTitle('Campaign Bulk Upload - ' + this.props.Campaign.details.name);
+    dispatch(fetchHierarchy('campaign', props))
+      .catch(function(){
+        props.history.replaceState(null, '/error404');
+      })
+      .then(() => {
+        if(this.props.Campaign.details) {
+          updateDocTitle('Campaign Bulk Upload - ' + this.props.Campaign.details.name);
+        }
     });
   }
 
@@ -71,5 +82,3 @@ function select(state) {
 
 // Wrap the component to inject dispatch and state into it
 export default connect(select)(CampaignBulkUploadPage);
-
-

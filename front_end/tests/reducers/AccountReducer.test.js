@@ -1,5 +1,4 @@
 import expect from 'expect';
-import { List, Map } from 'immutable';
 import { Account } from 'reducers/AccountReducer';
 import * as types from 'actions/Accounts/AccountActions';
 import _ from 'lodash';
@@ -11,7 +10,7 @@ describe('Account ', () => {
       Account(undefined, {}).rows).toEqual([]);
   });
 
-  it('should receive the accounts', () => {
+  it('should handle RECEIVE_ACCOUNTS', () => {
     expect(
       Account(undefined, {
         type: types.RECEIVE_ACCOUNTS,
@@ -21,7 +20,7 @@ describe('Account ', () => {
     );
   });
 
-  it('should receive the account', () => {
+  it('should handle RECEIVE_ACCOUNT', () => {
     expect(
       Account(undefined, {
         type: types.RECEIVE_ACCOUNT,

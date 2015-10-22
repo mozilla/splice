@@ -22,8 +22,12 @@ import {
   CampaignBulkUploadPage,
   AdGroupsPage,
   AdGroupViewPage,
+  AdGroupCreatePage,
+  AdGroupEditPage,
   TilesPage,
   TileViewPage,
+  TileCreatePage,
+  TileEditPage,
   ApprovalsPage,
   Error404Page
 } from './pages/index';
@@ -45,12 +49,16 @@ export default class App extends Component {
           <Route path="campaigns/:campaignId" title="Campaign View" component={CampaignViewPage}></Route>
           <Route path="campaigns/:campaignId/Edit" title="Campaign Edit" component={CampaignEditPage}></Route>
           <Route path="campaigns/:campaignId/bulkupload" title="Campaign Bulk Upload" component={CampaignBulkUploadPage}></Route>
+          <Route path="campaigns/:campaignId/createadgroup" title="Ad Group Create" component={AdGroupCreatePage}></Route>
 
           <Route path="adgroups" title="Ad Groups" component={AdGroupsPage}></Route>
           <Route path="adgroups/:adGroupId" title="Ad Group View" component={AdGroupViewPage}></Route>
+          <Route path="adgroups/:adGroupId/Edit" title="Ad Group Edit" component={AdGroupEditPage}></Route>
+          <Route path="adgroups/:adGroupId/createtile" title="Tile Create" component={TileCreatePage}></Route>
 
           <Route path="tiles" title="Tiles" component={TilesPage}></Route>
           <Route path="tiles/:tileId" title="Tile View" component={TileViewPage}></Route>
+          <Route path="tiles/:tileId/Edit" title="Tile Edit" component={TileEditPage}></Route>
 
           <Route path="approvals" title="Approval Queue" component={ApprovalsPage}></Route>
 
