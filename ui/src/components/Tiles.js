@@ -6,6 +6,7 @@ export default class Tiles extends Component {
     var tilesType = this.props.tilesType;
     this.props.tiles.forEach(function(webtile) {
       var thumbStyle = {
+        backgroundColor: webtile.bgColor,
         backgroundImage: 'url(' + webtile.imageURI + ')'
       };
       var enhancedThumbStyle = {
