@@ -1,3 +1,7 @@
+1.1.36
+======
+* Properly set the bgColor of tiles from the tile field. 
+
 1.1.35
 ======
 * Issue #113 - Port existing Splice UI to new redux stack
