@@ -1,3 +1,7 @@
+1.1.37
+======
+* Update the bundle.js. Otherwise, same as 1.1.36.
+
 1.1.36
 ======
 * Properly set the bgColor of tiles from the tile field. 
