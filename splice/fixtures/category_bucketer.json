@@ -4,6 +4,7 @@
         "descriptors": [
             "A pet site suggestion"
         ],
+        "explanation": "A pet content suggestion",
         "name": "Animals_General",
         "sites": [
             "1800petmeds.com",
@@ -73,6 +74,7 @@
         "descriptors": [
             "An auto site suggestion"
         ],
+        "explanation": "An auto content suggestion",
         "name": "Automotive_General",
         "sites": [
             "1aauto.com",
@@ -119,6 +121,7 @@
         "descriptors": [
             "An auto site suggestion"
         ],
+        "explanation": "An auto content suggestion",
         "name": "Automotive_In-Market",
         "sites": [
             "autobytel.com",
@@ -163,6 +166,7 @@
         "descriptors": [
             "An auto site suggestion"
         ],
+        "explanation": "An auto content suggestion",
         "name": "Automotive_OEM",
         "sites": [
             "acura.com",
@@ -231,6 +235,7 @@
         "descriptors": [
             "An auto parts site suggestion"
         ],
+        "explanation": "An auto parts content suggestion",
         "name": "Automotive_Parts Repair",
         "sites": [
             "1010tires.com",
@@ -286,6 +291,7 @@
         "descriptors": [
             "A literature site suggestion"
         ],
+        "explanation": "A literature content suggestion",
         "name": "Books_General",
         "sites": [
             "abebooks.co.uk",
@@ -406,6 +412,7 @@
         "descriptors": [
             "A banking site suggestion"
         ],
+        "explanation": "A banking content suggestion",
         "name": "Business/ Finance_Bank",
         "sites": [
             "53.com",
@@ -443,6 +450,7 @@
         "descriptors": [
             "A business news site suggestion"
         ],
+        "explanation": "A business news content suggestion",
         "name": "Business/ Finance_Business News",
         "sites": [
             "247wallst.com",
@@ -479,6 +487,7 @@
         "descriptors": [
             "A finance site suggestion"
         ],
+        "explanation": "A finance content suggestion",
         "name": "Business/ Finance_Card",
         "sites": [
             "achievecard.com",
@@ -503,6 +512,7 @@
         "descriptors": [
             "A finance site suggestion"
         ],
+        "explanation": "A finance content suggestion",
         "name": "Business/ Finance_Credit Union",
         "sites": [
             "alliantcreditunion.org",
@@ -523,6 +533,7 @@
         "descriptors": [
             "An investing site suggestion"
         ],
+        "explanation": "An investing content suggestion",
         "name": "Business/ Finance_Investing News",
         "sites": [
             "allbusiness.com",
@@ -578,6 +589,7 @@
         "descriptors": [
             "An investing site suggestion"
         ],
+        "explanation": "An investing content suggestion",
         "name": "Business/ Finance_Investment Companies",
         "sites": [
             "edwardjones.com",
@@ -602,6 +614,7 @@
         "descriptors": [
             "A finance site suggestion"
         ],
+        "explanation": "A finance content suggestion",
         "name": "Business/ Finance_Loans",
         "sites": [
             "247lendinggroup.com",
@@ -637,6 +650,7 @@
         "descriptors": [
             "An investing site suggestion"
         ],
+        "explanation": "An investing content suggestion",
         "name": "Business/ Finance_Online Investing",
         "sites": [
             "betterment.com",
@@ -654,6 +668,7 @@
         "descriptors": [
             "A finance site suggestion"
         ],
+        "explanation": "A finance content suggestion",
         "name": "Business/ Finance_Online Trading",
         "sites": [
             "bancdebinary.com",
@@ -678,6 +693,7 @@
         "descriptors": [
             "A personal finance site suggestion"
         ],
+        "explanation": "A personal finance content suggestion",
         "name": "Business/ Finance_Personal Finance",
         "sites": [
             "annualcreditreport.com",
@@ -710,6 +726,7 @@
         "descriptors": [
             "A business news site suggestion"
         ],
+        "explanation": "A business news content suggestion",
         "name": "Business/ Finance_Small Business",
         "sites": [
             "angieslist.com",
@@ -745,6 +762,7 @@
         "descriptors": [
             "A tax site suggestion"
         ],
+        "explanation": "A tax content suggestion",
         "name": "Business/ Finance_Tax",
         "sites": [
             "1040now.net",
@@ -779,6 +797,7 @@
         "descriptors": [
             "A career services site suggestion"
         ],
+        "explanation": "A career services content suggestion",
         "name": "Career Services_General",
         "sites": [
             "adeccousa.com",
@@ -869,6 +888,7 @@
         "descriptors": [
             "A philanthropic site suggestion"
         ],
+        "explanation": "A philanthropic content suggestion",
         "name": "Charities_General",
         "sites": [
             "americanheart.org",
@@ -909,6 +929,7 @@
         "descriptors": [
             "A college site suggestion"
         ],
+        "explanation": "A college content suggestion",
         "name": "Education_College",
         "sites": [
             "academia.edu",
@@ -1132,6 +1153,7 @@
         "descriptors": [
             "A college site suggestion"
         ],
+        "explanation": "A college content suggestion",
         "name": "Education_College Comparison",
         "sites": [
             "collegeboard.com",
@@ -1150,6 +1172,7 @@
         "descriptors": [
             "An education site suggestion"
         ],
+        "explanation": "An education content suggestion",
         "name": "Education_General",
         "sites": [
             "actstudent.org",
@@ -1213,6 +1236,7 @@
         "descriptors": [
             "An education site suggestion"
         ],
+        "explanation": "An education content suggestion",
         "name": "Education_Grade/ High School",
         "sites": [
             "browardschools.com",
@@ -1234,6 +1258,7 @@
         "descriptors": [
             "A learning games suggestion"
         ],
+        "explanation": "A learning games suggestion",
         "name": "Education_Online Games",
         "sites": [
             "coolmath-games.com",
@@ -1257,6 +1282,7 @@
         "descriptors": [
             "An entertainment site suggestion"
         ],
+        "explanation": "An entertainment content suggestion",
         "name": "Entertainment_General",
         "sites": [
             "askmen.com",
@@ -1288,6 +1314,7 @@
         "descriptors": [
             "A humor site suggestion"
         ],
+        "explanation": "A humor content suggestion",
         "name": "Entertainment_Humor",
         "sites": [
             "11points.com",
@@ -1349,6 +1376,7 @@
         "descriptors": [
             "A movie site suggestion"
         ],
+        "explanation": "A movie content suggestion",
         "name": "Entertainment_Movies",
         "sites": [
             "air.tv",
@@ -1430,6 +1458,7 @@
         "descriptors": [
             "A music site suggestion"
         ],
+        "explanation": "A music content suggestion",
         "name": "Entertainment_Music",
         "sites": [
             "1079ishot.com",
@@ -1532,6 +1561,7 @@
         "descriptors": [
             "An entertainment news site suggestion"
         ],
+        "explanation": "An entertainment news content suggestion",
         "name": "Entertainment_News/ Celebrity",
         "sites": [
             "aceshowbiz.com",
@@ -1670,6 +1700,7 @@
         "descriptors": [
             "A TV show site suggestion"
         ],
+        "explanation": "A TV show content suggestion",
         "name": "Entertainment_TV",
         "sites": [
             "abc.go.com",
@@ -1758,6 +1789,7 @@
         "descriptors": [
             "An environment site suggestion"
         ],
+        "explanation": "An environment content suggestion",
         "name": "Environment_General",
         "sites": [
             "americanhiking.org",
@@ -1793,6 +1825,7 @@
         "descriptors": [
             "A family site suggestion"
         ],
+        "explanation": "A family content suggestion",
         "name": "Family_Parenting",
         "sites": [
             "abbreviations.com",
@@ -1865,6 +1898,7 @@
         "descriptors": [
             "A family site suggestion"
         ],
+        "explanation": "A family content suggestion",
         "name": "Family_Youth",
         "sites": [
             "americangirl.com",
@@ -1917,6 +1951,7 @@
         "descriptors": [
             "A government site suggestion"
         ],
+        "explanation": "A government content suggestion",
         "name": "Government_General",
         "sites": [
             "alabama.gov",
@@ -2012,6 +2047,7 @@
         "descriptors": [
             "A health & fitness site suggestion"
         ],
+        "explanation": "A health & fitness content suggestion",
         "name": "Health_Fitness",
         "sites": [
             "beachbody.com",
@@ -2039,6 +2075,7 @@
         "descriptors": [
             "A health & wellness site suggestion"
         ],
+        "explanation": "A health & wellness content suggestion",
         "name": "Health_General",
         "sites": [
             "activebeat.com",
@@ -2088,6 +2125,7 @@
         "descriptors": [
             "A health insurance site suggestion"
         ],
+        "explanation": "A health insurance content suggestion",
         "name": "Health_Insurance",
         "sites": [
             "aetna.com",
@@ -2121,6 +2159,7 @@
         "descriptors": [
             "A health & wellness site suggestion"
         ],
+        "explanation": "A health & wellness content suggestion",
         "name": "Health_Medical",
         "sites": [
             "aafp.org",
@@ -2171,6 +2210,7 @@
         "descriptors": [
             "An insurance site suggestion"
         ],
+        "explanation": "An insurance content suggestion",
         "name": "Insurance_General",
         "sites": [
             "aaa.com",
@@ -2207,6 +2247,7 @@
         "descriptors": [
             "A food & lifestyle site suggestion"
         ],
+        "explanation": "A food & lifestyle content suggestion",
         "name": "Lifestyle_Food",
         "sites": [
             "101cookbooks.com",
@@ -2262,6 +2303,7 @@
         "descriptors": [
             "A lifestyle site suggestion"
         ],
+        "explanation": "A lifestyle content suggestion",
         "name": "Lifestyle_General",
         "sites": [
             "aarp.org",
@@ -2306,6 +2348,7 @@
         "descriptors": [
             "A home & lifestyle site suggestion"
         ],
+        "explanation": "A home & lifestyle content suggestion",
         "name": "Lifestyle_Home",
         "sites": [
             "apartmentratings.com",
@@ -2366,6 +2409,7 @@
         "descriptors": [
             "A news site suggestion"
         ],
+        "explanation": "A news content suggestion",
         "name": "News_General",
         "sites": [
             "10best.com",
@@ -2528,6 +2572,7 @@
         "descriptors": [
             "A news site suggestion"
         ],
+        "explanation": "A news content suggestion",
         "name": "News_Politics",
         "sites": [
             "aei.org",
@@ -2564,6 +2609,7 @@
         "descriptors": [
             "A science site suggestion"
         ],
+        "explanation": "A science content suggestion",
         "name": "News_Science",
         "sites": [
             "americanscientist.org",
@@ -2588,6 +2634,7 @@
         "descriptors": [
             "A weather site suggestion"
         ],
+        "explanation": "A weather content suggestion",
         "name": "News_Weather",
         "sites": [
             "accuweather.com",
@@ -2610,6 +2657,7 @@
         "descriptors": [
             "A photography site suggestion"
         ],
+        "explanation": "A photography content suggestion",
         "name": "Photography_General",
         "sites": [
             "bhphotovideo.com",
@@ -2642,6 +2690,7 @@
         "descriptors": [
             "A shopping site suggestion"
         ],
+        "explanation": "A shopping content suggestion",
         "name": "Retail_Apparel",
         "sites": [
             "abercrombie.com",
@@ -2685,6 +2734,7 @@
         "descriptors": [
             "A shopping site suggestion"
         ],
+        "explanation": "A shopping content suggestion",
         "name": "Retail_Comparison Shopping",
         "sites": [
             "bizrate.com",
@@ -2709,6 +2759,7 @@
         "descriptors": [
             "A flowers & gifts site suggestion"
         ],
+        "explanation": "A flowers & gifts content suggestion",
         "name": "Retail_Flowers/ Greetings",
         "sites": [
             "123greetings.com",
@@ -2737,6 +2788,7 @@
         "descriptors": [
             "A shopping site suggestion"
         ],
+        "explanation": "A shopping content suggestion",
         "name": "Retail_General Shopping",
         "sites": [
             "6pm.com",
@@ -2805,6 +2857,7 @@
         "descriptors": [
             "A home shopping site suggestion"
         ],
+        "explanation": "A home shopping content suggestion",
         "name": "Retail_Home",
         "sites": [
             "acehardware.com",
@@ -2838,6 +2891,7 @@
         "descriptors": [
             "A luxury shopping site suggestion"
         ],
+        "explanation": "A luxury shopping content suggestion",
         "name": "Retail_Luxury Goods",
         "sites": [
             "alexandermcqueen.com",
@@ -2885,6 +2939,7 @@
         "descriptors": [
             "An events & tickets site suggestion"
         ],
+        "explanation": "An events & tickets content suggestion",
         "name": "Retail_Tickets",
         "sites": [
             "bargainseatsonline.com",
@@ -2904,6 +2959,7 @@
         "descriptors": [
             "A toys & games site suggestion"
         ],
+        "explanation": "A toys & games content suggestion",
         "name": "Retail_Toys",
         "sites": [
             "babiesrus.com",
@@ -2927,6 +2983,7 @@
         "descriptors": [
             "A fantasy football site suggestion"
         ],
+        "explanation": "A fantasy football content suggestion",
         "name": "Sports_Fantasy Football",
         "sites": [
             "challengegames.nfl.com",
@@ -2949,6 +3006,7 @@
         "descriptors": [
             "A fantasy sports site suggestion"
         ],
+        "explanation": "A fantasy sports content suggestion",
         "name": "Sports_Fantasy Single Day",
         "sites": [
             "dailyjoust.com",
@@ -2966,6 +3024,7 @@
         "descriptors": [
             "A fantasy sports site suggestion"
         ],
+        "explanation": "A fantasy sports content suggestion",
         "name": "Sports_Fantasy Sports",
         "sites": [
             "cdmsports.com",
@@ -2995,6 +3054,7 @@
         "descriptors": [
             "A football site suggestion"
         ],
+        "explanation": "A football content suggestion",
         "name": "Sports_Football General",
         "sites": [
             "football.about.com",
@@ -3015,6 +3075,7 @@
         "descriptors": [
             "A football site suggestion"
         ],
+        "explanation": "A football content suggestion",
         "name": "Sports_Football Teams",
         "sites": [
             "49ers.com",
@@ -3056,6 +3117,7 @@
         "descriptors": [
             "A sports site suggestion"
         ],
+        "explanation": "A sports content suggestion",
         "name": "Sports_General",
         "sites": [
             "baseball-reference.com",
@@ -3090,6 +3152,7 @@
         "descriptors": [
             "A sports news site suggestion"
         ],
+        "explanation": "A sports news content suggestion",
         "name": "Sports_News",
         "sites": [
             "247sports.com",
@@ -3179,6 +3242,7 @@
         "descriptors": [
             "A sports & outdoor goods site suggestion"
         ],
+        "explanation": "A sports & outdoor goods content suggestion",
         "name": "Sports_Retail",
         "sites": [
             "adidas.com",
@@ -3210,6 +3274,7 @@
         "descriptors": [
             "A technology site suggestion"
         ],
+        "explanation": "A technology content suggestion",
         "name": "Technology_Android",
         "sites": [
             "airdroid.com",
@@ -3247,6 +3312,7 @@
         "descriptors": [
             "A technology site suggestion"
         ],
+        "explanation": "A technology content suggestion",
         "name": "Technology_Apple Sites",
         "sites": [
             "9to5mac.com",
@@ -3290,6 +3356,7 @@
         "descriptors": [
             "A technology site suggestion"
         ],
+        "explanation": "A technology content suggestion",
         "name": "Technology_Corporate",
         "sites": [
             "adobe.com",
@@ -3329,6 +3396,7 @@
         "descriptors": [
             "A technology site suggestion"
         ],
+        "explanation": "A technology content suggestion",
         "name": "Technology_General",
         "sites": [
             "3dprint.com",
@@ -3494,6 +3562,7 @@
         "descriptors": [
             "A Mozilla site suggestion"
         ],
+        "explanation": "A Mozilla content suggestion",
         "name": "Technology_Mozilla Sites",
         "sites": [
             "addons.mozilla.org",
@@ -3518,6 +3587,7 @@
         "descriptors": [
             "A technology news suggestion"
         ],
+        "explanation": "A technology news content suggestion ",
         "name": "Technology_News",
         "sites": [
             "addictivetips.com",
@@ -3584,6 +3654,7 @@
     {
         "adgroup_name": "technology",
         "descriptors": [],
+        "explanation": "",
         "name": "Technology_Policy",
         "sites": [
             "aclu.org",
@@ -3624,6 +3695,7 @@
         "descriptors": [
             "A tech retail site suggestion"
         ],
+        "explanation": "A tech retail content suggestion",
         "name": "Technology_Retail",
         "sites": [
             "bestbuy.ca",
@@ -3661,6 +3733,7 @@
         "descriptors": [
             "A video chat site suggestion"
         ],
+        "explanation": "A video chat content suggestion",
         "name": "Technology_Video Chat",
         "sites": [
             "chat.com",
@@ -3675,6 +3748,7 @@
         "descriptors": [
             "A web development site suggestion"
         ],
+        "explanation": "A web development content suggestion",
         "name": "Technology_Web Development",
         "sites": [
             "alistapart.com",
@@ -3721,6 +3795,7 @@
         "descriptors": [
             "A webdev education site suggestion"
         ],
+        "explanation": "A webdev education content suggestion",
         "name": "Technology_Web Education",
         "sites": [
             "classroom.google.com",
@@ -3749,6 +3824,7 @@
         "descriptors": [
             "A telecommunication site suggestion"
         ],
+        "explanation": "A telecommunication content suggestion",
         "name": "Telecommunications_General",
         "sites": [
             "att.com",
@@ -3815,6 +3891,7 @@
         "descriptors": [
             "A mobile carrier site suggestion"
         ],
+        "explanation": "A mobile carrier content suggestion",
         "name": "Telecommunications_Mobile Phone",
         "sites": [
             "alltel.com",
@@ -3864,6 +3941,7 @@
         "descriptors": [
             "A travel & airline site suggestion"
         ],
+        "explanation": "A travel & airline content suggestion",
         "name": "Travel_Airlines",
         "sites": [
             "aa.com",
@@ -3922,6 +4000,7 @@
         "descriptors": [
             "A travel & cruise site suggestion"
         ],
+        "explanation": "A travel & cruise content suggestion",
         "name": "Travel_Cruise",
         "sites": [
             "carnival.com",
@@ -3957,6 +4036,7 @@
         "descriptors": [
             "A hotel & resort site suggestion"
         ],
+        "explanation": "A hotel & resort content suggestion",
         "name": "Travel_Hotels/ Resorts",
         "sites": [
             "agoda.com",
@@ -4020,6 +4100,7 @@
         "descriptors": [
             "A travel site suggestion"
         ],
+        "explanation": "A travel content suggestion",
         "name": "Travel_Information",
         "sites": [
             "airfarewatchdog.com",
@@ -4059,6 +4140,7 @@
         "descriptors": [
             "A travel site suggestion"
         ],
+        "explanation": "A travel content suggestion",
         "name": "Travel_Online Travel Agents",
         "sites": [
             "aavacations.com",
@@ -4125,6 +4207,7 @@
         "descriptors": [
             "A travel & transit site suggestion"
         ],
+        "explanation": "A travel & transit content suggestion",
         "name": "Travel_Transportation",
         "sites": [
             "airportrentalcars.com",
@@ -4171,6 +4254,7 @@
         "descriptors": [
             "A gaming site suggestion"
         ],
+        "explanation": "A gaming content suggestion",
         "name": "Video Games_General",
         "sites": [
             "bulbagarden.net",
@@ -4216,6 +4300,7 @@
         "descriptors": [
             "An online gaming site suggestion"
         ],
+        "explanation": "An online gaming content suggestion",
         "name": "Video Games_Online Games",
         "sites": [
             "a10.com",
