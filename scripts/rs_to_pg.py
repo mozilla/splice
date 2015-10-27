@@ -33,11 +33,6 @@ def main():
         for table_name, columns in TABLES:
             print "Copying ", table_name
 
-            # first, we need to lock the source table (ideally)
-            # the problem with this is that we would need to modify permissions for production to allow
-            # the lock for the user configured in SQLALCHEMY_DATABASE_URI
-            # cursor.execute("LOCK TABLE %s" % table_name)
-
             # we need to assert the table is empty
             print "Counting ", table_name
             target_cursor.execute("select count(*) from %s" % table_name)
