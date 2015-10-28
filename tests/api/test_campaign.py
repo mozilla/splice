@@ -54,7 +54,7 @@ class TestCampaignAPI(BaseTestCase):
         # Verify two accounts are returned.
         for account_id, campaigns in self.campaign_fixture.iteritems():
             url = url_for('api.campaign.campaigns')
-            url = url + '?account_id=%s' % account_id
+            url = url + '?account_id=%s&past=True' % account_id
             response = self.client.get(url)
             assert_equal(response.status_code, 200)
             resp = json.loads(response.data)

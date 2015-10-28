@@ -50,7 +50,7 @@ class CampaignListAPI(Resource):
         self.reqparse_get = reqparse.RequestParser()
         self.reqparse_get.add_argument('account_id', type=int, required=True, help='Account ID', location='args')
         self.reqparse_get.add_argument('past', type=inputs.boolean, required=False,
-                                       help='Campaigns that ran in the past', location='args', default=True)
+                                       help='Campaigns that ran in the past', location='args', default=False)
         self.reqparse_get.add_argument('in_flight', type=inputs.boolean, required=False,
                                        help='Campaigns currently running', location='args', default=True)
         self.reqparse_get.add_argument('scheduled', type=inputs.boolean, required=False,
