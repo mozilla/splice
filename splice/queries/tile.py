@@ -1,4 +1,4 @@
-from splice.models import Tile
+from splice.models import Adgroup, Tile
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.sql import exists
@@ -15,6 +15,24 @@ def get_tiles_by_adgroup_id(adgroup_id):
         env.db.session
         .query(Tile)
         .filter(Tile.adgroup_id == adgroup_id)
+        .order_by(Tile.id.desc())
+        .all()
+    )
+    output = [row_to_dict(d) for d in rows]
+
+    return output
+
+
+def get_tiles_by_campaign(campaign_id):  # pragma: no cover
+    from splice.environment import Environment
+
+    env = Environment.instance()
+
+    rows = (
+        env.db.session
+        .query(Tile)
+        .join(Adgroup, Tile.adgroup_id == Adgroup.id)
+        .filter(Adgroup.campaign_id == campaign_id)
         .order_by(Tile.id.desc())
         .all()
     )
