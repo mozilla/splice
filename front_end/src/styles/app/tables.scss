@@ -1,0 +1,17 @@
+.list-actions{
+
+  .list-filters{
+    float: right;
+    color: #fff;
+    font-size: 14px;
+  }
+  .list-filter{
+    float: left;
+    margin-left: 25px;
+    cursor: pointer;
+
+    i.fa{
+      width: 14px;
+    }
+  }
+}

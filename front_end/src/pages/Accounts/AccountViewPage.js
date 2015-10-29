@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
+import { fetchCampaigns, campaignSetPast, campaignSetScheduled, campaignSetInFlight } from 'actions/Campaigns/CampaignActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
 import AccountDetails from 'components/Accounts/AccountDetails/AccountDetails';
@@ -31,7 +32,17 @@ export default class AccountViewPage extends Component {
               <AccountDetails Account={this.props.Account}/>
             </div>
           </div>
-          <Link className="create-link" to={'/accounts/' + this.props.Account.details.id + '/createcampaign'}>Create Campaign <i className="fa fa-plus"></i></Link>
+
+          <div className="list-actions">
+            <Link className="create-link" to={'/accounts/' + this.props.Account.details.id + '/createcampaign'}>Create Campaign <i className="fa fa-plus"></i></Link>
+
+            <div className="list-filters">
+              {this.generateFilter('past', 'Past', this.props.Campaign.past)}
+              {this.generateFilter('scheduled', 'Scheduled', this.props.Campaign.scheduled)}
+              {this.generateFilter('inFlight', 'In Flight', this.props.Campaign.inFlight)}
+            </div>
+          </div>
+
           <CampaignList rows={this.props.Campaign.rows}
                         isFetching={this.props.Campaign.isFetching}
                         channels={this.props.Init.channels}/>
@@ -40,6 +51,34 @@ export default class AccountViewPage extends Component {
     }
 
     return output;
+  }
+
+  handleToggleFilter(varName, value){
+    const { dispatch } = this.props;
+
+    switch(varName){
+      case 'past':
+        dispatch(campaignSetPast(value));
+        break;
+      case 'scheduled':
+        dispatch(campaignSetScheduled(value));
+        break;
+      case 'inFlight':
+        dispatch(campaignSetInFlight(value));
+        break;
+      default:
+        break;
+    }
+
+    dispatch(fetchCampaigns(this.props.Account.details.id));
+  }
+
+  generateFilter(varName, fieldName, value){
+    return (
+      <div className="list-filter" onClick={() => this.handleToggleFilter(varName, !value) } >
+        <i className={'fa ' + ((value) ? 'fa-check-square-o' : 'fa-square-o' )}></i> {fieldName}
+      </div>
+    );
   }
 
   fetchAccountDetails(props) {
