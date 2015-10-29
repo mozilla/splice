@@ -152,7 +152,6 @@ def derive_account_campaign(tid, title, url):
     return tld, "%s/%s" % (tld, insane_identity_counter)
 
 
-
 def safe_str(obj):
     """return the byte string representation of obj"""
     try:
@@ -202,7 +201,7 @@ def main():
 
     :return:
     """
-    r = requests.get('https://tiles.cdn.mozilla.net/desktop-prerelease_tile_index_v3.json')
+    r = requests.get('https://tiles-resources-prod-tiless3-qbv71djahz3b.s3.amazonaws.com/desktop_tile_index_v3.json')
     active_tiles = set()
     tile_geodes = defaultdict(set)
 
