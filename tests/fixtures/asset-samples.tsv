@@ -1,0 +1,6 @@
+Partner	Category  (As per Bucketer)	"Article # (1-2)"	Asset Name: Root	Clickthrough URL	Targeting Explanation	Daily Frequency Cap	Total Frequency Cap	Tile Title	Locales Served					
+Mozilla	Technology_News	1	firefox_lightbeam	https://www.mozilla.org/en-US/lightbeam/		1	2	Firefox Lightbeam	en-US					
+Mozilla	Technology_News	2	firefox_mdn	https://developer.mozilla.org/		1	2	MDN	en-US					
+Mozilla	Technology_News	3	firefox_mozfest	https://2015.mozillafestival.org/		1	1	MozFest	en-US					
+Mozilla	Technology_General	1	firefox_social	https://twitter.com/firefox		1	2	Follow Firefox	en-US					
+Mozilla	Technology_Mozilla Sites	2	firefox_webmaker	https://webmaker.org/		1	2	Web Maker	en-US					

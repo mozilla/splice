@@ -33,7 +33,7 @@ def get_adgroups_by_campaign_id(campaign_id):
         new = row_to_dict(d)
         categories = []
         for category in d.categories:
-            categories = categories.append(category.category)
+            categories.append(category.category)
         new['categories'] = categories
         output.append(new)
 
