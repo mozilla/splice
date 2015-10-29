@@ -19,6 +19,10 @@ export const RECEIVE_CAMPAIGNS = 'RECEIVE_CAMPAIGNS';
 export const REQUEST_CAMPAIGN = 'REQUEST_CAMPAIGN';
 export const RECEIVE_CAMPAIGN = 'RECEIVE_CAMPAIGN';
 
+export const CAMPAIGN_SET_PAST = 'CAMPAIGN_SET_PAST';
+export const CAMPAIGN_SET_SCHEDULED = 'CAMPAIGN_SET_SCHEDULED';
+export const CAMPAIGN_SET_IN_FLIGHT = 'CAMPAIGN_SET_IN_FLIGHT';
+
 export function requestCreateCampaign() {
   return {type: REQUEST_CREATE_CAMPAIGN};
 }
@@ -58,6 +62,25 @@ export function receiveCampaigns(json) {
   return {
     type: RECEIVE_CAMPAIGNS,
     json: json
+  };
+}
+
+export function campaignSetPast(value) {
+  return {
+    type: CAMPAIGN_SET_PAST,
+    value: value
+  };
+}
+export function campaignSetScheduled(value) {
+  return {
+    type: CAMPAIGN_SET_SCHEDULED,
+    value: value
+  };
+}
+export function campaignSetInFlight(value) {
+  return {
+    type: CAMPAIGN_SET_IN_FLIGHT,
+    value: value
   };
 }
 
@@ -121,10 +144,18 @@ export function fetchCampaign(campaignId) {
 
 export function fetchCampaigns(accountId = null) {
   // thunk middleware knows how to handle functions
-  return function next(dispatch) {
+  return function next(dispatch, state) {
     dispatch(requestCampaigns());
+
+    const campaign = state().Campaign;
+
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/campaigns' + '?account_id=' + accountId)
+    return fetch(apiUrl + '/api/campaigns' +
+        '?account_id=' + accountId +
+        '&past=' + campaign.past +
+        '&scheduled=' + campaign.scheduled +
+        '&in_flight=' + campaign.inFlight
+      )
       .then(response => response.json())
       .then(json => new Promise(resolve => {
         dispatch(receiveCampaigns(json));
