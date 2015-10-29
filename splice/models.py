@@ -1,4 +1,6 @@
+import pytz
 from splice.environment import Environment
+
 
 db = Environment.instance().db
 metadata = db.metadata
@@ -16,12 +18,20 @@ class Account(db.Model):
     campaigns = db.relationship("Campaign", backref="account")
 
 
+class UTCAwareDateTime(db.TypeDecorator):
+    '''UTC aware datetime, not naive ones.'''
+    impl = db.DateTime
+
+    def process_result_value(self, value, dialect):
+        return value.replace(tzinfo=pytz.utc)
+
+
 class Campaign(db.Model):
     __tablename__ = "campaigns"
 
     id = db.Column('id', db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
-    start_date = db.Column('start_date', db.DateTime(), nullable=True)
-    end_date = db.Column('end_date', db.DateTime(), nullable=True)
+    start_date = db.Column('start_date', UTCAwareDateTime(timezone=True), nullable=True)
+    end_date = db.Column('end_date', UTCAwareDateTime(timezone=True), nullable=True)
     name = db.Column('name', db.String(length=255), nullable=False)
     paused = db.Column('paused', db.Boolean(), nullable=False, default=False)
     channel_id = db.Column('channel_id', db.Integer(), db.ForeignKey("channels.id"))
@@ -102,6 +112,8 @@ class Adgroup(db.Model):
     name = db.Column(db.String(255))
     explanation = db.Column(db.String(255))
     check_inadjacency = db.Column(db.Boolean(), nullable=False, default=False)
+    # TODO(najiang@mozilla.com): channel_id is deprecated, leave it here only for backwards compatibility
+    channel_id = db.Column(db.Integer(), db.ForeignKey("channels.id"))
     campaign_id = db.Column(db.Integer(), db.ForeignKey("campaigns.id"))
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
     tiles = db.relationship("Tile", backref="adgroup")

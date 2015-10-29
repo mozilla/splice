@@ -1,28 +1,22 @@
-from datetime import datetime
-
 from flask import Blueprint
-from flask_restful import Api, Resource, marshal, fields, reqparse
-from flask_restful.utils import cors
+from flask_restful import Api, Resource, marshal, fields, reqparse, inputs
 from sqlalchemy.exc import IntegrityError
 
 from sqlalchemy.orm.exc import NoResultFound
 from splice.queries.common import session_scope
-from splice.queries.campaign import (
-    get_campaigns, get_campaign, insert_campaign, update_campaign)
-
+from splice.queries.campaign import get_campaigns, get_campaign, insert_campaign, update_campaign
+from datetime import datetime
 
 campaign_bp = Blueprint('api.campaign', __name__, url_prefix='/api')
-api = Api(campaign_bp,
-          decorators=[cors.crossdomain(origin='*', headers=['Content-Type'])])
-
+api = Api(campaign_bp)
 
 campaign_fields = {
     'id': fields.Integer,
     'name': fields.String,
     'countries': fields.List(fields.String),
-    'created_at': fields.DateTime,
-    'start_date': fields.DateTime,
-    'end_date': fields.DateTime,
+    'created_at': fields.DateTime(dt_format='iso8601'),
+    'start_date': fields.DateTime(dt_format='iso8601'),
+    'end_date': fields.DateTime(dt_format='iso8601'),
     'paused': fields.Boolean,
     'channel_id': fields.Integer,
     'account_id': fields.Integer,
@@ -36,13 +30,13 @@ campaign_parser.add_argument(
 campaign_parser.add_argument(
     'countries', type=list, required=True, default=["STAR"], help='List of countries', location='json')
 campaign_parser.add_argument(
-    'start_date', type=datetime, required=False, help='Start date', location='json',
+    'start_date', type=inputs.datetime_from_iso8601, required=False, help='Start date', location='json',
     store_missing=False)
 campaign_parser.add_argument(
-    'end_date', type=datetime, required=False, help='End date', location='json',
+    'end_date', type=inputs.datetime_from_iso8601, required=False, help='End date', location='json',
     store_missing=False)
 campaign_parser.add_argument(
-    'paused', type=bool, required=True, help='Campaign status', location='json',
+    'paused', type=inputs.boolean, required=True, help='Campaign status', location='json',
     store_missing=False)
 campaign_parser.add_argument(
     'channel_id', type=int, required=True, help='Channel ID', location='json')
@@ -54,14 +48,17 @@ class CampaignListAPI(Resource):
     def __init__(self):
         self.reqparse_post = campaign_parser
         self.reqparse_get = reqparse.RequestParser()
-        self.reqparse_get.add_argument(
-            'account_id', type=int, required=True, help='Account ID', location='args')
+        self.reqparse_get.add_argument('account_id', type=int, required=True, help='Account ID', location='args')
+        self.reqparse_get.add_argument('past', type=inputs.boolean, required=False,
+                                       help='Campaigns that ran in the past', location='args', default=False)
+        self.reqparse_get.add_argument('in_flight', type=inputs.boolean, required=False,
+                                       help='Campaigns currently running', location='args', default=True)
+        self.reqparse_get.add_argument('scheduled', type=inputs.boolean, required=False,
+                                       help='Campaigns scheduled to run in the future', location='args', default=True)
+        self.reqparse_get.add_argument('today', type=inputs.date, required=False,
+                                       help='Defaults to today\'s date', location='args', default=None)
 
         super(CampaignListAPI, self).__init__()
-
-    def options(self):
-        """Placeholder for flask-restful cors"""
-        pass  # pragma: no cover
 
     def get(self):
         """Returns all the campaigns.
@@ -69,7 +66,15 @@ class CampaignListAPI(Resource):
         Takes an optional account_id as a query string argument.
         """
         args = self.reqparse_get.parse_args()
-        campaigns = get_campaigns(args.get('account_id'))
+        if args.get('today') is None:
+            today = datetime.utcnow().date()
+        else:
+            today = args.get('today').date()
+        campaigns = get_campaigns(account_id=args.get('account_id'),
+                                  past=args.get('past'),
+                                  in_flight=args.get('in_flight'),
+                                  scheduled=args.get('scheduled'),
+                                  utctoday=today)
         return {'results': marshal(campaigns, campaign_fields)}
 
     def post(self):
@@ -102,15 +107,11 @@ class CampaignAPI(Resource):
         self.reqparse.replace_argument('account_id', type=int, required=False,
                                        help='Account ID', location='json',
                                        store_missing=False)
-        self.reqparse.replace_argument('paused', type=bool, required=False,
+        self.reqparse.replace_argument('paused', type=inputs.boolean, required=False,
                                        help='Campaign status', location='json',
                                        store_missing=False)
 
         super(CampaignAPI, self).__init__()
-
-    def options(self):
-        """Placeholder for flask-restful cors"""
-        pass  # pragma: no cover
 
     def get(self, campaign_id):
         """Returns the campaign with given campaign_id."""

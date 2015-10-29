@@ -1,8 +1,7 @@
 import jsonschema
 
 from flask import Blueprint
-from flask_restful import Api, Resource, marshal, fields, reqparse
-from flask_restful.utils import cors
+from flask_restful import Api, Resource, marshal, fields, reqparse, inputs
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from splice.schemas import API_TILE_SCHEMA_POST, API_TILE_SCHEMA_PUT
@@ -13,8 +12,7 @@ from splice.queries.tile import (
 
 
 tile_bp = Blueprint('api.tile', __name__, url_prefix='/api')
-api = Api(tile_bp,
-          decorators=[cors.crossdomain(origin='*', headers=['Content-Type'])])
+api = Api(tile_bp)
 
 tile_fields = {
     'id': fields.Integer,
@@ -25,7 +23,7 @@ tile_fields = {
     'status': fields.String,
     'image_uri': fields.String,
     'enhanced_image_uri': fields.String,
-    'created_at': fields.DateTime,
+    'created_at': fields.DateTime(dt_format='iso8601'),
     'bg_color': fields.String,
     'paused': fields.Boolean,
     'title_bg_color': fields.String
@@ -55,24 +53,17 @@ class TileListAPI(Resource):
                                    help='Background color', location='json')
         self.reqparse.add_argument('title_bg_color', type=str, default="",
                                    help='Background color of title', location='json')
-        self.reqparse.add_argument('paused', type=bool, required=True,
+        self.reqparse.add_argument('paused', type=inputs.boolean, required=True,
                                    help='Tile status', location='json')
         self.reqparse_get = reqparse.RequestParser()
         self.reqparse_get.add_argument('adgroup_id', type=int, required=True,
                                        help='Adgroup ID', location='args')
         super(TileListAPI, self).__init__()
 
-    def options(self):
-        """Placeholder for flask-restful cors"""
-        pass  # pragma: no cover
-
     def get(self):
         args = self.reqparse_get.parse_args()
         tiles = get_tiles_by_adgroup_id(args['adgroup_id'])
-        if len(tiles) == 0:
-            return {"message": "No tiles found"}, 404
-        else:
-            return {"results": marshal(tiles, tile_fields)}
+        return {"results": marshal(tiles, tile_fields)}
 
     def post(self):
         """ HTTP end point to create new tile. Note the initial status of a new
@@ -101,7 +92,7 @@ class TileAPI(Resource):
         self.reqparse.add_argument('status', type=str, required=False,
                                    choices=Tile.STATUS, store_missing=False,
                                    help='Tile approval state', location='json')
-        self.reqparse.add_argument('paused', type=bool, required=False,
+        self.reqparse.add_argument('paused', type=inputs.boolean, required=False,
                                    help='Tile status', location='json',
                                    store_missing=False)
         self.reqparse.add_argument('bg_color', type=str, required=False, store_missing=False,
@@ -109,10 +100,6 @@ class TileAPI(Resource):
         self.reqparse.add_argument('title_bg_color', type=str, required=False, store_missing=False,
                                    help='Background color of title', location='json')
         super(TileAPI, self).__init__()
-
-    def options(self):
-        """Placeholder for flask-restful cors"""
-        pass  # pragma: no cover
 
     def get(self, tile_id):
         tile = get_tile(tile_id)

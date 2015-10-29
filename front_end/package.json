@@ -87,6 +87,6 @@
     "webpack-dev-server": "~1.10.1"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start --single-run --browsers Firefox"
+    "test": "./node_modules/.bin/karma start --reporters dots --single-run --browsers Firefox"
   }
 }

@@ -1,6 +1,5 @@
 from flask import Blueprint
-from flask_restful import Api, Resource, marshal, fields, reqparse
-from flask_restful.utils import cors
+from flask_restful import Api, Resource, marshal, fields, reqparse, inputs
 
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
@@ -12,21 +11,21 @@ from splice.models import Adgroup
 
 
 adgroup_bp = Blueprint('api.adgroup', __name__, url_prefix='/api')
-api = Api(adgroup_bp,
-          decorators=[cors.crossdomain(origin='*', headers=['Content-Type'])])
+api = Api(adgroup_bp)
 
 adgroup_fields = {
     'id': fields.Integer,
     'name': fields.String,
     'locale': fields.String,
     'campaign_id': fields.Integer,
+    'channel_id': fields.Integer,
     'type': fields.String,
     'categories': fields.List(fields.String),
     'explanation': fields.String,
     'frequency_cap_daily': fields.Integer,
     'frequency_cap_total': fields.Integer,
     'paused': fields.Boolean,
-    'created_at': fields.DateTime
+    'created_at': fields.DateTime(dt_format='iso8601')
 }
 
 
@@ -35,6 +34,8 @@ class AdgroupListAPI(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('campaign_id', type=int, required=True,
                                    help='Campaign ID', location='json')
+        self.reqparse.add_argument('channel_id', type=int, required=True,
+                                   help='Channle ID', location='json')
         self.reqparse.add_argument('name', type=str, required=True,
                                    help='Name of the new adgroup', location='json')
         self.reqparse.add_argument('locale', type=str, required=True,
@@ -53,7 +54,7 @@ class AdgroupListAPI(Resource):
                                    help='Adgroup type', location='json')
         self.reqparse.add_argument('categories', type=list, default=[],
                                    help='Category of suggested tile', location='json')
-        self.reqparse.add_argument('paused', type=bool, required=True,
+        self.reqparse.add_argument('paused', type=inputs.boolean, required=True,
                                    help='Campaign status', location='json')
         self.reqparse_get = reqparse.RequestParser()
         self.reqparse_get.add_argument('campaign_id', type=int, required=True,
@@ -61,17 +62,10 @@ class AdgroupListAPI(Resource):
 
         super(AdgroupListAPI, self).__init__()
 
-    def options(self):
-        """Placeholder for flask-restful cors"""
-        pass  # pragma: no cover
-
     def get(self):
         args = self.reqparse_get.parse_args()
         adgroups = get_adgroups_by_campaign_id(args['campaign_id'])
-        if len(adgroups) == 0:
-            return {"message": "No adgroups found"}, 404
-        else:
-            return {"results": marshal(adgroups, adgroup_fields)}
+        return {"results": marshal(adgroups, adgroup_fields)}
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -107,14 +101,10 @@ class AdgroupAPI(Resource):
                                    help='Adgroup type', location='json')
         self.reqparse.add_argument('categories', type=list, default=[], store_missing=False,
                                    help='Category of suggested tile', location='json')
-        self.reqparse.add_argument('paused', type=bool, required=False,
+        self.reqparse.add_argument('paused', type=inputs.boolean, required=False,
                                    help='Adgroup status', location='json',
                                    store_missing=False)
         super(AdgroupAPI, self).__init__()
-
-    def options(self):
-        """Placeholder for flask-restful cors"""
-        pass  # pragma: no cover
 
     def get(self, adgroup_id):
         adgroup = get_adgroup(adgroup_id)

@@ -17,3 +17,5 @@ dateutils==0.6.6
 bleach==1.4.1
 tld==0.7.3
 flask-restful==0.3.4
+Flask-Cors==2.1.0
+pytz==2015.6

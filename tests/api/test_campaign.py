@@ -19,6 +19,8 @@ class TestCampaignAPI(BaseTestCase):
             'paused': False,
             'account_id': 1,
             'channel_id': 1,
+            'start_date': '2015-09-30T14:04:55+00:00',
+            'end_date': '2015-10-30T14:04:55+00:00',
             'countries': ['CA', 'US'],
         }
 
@@ -32,26 +34,69 @@ class TestCampaignAPI(BaseTestCase):
         """Test the support for CORS"""
         url = url_for('api.campaign.campaigns')
         data = json.dumps(self.campaign_data)
-        res = self.client.post(url, data=data, content_type='application/json')
+        res = self.client.post(url,
+                               data=data,
+                               headers={"Origin": "foo.com"},
+                               content_type='application/json')
         assert_equal(res.status_code, 201)
-        assert_equal(res.headers['Access-Control-Allow-Origin'], '*')
-        assert_equal(res.headers['Access-Control-Max-Age'], '21600')
-        assert_true('HEAD' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('POS' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('GET' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('OPTIONS' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('CONTENT-TYPE' in res.headers['Access-Control-Allow-Headers'])
+        assert_equal(res.headers['Access-Control-Allow-Origin'], 'foo.com')
+
+        # test CORS gets set properly in failures
+        res = self.client.post(url,
+                               data=data,
+                               headers={"Origin": "foo.com"},
+                               content_type='application/json')
+        assert_equal(res.status_code, 400)
+        assert_equal(res.headers['Access-Control-Allow-Origin'], 'foo.com')
 
     def test_get_campaigns_by_account_id(self):
         """Test getting the list of campaigns by campaign via API (GET)."""
         # Verify two accounts are returned.
         for account_id, campaigns in self.campaign_fixture.iteritems():
             url = url_for('api.campaign.campaigns')
-            url = url + '?account_id=%s' % account_id
+            url = url + '?account_id=%s&past=True' % account_id
             response = self.client.get(url)
             assert_equal(response.status_code, 200)
             resp = json.loads(response.data)
             assert_equal(len(resp['results']), len(campaigns))
+
+    def test_get_campaigns_by_date(self):
+        """Test getting the list of campaigns by campaign via API (GET), constrained to either 'past',
+        'in_flight', or 'scheduled'"""
+
+        # testing 'past'
+        url = url_for('api.campaign.campaigns')
+        past_url = "%s?account_id=1&past=True&in_flight=False&scheduled=False&today=2015-10-24" % url
+        response = self.client.get(past_url)
+        assert_equal(response.status_code, 200)
+        resp = json.loads(response.data)
+        assert_equal(len(resp['results']), 1)
+        assert_equal(resp['results'][0]['name'], "MozSuggested")
+
+        # testing 'in_flight'
+        url = url_for('api.campaign.campaigns')
+        past_url = "%s?account_id=1&past=False&in_flight=True&scheduled=False&today=2015-10-24" % url
+        response = self.client.get(past_url)
+        assert_equal(response.status_code, 200)
+        resp = json.loads(response.data)
+        assert_equal(len(resp['results']), 1)
+        assert_equal(resp['results'][0]['name'], "MozDirectory")
+
+        # testing 'scheduled'
+        url = url_for('api.campaign.campaigns')
+        past_url = "%s?account_id=1&past=False&in_flight=False&scheduled=True&today=2015-09-01" % url
+        response = self.client.get(past_url)
+        assert_equal(response.status_code, 200)
+        resp = json.loads(response.data)
+        assert_equal(len(resp['results']), 2)
+        found_dir = False
+        found_sug = False
+        for res in resp['results']:
+            if res['name'] == "MozDirectory":
+                found_dir = True
+            elif res['name'] == "MozSuggested":
+                found_sug = True
+        assert_true(found_dir and found_sug)
 
     def test_post_campaign(self):
         """Test creating an campaign via API (POST)."""
@@ -60,14 +105,18 @@ class TestCampaignAPI(BaseTestCase):
         data = json.dumps(self.campaign_data)
         response = self.client.post(url, data=data, content_type='application/json')
         assert_equal(response.status_code, 201)
-        campaign_id = json.loads(response.data)['result']['id']
+        new_campaign = json.loads(response.data)['result']
 
         # Verify the right data was stored to DB.
-        campaign = get_campaign(campaign_id)
-        for field in ['name', 'account_id', 'channel_id', 'countries', 'paused']:
-            assert_equal(campaign[field], self.campaign_data[field])
+        url = url_for('api.campaign.campaign', campaign_id=new_campaign['id'])
+        response = self.client.get(url)
+        assert_equal(response.status_code, 200)
+        resp = json.loads(response.data)
+        campaign = resp['result']
+        assert_equal(campaign, new_campaign)
 
         # Posting again with same name should fail with a 400.
+        url = url_for('api.campaign.campaigns')
         response = self.client.post(url, data=data, content_type='application/json')
         assert_equal(response.status_code, 400)
 
@@ -88,12 +137,15 @@ class TestCampaignAPI(BaseTestCase):
 
     def test_put_campaign(self):
         """Test updating a campaign via API (PUT)."""
+        from flask_restful.inputs import datetime_from_iso8601
         new_campaign_data = {
             'name': 'New Campaign Name',
             'paused': True,
             'account_id': 2,
             'channel_id': 2,
             'countries': ['CA', 'FR'],
+            'start_date': '2015-10-30T14:04:55+00:00',
+            'end_date': '2015-12-30T14:04:55+00:00',
         }
 
         # Create a new campaign.
@@ -110,3 +162,5 @@ class TestCampaignAPI(BaseTestCase):
         campaign = get_campaign(campaign_id)
         for field in ['name', 'account_id', 'channel_id', 'paused', 'countries']:
             assert_equal(campaign[field], new_campaign_data[field])
+        for field in ['start_date', 'end_date']:
+            assert_equal(campaign[field], datetime_from_iso8601(new_campaign_data[field]))

@@ -1,4 +1,4 @@
-from nose.tools import assert_equal, assert_true
+from nose.tools import assert_equal
 from flask import url_for, json
 from tests.base import BaseTestCase
 from tests.populate_database import parse_csv
@@ -17,6 +17,7 @@ class TestAdgroup(BaseTestCase):
             "frequency_cap_daily": 3,
             "frequency_cap_total": 10,
             "paused": 'false',
+            "channel_id": 1,
         }
 
         for adgroup in parse_csv("adgroups.csv"):
@@ -27,15 +28,20 @@ class TestAdgroup(BaseTestCase):
         """Test the support for CORS"""
         url = url_for('api.adgroup.adgroups')
         data = json.dumps(self.new_adgroup)
-        res = self.client.post(url, data=data, content_type='application/json')
+        res = self.client.post(url,
+                               data=data,
+                               headers={"Origin": "foo.com"},
+                               content_type='application/json')
         assert_equal(res.status_code, 201)
-        assert_equal(res.headers['Access-Control-Allow-Origin'], '*')
-        assert_equal(res.headers['Access-Control-Max-Age'], '21600')
-        assert_true('HEAD' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('POS' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('GET' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('OPTIONS' in res.headers['Access-Control-Allow-Methods'])
-        assert_true('CONTENT-TYPE' in res.headers['Access-Control-Allow-Headers'])
+        assert_equal(res.headers['Access-Control-Allow-Origin'], 'foo.com')
+
+        # test CORS gets set properly in failures
+        res = self.client.post(url,
+                               data=data,
+                               headers={"Origin": "foo.com"},
+                               content_type='application/json')
+        assert_equal(res.status_code, 400)
+        assert_equal(res.headers['Access-Control-Allow-Origin'], 'foo.com')
 
     def test_get_adgroups_by_campaign_id(self):
         """ Test for getting all adgroups for a given campaign id
@@ -46,6 +52,15 @@ class TestAdgroup(BaseTestCase):
             assert_equal(response.status_code, 200)
             resp = json.loads(response.data)
             assert_equal(len(resp["results"]), len(adgroups))
+
+    def test_get_adgroups_by_missing_campaign_id(self):
+        """ Test for getting adgroups for a missing campaign id
+        """
+        url = url_for('api.adgroup.adgroups', campaign_id=1234)
+        response = self.client.get(url)
+        assert_equal(response.status_code, 200)
+        resp = json.loads(response.data)
+        assert_equal(len(resp["results"]), 0)
 
     def test_post_and_get(self):
         """ Test for HTTP POST and GET
