@@ -5,7 +5,7 @@ from tests.base import BaseTestCase
 from collections import defaultdict
 
 from flask import url_for, json
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 
 from splice.queries.campaign import insert_campaign, get_campaign
 from splice.queries.common import session_scope
@@ -54,11 +54,49 @@ class TestCampaignAPI(BaseTestCase):
         # Verify two accounts are returned.
         for account_id, campaigns in self.campaign_fixture.iteritems():
             url = url_for('api.campaign.campaigns')
-            url = url + '?account_id=%s' % account_id
+            url = url + '?account_id=%s&past=True' % account_id
             response = self.client.get(url)
             assert_equal(response.status_code, 200)
             resp = json.loads(response.data)
             assert_equal(len(resp['results']), len(campaigns))
+
+    def test_get_campaigns_by_date(self):
+        """Test getting the list of campaigns by campaign via API (GET), constrained to either 'past',
+        'in_flight', or 'scheduled'"""
+
+        # testing 'past'
+        url = url_for('api.campaign.campaigns')
+        past_url = "%s?account_id=1&past=True&in_flight=False&scheduled=False&today=2015-10-24" % url
+        response = self.client.get(past_url)
+        assert_equal(response.status_code, 200)
+        resp = json.loads(response.data)
+        assert_equal(len(resp['results']), 1)
+        assert_equal(resp['results'][0]['name'], "MozSuggested")
+
+        # testing 'in_flight'
+        url = url_for('api.campaign.campaigns')
+        past_url = "%s?account_id=1&past=False&in_flight=True&scheduled=False&today=2015-10-24" % url
+        response = self.client.get(past_url)
+        assert_equal(response.status_code, 200)
+        resp = json.loads(response.data)
+        assert_equal(len(resp['results']), 1)
+        assert_equal(resp['results'][0]['name'], "MozDirectory")
+
+        # testing 'scheduled'
+        url = url_for('api.campaign.campaigns')
+        past_url = "%s?account_id=1&past=False&in_flight=False&scheduled=True&today=2015-09-01" % url
+        response = self.client.get(past_url)
+        assert_equal(response.status_code, 200)
+        resp = json.loads(response.data)
+        assert_equal(len(resp['results']), 2)
+        found_dir = False
+        found_sug = False
+        for res in resp['results']:
+            if res['name'] == "MozDirectory":
+                found_dir = True
+            elif res['name'] == "MozSuggested":
+                found_sug = True
+        assert_true(found_dir and found_sug)
 
     def test_post_campaign(self):
         """Test creating an campaign via API (POST)."""

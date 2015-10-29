@@ -4,9 +4,8 @@ from sqlalchemy.exc import IntegrityError
 
 from sqlalchemy.orm.exc import NoResultFound
 from splice.queries.common import session_scope
-from splice.queries.campaign import (
-    get_campaigns, get_campaign, insert_campaign, update_campaign)
-
+from splice.queries.campaign import get_campaigns, get_campaign, insert_campaign, update_campaign
+from datetime import datetime
 
 campaign_bp = Blueprint('api.campaign', __name__, url_prefix='/api')
 api = Api(campaign_bp)
@@ -49,8 +48,15 @@ class CampaignListAPI(Resource):
     def __init__(self):
         self.reqparse_post = campaign_parser
         self.reqparse_get = reqparse.RequestParser()
-        self.reqparse_get.add_argument(
-            'account_id', type=int, required=True, help='Account ID', location='args')
+        self.reqparse_get.add_argument('account_id', type=int, required=True, help='Account ID', location='args')
+        self.reqparse_get.add_argument('past', type=inputs.boolean, required=False,
+                                       help='Campaigns that ran in the past', location='args', default=False)
+        self.reqparse_get.add_argument('in_flight', type=inputs.boolean, required=False,
+                                       help='Campaigns currently running', location='args', default=True)
+        self.reqparse_get.add_argument('scheduled', type=inputs.boolean, required=False,
+                                       help='Campaigns scheduled to run in the future', location='args', default=True)
+        self.reqparse_get.add_argument('today', type=inputs.date, required=False,
+                                       help='Defaults to today\'s date', location='args', default=None)
 
         super(CampaignListAPI, self).__init__()
 
@@ -60,7 +66,15 @@ class CampaignListAPI(Resource):
         Takes an optional account_id as a query string argument.
         """
         args = self.reqparse_get.parse_args()
-        campaigns = get_campaigns(args.get('account_id'))
+        if args.get('today') is None:
+            today = datetime.utcnow().date()
+        else:
+            today = args.get('today').date()
+        campaigns = get_campaigns(account_id=args.get('account_id'),
+                                  past=args.get('past'),
+                                  in_flight=args.get('in_flight'),
+                                  scheduled=args.get('scheduled'),
+                                  utctoday=today)
         return {'results': marshal(campaigns, campaign_fields)}
 
     def post(self):

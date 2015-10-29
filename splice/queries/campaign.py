@@ -2,20 +2,21 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from splice.models import Campaign, CampaignCountry
 from splice.queries.common import row_to_dict
+from datetime import datetime
 
 
-def get_campaigns(account_id=None):
+def get_campaigns(account_id=None, past=True, in_flight=True, scheduled=True, utctoday=None):
     from splice.environment import Environment
 
     env = Environment.instance()
 
-    query = (
-        env.db.session
-        .query(Campaign)
-    )
+    query = env.db.session.query(Campaign)
 
     if account_id is not None:
         query = query.filter(Campaign.account_id == account_id)
+
+    if utctoday is None:
+        utctoday = datetime.utcnow().date()
 
     rows = query.order_by(Campaign.id.desc()).all()
 
@@ -26,7 +27,12 @@ def get_campaigns(account_id=None):
         for country in row.countries:
             countries.append(country.country_code)
         ret['countries'] = countries
-        campaigns.append(ret)
+
+        # filter based on start and end dates unless an account ID is specified
+        if ((past and row.end_date.date() <= utctoday) or
+                (in_flight and row.end_date.date() >= utctoday >= row.start_date.date()) or
+                (scheduled and row.start_date.date() >= utctoday)):
+            campaigns.append(ret)
 
     return campaigns
 
