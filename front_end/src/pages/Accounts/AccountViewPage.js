@@ -48,6 +48,7 @@ export default class AccountViewPage extends Component {
                 {this.generateFilter('inFlight', 'In Flight', this.props.Campaign.inFlight)}
               </div>
             </div>
+            <div className="clearfix"></div>
           </div>
 
           <CampaignList rows={this.props.Campaign.rows}
