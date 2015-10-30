@@ -49,7 +49,7 @@ export default class SideBar extends Component {
         </div>
 
         <div className="create button"><Link to="/accounts/create">Create <i className="fa fa-plus"></i></Link></div>
-        <div className="approval button"><Link to={'/approvals'} >Approval Queue <i className="fa fa-check"></i></Link></div>
+        {/*<div className="approval button"><Link to={'/approvals'} >Approval Queue <i className="fa fa-check"></i></Link></div>*/}
       </div>
     );
   }
@@ -57,7 +57,8 @@ export default class SideBar extends Component {
   handleResize(){
     const h = window.innerHeight;
 
-    const maxHeight = h - 168;
+    //const maxHeight = h - 168;
+    const maxHeight = h - 109;
     $('.accounts-list').css('max-height', maxHeight);
   }
 }

@@ -26,8 +26,10 @@ export default class TilePreview extends Component {
             </div>
           </div>
           <div className="tile-status-buttons">
+            {/*
             <input type="submit" className="btn disapprove" value="Disapprove" onClick={() => this.props.handleDisapprove()}/>
             <input type="submit" className="btn approve" value="Approve" onClick={() => this.props.handleApprove()}/>
+             */}
           </div>
         </div>
       );
