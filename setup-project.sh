@@ -9,6 +9,7 @@ then
     set -x
     echo "setting up development virtualenv"
     export MOZ_SPLICE_DEV=1
+    export CFLAGS='-std=c99'
 else
     echo "setting up production virtualenv"
 fi
