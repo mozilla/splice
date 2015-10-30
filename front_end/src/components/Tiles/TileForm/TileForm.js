@@ -126,7 +126,7 @@ export default class TileForm extends Component {
             </div>
           </div>
 
-          <div onClick={(e) => this.handleFormSubmit(e)} className="form-submit">Save {spinner}</div>
+          <button onClick={(e) => this.handleFormSubmit(e)} className="form-submit">Save {spinner}</button>
         </form>
       </div>
     );
