@@ -10,6 +10,8 @@ import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 import AccountDetails from 'components/Accounts/AccountDetails/AccountDetails';
 import CampaignList from 'components/Campaigns/CampaignList/CampaignList';
 
+window.$ = require('jquery');
+
 export default class AccountViewPage extends Component {
   componentWillMount() {
     this.fetchAccountDetails(this.props);
@@ -37,20 +39,38 @@ export default class AccountViewPage extends Component {
             <Link className="create-link" to={'/accounts/' + this.props.Account.details.id + '/createcampaign'}>Create Campaign <i className="fa fa-plus"></i></Link>
 
             <div className="list-filters">
-              {this.generateFilter('past', 'Past', this.props.Campaign.past)}
-              {this.generateFilter('scheduled', 'Scheduled', this.props.Campaign.scheduled)}
-              {this.generateFilter('inFlight', 'In Flight', this.props.Campaign.inFlight)}
+              <div className="list-filter-button" onClick={this.handleShowHideFilters}>
+                Filters
+              </div>
+              <div className="list-filter-dropdown" >
+                {this.generateFilter('past', 'Past', this.props.Campaign.past)}
+                {this.generateFilter('scheduled', 'Scheduled', this.props.Campaign.scheduled)}
+                {this.generateFilter('inFlight', 'In Flight', this.props.Campaign.inFlight)}
+              </div>
             </div>
           </div>
 
           <CampaignList rows={this.props.Campaign.rows}
                         isFetching={this.props.Campaign.isFetching}
-                        channels={this.props.Init.channels}/>
+                        init_channels={this.props.Init.channels}
+                        init_countries={this.props.Init.countries} />
         </div>
       );
     }
 
     return output;
+  }
+
+  handleShowHideFilters(e){
+    const elem = $(e.target);
+    if(elem.hasClass('active')){
+      elem.removeClass('active');
+      elem.siblings('.list-filter-dropdown').slideUp();
+    }
+    else{
+      elem.addClass('active');
+      elem.siblings('.list-filter-dropdown').slideDown();
+    }
   }
 
   handleToggleFilter(varName, value){
@@ -75,7 +95,7 @@ export default class AccountViewPage extends Component {
 
   generateFilter(varName, fieldName, value){
     return (
-      <div className="list-filter" onClick={() => this.handleToggleFilter(varName, !value) } >
+      <div className="list-filter-item" onClick={() => this.handleToggleFilter(varName, !value) } >
         <i className={'fa ' + ((value) ? 'fa-check-square-o' : 'fa-square-o' )}></i> {fieldName}
       </div>
     );

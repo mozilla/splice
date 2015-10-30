@@ -8,7 +8,7 @@ export default class CampaignList extends Component {
 
     if (this.props.isFetching === false) {
       rows = this.props.rows.map((row, index) =>
-          <CampaignRow {...row} key={index} channels={this.props.channels}/>
+          <CampaignRow {...row} key={index} init_channels={this.props.init_channels} init_countries={this.props.init_countries}/>
       );
     } else {
       spinner = (<img src="./public/img/ajax-loader-navy.gif"/>);
@@ -22,8 +22,10 @@ export default class CampaignList extends Component {
             <th>ID</th>
             <th>Name</th>
             <th>Channel</th>
+            <th>Countries</th>
             <th>Status</th>
-            <th>Created</th>
+            <th>Start Date</th>
+            <th>End Date</th>
           </tr>
           </thead>
           <tbody>
@@ -41,8 +43,11 @@ CampaignList.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     channel_id: PropTypes.number.isRequired,
+    countries: PropTypes.array.isRequired,
     paused: PropTypes.bool.isRequired,
-    created_at: PropTypes.string.isRequired
+    start_date: PropTypes.string.isRequired,
+    end_date: PropTypes.string.isRequired
   }).isRequired).isRequired,
-  channels: PropTypes.array.isRequired
+  init_channels: PropTypes.array.isRequired,
+  init_countries: PropTypes.array.isRequired
 };
