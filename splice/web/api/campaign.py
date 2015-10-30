@@ -1,6 +1,3 @@
-import os
-import tempfile
-
 from flask import Blueprint, request
 from flask.json import jsonify
 from flask_restful import Api, Resource, marshal, fields, reqparse, inputs
@@ -139,30 +136,24 @@ _VALID_ASSETS_EXTENSIONS = set(['tsv', 'txt'])
 def handler_bulk_upload(campaign_id):
     """bulk uploading adgroups and tiles with the given campaign_id."""
 
-    def is_allowed_files(name, allowed_sets):
-        return '.' in name and name.rsplit('.', 1)[1] in allowed_sets
+    def _is_allowed_file(name, allowed_sets):
+        return '.' in name and name.rsplit('.', 1)[1].lower() in allowed_sets
 
     creatives = request.files["creatives"]
     assets = request.files["assets"]
-    if not is_allowed_files(creatives.filename.lower(), _VALID_CREATIVE_EXTENSIONS) \
-            or not is_allowed_files(assets.filename.lower(), _VALID_ASSETS_EXTENSIONS):
+    if not _is_allowed_file(creatives.filename, _VALID_CREATIVE_EXTENSIONS) \
+            or not _is_allowed_file(assets.filename, _VALID_ASSETS_EXTENSIONS):
             return jsonify(message="Invalid files uploaded."), 400
 
     campaign = get_campaign(campaign_id)
     if campaign is None:
         return jsonify(message='Campaign not found.'), 404
 
-    (_, tmp_creatives) = tempfile.mkstemp()
-    (_, tmp_assets) = tempfile.mkstemp()
-    creatives.save(tmp_creatives)
-    assets.save(tmp_assets)
     try:
-        bulk_upload(tmp_creatives, tmp_assets, campaign_id, campaign["channel_id"])
+        bulk_upload(creatives.stream, assets.stream, campaign_id, campaign["channel_id"])
     except Exception as e:
         return jsonify(message="Error: %s" % e), 400
     else:
-        os.remove(tmp_assets)
-        os.remove(tmp_creatives)
         return jsonify(message="Uploading successfully.")
 
 

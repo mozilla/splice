@@ -1,9 +1,7 @@
 import csv
 import hashlib
 import os
-import shutil
 import StringIO
-import tempfile
 import zipfile
 import random
 import traceback
@@ -61,20 +59,17 @@ def insert_ingested_assets(ingested_assets, campaign_id, channel_id, creative_ma
     # a function scope cache to speedup the uploading of duplicate creatives
     s3_key_cache = dict()
     bucket, headers = setup_s3()
-    try:
-        with session_scope() as session:
-            for key, value in ingested_assets.iteritems():
-                # at least two items in the value, i.e. one adgroup and 1+ tiles
-                assert(len(value) >= 2)
-                adgroup, tiles = value[0], value[1:]
-                inserted_adgroup = insert_adgroup(session, adgroup)
-                for tile in tiles:
-                    tile["image_uri"], tile["enhanced_image_uri"] = \
-                        upload_creatives_to_s3(tile, creative_map, bucket, headers, s3_key_cache)
-                    tile["adgroup_id"] = inserted_adgroup["id"]
-                    insert_tile(session, tile)
-    except Exception as e:  # pragma: no cover
-        raise e
+    with session_scope() as session:
+        for key, value in ingested_assets.iteritems():
+            # at least two items in the value, i.e. one adgroup and 1+ tiles
+            assert(len(value) >= 2)
+            adgroup, tiles = value[0], value[1:]
+            inserted_adgroup = insert_adgroup(session, adgroup)
+            for tile in tiles:
+                tile["image_uri"], tile["enhanced_image_uri"] = \
+                    upload_creatives_to_s3(tile, creative_map, bucket, headers, s3_key_cache)
+                tile["adgroup_id"] = inserted_adgroup["id"]
+                insert_tile(session, tile)
 
 
 def setup_s3():
@@ -117,9 +112,6 @@ def upload_creatives_to_s3(tile, creative_map, bucket, headers, key_cache):
 
 def load_creatives_to_memory(uploaded_zip_file):
     """Load all the creatives into memory, resizing it if neccessary"""
-    # use a temporary directory for the image processing
-    work_dir = tempfile.mkdtemp(prefix="splice_upload")
-
     creative_map = {}
     try:
         with zipfile.ZipFile(uploaded_zip_file, "r") as zf:
@@ -134,40 +126,36 @@ def load_creatives_to_memory(uploaded_zip_file):
                     img = Image.open(StringIO.StringIO(buf))
                     if img.size != (290, 180):
                         img.thumbnail((290, 180))
-                        tmp_name = os.path.join(work_dir, basename)
-                        # need to persist it on the disk to generate the resized image
-                        img.save(tmp_name, ext)
-                        with open(tmp_name, "r") as f:
-                            buf = f.read()
+                        buffer = StringIO.StringIO()
+                        img.save(buffer, ext)
+                        buf = buffer.getvalue()
+                        buffer.close()
                     creative_map[name.lower()] = (buf, ext)
     except zipfile.BadZipfile as e:
-        env.log("Error when opening zip file: %s, %s" % uploaded_zip_file, e)
-        raise ValueError("Can not open zip file")
+        msg = "Error when opening zip file: %s, %s" % (uploaded_zip_file, e)
+        env.log(msg)
+        raise ValueError(msg)
     except Exception as e:
         msg = "Error when loading image: %s" % e
         env.log(msg)
         raise ValueError(msg)
-    finally:
-        shutil.rmtree(work_dir)
 
     return creative_map
 
 
 def load_assets(assets):
-    with open(assets, "rb") as f:
-        tsv_reader = csv.DictReader(f, delimiter='\t')
-        for item in tsv_reader:
-            yield item
+    for item in csv.DictReader(assets, delimiter='\t'):
+        yield item
 
 
 def load_bucketer():
-    bucketer = Environment.instance()._load_category_bucketer()
-    buckets = dict()
-    for bucket in bucketer:
+    buckets = Environment.instance()._load_category_bucketer()
+    bucketer = dict()
+    for bucket in buckets:
         category = bucket["name"]
-        buckets[category] = bucket
+        bucketer[category] = bucket
 
-    return buckets
+    return bucketer
 
 
 def ingest_asset(asset, image_set, bucketer, locale_set, campaign_id=0,
@@ -210,13 +198,13 @@ def ingest_asset(asset, image_set, bucketer, locale_set, campaign_id=0,
     tile['title_bg_color'] = ""
     tile['target_url'] = asset["Clickthrough URL"].strip()
     rootpath = asset["Asset Name: Root"]
-    imageURI, enhancedImageURI = rootpath + "_b", rootpath + '_a'
-    if imageURI not in image_set:
-        raise ValueError("Missing creative %s" % imageURI)
-    if enhancedImageURI not in image_set:
-        raise ValueError("Missing creative %s" % enhancedImageURI)
-    tile['image_uri'] = imageURI
-    tile['enhanced_image_uri'] = enhancedImageURI
+    image_uri, enhanced_image_uri = rootpath + "_b", rootpath + '_a'
+    if image_uri not in image_set:
+        raise ValueError("Missing creative %s" % image_uri)
+    if enhanced_image_uri not in image_set:
+        raise ValueError("Missing creative %s" % enhanced_image_uri)
+    tile['image_uri'] = image_uri
+    tile['enhanced_image_uri'] = enhanced_image_uri
 
     return adgroup, tile
 
@@ -253,20 +241,23 @@ def ingest_assets(uploaded_zip_file, assets, bucketer, campaign_id=0, channel_id
     '''
     locale_set = set(Environment.instance()._load_locales())
     image_set = zip_list(uploaded_zip_file)
+    fd = open(assets, "rb") if isinstance(assets, str) else assets
 
     ingested_assets = defaultdict(list)
     try:
-        for asset in load_assets(assets):
+        for asset in load_assets(fd):
             adgroup, tile = ingest_asset(asset, image_set, bucketer, locale_set, campaign_id, channel_id)
             key = (adgroup["categories"][0], adgroup["locale"], adgroup["type"],
                    adgroup["frequency_cap_daily"], adgroup["frequency_cap_total"])
-            # the first element for a new key is always the adgroup, followed by a list
-            # of tiles.
+            # the first element for a new key is always the adgroup, followed by a list of tiles
             if key not in ingested_assets:
                 ingested_assets[key].append(adgroup)
             ingested_assets[key].append(tile)
     except ValueError as e:
         env.log("Error when ingesting assets: %s" % e)
         raise e
+    finally:
+        if fd != assets:  # only close it if we opened it
+            fd.close()
 
     return ingested_assets
