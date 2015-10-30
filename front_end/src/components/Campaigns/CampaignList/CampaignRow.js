@@ -22,18 +22,19 @@ export default class CampaignRow extends Component {
 
   outputCountries(countries){
     let output = '';
+    const countryNames = [];
     let country;
 
     countries.map((row, index) => {
-      if (index > 0) {
-        output += ', ';
-      }
-
       country = getCountry(row, this.props.init_countries);
       if (country !== undefined && country.country_name !== undefined) {
-        output += country.country_name;
+        countryNames.push(country.country_name);
       }
     });
+
+    if(countryNames.length > 0){
+      output = countryNames.join(', ');
+    }
 
     return output;
   }
