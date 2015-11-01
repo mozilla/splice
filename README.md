@@ -21,12 +21,16 @@ Get your virtualenv environment setup.
  * `./setup-project.sh`
  * `source ./splice-env/bin/activate`
 
+Create databases in postgres.
+
+```
+psql postgres
+create database mozsplice;
+create database mozsplice_campaigns;
+```
+
 Next get your postgresql database setup
 
- * `manage.py db init`
-  * ignore 'configuration/connection/logging settings'
- * `manage.py db migrate`
-  * may error out on postgres permissions
  * `manage.py db upgrade`
  
 ## Run
@@ -36,5 +40,12 @@ Next get your postgresql database setup
  * `manage.py runserver`: run a webserver listening on port 5000
 
 ## Test
+
+Create test database in postgres.
+
+```
+psql postgres
+create database splice_test;
+```
 
  * `fab test`: run unit tests and code coverage tools
