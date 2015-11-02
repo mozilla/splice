@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Splice - Redux edition</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='build/css/newtab.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='build/css/datetime.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='build/css/app.css') }}">
+    <title>Splice</title>
   </head>
   <body>
-    <div id="root">Loading...</div>
-    <script src="{{ url_for('static', filename='build/js/bundle.js') }}"></script>
+    <h1>Welcome to Splice</h1>
+    <ul>
+      <li>
+        <a href="{{ url_for('root.distribution') }}">
+          Distribution App
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('root.campaign') }}">
+          Campaign App
+        </a>
+      </li>
+    </ul>
   </body>
 </html>
