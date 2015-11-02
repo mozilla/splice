@@ -1,3 +1,21 @@
-{% extends 'base.jinja2' %}
-
-{% block title %}Firefox Tiles - Authoring{% endblock %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Splice</title>
+  </head>
+  <body>
+    <h1>Welcome to Splice</h1>
+    <ul>
+      <li>
+        <a href="{{ url_for('root.distribution') }}">
+          Distribution App
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('root.campaign') }}">
+          Campaign App
+        </a>
+      </li>
+    </ul>
+  </body>
+</html>
