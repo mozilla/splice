@@ -4,6 +4,32 @@ import { Link } from 'react-router';
 import './BreadCrumb.scss';
 
 export default class BreadCrumbs extends Component {
+  getName(data, isTile){
+    let name;
+
+    if(isTile){
+      if(data.title !== undefined) {
+        if (data.title.trim() === '') {
+          name = '(No Title)';
+        }
+        else {
+          name = data.title;
+        }
+      }
+    }
+    else {
+      if(data.name !== undefined){
+        if(data.name.trim() === ''){
+          name = '(No Name)';
+        }
+        else{
+          name = data.name;
+        }
+      }
+    }
+    return name;
+  }
+
   render() {
     let campaignParent = '';
     let adGroupParent = '';
@@ -49,7 +75,7 @@ export default class BreadCrumbs extends Component {
 
     let tileMarkup = (<li className="line top-level"><a className="dropdown-toggle" disabled="disabled" style={{pointerEvents: 'none'}}>Tiles {tileCount}</a></li>);
     if(this.props.location.pathname.match(/\/tiles\/.*/) ){
-      tileMarkup = this.generateCrumb(this.props.Tile, tileActive, false, '/tiles/', false);
+      tileMarkup = this.generateCrumb(this.props.Tile, tileActive, false, '/tiles/', false, true);
     }
 
     return (
@@ -65,17 +91,19 @@ export default class BreadCrumbs extends Component {
     );
   }
 
-  generateCrumb(data, active, parent, url, branch){
+  generateCrumb(data, active, parent, url, branch, isTile = false){
+    const context = this;
     let output;
+
     if(data.details){
       output = (
         <li className={'dropdown top-level ' + parent + ' ' + active + ' ' + ((branch) ? 'branch' : 'line')}>
-          <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{(data.details.name !== undefined) ? data.details.name : data.details.title } <span className="down-arrow"></span></a>
+          <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.getName(data.details, isTile)} <span className="down-arrow"></span></a>
           <ul className="dropdown-menu">
-            <li className="active"><Link to={url + data.details.id} >{(data.details.name !== undefined) ? data.details.name : data.details.title }</Link></li>
+            <li className="active"><Link to={url + data.details.id} >{this.getName(data.details, isTile)}</Link></li>
             {data.rows.map(function(object, i){
               if(data.details.id !== object.id){
-                return <li key={'bread-crumb-' + i}><Link to={url + object.id} >{(object.name !== undefined) ? object.name : object.title }</Link></li>;
+                return <li key={'bread-crumb-' + i}><Link to={url + object.id} >{context.getName(object, isTile)}</Link></li>;
               }
             })}
           </ul>
