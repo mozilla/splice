@@ -19,6 +19,13 @@ export default class AppPage extends Component {
     if(_.isEmpty(this.props.Init.channels) ){
       dispatch(fetchInit());
     }
+
+    const context = this;
+    $(window).bind('beforeunload', function() {
+      if (context.props.App.formChanged) {
+        return 'Your progress has not been saved.';
+      }
+    });
   }
 
   componentWillReceiveProps(nextProps) {

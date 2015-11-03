@@ -11,6 +11,9 @@ export const REMOVE_MESSAGE = 'REMOVE_MESSAGE';
 
 export const LIST_TYPE_SELECT = 'LIST_TYPE_SELECT';
 
+export const FORM_CHANGED = 'FORM_CHANGED';
+export const FORM_SAVED = 'FORM_SAVED';
+
 export function updateDocTitle(title) {
   document.subTitle = title;
   document.title = 'Splice | ' + document.subTitle;
@@ -45,3 +48,10 @@ export function listTypeSelect(value) {
   return {type: LIST_TYPE_SELECT, value: value};
 }
 
+export function formChanged(){
+  return {type: FORM_CHANGED};
+}
+
+export function formSaved(){
+  return {type: FORM_SAVED};
+}

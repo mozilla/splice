@@ -3,7 +3,9 @@ import {
   SHOWN_MESSAGE,
   REMOVE_MESSAGE,
   FILE_UPLOADED,
-  LIST_TYPE_SELECT
+  LIST_TYPE_SELECT,
+  FORM_CHANGED,
+  FORM_SAVED
 } from 'actions/App/AppActions';
 
 import { GET_RECENTLY_VIEWED } from 'actions/App/RecentlyViewedActions';
@@ -17,7 +19,8 @@ const initialState = {
     type: '',
     body: '',
     shown: false
-  }
+  },
+  formChanged: false
 };
 
 export function App(state = initialState, action = null) {
@@ -66,6 +69,14 @@ export function App(state = initialState, action = null) {
     case LIST_TYPE_SELECT:
       return _.assign({}, state, {
         listType: action.value
+      });
+    case FORM_CHANGED:
+      return _.assign({}, state, {
+        formChanged: true
+      });
+    case FORM_SAVED:
+      return _.assign({}, state, {
+        formChanged: false
       });
     default:
       return state;

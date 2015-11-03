@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-import { displayMessage, shownMessage } from 'actions/App/AppActions';
+import { displayMessage, shownMessage, formChanged, formSaved } from 'actions/App/AppActions';
 import { createAccount, updateAccount, fetchAccounts } from 'actions/Accounts/AccountActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
 
@@ -13,12 +13,27 @@ bindFormConfig();
 require('parsleyjs');
 
 export default class AccountForm extends Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleCreate = this.handleCreate.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleResponse = this.handleResponse.bind(this);
+  }
+
   componentDidMount(){
     bindFormValidators();
+    if(this.props.App.formChanged === true){
+      this.props.dispatch(formSaved());
+    }
   }
   componentDidUpdate(prevProps) {
     if (prevProps.Account.details.id !== this.props.Account.details.id ){
       bindFormValidators();
+      if(this.props.App.formChanged === true){
+        this.props.dispatch(formSaved());
+      }
     }
   }
 
@@ -42,7 +57,7 @@ export default class AccountForm extends Component {
               <div className="col-xs-4">
                 <div className="form-group">
                   <label htmlFor="AccountName">Account Name</label>
-                  <input className="form-control" type="text" id="AccountName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
+                  <input className="form-control" type="text" id="AccountName" name="name" ref="name" defaultValue={data.name} onChange={this.handleChange} data-parsley-required data-parsley-minlength="2"/>
                 </div>
               </div>
             </div>
@@ -50,28 +65,34 @@ export default class AccountForm extends Component {
               <div className="col-xs-4">
                 <div className="form-group">
                   <label htmlFor="AccountContactName">Contact Name</label>
-                  <input className="form-control" type="text" id="AccountContactName" name="contact_name" ref="contact_name" defaultValue={data.contact_name} />
+                  <input className="form-control" type="text" id="AccountContactName" name="contact_name" ref="contact_name" defaultValue={data.contact_name} onChange={this.handleChange}/>
                 </div>
               </div>
               <div className="col-xs-4">
                 <div className="form-group">
                   <label htmlFor="AccountContactEmail">Contact Email</label>
-                  <input className="form-control" type="text" id="AccountContactEmail" name="contact_email" ref="contact_email" defaultValue={data.contact_email} data-parsley-type="email"/>
+                  <input className="form-control" type="text" id="AccountContactEmail" name="contact_email" ref="contact_email" defaultValue={data.contact_email} onChange={this.handleChange} data-parsley-type="email"/>
                 </div>
               </div>
               <div className="col-xs-4">
                 <div className="form-group">
                   <label htmlFor="AccountContactPhone">Contact Phone</label>
-                  <input className="form-control" type="text" id="AccountContactPhone" name="contact_phone" ref="contact_phone" defaultValue={data.contact_phone} />
+                  <input className="form-control" type="text" id="AccountContactPhone" name="contact_phone" ref="contact_phone" defaultValue={data.contact_phone} onChange={this.handleChange}/>
                 </div>
               </div>
             </div>
           </div>
 
-          <button onClick={(e) => this.handleFormSubmit(e)} className="form-submit">Save {spinner}</button>
+          <button onClick={this.handleFormSubmit} className="form-submit">Save {spinner}</button>
         </form>
       </div>
     );
+  }
+
+  handleChange(){
+    if(this.props.App.formChanged !== true){
+      this.props.dispatch(formChanged());
+    }
   }
 
   handleFormSubmit(e) {
@@ -132,6 +153,8 @@ export default class AccountForm extends Component {
       else{
         dispatch(displayMessage('success', 'Account Created Successfully') );
       }
+
+      dispatch(formSaved());
       dispatch(fetchAccounts());
       history.pushState(null, '/accounts/' + response.result.id);
     }
