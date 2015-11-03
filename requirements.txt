@@ -19,3 +19,4 @@ tld==0.7.3
 flask-restful==0.3.4
 Flask-Cors==2.1.0
 pytz==2015.6
+Pillow==3.0.0
