@@ -87,6 +87,7 @@ export default class TopBar extends Component {
       this.props.location.pathname.match(/\/accounts\/\d\/createcampaign/) ||
       this.props.location.pathname.match(/\/campaigns\/\d\/edit/) ||
       this.props.location.pathname.match(/\/campaigns\/\d\/createadgroup/) ||
+      this.props.location.pathname.match(/\/campaigns\/\d\/bulkupload/) ||
       this.props.location.pathname.match(/\/adgroups\/\d\/edit/) ||
       this.props.location.pathname.match(/\/adgroups\/\d\/createtile/) ||
       this.props.location.pathname.match(/\/tiles\/\d\/edit/);

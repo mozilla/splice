@@ -19,20 +19,36 @@ export default class CampaignBulkUploadPage extends Component {
   }
 
   render() {
+    let spinner;
+    if(this.props.Campaign.isSaving){
+      spinner = <img src="/public/img/ajax-loader-aqua.gif" />;
+    }
+
     let output = (<div/>);
 
     if(this.props.Campaign.details){
       output = (
         <div>
-          <h1>Bulk Upload - {this.props.Campaign.details.name}</h1>
-          <div className="panel panel-default">
-            <div className="panel-body">
+          <div className="form-module">
+            <div className="form-module-header">Bulk Upload - {this.props.Campaign.details.name}</div>
+            <div className="form-module-body">
               <form >
-                <label htmlFor="bulkUpload">Upload File</label>
-                <input type="file" name="bulkUpload" id="bulkUpload" ref="bulkUpload" />
-                <br/>
-                <input onClick={(e) => this.handleFileUpload(e)} type="submit" className="btn btn-primary" value="Submit" />
-                <Link to={'/campaigns/' + this.props.Campaign.details.id} className="btn btn-default">Cancel</Link>
+                <div className="container-fluid field-container">
+                  <div className="row">
+                    <div className="col-xs-12">
+                      <div className="form-group">
+                        <label htmlFor="zip">Upload Zip</label>
+                        <input type="file" name="zip" id="zip" ref="zip" />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="bulkUpload">Upload TSV</label>
+                        <input type="file" name="tsv" id="tsv" ref="tsv" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button onClick={(e) => this.handleFileUpload(e)} className="form-submit" >Save {spinner}</button>
               </form>
             </div>
           </div>
