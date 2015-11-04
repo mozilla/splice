@@ -58,3 +58,15 @@ select.js-select{
 .js-select{
   width: 100%;
 }
+.file-upload-input{
+  color: #fff;
+  font-size: 13px;
+}
+.form-group.file-upload-form-group{
+  padding: 20px 0 20px 0;
+  margin: 0;
+
+  label{
+    margin: 0 0 10px 0;
+  }
+}

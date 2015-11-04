@@ -25,4 +25,12 @@ export function bindFormValidators() {
       })
       .addMessage('en', 'dateformat', 'Invalid date format.');
   }
+
+  if(window.ParsleyValidator.validators.filetype === undefined){
+    window.ParsleyValidator
+      .addValidator('filetype', function(value, requirement) {
+        return value.split('.').pop().toLowerCase() === requirement;
+      })
+      .addMessage('en', 'filetype', 'Invalid file extension.');
+  }
 }

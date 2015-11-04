@@ -13,6 +13,9 @@ export const RECEIVE_CREATE_CAMPAIGN = 'RECEIVE_CREATE_CAMPAIGN';
 export const REQUEST_UPDATE_CAMPAIGN = 'REQUEST_UPDATE_CAMPAIGN';
 export const RECEIVE_UPDATE_CAMPAIGN = 'RECEIVE_UPDATE_CAMPAIGN';
 
+export const REQUEST_BULK_UPLOAD = 'REQUEST_BULK_UPLOAD';
+export const RECEIVE_BULK_UPLOAD = 'RECEIVE_BULK_UPLOAD';
+
 export const REQUEST_CAMPAIGNS = 'REQUEST_CAMPAIGNS';
 export const RECEIVE_CAMPAIGNS = 'RECEIVE_CAMPAIGNS';
 
@@ -41,6 +44,17 @@ export function requestUpdateCampaign() {
 export function receiveUpdateCampaign(json) {
   return {
     type: RECEIVE_UPDATE_CAMPAIGN,
+    json: json
+  };
+}
+
+export function requestBulkUpload() {
+  return {type: REQUEST_BULK_UPLOAD};
+}
+
+export function receiveBulkUpload(json) {
+  return {
+    type: RECEIVE_BULK_UPLOAD,
     json: json
   };
 }
@@ -122,6 +136,27 @@ export function updateCampaign(campaignId, data) {
       .then(response => response.json())
       .then(json => new Promise(resolve => {
         dispatch(receiveUpdateCampaign(json));
+        resolve(json);
+      })
+    );
+  };
+}
+
+export function bulkupload(campaignId, data){
+  // thunk middleware knows how to handle functions
+  return function next(dispatch) {
+    dispatch(requestBulkUpload());
+    // Return a promise to wait for
+    return fetch(apiUrl + '/api/campaigns/' + campaignId + '/bulkupload', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json'
+      },
+      body: data
+    })
+      .then(response => response.json())
+      .then(json => new Promise(resolve => {
+        dispatch(receiveBulkUpload(json));
         resolve(json);
       })
     );
