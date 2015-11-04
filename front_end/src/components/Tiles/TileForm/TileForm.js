@@ -185,10 +185,10 @@ export default class TileForm extends Component {
     }
     else{
       if(this.props.editMode){
-        dispatch(displayMessage('success', 'Ad Group Updated Successfully') );
+        dispatch(displayMessage('success', 'Tile Updated Successfully') );
       }
       else{
-        dispatch(displayMessage('success', 'Ad Group Created Successfully') );
+        dispatch(displayMessage('success', 'Tile Created Successfully') );
       }
       history.pushState(null, '/tiles/' + response.result.id);
     }
