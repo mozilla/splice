@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 require('./TilePreview.scss');
+window.$ = require('jquery');
 
 export default class TilePreview extends Component {
   render() {
@@ -12,14 +13,21 @@ export default class TilePreview extends Component {
           <div className="tiles-container">
             <div className="tile-preview-container tile-default" >
               <div className="tile-preview">
-                <div className="tile-image" style={{backgroundColor: this.props.Tile.details.bg_color, backgroundImage: 'url(' + this.props.Tile.details.image_uri + ')' }}></div>
+                <div className="tile-image"
+                     onMouseOver={() => this.handleImageSwap(this.props.Tile.details.image_uri)}
+                     onMouseOut={() => this.handleImageSwap(this.props.Tile.details.enhanced_image_uri)}
+                     style={ {
+                       backgroundColor: this.props.Tile.details.bg_color,
+                       backgroundImage: 'url(' + this.props.Tile.details.enhanced_image_uri + ')'
+                     }}>
+                </div>
                 <div className="tile-title" style={{backgroundColor: this.props.Tile.details.title_bg_color}}>{this.props.Tile.details.title}</div>
               </div>
               <p className="tile-description">Tile Preview</p>
             </div>
             <div className="tile-preview-container tile-hover">
               <div className="tile-preview">
-                <div className="tile-image" style={{backgroundColor: this.props.Tile.details.bg_color, backgroundImage: 'url(' + this.props.Tile.details.enhanced_image_uri + ')' }}></div>
+                <div className="tile-image" style={{backgroundColor: this.props.Tile.details.bg_color, backgroundImage: 'url(' + this.props.Tile.details.image_uri + ')' }}></div>
                 <div className="tile-title" style={{backgroundColor: this.props.Tile.details.title_bg_color}}>{this.props.Tile.details.title}</div>
               </div>
               <p>Rollover Preview</p>
@@ -35,6 +43,10 @@ export default class TilePreview extends Component {
       );
     }
     return output;
+  }
+
+  handleImageSwap(url){
+    $('.tile-default .tile-preview .tile-image').css('backgroundImage', 'url(' + url + ')');
   }
 }
 

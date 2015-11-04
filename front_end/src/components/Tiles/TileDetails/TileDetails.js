@@ -26,9 +26,9 @@ export default class TileDetails extends Component {
 					</div>
 					<div className="details-panel-body">
 						<p><strong>Status:</strong> {_.capitalize(data.status)}</p>
-						<p><strong>Target Url:</strong> {data.target_url}</p>
-						<p><strong>Enhanced Image URI:</strong> {data.enhanced_image_uri}</p>
-						<p><strong>Image URI:</strong> {data.image_uri}</p>
+						<p><strong>Target Url:</strong> <a href={data.target_url} target="_blank">{data.target_url}</a></p>
+						<p><strong>Enhanced Image URI:</strong> <a href={data.enhanced_image_uri} target="_blank">{data.enhanced_image_uri}</a></p>
+						<p><strong>Image URI:</strong> <a href={data.image_uri} target="_blank">{data.image_uri}</a></p>
 						<p><strong>BG Color:</strong> {data.bg_color}</p>
 						<p><strong>Title BG Color:</strong> {data.title_bg_color}</p>
 						<p><strong>Type:</strong> {_.capitalize(data.type)}</p>

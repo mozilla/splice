@@ -18,8 +18,8 @@
     margin-bottom: 15px;
 
     .tile-image{
-      height: 200px;
-      width: 390px;
+      height: 180px;
+      width: 290px;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
       background-position: center;
@@ -27,16 +27,16 @@
       background-color: #bbb;
     }
     .tile-title{
-      width: 390px;
-      height: 40px;
+      width: 290px;
+      height: 30px;
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
-      padding: 10px 5px;
-      font-size: 18px;
+      padding: 8px 5px;
+      font-size: 13px;
       line-height: 1em;
-      color: #ffffff;
+      color: #5c5c5c;
       font-weight: normal;
-      background-color: #bbb;
+      background-color: #f2f2f2;
     }
   }
   .tile-default{
@@ -59,7 +59,7 @@
     text-transform: uppercase;
   }
   .btn.approve{
-    margin-right: 0px;
+    margin-right: 0;
     background-color: $color-aqua;
     color: $font-color-default;
     border-radius: 5px;
