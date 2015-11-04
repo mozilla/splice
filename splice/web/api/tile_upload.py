@@ -73,7 +73,7 @@ def insert_ingested_assets(ingested_assets, campaign_id, channel_id, creative_ma
 
 
 def setup_s3():
-    bucket = Environment.instance().s3.get_bucket(Environment.instance().config.S3["bucket"])
+    bucket = env.s3.get_bucket(env.config.S3["bucket"])
     cors = CORSConfiguration()
     cors.add_rule("GET", "*", allowed_header="*")
     bucket.set_cors(cors)
@@ -88,8 +88,7 @@ def generate_s3_key(image, ext, key_cache):
     hash = hashlib.sha1(image).hexdigest()
     if hash not in key_cache:
         s3_key = "images/{0}.{1}.{2}".format(hash, len(image), ext)
-        url = os.path.join(Environment.instance().config.CLOUDFRONT_BASE_URL, s3_key)
-        key_cache[hash] = url
+        key_cache[hash] = s3_key
     return key_cache[hash]
 
 
@@ -105,7 +104,7 @@ def upload_creatives_to_s3(tile, creative_map, bucket, headers, key_cache):
             key.set_contents_from_string(image, headers=headers)
             key.set_acl("public-read")
 
-        return s3_key
+        return os.path.join('https://%s.s3.amazonaws.com' % env.config.S3['bucket'], s3_key)
 
     return _upload(tile["image_uri"]), _upload(tile["enhanced_image_uri"])
 
@@ -149,7 +148,7 @@ def load_assets(assets):
 
 
 def load_bucketer():
-    buckets = Environment.instance()._load_category_bucketer()
+    buckets = env._load_category_bucketer()
     bucketer = dict()
     for bucket in buckets:
         category = bucket["name"]
@@ -239,7 +238,7 @@ def ingest_assets(uploaded_zip_file, assets, bucketer, campaign_id=0, channel_id
         key: ('category', 'locale', 'type', 'freq cap daily', 'freq cap total')
         value: ['adgroup', 'tile0', 'tile1', ..., 'tileN']
     '''
-    locale_set = set(Environment.instance()._load_locales())
+    locale_set = set(env._load_locales())
     image_set = zip_list(uploaded_zip_file)
     fd = open(assets, "rb") if isinstance(assets, str) else assets
 
