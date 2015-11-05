@@ -1,14 +1,15 @@
 import jsonschema
 
-from flask import Blueprint
+from flask import Blueprint, request
+from flask.json import jsonify
 from flask_restful import Api, Resource, marshal, fields, reqparse, inputs
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from splice.schemas import API_TILE_SCHEMA_POST, API_TILE_SCHEMA_PUT
 from splice.models import Tile
 from splice.queries.common import session_scope
-from splice.queries.tile import (
-    get_tiles_by_adgroup_id, insert_tile, get_tile, update_tile)
+from splice.queries.tile import get_tiles_by_adgroup_id, insert_tile, get_tile, update_tile
+from splice.web.api.tile_upload import VALID_CREATIVE_EXTS, single_creative_upload
 
 
 tile_bp = Blueprint('api.tile', __name__, url_prefix='/api')
@@ -124,6 +125,25 @@ class TileAPI(Resource):
 
 api.add_resource(TileListAPI, '/tiles', endpoint='tiles')
 api.add_resource(TileAPI, '/tiles/<int:tile_id>', endpoint='tile')
+
+
+@tile_bp.route('/tiles/creative/upload', methods=['POST'])
+def handler_creative_upload():
+    """Upload a single creative to S3, return the URL if succeeds."""
+    def _is_allowed_file(name, allowed_sets):
+        return '.' in name and name.rsplit('.', 1)[1].lower() in allowed_sets
+
+    creative = request.files["creative"]
+    if not _is_allowed_file(creative.filename, VALID_CREATIVE_EXTS):
+        return jsonify(message="Invalid creative uploaded."), 400
+
+    try:
+        url = single_creative_upload(creative.stream,
+                                     creative.filename.rsplit('.', 1)[1])
+    except Exception as e:
+        return jsonify(message="%s" % e), 400
+    else:
+        return jsonify(result=url)
 
 
 def register_routes(app):

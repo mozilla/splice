@@ -50,6 +50,25 @@ def bulk_upload(uploaded_zip_file, assets, campaign_id, channel_id):
         raise e
 
 
+def single_creative_upload(creative, ext):
+    """Load a single creative to S3, return the url if succeeds
+
+    Params:
+        creative: file object of the target creative
+        ext: file extension
+    """
+    ext = ext.lower()
+    ext = "jpeg" if ext == "jpg" else ext  # Pillow.Image only takes 'jpeg'
+    try:
+        image = resize_image(creative, ext)
+        bucket, headers = setup_s3()
+        url = upload_creative_to_s3(image, ext, bucket, headers, {})
+    except Exception as e:
+        raise Exception("Failed to upload image: %s" % e)
+
+    return url
+
+
 def insert_ingested_assets(ingested_assets, campaign_id, channel_id, creative_map):
     """Insert assets(adgroups and tiles) to database, upload creatives to S3 if neccessary
 
@@ -66,8 +85,13 @@ def insert_ingested_assets(ingested_assets, campaign_id, channel_id, creative_ma
             adgroup, tiles = value[0], value[1:]
             inserted_adgroup = insert_adgroup(session, adgroup)
             for tile in tiles:
-                tile["image_uri"], tile["enhanced_image_uri"] = \
-                    upload_creatives_to_s3(tile, creative_map, bucket, headers, s3_key_cache)
+                image, ext = creative_map[tile["image_uri"]]
+                tile["image_uri"] = \
+                    upload_creative_to_s3(image, ext, bucket, headers, s3_key_cache)
+                image, ext = creative_map[tile["enhanced_image_uri"]]
+                tile["enhanced_image_uri"] = \
+                    upload_creative_to_s3(image, ext, bucket, headers, s3_key_cache)
+
                 tile["adgroup_id"] = inserted_adgroup["id"]
                 insert_tile(session, tile)
 
@@ -84,29 +108,39 @@ def setup_s3():
     return bucket, headers
 
 
-def generate_s3_key(image, ext, key_cache):
+def generate_s3_key(image, ext):
     hash = hashlib.sha1(image).hexdigest()
-    if hash not in key_cache:
-        s3_key = "images/{0}.{1}.{2}".format(hash, len(image), ext)
-        key_cache[hash] = s3_key
-    return key_cache[hash]
+    return "images/{0}.{1}.{2}".format(hash, len(image), ext)
 
 
-def upload_creatives_to_s3(tile, creative_map, bucket, headers, key_cache):
-    def _upload(image_key):
-        (image, ext) = creative_map[image_key]
-        s3_key = generate_s3_key(image, ext, key_cache)
+def upload_creative_to_s3(image, ext, bucket, headers, key_cache):
+    s3_key = generate_s3_key(image, ext)
+    if s3_key in key_cache:
+        return key_cache[s3_key]
+
+    key = bucket.get_key(s3_key)
+    if key is None:  # pragma: no cover
+        key = Key(bucket)
+        key.name = s3_key
         headers['Content-Type'] = MIME_EXTENSIONS[ext]
-        key = bucket.get_key(s3_key)
-        if key is None:
-            key = Key(bucket)
-            key.name = s3_key
-            key.set_contents_from_string(image, headers=headers)
-            key.set_acl("public-read")
+        key.set_contents_from_string(image, headers=headers)
+        key.set_acl("public-read")
 
-        return os.path.join('https://%s.s3.amazonaws.com' % env.config.S3['bucket'], s3_key)
+    url = os.path.join('https://%s.s3.amazonaws.com' % env.config.S3['bucket'], s3_key)
+    key_cache[s3_key] = url
+    return url
 
-    return _upload(tile["image_uri"]), _upload(tile["enhanced_image_uri"])
+
+def resize_image(image, ext):
+    img = Image.open(image)
+    if img.size != (290, 180):
+        img.thumbnail((290, 180))
+    buffer = StringIO.StringIO()
+    img.save(buffer, ext)
+    buf = buffer.getvalue()
+    buffer.close()
+
+    return buf
 
 
 def load_creatives_to_memory(uploaded_zip_file):
@@ -122,13 +156,7 @@ def load_creatives_to_memory(uploaded_zip_file):
                 # skip all the invalid file extensions. As user might upload unrelated files by accident
                 if ext in VALID_CREATIVE_EXTS and not basename.startswith('.'):
                     buf = zf.read(info)
-                    img = Image.open(StringIO.StringIO(buf))
-                    if img.size != (290, 180):
-                        img.thumbnail((290, 180))
-                        buffer = StringIO.StringIO()
-                        img.save(buffer, ext)
-                        buf = buffer.getvalue()
-                        buffer.close()
+                    buf = resize_image(StringIO.StringIO(buf), ext)
                     creative_map[name.lower()] = (buf, ext)
     except zipfile.BadZipfile as e:
         msg = "Error when opening zip file: %s, %s" % (uploaded_zip_file, e)

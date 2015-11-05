@@ -1,7 +1,9 @@
 import mock
+import os
 import StringIO
+import zipfile
 
-from flask import url_for
+from flask import url_for, json
 from tests.base import BaseTestCase
 from nose.tools import assert_equal
 from splice.web.api import tile_upload
@@ -13,6 +15,7 @@ class TestTileUpload(BaseTestCase):
         self.bucketer = tile_upload.load_bucketer()
         self.zip_file = self.get_fixture_path("creative-samples.zip")
         self.assets_file = self.get_fixture_path("asset-samples.tsv")
+        self.creative_file = self.get_fixture_path("creative-sample.png")
         self.asset = {
             "Locales Served": "en-US",
             "Category  (As per Bucketer)": "Technology_News",
@@ -132,3 +135,36 @@ class TestTileUpload(BaseTestCase):
         }
         response = self.client.post(url, data=data)
         assert_equal(response.status_code, 404)
+
+    def test_single_creative_upload_endpoint(self):
+        """Test the API endpoint for the single creative upload"""
+        from splice.environment import Environment
+
+        env = Environment.instance()
+        url = url_for('api.tile.handler_creative_upload')
+        with zipfile.ZipFile(self.zip_file, "r") as zf:
+            f = zf.getinfo("samples/firefox_mdn_a.png")
+            data = {'creative': (StringIO.StringIO(zf.read(f)), 'creative.png')}
+            response = self.client.post(url, data=data)
+            assert_equal(response.status_code, 200)
+            creative_url = json.loads(response.data)['result']
+            bucket = env.s3.get_bucket(env.config.S3["bucket"])
+            s3_key = os.path.basename(creative_url)
+            key = bucket.get_key(s3_key)
+            self.assertIsNotNone(key)
+
+    @mock.patch('splice.web.api.tile_upload.resize_image')
+    def test_single_creative_upload_endpoint_failure(self, resize_imageMock):
+        """Test the API endpoint for the single creative upload - failure case"""
+        resize_imageMock.side_effect = ValueError("failed to resize the image")
+        url = url_for('api.tile.handler_creative_upload')
+        data = {'creative': (StringIO.StringIO(''), 'creative.png')}
+        response = self.client.post(url, data=data)
+        assert_equal(response.status_code, 400)
+
+    def test_single_creative_upload_endpoint_invalid_ext(self):
+        """Test the API endpoint for the single creative upload - invalid ext"""
+        url = url_for('api.tile.handler_creative_upload')
+        data = {'creative': (StringIO.StringIO(''), 'creative.txt')}
+        response = self.client.post(url, data=data)
+        assert_equal(response.status_code, 400)
