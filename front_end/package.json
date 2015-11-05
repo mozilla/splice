@@ -39,7 +39,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-serve": "^1.0.0",
     "gulp-size": "^2.0.0",
-    "history": "^1.9.1",
+    "history": "^1.12.0",
     "http-proxy": "^1.11.1",
     "immutable": "^3.7.4",
     "imports-loader": "^0.6.4",
