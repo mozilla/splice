@@ -162,5 +162,6 @@ export default class AccountForm extends Component {
 }
 
 AccountForm.propTypes = {
+  App: PropTypes.object.isRequired,
   editMode: PropTypes.bool.isRequired
 };

@@ -30,6 +30,7 @@ AccountCreatePage.propTypes = {};
 // Which props do we want to inject, given the global state?
 function select(state) {
   return {
+    App: state.App,
     Account: state.Account
   };
 }
