@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import { displayMessage, shownMessage } from 'actions/App/AppActions';
-import { createAdGroup, updateAdGroup, fetchAdGroups } from 'actions/AdGroups/AdGroupActions';
+import { createAdGroup, updateAdGroup, fetchAdGroups, adGroupSetVar } from 'actions/AdGroups/AdGroupActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
 
 window.$ = require('jquery');
@@ -36,10 +36,8 @@ export default class AdGroupForm extends Component {
       spinner = <img src="/public/img/ajax-loader-aqua.gif" />;
     }
 
-    let data = this.props.AdGroup.details;
-    if(this.props.editMode === false){
-      data = {};
-    }
+    const data = this.props.AdGroup.details;
+
     if(data.campaign_id === undefined){
       data.campaign_id = this.props.params.campaignId;
     }
@@ -87,49 +85,53 @@ export default class AdGroupForm extends Component {
               </div>
             </div>
             <div className="row">
-              <div className="col-xs-2">
-                <div className="form-group">
-                  <label htmlFor="AdGroupFrequencyCapDaily">Frequency Cap Daily</label>
-                  <input className="form-control" type="text" id="AdGroupFrequencyCapDaily" name="frequency_cap_daily" ref="frequency_cap_daily" defaultValue={data.frequency_cap_daily} />
-                </div>
-              </div>
-              <div className="col-xs-2">
-                <div className="form-group">
-                  <label htmlFor="AdGroupFrequencyCapTotal">Frequency Cap Total</label>
-                  <input className="form-control" type="text" id="AdGroupFrequencyCapTotal" name="frequency_cap_total" ref="frequency_cap_total" defaultValue={data.frequency_cap_total} />
-                </div>
-              </div>
-            </div>
-            <div className="row">
               <div className="col-xs-4">
                 <div className="form-group">
                   <label htmlFor="AdGroupType">Product Type</label>
                   <div className="switch-group">
                     <div className="switch-option switch-option-one">
-                      Directory
+                      Suggested
                     </div>
+
                     <div className="onoffswitch transparent">
-                      <input type="checkbox" name="type" ref="type" className="onoffswitch-checkbox" id="AdGroupType" defaultChecked={(data.type === 'suggested') ? true : false} value="true"/>
+                      <input type="checkbox" name="type" ref="type" onChange={(e) => this.handleSwitch(e)} className="onoffswitch-checkbox" id="AdGroupType" defaultChecked={(data.type === 'suggested') ? false : true} value="true"/>
                       <label className="onoffswitch-label" htmlFor="AdGroupType"></label>
                     </div>
                     <div className="switch-option switch-option-two">
-                      Suggested
+                      Directory
                     </div>
                     <div className="clearfix" ></div>
-                    <div className="switch-copy" >
+                    {/*<div className="switch-copy" >
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec cursus nulla et hendrerit mollis. Vivamus ullamcorper, lectus eget vestibulum placerat, leo erat ultrices tortor, eget tincidunt elit nulla sit amet metus.
-                    </div>
+                    </div>*/}
                   </div>
                 </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col-xs-8">
-                <div className="form-group">
-                  <label htmlFor="AdGroupCategories">Categories</label><br/>
-                  <select className="form-control js-select" style={{width: '100%'}} id="AdGroupCategories" name="categories[]" multiple="multiple" ref="categories" defaultValue={data.categories} data-parsley-required>
-                    {categories}
-                  </select>
+
+            <div className={(this.props.AdGroup.details.type === 'directory')  ? 'hide' : '' }>
+              <div className="row">
+                <div className="col-xs-2">
+                  <div className="form-group">
+                    <label htmlFor="AdGroupFrequencyCapDaily">Frequency Cap Daily</label>
+                    <input disabled={(this.props.AdGroup.details.type === 'directory')} className="form-control" type="text" id="AdGroupFrequencyCapDaily" name="frequency_cap_daily" ref="frequency_cap_daily" defaultValue={data.frequency_cap_daily} data-parsley-type="number" data-parsley-required/>
+                  </div>
+                </div>
+                <div className="col-xs-2">
+                  <div className="form-group">
+                    <label htmlFor="AdGroupFrequencyCapTotal">Frequency Cap Total</label>
+                    <input disabled={(this.props.AdGroup.details.type === 'directory')} className="form-control" type="text" id="AdGroupFrequencyCapTotal" name="frequency_cap_total" ref="frequency_cap_total" defaultValue={data.frequency_cap_total} data-parsley-type="number" data-parsley-required/>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-xs-8">
+                  <div className="form-group">
+                    <label htmlFor="AdGroupCategories">Categories</label><br/>
+                    <select disabled={(this.props.AdGroup.details.type === 'directory')} className="form-control js-select" style={{width: '100%'}} id="AdGroupCategories" name="categories[]" multiple="multiple" ref="categories" defaultValue={data.categories} data-parsley-required>
+                      {categories}
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
@@ -158,6 +160,15 @@ export default class AdGroupForm extends Component {
     );
   }
 
+  handleSwitch(e){
+    let value = 'suggested';
+
+    if($('#' + e.target.id).prop('checked') === true){
+      value = 'directory';
+    }
+    this.props.dispatch(adGroupSetVar('type', value));
+  }
+
   handleFormSubmit(e) {
     e.preventDefault();
 
@@ -169,10 +180,10 @@ export default class AdGroupForm extends Component {
     if(form.validate()){
       const formData = $('#AdGroupForm').serializeJSON();
       if(formData.type === undefined){
-        formData.type = 'directory';
+        formData.type = 'suggested';
       }
       else{
-        formData.type = 'suggested';
+        formData.type = 'directory';
       }
 
       const data = JSON.stringify(formData);
@@ -233,5 +244,6 @@ export default class AdGroupForm extends Component {
 }
 
 AdGroupForm.propTypes = {
+  AdGroup: PropTypes.object.isRequired,
   editMode: PropTypes.bool.isRequired
 };

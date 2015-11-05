@@ -84,12 +84,12 @@ export default class TileForm extends Component {
                   <input className="form-control" type="text" id="TileTargetUrl" name="target_url" ref="target_url" defaultValue={data.target_url} data-parsley-required data-parsley-type="url"/>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="TileImageUri">Image URI</label>
-                  <input className="form-control" type="text" id="TileImageUri" name="image_uri" ref="image_uri" defaultValue={data.image_uri} data-parsley-required data-parsley-type="url"/>
-                </div>
-                <div className="form-group">
                   <label htmlFor="TileEnhancedImageUri">Enhanced Image URI</label>
                   <input className="form-control" type="text" id="TileEnhancedImageUri" name="enhanced_image_uri" ref="enhanced_image_uri" defaultValue={data.enhanced_image_uri} data-parsley-required data-parsley-type="url"/>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="TileImageUri">Image URI</label>
+                  <input className="form-control" type="text" id="TileImageUri" name="image_uri" ref="image_uri" defaultValue={data.image_uri} data-parsley-required data-parsley-type="url"/>
                 </div>
                 <div className="form-group">
                   <label htmlFor="TileBgColor">Background Color</label>

@@ -13,7 +13,8 @@ export function bindFormConfig() {
     errorsWrapper: '<span class="help-block"></span>',
     errorTemplate: '<span class="text-danger"></span>',
     //successClass: 'has-success',
-    errorClass: 'has-error'
+    errorClass: 'has-error',
+    excluded: 'input[type=button], input[type=submit], input[type=reset], input[type=hidden], [disabled], :hidden'
   };
 }
 

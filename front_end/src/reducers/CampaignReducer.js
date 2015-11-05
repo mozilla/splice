@@ -32,7 +32,7 @@ export function Campaign(state = initialState, action = null) {
       });
     case RECEIVE_CREATE_CAMPAIGN:
       let rows = state.rows;
-      if(action.json.result !== null){
+      if(action.json.result !== undefined){
         rows = [action.json.result, ...state.rows];
       }
       return _.assign({}, state, {
@@ -45,7 +45,7 @@ export function Campaign(state = initialState, action = null) {
       });
     case RECEIVE_UPDATE_CAMPAIGN:
       let details = state.details;
-      if(action.json.result !== null){
+      if(action.json.result !== undefined){
         details = action.json.result;
       }
       return _.assign({}, state, {
