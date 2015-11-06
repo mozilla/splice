@@ -79,30 +79,35 @@ export default class TileForm extends Component {
                   <label htmlFor="TileTitle">Headline</label>
                   <input className="form-control" type="text" id="TileTitle" name="title" ref="title" defaultValue={data.title} data-parsley-required data-parsley-minlength="2"/>
                 </div>
-                <div className="form-group">
-                  <label htmlFor="TileTargetUrl">Clickthrough URL</label>
-                  <input className="form-control" type="text" id="TileTargetUrl" name="target_url" ref="target_url" defaultValue={data.target_url} data-parsley-required data-parsley-type="url"/>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="TileEnhancedImageUri">Enhanced Image URI</label>
-                  <input className="form-control" type="text" id="TileEnhancedImageUri" name="enhanced_image_uri" ref="enhanced_image_uri" defaultValue={data.enhanced_image_uri} data-parsley-required data-parsley-type="url"/>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="TileImageUri">Image URI</label>
-                  <input className="form-control" type="text" id="TileImageUri" name="image_uri" ref="image_uri" defaultValue={data.image_uri} data-parsley-required data-parsley-type="url"/>
-                </div>
+                {(this.props.editMode === false) ?
+                  (<div>
+                    <div className="form-group">
+                      <label htmlFor="TileTargetUrl">Clickthrough URL</label>
+                      <input className="form-control" type="text" id="TileTargetUrl" name="target_url" ref="target_url" defaultValue={data.target_url} data-parsley-required data-parsley-type="url"/>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="TileEnhancedImageUri">Enhanced Image URI</label>
+                      <input className="form-control" type="text" id="TileEnhancedImageUri" name="enhanced_image_uri" ref="enhanced_image_uri" defaultValue={data.enhanced_image_uri} data-parsley-required data-parsley-type="url"/>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="TileImageUri">Image URI</label>
+                      <input className="form-control" type="text" id="TileImageUri" name="image_uri" ref="image_uri" defaultValue={data.image_uri} data-parsley-required data-parsley-type="url"/>
+                    </div>
+                  </div>)
+                  : null
+                }
                 <div className="form-group">
                   <label htmlFor="TileBgColor">Background Color</label>
                   <div className="input-group colorpicker-input-group">
                     <span className="input-group-addon"><i></i></span>
-                    <input className="form-control" type="text" id="TileBgColor" name="bg_color" ref="bg_color" defaultValue={data.bg_color} data-parsley-required/>
+                    <input className="form-control" type="text" id="TileBgColor" name="bg_color" ref="bg_color" defaultValue={data.bg_color} />
                   </div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="TileTitleBgColor">Title Background Color</label>
                   <div className="input-group colorpicker-input-group">
                     <span className="input-group-addon"><i></i></span>
-                    <input className="form-control" type="text" id="TileTitleBgColor" name="title_bg_color" ref="title_bg_color" defaultValue={data.title_bg_color} data-parsley-required/>
+                    <input className="form-control" type="text" id="TileTitleBgColor" name="title_bg_color" ref="title_bg_color" defaultValue={data.title_bg_color} />
                   </div>
                 </div>
                 <div className="form-group">
