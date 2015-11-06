@@ -60,10 +60,6 @@ export default class AdGroupForm extends Component {
           <div className="container-fluid field-container">
             <div className="row">
               <div className="col-xs-4">
-                <div className="form-group">
-                  <label htmlFor="AdGroupName">Ad Group Name</label>
-                  <input className="form-control" type="text" id="AdGroupName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
-                </div>
                 {(this.props.editMode)
                   ? (<div className="form-group">
                   <label htmlFor="AdGroupPaused">Paused</label>
@@ -77,15 +73,16 @@ export default class AdGroupForm extends Component {
               </div>
             </div>
             <div className="row">
-              <div className="col-xs-8">
+              <div className="col-xs-4">
                 <div className="form-group">
-                  <label htmlFor="AdGroupExplanation">Explanation</label>
-                  <textarea className="form-control" type="text" id="AdGroupExplanation" name="explanation" ref="explanation" defaultValue={data.explanation} />
+                  <label htmlFor="AdGroupName">Ad Group Name</label>
+                  <input className="form-control" type="text" id="AdGroupName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
+                </div>
+                <div className="form-group">
+                  <textarea className="form-control" placeholder="Description" type="text" id="AdGroupExplanation" name="explanation" ref="explanation" defaultValue={data.explanation} />
                 </div>
               </div>
-            </div>
-            <div className="row">
-              <div className="col-xs-4">
+              <div className="col-xs-4 col-xs-push-4">
                 <div className="form-group">
                   <label htmlFor="AdGroupType">Product Type</label>
                   <div className="switch-group">
@@ -102,37 +99,16 @@ export default class AdGroupForm extends Component {
                     </div>
                     <div className="clearfix" ></div>
                     {/*<div className="switch-copy" >
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec cursus nulla et hendrerit mollis. Vivamus ullamcorper, lectus eget vestibulum placerat, leo erat ultrices tortor, eget tincidunt elit nulla sit amet metus.
-                    </div>*/}
+                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec cursus nulla et hendrerit mollis. Vivamus ullamcorper, lectus eget vestibulum placerat, leo erat ultrices tortor, eget tincidunt elit nulla sit amet metus.
+                     </div>*/}
                   </div>
                 </div>
               </div>
             </div>
-
-            <div className={(this.props.AdGroup.details.type === 'directory')  ? 'hide' : '' }>
-              <div className="row">
-                <div className="col-xs-2">
-                  <div className="form-group">
-                    <label htmlFor="AdGroupFrequencyCapDaily">Frequency Cap Daily</label>
-                    <input disabled={(this.props.AdGroup.details.type === 'directory')} className="form-control" type="text" id="AdGroupFrequencyCapDaily" name="frequency_cap_daily" ref="frequency_cap_daily" defaultValue={data.frequency_cap_daily} data-parsley-type="number" data-parsley-required/>
-                  </div>
-                </div>
-                <div className="col-xs-2">
-                  <div className="form-group">
-                    <label htmlFor="AdGroupFrequencyCapTotal">Frequency Cap Total</label>
-                    <input disabled={(this.props.AdGroup.details.type === 'directory')} className="form-control" type="text" id="AdGroupFrequencyCapTotal" name="frequency_cap_total" ref="frequency_cap_total" defaultValue={data.frequency_cap_total} data-parsley-type="number" data-parsley-required/>
-                  </div>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-xs-8">
-                  <div className="form-group">
-                    <label htmlFor="AdGroupCategories">Categories</label><br/>
-                    <select disabled={(this.props.AdGroup.details.type === 'directory')} className="form-control js-select" style={{width: '100%'}} id="AdGroupCategories" name="categories[]" multiple="multiple" ref="categories" defaultValue={data.categories} data-parsley-required>
-                      {categories}
-                    </select>
-                  </div>
-                </div>
+            <hr/>
+            <div className="row">
+              <div className="col-xs-12">
+                <h3 className="form-section-header">Audience</h3>
               </div>
             </div>
             <div className="row">
@@ -149,6 +125,36 @@ export default class AdGroupForm extends Component {
                     <option></option>
                     {locales}
                   </select>
+                </div>
+                <div className={(this.props.AdGroup.details.type === 'directory')  ? 'hide' : '' }>
+                  <div className="form-group">
+                    <label htmlFor="AdGroupCategories">Categories</label><br/>
+                    <select disabled={(this.props.AdGroup.details.type === 'directory')} className="form-control js-select" style={{width: '100%'}} id="AdGroupCategories" name="categories[]" multiple="multiple" ref="categories" defaultValue={data.categories} data-parsley-required data-parsley-mincheck="1">
+                      {categories}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={(this.props.AdGroup.details.type === 'directory')  ? 'hide' : '' }>
+              <hr/>
+              <div className="row">
+                <div className="col-xs-12">
+                  <h3 className="form-section-header">Budget</h3>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-xs-3">
+                  <div className="form-group">
+                    <label htmlFor="AdGroupFrequencyCapDaily">Frequency Cap Daily</label>
+                    <input disabled={(this.props.AdGroup.details.type === 'directory')} className="form-control" type="text" id="AdGroupFrequencyCapDaily" name="frequency_cap_daily" ref="frequency_cap_daily" defaultValue={data.frequency_cap_daily} data-parsley-type="number" data-parsley-required/>
+                  </div>
+                </div>
+                <div className="col-xs-3">
+                  <div className="form-group">
+                    <label htmlFor="AdGroupFrequencyCapTotal">Frequency Cap Total</label>
+                    <input disabled={(this.props.AdGroup.details.type === 'directory')} className="form-control" type="text" id="AdGroupFrequencyCapTotal" name="frequency_cap_total" ref="frequency_cap_total" defaultValue={data.frequency_cap_total} data-parsley-type="number" data-parsley-required/>
+                  </div>
                 </div>
               </div>
             </div>
@@ -176,6 +182,7 @@ export default class AdGroupForm extends Component {
     $('input.select2-search__field').attr('data-parsley-excluded', true);
 
     const form = $('#AdGroupForm').parsley();
+    console.log(form);
 
     if(form.validate()){
       const formData = $('#AdGroupForm').serializeJSON();
