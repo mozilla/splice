@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 import AccountList from 'components/Accounts/AccountList/AccountList';
+import CustomDropdown from 'components/App/CustomDropdown/CustomDropdown';
 
 export default class AppList extends Component {
   render() {
@@ -14,21 +15,22 @@ export default class AppList extends Component {
         break;
     }
 
+    const options = [
+      {key: 'accounts', val: 'Accounts'},
+      {key: 'campaigns', val: 'Campaigns'},
+      {key: 'adGroups', val: 'AdGroups'},
+      {key: 'tiles', val: 'Tiles'}
+    ];
+
     return (
       <div>
-        <select className="styled" ref="typeSelector" onChange={(e) => this.selectType(e)}>
-          <option value="accounts">Accounts</option>
-          <option value="campaigns">Campaigns</option>
-          <option value="ad_groups">Ad Groups</option>
-          <option value="tiles">Tiles</option>
-        </select>
+        <CustomDropdown selectedKey="accounts" selectedValue="Accounts" options={options} onChange={(value) => this.selectType(value)}  />
         {listMarkup}
       </div>
     );
   }
 
-  selectType(e) {
-    const value = e.target.value;
+  selectType(value) {
     this.props.handleListTypeSelect(value);
   }
 }

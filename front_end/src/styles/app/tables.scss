@@ -40,6 +40,8 @@
     .list-filter-item{
       margin-bottom: 5px;
       cursor: pointer;
+      float: left;
+      clear: both;
 
       i.fa{
         width: 14px;

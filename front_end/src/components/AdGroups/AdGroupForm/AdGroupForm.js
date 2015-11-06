@@ -16,8 +16,6 @@ require('parsleyjs');
 
 export default class AdGroupForm extends Component {
   componentWillMount(){
-    console.log(this.props.AdGroup.details.type);
-
     if(this.props.AdGroup.details.type === undefined){
       this.props.dispatch(adGroupSetVar('type', 'suggested'));
     }
@@ -189,7 +187,6 @@ export default class AdGroupForm extends Component {
     $('input.select2-search__field').attr('data-parsley-excluded', true);
 
     const form = $('#AdGroupForm').parsley();
-    console.log(form);
 
     if(form.validate()){
       const formData = $('#AdGroupForm').serializeJSON();
