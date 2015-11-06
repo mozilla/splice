@@ -105,7 +105,7 @@ class SpliceConfig(DefaultConfig):
     }
 
     # do not use a CDN, instead, use S3 url for the above defined bucket
-    CLOUDFRONT_BASE_URL = 'https://moz-tiles-mybucket.s3.amazonaws.com'
+    CLOUDFRONT_BASE_URL = 'https://%s.s3.amazonaws.com' % S3['bucket']
 ```
 
 A few things to note:
