@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import reactMixin from 'react-mixin';
+import { Link, Lifecycle } from 'react-router';
 
 import { updateDocTitle } from 'actions/App/AppActions';
 
 import AccountForm from 'components/Accounts/AccountForm/AccountForm';
 
-export default class AccountCreatePage extends Component {
+@reactMixin.decorate(Lifecycle)
+class AccountCreatePage extends Component {
+  constructor(props) {
+    super(props);
+    this.routerWillLeave = this.routerWillLeave.bind(this);
+  }
+
   componentDidMount(){
     updateDocTitle('Create Account');
   }
@@ -22,6 +29,12 @@ export default class AccountCreatePage extends Component {
         </div>
       </div>
     );
+  }
+
+  routerWillLeave(nextLocation) {
+    if(this.props.App.formChanged){
+      return 'Your progress is not saved. Are you sure you want to leave?';
+    }
   }
 }
 

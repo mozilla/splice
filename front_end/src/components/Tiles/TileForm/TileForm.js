@@ -65,10 +65,6 @@ export default class TileForm extends Component {
           <div className="container-fluid field-container">
             <div className="row">
               <div className="col-xs-4">
-                <div className="form-group">
-                  <label htmlFor="TileTitle">Title</label>
-                  <input className="form-control" type="text" id="TileTitle" name="title" ref="title" defaultValue={data.title} data-parsley-required data-parsley-minlength="2"/>
-                </div>
                 {(this.props.editMode)
                   ? (<div className="form-group">
                   <label htmlFor="TilePaused">Paused</label>
@@ -80,7 +76,11 @@ export default class TileForm extends Component {
                   : <input type="hidden" name="paused" ref="paused" value={false}/>
                 }
                 <div className="form-group">
-                  <label htmlFor="TileTargetUrl">Target URL</label>
+                  <label htmlFor="TileTitle">Headline</label>
+                  <input className="form-control" type="text" id="TileTitle" name="title" ref="title" defaultValue={data.title} data-parsley-required data-parsley-minlength="2"/>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="TileTargetUrl">Clickthrough URL</label>
                   <input className="form-control" type="text" id="TileTargetUrl" name="target_url" ref="target_url" defaultValue={data.target_url} data-parsley-required data-parsley-type="url"/>
                 </div>
                 <div className="form-group">
@@ -152,6 +152,7 @@ export default class TileForm extends Component {
       const { dispatch } = this.props;
       dispatch(displayMessage('error', 'Validation Errors') );
       dispatch(shownMessage());
+      window.scrollTo(0, 0);
     }
   }
 
@@ -182,6 +183,7 @@ export default class TileForm extends Component {
     if(response.result === undefined){
       dispatch(displayMessage('error', response.message) );
       dispatch(shownMessage());
+      window.scrollTo(0, 0);
     }
     else{
       if(this.props.editMode){

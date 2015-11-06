@@ -54,7 +54,7 @@ export default class AccountForm extends Component {
           {(this.props.editMode) ? (<input type="hidden" id="AccountId" name="id" ref="id" value={data.id}/>) : null}
           <div className="container-fluid field-container">
             <div className="row">
-              <div className="col-xs-4">
+              <div className="col-xs-4 col-xs-push-4">
                 <div className="form-group">
                   <label htmlFor="AccountName">Account Name</label>
                   <input className="form-control" type="text" id="AccountName" name="name" ref="name" defaultValue={data.name} onChange={this.handleChange} data-parsley-required data-parsley-minlength="2"/>
@@ -81,6 +81,31 @@ export default class AccountForm extends Component {
                 </div>
               </div>
             </div>
+            <div className="disabled">
+              <div className="row">
+                <div className="col-xs-4 col-xs-push-4">
+                  <div className="form-group">
+                    <label htmlFor="AccountCountry">Country</label>
+                    <input className="form-control" disabled="true" type="text" id="AccountCountry" name="country" ref="country"/>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-xs-4 col-xs-push-2">
+                  <div className="form-group">
+                    <label htmlFor="AccountCurrency">Currency</label>
+                    <input className="form-control" disabled="true" type="text" id="AccountCurrency" name="currency" ref="currency"/>
+                  </div>
+                </div>
+                <div className="col-xs-4 col-xs-push-2">
+                  <div className="form-group">
+                    <label htmlFor="AccountTimezone">Timezone</label>
+                    <input className="form-control" disabled="true" type="text" id="AccountTimezone" name="timezone" ref="timezone"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
           <button onClick={this.handleFormSubmit} className="form-submit">Save {spinner}</button>
@@ -115,6 +140,7 @@ export default class AccountForm extends Component {
       const { dispatch } = this.props;
       dispatch(displayMessage('error', 'Validation Errors') );
       dispatch(shownMessage());
+      window.scrollTo(0, 0);
     }
   }
 
@@ -145,6 +171,7 @@ export default class AccountForm extends Component {
     if(response.result === undefined){
       dispatch(displayMessage('error', response.message) );
       dispatch(shownMessage());
+      window.scrollTo(0, 0);
     }
     else{
       if(this.props.editMode){

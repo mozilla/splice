@@ -27,7 +27,7 @@ export default class AdGroupCreatePage extends Component {
           <div className="form-module">
             <div className="form-module-header">{this.props.Campaign.details.name}: Create Ad Group</div>
             <div className="form-module-body">
-              <AdGroupForm editMode={false} {...this.props} AdGroup={ {details: {type: 'suggested'} } }/>
+              <AdGroupForm editMode={false} {...this.props}/>
             </div>
           </div>
         </div>

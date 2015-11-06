@@ -15,6 +15,13 @@ bindFormConfig();
 require('parsleyjs');
 
 export default class AdGroupForm extends Component {
+  componentWillMount(){
+    console.log(this.props.AdGroup.details.type);
+
+    if(this.props.AdGroup.details.type === undefined){
+      this.props.dispatch(adGroupSetVar('type', 'suggested'));
+    }
+  }
   componentDidMount(){
     bindFormValidators();
 
@@ -207,6 +214,7 @@ export default class AdGroupForm extends Component {
       const { dispatch } = this.props;
       dispatch(displayMessage('error', 'Validation Errors') );
       dispatch(shownMessage());
+      window.scrollTo(0, 0);
     }
   }
 
@@ -237,6 +245,7 @@ export default class AdGroupForm extends Component {
     if(response.result === undefined){
       dispatch(displayMessage('error', response.message) );
       dispatch(shownMessage());
+      window.scrollTo(0, 0);
     }
     else{
       if(this.props.editMode){

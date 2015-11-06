@@ -1,11 +1,11 @@
 exports.devApi = "'http://tbg-staging-1.thebuddygroup.com:5000'";
 exports.liveApi = "'http://tbg-staging-1.thebuddygroup.com:5000'";
 exports.devUrl = "http://localhost:9999/";
-exports.liveUrl = "http://dev.splice.com/";
+exports.liveUrl = "http://10.1.1.158/";
 exports.development = true;
 exports.devTools = false;
 
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+//var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 exports.webpack_modules_loaders =
   [
