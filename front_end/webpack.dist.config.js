@@ -19,7 +19,6 @@ module.exports = {
     filename: 'main.js',
     publicPath: liveUrl
   },
-  devtool: 'source-map',
   progress: true,
   entry: [
     './src/main.js'
