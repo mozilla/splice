@@ -1,40 +1,55 @@
-from collections import defaultdict
-from collections import namedtuple
 import hashlib
 import os
 import urllib
-
-from datetime import datetime
 import json
 
+from datetime import datetime
+from collections import defaultdict
+from collections import namedtuple
+
+from sqlalchemy.sql.expression import false
 from splice.models import Tile, Adgroup, Campaign, CampaignCountry
+from splice.web.api.tile_upload import load_bucketer
+
 
 Dists = namedtuple("Dists", ['legacy', 'directory', 'suggested'])
 
 
-def _tile_dict(tile, legacy=False):
-        tile_dict = dict(
-            target_url=tile.target_url,
-            bg_color=tile.bg_color,
-            title_bg_color=tile.title_bg_color,
-            title=tile.title,
-            typ=tile.type,
-            image_uri=tile.image_uri,
-            enhanced_image_uri=tile.enhanced_image_uri,
-            locale=tile.adgroup.locale,
-            channel_id=tile.adgroup.channel_id)
-        if not legacy:
+def _tile_dict(tile, bucketer, legacy=False):
+    tile_dict = dict(
+        directoryId=tile.id,
+        url=tile.target_url,
+        bgColor=tile.bg_color,
+        title=tile.title,
+        type=tile.type,
+        imageURI=switch_to_cdn_url(tile.image_uri),
+        enhancedImageURI=switch_to_cdn_url(tile.enhanced_image_uri))
+    if not legacy:
+        # only suggested tiles have categories
+        if tile.adgroup.categories:
+            # TODO(najiang@mozilla.com) only grab the first category here.
+            # We should create multiple tiles for multiple categories, with
+            # each tile has a frecent site list based on the category.
+            bucket = bucketer[tile.adgroup.categories[0].category]
             frequency_caps = {"daily": tile.adgroup.frequency_cap_daily, "total": tile.adgroup.frequency_cap_total}
-            #todo populate frecent_sites, adgroup_name
             tile_dict.update(dict(
-                frecent_sites=None,
-                # time_limits=time_limits,
+                titleBgColor=tile.title_bg_color,
+                frecent_sites=bucket["sites"],
                 frequency_caps=frequency_caps,
-                adgroup_name=None,
-                adgroup_categories=tile.adgroup.categories,
+                adgroup_name=bucket["adgroup_name"],
+                adgroup_categories=[category.category for category in tile.adgroup.categories],
                 explanation=tile.adgroup.explanation,
                 check_inadjacency=tile.adgroup.check_inadjacency))
-        return tile_dict
+    return tile_dict
+
+
+def switch_to_cdn_url(image_uri):
+    """See https://github.com/oyiptong/splice/issues/203"""
+    from splice.environment import Environment
+
+    env = Environment.instance()
+    basename = os.path.basename(image_uri)
+    return os.path.join(env.config.CLOUDFRONT_BASE_URL, "images/%s" % basename)
 
 
 def get_possible_distributions(today=None):
@@ -47,9 +62,9 @@ def get_possible_distributions(today=None):
     query = (
         env.db.session
         .query(Tile)
-        .filter(Tile.paused == False)
-        .filter(Adgroup.paused == False)
-        .filter(Campaign.paused == False)
+        .filter(Tile.paused == false())
+        .filter(Adgroup.paused == false())
+        .filter(Campaign.paused == false())
         .filter(Campaign.end_date > today)
         .filter(Campaign.start_date <= today)
         .join(Adgroup)
@@ -58,7 +73,7 @@ def get_possible_distributions(today=None):
         .order_by(Tile.id))
 
     rows = query.all()
-
+    bucketer = load_bucketer()
     artifacts = defaultdict(list)
     tiles = {}
     for tile in rows:
@@ -67,12 +82,12 @@ def get_possible_distributions(today=None):
         channel = tile.adgroup.channel.name
         safe_channel_name = urllib.quote(channel)
 
-        tile_dict = _tile_dict(tile)
-        legacy_dict = _tile_dict(tile, True)
+        tile_dict = _tile_dict(tile, bucketer)
+        legacy_dict = _tile_dict(tile, bucketer, True)
         suggested = len(tile.adgroup.categories) > 0
 
         for country in countries:
-            key = (safe_channel_name, country, locale)
+            key = (safe_channel_name, country.country_code, locale)
             value = tiles.setdefault(key, Dists(legacy=[], directory=[], suggested=[]))
             if suggested:
                 value.suggested.append(tile_dict)
@@ -83,7 +98,7 @@ def get_possible_distributions(today=None):
     tile_index = {}
     for (channel, country, locale), (legacy, directory, suggested) in tiles.items():
         country_locale = "%s/%s" % (country, locale)
-        # do v2
+        # v2
         legacy_json = json.dumps({locale: legacy}, sort_keys=True)
         legacy_hsh = hashlib.sha1(legacy_json).hexdigest()
         legacy_key = "{0}/{1}.{2}.json".format(channel, country_locale, legacy_hsh)
@@ -104,10 +119,10 @@ def get_possible_distributions(today=None):
             'ag': os.path.join(env.config.CLOUDFRONT_BASE_URL, ag_key),
         }
 
+        # the index file
+        artifacts[channel].append({
+            "key": "{0}_{1}".format(safe_channel_name, env.config.S3["tile_index_key"]),
+            "data": json.dumps(tile_index, sort_keys=True)
+        })
+
     return artifacts
-
-
-
-
-
-
