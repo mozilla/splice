@@ -5,6 +5,7 @@ import { displayMessage, shownMessage } from 'actions/App/AppActions';
 import { createCampaign, updateCampaign} from 'actions/Campaigns/CampaignActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
 import { formatDate, apiDate } from 'helpers/DateHelpers';
+import CustomRadio from 'components/Forms/CustomRadio/CustomRadio';
 import Moment from 'moment';
 
 window.$ = require('jquery');
@@ -80,12 +81,10 @@ export default class CampaignForm extends Component {
                   <input className="form-control" type="text" id="CampaignName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
                 </div>
               </div>
-              <div className="col-xs-4 col-xs-push-4">
+              <div className="col-xs-4 col-xs-push-3">
                 <div className="form-group">
                   <label htmlFor="CampaignChannelId">How do you want to reach people?</label>
-                  <select className="form-control" id="CampaignChannelId" name="channel_id" ref="channel_id" defaultValue={data.channel_id} data-parsley-required >
-                    {channels}
-                  </select>
+                  <CustomRadio inputName="channel_id" selected={this.props.Campaign.details.channel_id} options={this.props.Init.channels} />
                 </div>
               </div>
             </div>

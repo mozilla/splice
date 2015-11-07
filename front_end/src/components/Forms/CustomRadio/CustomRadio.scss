@@ -1,0 +1,23 @@
+.custom-radio{
+
+  .custom-radio-option{
+    margin: 0 0 0 10px;
+    vertical-align: middle;
+    color: #fff;
+
+    label{
+      cursor: pointer;
+    }
+
+    .custom-radio-input{
+      display: none;
+    }
+
+    i.fa{
+      font-size: 25px;
+      position: relative;
+      top: 5px;
+      margin: 0 10px 0 0;
+    }
+  }
+}

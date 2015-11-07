@@ -87,7 +87,7 @@ export default class AdGroupForm extends Component {
                   <textarea className="form-control" placeholder="Description" type="text" id="AdGroupExplanation" name="explanation" ref="explanation" defaultValue={data.explanation} />
                 </div>
               </div>
-              <div className="col-xs-4 col-xs-push-4">
+              <div className="col-xs-4 col-xs-push-3">
                 <div className="form-group">
                   <label htmlFor="AdGroupType">Product Type</label>
                   <div className="switch-group">
