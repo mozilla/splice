@@ -82,7 +82,6 @@ export default class TopBar extends Component {
   }
 
   showTimeline(){
-    console.log(this.props.location.pathname);
     return this.props.location.pathname.match(/\/accounts\/create/) ||
       this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}\/edit/) ||
       this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}\/createcampaign/) ||
