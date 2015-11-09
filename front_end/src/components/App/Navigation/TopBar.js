@@ -75,22 +75,23 @@ export default class TopBar extends Component {
   }
 
   showTabsAndBreadCrumbs(){
-    return this.props.location.pathname.match(/\/accounts\/\d.*/) ||
-      this.props.location.pathname.match(/\/campaigns\/\d.*/) ||
-      this.props.location.pathname.match(/\/adgroups\/\d.*/) ||
-      this.props.location.pathname.match(/\/tiles\/\d.*/);
+    return this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}.*/) ||
+      this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}.*/) ||
+      this.props.location.pathname.match(/\/adgroups\/[0-9]{1,10}.*/) ||
+      this.props.location.pathname.match(/\/tiles\/[0-9]{1,10}.*/);
   }
 
   showTimeline(){
+    console.log(this.props.location.pathname);
     return this.props.location.pathname.match(/\/accounts\/create/) ||
-      this.props.location.pathname.match(/\/accounts\/\d\/edit/) ||
-      this.props.location.pathname.match(/\/accounts\/\d\/createcampaign/) ||
-      this.props.location.pathname.match(/\/campaigns\/\d\/edit/) ||
-      this.props.location.pathname.match(/\/campaigns\/\d\/createadgroup/) ||
-      this.props.location.pathname.match(/\/campaigns\/\d\/bulkupload/) ||
-      this.props.location.pathname.match(/\/adgroups\/\d\/edit/) ||
-      this.props.location.pathname.match(/\/adgroups\/\d\/createtile/) ||
-      this.props.location.pathname.match(/\/tiles\/\d\/edit/);
+      this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}\/edit/) ||
+      this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}\/createcampaign/) ||
+      this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/edit/) ||
+      this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/createadgroup/) ||
+      this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/bulkupload/) ||
+      this.props.location.pathname.match(/\/adgroups\/[0-9]{1,10}\/edit/) ||
+      this.props.location.pathname.match(/\/adgroups\/[0-9]{1,10}\/createtile/) ||
+      this.props.location.pathname.match(/\/tiles\/[0-9]{1,10}\/edit/);
   }
 
   handleNavigationToggle(){

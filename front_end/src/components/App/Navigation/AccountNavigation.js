@@ -6,7 +6,7 @@ import './AccountNavigation.scss';
 export default class AccountNavigation extends Component {
   render() {
     let accountActive = '';
-    if(this.props.location.pathname.match(/\/accounts\/\d/)){
+    if(this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}/)){
       accountActive = 'active';
     }
 

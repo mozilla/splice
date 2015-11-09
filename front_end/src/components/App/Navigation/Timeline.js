@@ -13,20 +13,20 @@ export default class Timeline extends Component {
     if(this.props.location.pathname.match(/\/accounts\/create/)){
       output = '/';
     }
-    else if(this.props.location.pathname.match(/\/accounts\/\d\/edit/) ||
-      this.props.location.pathname.match(/\/accounts\/\d\/createcampaign/) ) {
+    else if(this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}\/edit/) ||
+      this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}\/createcampaign/) ) {
       output = '/accounts/' + this.props.params.accountId;
     }
-    else if(this.props.location.pathname.match(/\/campaigns\/\d\/edit/) ||
-      this.props.location.pathname.match(/\/campaigns\/\d\/createadgroup/) ||
-      this.props.location.pathname.match(/\/campaigns\/\d\/bulkupload/) ){
+    else if(this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/edit/) ||
+      this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/createadgroup/) ||
+      this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/bulkupload/) ){
       output = '/campaigns/' + this.props.params.campaignId;
     }
-    else if(this.props.location.pathname.match(/\/adgroups\/\d\/edit/) ||
-      this.props.location.pathname.match(/\/adgroups\/\d\/createtile/) ){
+    else if(this.props.location.pathname.match(/\/adgroups\/[0-9]{1,10}\/edit/) ||
+      this.props.location.pathname.match(/\/adgroups\/[0-9]{1,10}\/createtile/) ){
       output = '/adgroups/' + this.props.params.adGroupId;
     }
-    else if(this.props.location.pathname.match(/\/tiles\/\d\/edit/) ){
+    else if(this.props.location.pathname.match(/\/tiles\/[0-9]{1,10}\/edit/) ){
       output = '/tiles/' + this.props.params.tileId;
     }
 
@@ -100,22 +100,22 @@ export default class Timeline extends Component {
 
   isAccount(){
     return (this.props.location.pathname.match(/\/accounts\/create/) ||
-            this.props.location.pathname.match(/\/accounts\/\d\/edit/) );
+            this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}\/edit/) );
   }
 
   isCampaign(){
-    return (this.props.location.pathname.match(/\/accounts\/\d\/createcampaign/) ||
-            this.props.location.pathname.match(/\/campaigns\/\d\/edit/) ||
-            this.props.location.pathname.match(/\/campaigns\/\d\/bulkupload/));
+    return (this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}\/createcampaign/) ||
+            this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/edit/) ||
+            this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/bulkupload/));
   }
 
   isAdGroup(){
-    return (this.props.location.pathname.match(/\/campaigns\/\d\/createadgroup/) ||
-    this.props.location.pathname.match(/\/adgroups\/\d\/edit/) );
+    return (this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/createadgroup/) ||
+    this.props.location.pathname.match(/\/adgroups\/[0-9]{1,10}\/edit/) );
   }
 
   isTile(){
-    return (this.props.location.pathname.match(/\/adgroups\/\d\/createtile/) ||
-    this.props.location.pathname.match(/\/tiles\/\d\/edit/) );
+    return (this.props.location.pathname.match(/\/adgroups\/[0-9]{1,10}\/createtile/) ||
+    this.props.location.pathname.match(/\/tiles\/[0-9]{1,10}\/edit/) );
   }
 }
