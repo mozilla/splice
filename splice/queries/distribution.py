@@ -121,7 +121,7 @@ def get_possible_distributions(today=None):
 
         # the index file
         artifacts[channel].append({
-            "key": "{0}_{1}".format(safe_channel_name, env.config.S3["tile_index_key"]),
+            "key": "{0}_{1}".format(channel, env.config.S3["tile_index_key"]),
             "data": json.dumps(tile_index, sort_keys=True)
         })
 
