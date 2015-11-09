@@ -1,0 +1,14 @@
+machine:
+    python:
+        version: 2.7.5
+    environment:
+        TEST_DB_URI: postgres://ubuntu@127.0.0.1:5432/circle_test
+        TEST_DB_STATS_URI: postgres://ubuntu@127.0.0.1:5432/circle_test_stats
+dependencies:
+    override:
+        - pip install -r requirements.txt -r requirements-dev.txt
+test:
+    override:
+        - fab build
+    post:
+        - coveralls

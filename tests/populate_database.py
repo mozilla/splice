@@ -2,6 +2,7 @@ import os
 import sys
 import csv
 from splice.environment import Environment
+from sqlalchemy.sql import insert as insertSql
 
 
 def get_fixture_path(name):
@@ -24,7 +25,7 @@ def get_country_code():
 def insert(env, drop=False):
     # import models here to delay the db instantiation
     from splice.models import (Account, Country, Campaign, CampaignCountry,
-                               Channel, Adgroup, AdgroupCategory, Tile)
+                               Channel, Adgroup, AdgroupCategory, Tile, impression_stats_daily)
     with env.application.app_context():
         session = env.db.session
         if drop:
@@ -66,15 +67,25 @@ def insert(env, drop=False):
             tile = Tile(**record)
             session.add(tile)
 
+        for record in parse_csv("impression_stats.csv"):
+            i = insertSql(impression_stats_daily)
+            i = i.values(**record)
+            session.execute(i)
+
         session.commit()
     return True
 
-
 if __name__ == '__main__':
-    db_name = "splice_test"
-    if len(sys.argv) > 1:
+    db_name = 'splice_test'
+    db_stats_name = 'splice_stats_test'
+
+    if (len(sys.argv) > 1):
         db_name = sys.argv[1]
+    if (len(sys.argv) > 1):
+        db_stats_name = sys.argv[2]
+
     db_uri = os.environ.get('TEST_DB_URI') or 'postgres://localhost/%s' % db_name
-    env = Environment.instance(test=True, test_db_uri=db_uri)
+    db_stats_uri = os.environ.get('TEST_DB_STATS_URI') or 'postgres://localhost/%s' % db_stats_name
+    env = Environment.instance(test=True, test_db_uri=db_uri, test_db_stats_uri=db_stats_uri)
 
     insert(env, True)

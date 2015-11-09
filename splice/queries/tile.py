@@ -36,7 +36,8 @@ def get_tiles_by_campaign(campaign_id):  # pragma: no cover
         .order_by(Tile.id.desc())
         .all()
     )
-    output = [row_to_dict(d) for d in rows]
+
+    output = [row_to_dict(d) for d in rows] if rows else None
 
     return output
 
