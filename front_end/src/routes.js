@@ -35,7 +35,7 @@ import {
 export default class App extends Component {
   render() {
     return (
-      <Router history={history}>
+      <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
         <Route path="/" component={AppPage}>
           <IndexRoute title="Home" component={HomePage}></IndexRoute>
 

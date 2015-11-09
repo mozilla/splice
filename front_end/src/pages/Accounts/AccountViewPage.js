@@ -46,6 +46,7 @@ export default class AccountViewPage extends Component {
                 {this.generateFilter('past', 'Past', this.props.Campaign.past)}
                 {this.generateFilter('scheduled', 'Scheduled', this.props.Campaign.scheduled)}
                 {this.generateFilter('inFlight', 'In Flight', this.props.Campaign.inFlight)}
+                <div className="clearfix"></div>
               </div>
             </div>
             <div className="clearfix"></div>

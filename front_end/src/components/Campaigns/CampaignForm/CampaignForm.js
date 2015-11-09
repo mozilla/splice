@@ -5,6 +5,7 @@ import { displayMessage, shownMessage } from 'actions/App/AppActions';
 import { createCampaign, updateCampaign} from 'actions/Campaigns/CampaignActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
 import { formatDate, apiDate } from 'helpers/DateHelpers';
+import CustomRadio from 'components/Forms/CustomRadio/CustomRadio';
 import Moment from 'moment';
 
 window.$ = require('jquery');
@@ -61,10 +62,6 @@ export default class CampaignForm extends Component {
           <div className="container-fluid field-container">
             <div className="row">
               <div className="col-xs-4">
-                <div className="form-group">
-                  <label htmlFor="CampaignName">Campaign Name</label>
-                  <input className="form-control" type="text" id="CampaignName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
-                </div>
                 {(this.props.editMode)
                   ? (<div className="form-group">
                   <label htmlFor="AccountPaused">Paused</label>
@@ -80,19 +77,25 @@ export default class CampaignForm extends Component {
             <div className="row">
               <div className="col-xs-4">
                 <div className="form-group">
-                  <label htmlFor="CampaignStartDate">Start Date</label>
-                  <input className="form-control" type="text" id="CampaignStartDate" name="start_date" ref="start_date" defaultValue={formatDate(data.start_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
+                  <label htmlFor="CampaignName">Campaign Name</label>
+                  <input className="form-control" type="text" id="CampaignName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
                 </div>
               </div>
-              <div className="col-xs-4">
+              <div className="col-xs-4 col-xs-push-3">
                 <div className="form-group">
-                  <label htmlFor="CampaignEndDate">End Date</label>
-                  <input className="form-control" type="text" id="CampaignEndDate" name="end_date" ref="end_date" defaultValue={formatDate(data.end_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
+                  <label htmlFor="CampaignChannelId">How do you want to reach people?</label>
+                  <CustomRadio inputName="channel_id" selected={this.props.Campaign.details.channel_id} options={this.props.Init.channels} />
                 </div>
               </div>
             </div>
+            <hr/>
             <div className="row">
-              <div className="col-xs-8">
+              <div className="col-xs-12">
+                <h3 className="form-section-header">Audience</h3>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-xs-6">
                 <div className="form-group">
                   <label htmlFor="CampaignCountries">Countries</label><br/>
                   <select className="form-control js-select" style={{width: '100%'}} id="CampaignCountries" name="countries[]" ref="countries" multiple="multiple" defaultValue={data.countries} data-parsley-required>
@@ -101,13 +104,23 @@ export default class CampaignForm extends Component {
                 </div>
               </div>
             </div>
+            <hr/>
             <div className="row">
-              <div className="col-xs-4">
+              <div className="col-xs-12">
+                <h3 className="form-section-header">Scheduling</h3>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-xs-3">
                 <div className="form-group">
-                  <label htmlFor="CampaignChannelId">Channel</label>
-                  <select className="form-control" id="CampaignChannelId" name="channel_id" ref="channel_id" defaultValue={data.channel_id} data-parsley-required >
-                    {channels}
-                  </select>
+                  <label htmlFor="CampaignStartDate">Start Date</label>
+                  <input className="form-control" type="text" id="CampaignStartDate" name="start_date" ref="start_date" defaultValue={formatDate(data.start_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
+                </div>
+              </div>
+              <div className="col-xs-3">
+                <div className="form-group">
+                  <label htmlFor="CampaignEndDate">End Date</label>
+                  <input className="form-control" type="text" id="CampaignEndDate" name="end_date" ref="end_date" defaultValue={formatDate(data.end_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
                 </div>
               </div>
             </div>
@@ -165,6 +178,7 @@ export default class CampaignForm extends Component {
       const { dispatch } = this.props;
       dispatch(displayMessage('error', 'Validation Errors') );
       dispatch(shownMessage());
+      window.scrollTo(0, 0);
     }
   }
 
@@ -195,6 +209,7 @@ export default class CampaignForm extends Component {
     if(response.result === undefined){
       dispatch(displayMessage('error', response.message) );
       dispatch(shownMessage());
+      window.scrollTo(0, 0);
     }
     else{
       if(this.props.editMode){

@@ -26,7 +26,12 @@ export default class AppMessage extends Component {
         }
       }
       else{
-        body = 'Error: ' + this.props.message.body;
+        if(this.props.message.body.includes('Error:')){
+          body = this.props.message.body;
+        }
+        else{
+          body = 'Error: ' + this.props.message.body;
+        }
       }
     }
     else{

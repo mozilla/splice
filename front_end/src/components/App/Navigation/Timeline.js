@@ -18,7 +18,8 @@ export default class Timeline extends Component {
       output = '/accounts/' + this.props.params.accountId;
     }
     else if(this.props.location.pathname.match(/\/campaigns\/\d\/edit/) ||
-      this.props.location.pathname.match(/\/campaigns\/\d\/createadgroup/) ){
+      this.props.location.pathname.match(/\/campaigns\/\d\/createadgroup/) ||
+      this.props.location.pathname.match(/\/campaigns\/\d\/bulkupload/) ){
       output = '/campaigns/' + this.props.params.campaignId;
     }
     else if(this.props.location.pathname.match(/\/adgroups\/\d\/edit/) ||
@@ -104,7 +105,8 @@ export default class Timeline extends Component {
 
   isCampaign(){
     return (this.props.location.pathname.match(/\/accounts\/\d\/createcampaign/) ||
-            this.props.location.pathname.match(/\/campaigns\/\d\/edit/) );
+            this.props.location.pathname.match(/\/campaigns\/\d\/edit/) ||
+            this.props.location.pathname.match(/\/campaigns\/\d\/bulkupload/));
   }
 
   isAdGroup(){

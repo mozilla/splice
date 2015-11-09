@@ -24,7 +24,7 @@ export function Account(state = initialState, action = null) {
       });
     case RECEIVE_CREATE_ACCOUNT:
       let rows = state.rows;
-      if(action.json.result !== null){
+      if(action.json.result !== undefined){
         rows = [action.json.result, ...state.rows];
       }
       return _.assign({}, state, {
@@ -37,7 +37,7 @@ export function Account(state = initialState, action = null) {
       });
     case RECEIVE_UPDATE_ACCOUNT:
       let details = state.details;
-      if(action.json.result !== null){
+      if(action.json.result !== undefined){
         details = action.json.result;
       }
       return _.assign({}, state, {

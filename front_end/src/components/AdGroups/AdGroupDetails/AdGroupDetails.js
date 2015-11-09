@@ -8,7 +8,8 @@ export default class AdGroupDetails extends Component {
     const data = this.props.AdGroup.details;
 
     let categories = '';
-    if(data !== undefined && data.categories !== undefined && data.categories.length > 0){
+
+    if(data !== undefined && data.categories !== undefined && data.categories !== null ){
       data.categories.map(function(val, index){
         if(index !== 0){
           categories += ', ';
@@ -16,6 +17,15 @@ export default class AdGroupDetails extends Component {
         categories += val;
       });
     }
+
+    const suggestedFields = (
+        <div>
+          <p><strong>Frequency Cap Daily:</strong> {data.frequency_cap_daily}</p>
+          <p><strong>Frequency Cap Total:</strong> {data.frequency_cap_total}</p>
+          <p><strong>Categories:</strong> {categories}</p>
+        </div>
+      );
+
 
     let details;
     if (this.props.AdGroup.details !== undefined) {
@@ -35,12 +45,10 @@ export default class AdGroupDetails extends Component {
             </div>
           </div>
           <div className="details-panel-body">
-            <p><strong>Categories:</strong> {categories}</p>
             <p><strong>Explanation:</strong> {data.explanation}</p>
-            <p><strong>Frequency Cap Daily:</strong> {data.frequency_cap_daily}</p>
-            <p><strong>Frequency Cap Total:</strong> {data.frequency_cap_total}</p>
-            <p><strong>Locale:</strong> {data.locale}</p>
             <p><strong>Type:</strong> {_.capitalize(data.type)}</p>
+            {(data.type === 'suggested') ? suggestedFields : null }
+            <p><strong>Locale:</strong> {data.locale}</p>
             <p><strong>Created:</strong> {formatDate(data.created_at, 'M/D/YYYY')}</p>
           </div>
         </div>

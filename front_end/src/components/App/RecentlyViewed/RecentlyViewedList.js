@@ -3,27 +3,28 @@ import RecentlyViewedRow from './RecentlyViewedRow';
 
 export default class RecentlyViewedList extends Component {
   render() {
+    let output = null;
     let rows;
-    if (this.props.recentlyViewedRows !== undefined && this.props.recentlyViewedRows.length > 0) {
+    if (this.props.recentlyViewedRows !== undefined && this.props.recentlyViewedRows !== null) {
       rows = this.props.recentlyViewedRows.map((recentlyViewedRow, index) =>
           <RecentlyViewedRow {...recentlyViewedRow} key={index}/>
       );
-    } else {
-      rows = '';
+
+      output = (
+        <div className="module">
+          <div className="module-header">
+            Recently Viewed
+          </div>
+          <table className="module-table">
+            <tbody>
+            {rows}
+            </tbody>
+          </table>
+        </div>
+      );
     }
 
-    return (
-      <div className="module">
-        <div className="module-header">
-          Recently Viewed
-        </div>
-        <table className="module-table">
-          <tbody>
-            {rows}
-          </tbody>
-        </table>
-      </div>
-    );
+    return output;
   }
 }
 

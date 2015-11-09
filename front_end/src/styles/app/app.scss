@@ -6,6 +6,9 @@ html body{
   background-color: $color-navy;
   color: #363755;
 }
+.disabled{
+  opacity: .5;
+}
 .app-container{
   min-width: 1170px;
 
@@ -23,6 +26,7 @@ html body{
 }
 
 select.styled{
+  cursor: pointer;
   -webkit-appearance: none;
   -moz-appearance: none;
   border: 1px solid #fff;
@@ -30,7 +34,7 @@ select.styled{
   padding: 0px 60px 0 40px;
   border-radius: 0px;
   height: 35px;
-  background: $color-dark-gray url(/public/img/select-downarrow.png) no-repeat right center;
+  background: $color-dark-gray url(/public/img/select-downarrow-dark.png) no-repeat right center;
   font-size: 14px;
   font-weight: normal;
 

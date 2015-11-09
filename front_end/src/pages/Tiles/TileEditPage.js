@@ -27,7 +27,7 @@ export default class TileEditPage extends Component {
           <div className="form-module">
             <div className="form-module-header">Edit Tile - {this.props.Tile.details.name}</div>
             <div className="form-module-body">
-              { (this.props.Tile.details.id && this.props.Init.categories.length)
+              { (this.props.Tile.details.id)
                 ? <TileForm editMode={true} {...this.props} />
                 : null
               }

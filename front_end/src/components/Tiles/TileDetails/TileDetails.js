@@ -18,19 +18,19 @@ export default class TileDetails extends Component {
 							<div className="details-panel-id">ID: {data.id}</div>
 						</div>
 
-						{/*<div className="details-edit-link">
+						<div className="details-edit-link">
 							<Link className="" to={'/tiles/' + data.id + '/edit'} title="Edit">
 								<i className="fa fa-pencil"></i>
 							</Link>
-						</div>*/}
+						</div>
 					</div>
 					<div className="details-panel-body">
 						<p><strong>Status:</strong> {_.capitalize(data.status)}</p>
-						<p><strong>Target Url:</strong> {data.target_url}</p>
-						<p><strong>Enhanced Image URI:</strong> {data.enhanced_image_uri}</p>
-						<p><strong>Image URI:</strong> {data.image_uri}</p>
-						<p><strong>BG Color:</strong> {data.bg_color}</p>
-						<p><strong>Title BG Color:</strong> {data.title_bg_color}</p>
+						<p><strong>Target Url:</strong> <a href={data.target_url} target="_blank">{data.target_url}</a></p>
+						<p><strong>Enhanced Image URI:</strong> <a href={data.enhanced_image_uri} target="_blank">{data.enhanced_image_uri}</a></p>
+						<p><strong>Image URI:</strong> <a href={data.image_uri} target="_blank">{data.image_uri}</a></p>
+						<p><strong>BG Color:</strong> {(data.bg_color !== '' && data.bg_color !== null) ? <i className="fa fa-square" style={{color: data.bg_color}}></i> : '' } {data.bg_color}</p>
+						<p><strong>Title BG Color:</strong> {(data.title_bg_color !== '' && data.title_bg_color !== null) ? <i className="fa fa-square" style={{color: data.title_bg_color}}></i> : '' }  {data.title_bg_color}</p>
 						<p><strong>Type:</strong> {_.capitalize(data.type)}</p>
 						<p><strong>Created:</strong> {formatDate(data.created_at, 'M/D/YYYY')}</p>
 					</div>

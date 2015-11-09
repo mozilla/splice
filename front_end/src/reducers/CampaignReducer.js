@@ -3,6 +3,8 @@ import {
   RECEIVE_CREATE_CAMPAIGN,
   REQUEST_UPDATE_CAMPAIGN,
   RECEIVE_UPDATE_CAMPAIGN,
+  REQUEST_BULK_UPLOAD,
+  RECEIVE_BULK_UPLOAD,
   REQUEST_CAMPAIGNS,
   RECEIVE_CAMPAIGNS,
   REQUEST_CAMPAIGN,
@@ -30,7 +32,7 @@ export function Campaign(state = initialState, action = null) {
       });
     case RECEIVE_CREATE_CAMPAIGN:
       let rows = state.rows;
-      if(action.json.result !== null){
+      if(action.json.result !== undefined){
         rows = [action.json.result, ...state.rows];
       }
       return _.assign({}, state, {
@@ -43,11 +45,19 @@ export function Campaign(state = initialState, action = null) {
       });
     case RECEIVE_UPDATE_CAMPAIGN:
       let details = state.details;
-      if(action.json.result !== null){
+      if(action.json.result !== undefined){
         details = action.json.result;
       }
       return _.assign({}, state, {
         details: details,
+        isSaving: false
+      });
+    case REQUEST_BULK_UPLOAD:
+      return _.assign({}, state, {
+        isSaving: true
+      });
+    case RECEIVE_BULK_UPLOAD:
+      return _.assign({}, state, {
         isSaving: false
       });
     case REQUEST_CAMPAIGNS:

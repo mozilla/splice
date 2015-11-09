@@ -115,18 +115,19 @@ $button-transistion-duration: 0.3s;     // The transition duration
   transition: background 0s $button-transistion-duration;
 }
 
-.c-hamburger--htx span::before,
+.c-hamburger--htx span::before{
+  transition: transform $button-transistion-duration 0s, top $button-transistion-duration $button-transistion-duration;
+}
 .c-hamburger--htx span::after {
-  transition-duration: $button-transistion-duration, $button-transistion-duration;
-  transition-delay: $button-transistion-duration, 0s;
+  transition: transform $button-transistion-duration 0s, bottom $button-transistion-duration $button-transistion-duration;
 }
 
 .c-hamburger--htx span::before {
-  transition-property: top, transform;
+  //transition-property: top, transform;
 }
 
 .c-hamburger--htx span::after {
-  transition-property: bottom, transform;
+  //transition-property: bottom, transform;
 }
 
 /* active state, i.e. menu open */
@@ -149,9 +150,11 @@ $button-transistion-duration: 0.3s;     // The transition duration
   transform: rotate(-45deg);
 }
 
-.c-hamburger--htx.is-active span::before,
+.c-hamburger--htx.is-active span::before{
+  transition: top $button-transistion-duration 0s, transform $button-transistion-duration $button-transistion-duration;
+}
 .c-hamburger--htx.is-active span::after {
-  transition-delay: 0s, $button-transistion-duration;
+  transition: bottom $button-transistion-duration 0s, transform $button-transistion-duration $button-transistion-duration;
 }
 
 /**

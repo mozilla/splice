@@ -6,7 +6,8 @@ import {
   REQUEST_ADGROUPS,
   RECEIVE_ADGROUPS,
   REQUEST_ADGROUP,
-  RECEIVE_ADGROUP
+  RECEIVE_ADGROUP,
+  ADGROUP_SET_DETAILS_VAR
 } from 'actions/AdGroups/AdGroupActions';
 
 const initialState = {
@@ -18,13 +19,19 @@ const initialState = {
 
 export function AdGroup(state = initialState, action = null) {
   switch (action.type) {
+    case ADGROUP_SET_DETAILS_VAR:
+      return _.assign({}, state, {
+        details: _.assign({}, state.details, {
+          [action.variable]: action.value
+        })
+      });
     case REQUEST_CREATE_ADGROUP:
       return _.assign({}, state, {
         isSaving: true
       });
     case RECEIVE_CREATE_ADGROUP:
       let rows = state.rows;
-      if(action.json.result !== null){
+      if(action.json.result !== undefined){
         rows = [action.json.result, ...state.rows];
       }
       return _.assign({}, state, {
@@ -37,7 +44,7 @@ export function AdGroup(state = initialState, action = null) {
       });
     case RECEIVE_UPDATE_ADGROUP:
       let details = state.details;
-      if(action.json.result !== null){
+      if(action.json.result !== undefined){
         details = action.json.result;
       }
       return _.assign({}, state, {

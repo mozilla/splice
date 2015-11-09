@@ -10,7 +10,8 @@ export default class CampaignDetails extends Component {
     const context = this;
 
     let countries = '';
-    if(data.countries !== undefined && data.countries.length > 0 &&  this.props.Init.countries.length > 0){
+    if(data.countries !== undefined && data.countries !== null &&
+      this.props.Init.countries !== undefined && this.props.Init.countries !== null){
       data.countries.map(function(val, index){
         if(index !== 0){
           countries += ', ';

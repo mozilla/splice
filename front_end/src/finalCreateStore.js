@@ -18,8 +18,8 @@ export function finalCreateStore(reducer) {
       ),
       devTools()
     )(createStore);
-  } else if ((typeof __DEVTOOLS__ === 'undefined' || __DEVTOOLS__ === false) &&
-    (typeof __DEVELOPMENT__ !== 'undefined' || __DEVELOPMENT__ === true)) {
+  } else if ((typeof __DEVTOOLS__ !== 'undefined' && __DEVTOOLS__ === false) &&
+    (typeof __DEVELOPMENT__ !== 'undefined' && __DEVELOPMENT__ === true)) {
     result = compose(
       applyMiddleware(
         thunkMiddleware,

@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import reactMixin from 'react-mixin';
+import { Link, Lifecycle } from 'react-router';
 
 import { updateDocTitle } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
 import AccountForm from 'components/Accounts/AccountForm/AccountForm';
 
-export default class AccountEditPage extends Component {
+@reactMixin.decorate(Lifecycle)
+class AccountEditPage extends Component {
+  constructor(props) {
+    super(props);
+    this.routerWillLeave = this.routerWillLeave.bind(this);
+  }
+
   componentWillMount() {
     this.fetchAccountDetails(this.props);
   }
@@ -40,6 +47,12 @@ export default class AccountEditPage extends Component {
     return output;
   }
 
+  routerWillLeave(nextLocation) {
+    if(this.props.App.formChanged){
+      return 'Your progress is not saved. Are you sure you want to leave?';
+    }
+  }
+
   fetchAccountDetails(props) {
     const { dispatch } = props;
 
@@ -62,7 +75,8 @@ AccountEditPage.propTypes = {};
 // Which props do we want to inject, given the global state?
 function select(state) {
   return {
-    Account: state.Account
+    Account: state.Account,
+    App: state.App
   };
 }
 
