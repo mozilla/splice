@@ -1,7 +1,5 @@
 exports.devApi = "'http://tbg-staging-1.thebuddygroup.com:5000'";
 exports.liveApi = "'http://tbg-staging-1.thebuddygroup.com:5000'";
-exports.devUrl = "http://localhost:9999/";
-exports.liveUrl = "http://10.1.1.158/";
 exports.development = true;
 exports.devTools = false;
 
@@ -30,7 +28,7 @@ exports.webpack_modules_loaders =
   }, {
     test: /\.css$/,
     exclude: [/\.raw\.css$/, /\.useable\.css$/],
-    loader: 'style!css?sourceMap!autoprefixer'
+    loader: 'style!css!autoprefixer'
   }, {
     test: /\.raw\.css$/,
     loader: 'style!raw!autoprefixer'

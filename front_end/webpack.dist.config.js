@@ -10,14 +10,13 @@ var assetPath = require('path').join(__dirname, 'dist');
 
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-import { webpack_resolve, webpack_modules_loaders, devApi, liveApi, devUrl, liveUrl } from './settings.conf.js';
+import { webpack_resolve, webpack_modules_loaders, devApi, liveApi } from './settings.conf.js';
 
 module.exports = {
 
   output: {
     path: assetPath,
-    filename: 'main.js',
-    publicPath: liveUrl
+    filename: 'main.js'
   },
   progress: true,
   entry: [

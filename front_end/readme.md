@@ -6,9 +6,7 @@ Work in progress, issues are welcome.
 
 ## Config
 
-Modify `settings.conf.js` variables `devApi` or `liveApi` with your API url. (Use single quotes within double quotes). 
-
-Modify variables `devUrl` or `liveUrl` with the domain that the index.html will be served (http://localhost:9999/ for Dev). 
+Modify `settings.conf.js` variables `devApi` or `liveApi` with your API url. (Use single quotes within double quotes).  
 
 ## Run
 
