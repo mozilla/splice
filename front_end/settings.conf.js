@@ -46,4 +46,3 @@ exports.webpack_resolve = {
     'helpers': __dirname + '/src/helpers/'
   }
 };
-
