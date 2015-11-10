@@ -1,0 +1,41 @@
+{
+  "name": "SpliceUI",
+  "version": "0.0.0",
+  "description": "The new Splice UI. Built with redux.",
+  "scripts": {
+    "start": "node server.js",
+    "bundle": "./node_modules/webpack/bin/webpack.js && mkdir -p ../splice/static/build/distribution-viewer && cp -r static/ ../splice/static/build/distribution-viewer/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oyiptong/splice"
+  },
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/oyiptong/splice/issues"
+  },
+  "homepage": "https://github.com/oyiptong/splice",
+  "dependencies": {
+    "history": "^1.9.1",
+    "isomorphic-fetch": "^2.1.1",
+    "react": "^0.13.3",
+    "react-redux": "^2.1.2",
+    "react-router": "1.0.0-rc1",
+    "redux": "^3.0.0",
+    "redux-logger": "0.0.3",
+    "redux-thunk": "^0.1.0",
+    "tv4": "^1.2.7"
+  },
+  "devDependencies": {
+    "babel-core": "^5.6.18",
+    "babel-loader": "^5.1.4",
+    "expect": "^1.6.0",
+    "jsdom": "^5.6.1",
+    "mocha": "^2.2.5",
+    "mocha-jsdom": "^1.0.0",
+    "node-libs-browser": "^0.5.2",
+    "react-hot-loader": "^1.3.0",
+    "webpack": "^1.9.11",
+    "webpack-dev-server": "^1.9.0"
+  }
+}
