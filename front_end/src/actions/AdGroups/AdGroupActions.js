@@ -21,7 +21,7 @@ export const RECEIVE_ADGROUP = 'RECEIVE_ADGROUP';
 
 export const ADGROUP_SET_DETAILS_VAR = 'ADGROUP_SET_DETAILS_VAR';
 
-export function adGroupSetVar(variable, value){
+export function adGroupSetDetailsVar(variable, value){
   return {type: ADGROUP_SET_DETAILS_VAR, variable: variable, value: value};
 }
 

@@ -8,6 +8,9 @@ import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 import AdGroupForm from 'components/AdGroups/AdGroupForm/AdGroupForm';
 
 export default class AdGroupCreatePage extends Component {
+  componentWillMount(){
+    this.props.AdGroup.details = {};
+  }
   componentDidMount(){
     this.fetchAdGroupDetails(this.props);
   }

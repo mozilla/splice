@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import { displayMessage, shownMessage } from 'actions/App/AppActions';
-import { createAdGroup, updateAdGroup, fetchAdGroups, adGroupSetVar } from 'actions/AdGroups/AdGroupActions';
+import { createAdGroup, updateAdGroup, fetchAdGroups, adGroupSetDetailsVar } from 'actions/AdGroups/AdGroupActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
 
 window.$ = require('jquery');
@@ -17,7 +17,7 @@ require('parsleyjs');
 export default class AdGroupForm extends Component {
   componentWillMount(){
     if(this.props.AdGroup.details.type === undefined){
-      this.props.dispatch(adGroupSetVar('type', 'suggested'));
+      this.props.dispatch(adGroupSetDetailsVar('type', 'suggested'));
     }
   }
   componentDidMount(){
@@ -191,7 +191,7 @@ export default class AdGroupForm extends Component {
     if($('#' + e.target.id).prop('checked') === true){
       value = 'directory';
     }
-    this.props.dispatch(adGroupSetVar('type', value));
+    this.props.dispatch(adGroupSetDetailsVar('type', value));
   }
 
   handleFormSubmit(e) {

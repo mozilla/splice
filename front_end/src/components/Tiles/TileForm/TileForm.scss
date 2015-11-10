@@ -1,22 +1,32 @@
 @import '../../../styles/variables';
 
-.tiles-container{
+.tile-dropzone {
+  border-radius: 10px;
+  height: 210px;
+  width: 290px;
+  margin-bottom: 15px;
+  background-color: $font-color-default;
+  color: #fff;
   text-align: center;
-  margin: 0 0 20px 0;
 
-  .tile-preview-container{
-    display: inline-block;
-    color: #fff;
-    font-weight: normal;
-    font-size: 14px;
+  .tile-text{
+    text-transform: uppercase;
+    margin: 0 0 20px 0;
+    padding-top: 45px;
   }
-
+  .tile-text-or{
+    margin-bottom: 20px;
+  }
+  .tile-upload-btn{
+    background-color: $color-aqua;
+    display: inline-block;
+    padding: 5px 20px;
+    border-radius: 5px;
+    color: $font-color-default;
+    text-transform: uppercase;
+    cursor: default;
+  }
   .tile-preview{
-    padding: 0;
-    @include all-shadow();
-    border-radius: 10px;
-    margin-bottom: 15px;
-
     .tile-image{
       height: 180px;
       width: 290px;
@@ -39,31 +49,5 @@
       font-weight: normal;
       background-color: #f2f2f2;
     }
-  }
-  .tile-default{
-    margin-right: 30px;
-  }
-}
-.tile-status-buttons{
-  text-align: center;
-  margin-bottom: 40px;
-
-  .btn{
-    width: 115px;
-  }
-
-  .btn.disapprove{
-    margin-right: 30px;
-    background-color: #000;
-    color: #fff;
-    border-radius: 5px;
-    text-transform: uppercase;
-  }
-  .btn.approve{
-    margin-right: 0;
-    background-color: $color-aqua;
-    color: $font-color-default;
-    border-radius: 5px;
-    text-transform: uppercase;
   }
 }
