@@ -1,0 +1,170 @@
+#reporting {
+  // LOL hax
+  // TODO: change base component to be compatible with flex layout/white bg
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: white;
+  color: $darkgrey;
+  display: flex;
+
+  > div {
+    display: flex;
+    flex: 1;
+  }
+
+  // Sidebar
+  aside.sidebar {
+    position: relative;
+    font-size: 13px;
+    width: 300px;
+    flex-shrink: 0;
+    border-right: 1px solid darken($light-blue, 5%);
+    background: $light-blue;
+    overflow-y: auto;
+    transition: width 0.2s ease-in-out;
+    &.collapsed {
+      overflow: hidden;
+      width: 0;
+    }
+  }
+
+  // Main section
+  main.main {
+    padding: 20px 50px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  // Icon sidebar
+  .sidebar.icons {
+    background: $secondary-blue;
+    width: 85px;
+    border-right: 1px solid darken($secondary-blue, 5%);
+    box-shadow: none;
+
+    text-align: center;
+    color: lighten($secondary-blue, 40%);
+    font-weight: 400;
+
+    nav a {
+      display: block;
+      color: inherit;
+      padding: 10px 0;
+      border-bottom: 1px solid darken($secondary-blue, 5%);
+      font-size: 12px;
+      .icon-label {
+        display: block;
+      }
+      .fa {
+        font-size: 22px;
+        line-height: 1;
+      }
+      &.active {
+        color: white;
+      }
+      &:hover {
+        text-decoration: none;
+        background: lighten($secondary-blue, 10%);
+        color: white;
+        cursor: pointer;
+      }
+    }
+  }
+
+  // Report settings sidebar
+  .report-settings {
+    .Select + .Select {
+      margin-top: 5px;
+    }
+    section {
+      padding: 20px;
+      border-bottom: 1px solid $border-blue;
+      &.extra {
+        background: darken($light-blue, 3%);
+      }
+      .form-group {
+        margin: 0;
+        &+.form-group {
+          margin-top: 10px;
+        }
+      }
+      &.flex-wrapper {
+        display: flex;
+        .form-group {
+          margin-top: 0;
+        }
+      }
+      .half {
+        width: 50%;
+        &:first-child {
+          margin-right: 5%;
+        }
+      }
+    }
+  }
+
+  .btn {
+    border-radius: 2px;
+
+    > span.fa {
+      font-size: 14px;
+      margin-right: 2px;
+    }
+
+    &.btn-emphasis {
+      padding: 8px 15px;
+      box-shadow: 0 3px 5px -3px fade-out($darkgrey, 0.8);
+    }
+
+    &.btn-default {
+      color: inherit;
+      border-color: darken($border-blue, 5%);
+      &:hover {
+        background: white;
+        border-color: darken($border-blue, 10%);
+      }
+    }
+
+    &.btn-pink {
+      background: $pink;
+      color: white;
+      &:hover {
+        background: lighten($pink, 5%);
+      }
+    }
+  }
+
+  h2 {
+    margin: 40px 0 30px 30px;
+  }
+
+  .table-summary {
+    margin-bottom: 30px;
+    border: none;
+    border-left: 1px solid $greyborder;
+    td, th {
+      border: none;
+    }
+    td {
+      background: white;
+      padding: 3px 30px;
+      font-family: inherit;
+      font-size: 16px;
+    }
+    td:first-child {
+      font-size: 14px;
+      white-space: pre;
+      font-weight: bold;
+      color: $pink;
+    }
+    td:nth-child(2) {
+      width: 100%;
+    }
+  }
+}
+
+

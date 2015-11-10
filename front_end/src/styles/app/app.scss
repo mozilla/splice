@@ -1,5 +1,9 @@
 @import '../variables';
 
+[hidden] {
+  display: none !important;
+}
+
 html body{
   font-family: $font-default;
   font-size: 14px;

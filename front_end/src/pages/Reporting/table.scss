@@ -1,0 +1,130 @@
+.table {
+  $tblHzPadding: 25px;
+
+  table {
+    border-top: 1px solid $darkerborder;
+    border-bottom: 1px solid $darkerborder;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  th, td {
+    border-bottom: 1px solid $greyborder;
+    white-space: nowrap;
+  }
+
+  th {
+    font-size: 14px;
+    padding: 16px $tblHzPadding;
+    text-align: left;
+    font-weight: bold;
+    background-color: white;
+    color: darken($midgrey, 20%);
+    cursor: pointer;
+  .carrot {
+    line-height: 1;
+    margin-left: 2px;
+    font-family: sans-serif;
+    position: relative;
+    display: inline-block;
+    opacity: 0;
+    color: lighten($darkgrey, 20%);
+    &::after {
+      content: "\25BE"
+    }
+      top: -1px;
+    &.up {
+      top: 0;
+      transform: rotate(180deg);
+    }
+  }
+  &.selected .carrot {
+    opacity: 1;
+    color: $pink;
+  }
+  &:hover {
+    background: $grey;
+    .carrot {
+      opacity: 1;
+    }
+  }
+
+
+  &.settings {
+    padding: 0;
+    width: 20px;
+    color: $pink;
+
+    text-align: center;
+    position: relative;
+    user-select: none;
+
+    button {
+    color: inherit;
+    background: none;
+    border: none;
+    font-size: 24px;
+      &:focus {
+        outline: none;
+      }
+      &::after {
+        position: relative;
+        content: "...";
+        top: -4px;
+      }
+    }
+
+    .menu {
+      text-align: left;
+      background: white;
+      color: $darkgrey;
+      border: 1px solid #DDD;
+      position: absolute;
+      top: 100%;
+      right: 1px;
+      margin: 0;
+      padding: 5px;
+      list-style: none;
+      z-index: 1;
+      white-space: nowrap;
+      font-size: 13px;
+      li {
+        margin: 0;
+        padding: 4px 10px;
+        input {
+          display: inline-block;
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+
+  }
+
+  td {
+    padding: 8px $tblHzPadding;
+    font-family: Monaco, Inconsolata, monospace;
+    &:first-child {
+      font-family: inherit;
+    }
+  }
+
+  tr:nth-child(even) td {
+    background: $grey;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tfoot tr th {
+    border-top: 1px solid $darkerborder;
+    font-family: Monaco, Inconsolata, monospace;
+    &:first-child {
+      font-family: inherit;
+    }
+    border-bottom: none;
+  }
+
+}
