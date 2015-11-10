@@ -115,7 +115,7 @@ def get_possible_distributions(today=None):
             "data": ag,
         })
 
-        tile_index_channel = tile_index.setdefault(channel, {})
+        tile_index_channel = tile_index.setdefault(channel, {'__ver__': 3})
         tile_index_channel[country_locale] = {
             'legacy': os.path.join(env.config.CLOUDFRONT_BASE_URL, legacy_key),
             'ag': os.path.join(env.config.CLOUDFRONT_BASE_URL, ag_key),
@@ -125,6 +125,7 @@ def get_possible_distributions(today=None):
     for channel, tile_index_channel in tile_index.items():
         artifacts[channel].append({
             "key": "{0}_{1}".format(channel, env.config.S3["tile_index_key"]),
-            "data": json.dumps(tile_index_channel, sort_keys=True)
+            "data": json.dumps(tile_index_channel, sort_keys=True),
+            "force_upload": True
         })
     return artifacts
