@@ -33,6 +33,7 @@ import {
   TileCreatePage,
   TileEditPage,
   ApprovalsPage,
+  Reporting,
   Error404Page
 } from './pages/index';
 
@@ -68,6 +69,10 @@ export default class App extends Component {
           <Route path="tiles/:tileId/Edit" title="Tile Edit" component={TileEditPage}></Route>
 
           <Route path="approvals" title="Approval Queue" component={ApprovalsPage}></Route>
+
+          <Route path="reporting" title="Reporting" component={Reporting}>
+            <IndexRoute title="Reporting | Reports" component={require('./pages/Reporting/Reporting-Reports')} />
+          </Route>
 
           <Route path="error404" title="Page Not Found" component={Error404Page}></Route>
           <Route path="*" component={Error404Page}/>

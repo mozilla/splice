@@ -16,8 +16,10 @@ valid_group_by = {
 }
 
 valid_filters = {
+    'account_id': {'type': int, 'store_missing': False},
     'adgroup_id': {'type': int, 'store_missing': False},
     'campaign_id': {'type': int, 'store_missing': False},
+    'account_id': {'type': int, 'store_missing': False},
     'type': {'choices': Tile.TYPES, 'store_missing': False},
     'adgroup_type': {'choices': Adgroup.TYPE, 'store_missing': False},
     'country_code': {'store_missing': False},
