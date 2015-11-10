@@ -1,0 +1,131 @@
+body {
+  background: #f0f0f0;
+}
+
+label {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 5px 15px 5px 0;
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+input {
+  margin: 0 25px 0 0;
+}
+
+a,
+a:visited {
+  color: #0095DD;
+  text-decoration: none;
+}
+
+ul.collapse {
+  display: none;
+}
+
+div.busy * {
+  cursor: wait !important;
+}
+
+#page {
+}
+
+#nav {
+  background: #000;
+  color: #f0f0f0;
+  font-size: 22px;
+}
+
+#nav ul {
+  align-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+#nav li {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  text-align: center;
+}
+
+#nav li > a {
+  padding: 25px;
+}
+
+#nav li > span {
+  padding: 25px 50px;
+}
+
+#nav a {
+  color: #f0f0f0;
+  text-decoration: none;
+}
+
+#nav a.active {
+  background: #f0f0f0;
+  color: #000;
+}
+
+#view {
+  padding: 25px;
+}
+
+/* Tile filtering and previewing */
+#pickers {
+  padding: 5px 0;
+}
+
+#pickers select {
+  margin: 0 15px 0 5px;
+}
+
+.newtab-cell {
+  position: relative;
+}
+
+.suggested-metadata {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px #000;
+  display: none;
+  left: 300px;
+  padding: 10px;
+  position: absolute;
+  text-align: left;
+  top: 0;
+  width: 160px;
+  z-index: 100;
+}
+
+.suggested-metadata ul, .suggested-metadata li {
+  font-size: 9px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0 5px;
+}
+
+.newtab-cell:hover .suggested-metadata {
+  display:block;
+}
+
+/* override some rules from newtab.css */
+.newtab-site.suggested > .newtab-sponsored {
+   background-color: #E2E2E2;
+   border: none;
+ }
+
+ .newtab-site.suggested .newtab-suggested {
+   display: table;
+ }
