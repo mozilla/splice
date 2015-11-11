@@ -193,7 +193,7 @@ export default class TileForm extends Component {
     const data = new FormData();
     data.append('creative', file[0]);
 
-    dispatch(uploadImage(data, isEnhanced))
+    dispatch(uploadImage(data, fieldName === 'enhanced_image_uri'))
       .then(function(response){
         if(response.result !== undefined){
           dispatch(tileSetDetailsVar(fieldName, response.result));

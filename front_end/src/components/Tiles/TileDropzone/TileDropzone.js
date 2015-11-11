@@ -28,6 +28,5 @@ export default class TileDropzone extends Component {
 TileDropzone.propTypes = {
   Tile: PropTypes.object.isRequired,
   fieldName: PropTypes.string.isRequired,
-  isEnhanced: PropTypes.bool.isRequired,
   handleFileUpload: PropTypes.func.isRequired
 };
