@@ -52,7 +52,7 @@ def switch_to_cdn_url(image_uri):
     return os.path.join(env.config.CLOUDFRONT_BASE_URL, "images/%s" % basename)
 
 
-def get_possible_distributions(today=None):
+def get_possible_distributions(today=None, channel_id=None):
     from splice.environment import Environment
 
     env = Environment.instance()
@@ -71,6 +71,9 @@ def get_possible_distributions(today=None):
         .join(Campaign)
         .join(CampaignCountry)
         .order_by(Tile.id))
+
+    if channel_id is not None:
+        query = query.filter(Campaign.channel_id == channel_id)
 
     rows = query.all()
     bucketer = load_bucketer()
@@ -104,7 +107,7 @@ def get_possible_distributions(today=None):
         legacy_key = "{0}/{1}.{2}.json".format(channel, country_locale, legacy_hsh)
         artifacts[channel].append({
             "key": legacy_key,
-            "data": legacy})
+            "data": legacy_json})
 
         # v3
         ag = json.dumps({'suggested': suggested, 'directory': directory}, sort_keys=True)

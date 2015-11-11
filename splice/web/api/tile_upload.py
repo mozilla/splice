@@ -7,6 +7,7 @@ import random
 import traceback
 
 from PIL import Image
+from furl import furl
 from collections import defaultdict
 from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
@@ -67,6 +68,35 @@ def single_creative_upload(creative, ext):
         raise Exception("Failed to upload image: %s" % e)
 
     return url
+
+
+def artifacts_upload(artifacts):
+    """Upload the artifacts to S3"""
+    try:
+        urls = []
+        bucket, headers = setup_s3()
+        for artifact in artifacts:
+            key = bucket.get_key(artifact["key"])
+            if key is None or artifact.get("force_upload"):
+                key = Key(bucket)
+                key.name = artifact["key"]
+                headers['Content-Type'] = "application/json"
+                key.set_contents_from_string(artifact["data"], headers=headers)
+                key.set_acl("public-read")
+            # return urls
+            url = key.generate_url(expires_in=0, query_auth=False)
+            # remove x-amz-security-token, which is inserted even if query_auth=False
+            # ref: https://github.com/boto/boto/issues/1477
+            uri = furl(url)
+            try:
+                uri.args.pop('x-amz-security-token')
+            except:
+                pass
+            urls.append(uri.url)
+    except Exception as e:
+        raise Exception("Failed to upload artifact: %s" % e)
+
+    return urls
 
 
 def insert_ingested_assets(ingested_assets, campaign_id, channel_id, creative_map):
