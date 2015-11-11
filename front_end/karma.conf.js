@@ -12,12 +12,11 @@ module.exports = function (config) {
       'tests.webpack.js' //just load this file
     ],
     preprocessors: {
-      'tests.webpack.js': ['webpack', 'sourcemap'] //preprocess with webpack and our sourcemap loader
+      'tests.webpack.js': ['webpack'] //preprocess with webpack and our sourcemap loader
     },
     reporters: ['dots'], //report results in this format
     autoWatch: true,
     webpack: { //kind of a copy of your webpack config
-      devtool: 'inline-source-map', //just do inline source maps instead of the default
       resolve: settings.webpack_resolve,
       module: {
         loaders: settings.webpack_modules_loaders

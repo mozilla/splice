@@ -2,8 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import { displayMessage, shownMessage } from 'actions/App/AppActions';
-import { createTile, updateTile, fetchTiles } from 'actions/Tiles/TileActions';
+import { createTile, updateTile, fetchTiles, uploadImage, tileSetDetailsVar } from 'actions/Tiles/TileActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
+
+import TileDropzone from 'components/Tiles/TileDropzone/TileDropzone';
 
 window.$ = require('jquery');
 window.jQuery = $;
@@ -19,7 +21,7 @@ export default class TileForm extends Component {
     bindFormValidators();
 
     $('.js-select').select2();
-    $('.colorpicker-input-group').colorpicker({horizontal: true});
+    this.bindColorPickerEvents();
   }
 
   componentDidUpdate(prevProps) {
@@ -28,7 +30,7 @@ export default class TileForm extends Component {
       bindFormValidators();
 
       $('.js-select').select2();
-      $('.colorpicker-input-group').colorpicker({horizontal: true});
+      this.bindColorPickerEvents();
     }
   }
 
@@ -38,10 +40,8 @@ export default class TileForm extends Component {
       spinner = <img src="/public/img/ajax-loader-aqua.gif" />;
     }
 
-    let data = this.props.Tile.details;
-    if(this.props.editMode === false){
-      data = {};
-    }
+    const data = this.props.Tile.details;
+
     if(data.adgroup_id === undefined){
       data.adgroup_id = this.props.params.adGroupId;
     }
@@ -77,7 +77,7 @@ export default class TileForm extends Component {
                 }
                 <div className="form-group">
                   <label htmlFor="TileTitle">Headline</label>
-                  <input className="form-control" type="text" id="TileTitle" name="title" ref="title" defaultValue={data.title} data-parsley-required data-parsley-minlength="2"/>
+                  <input className="form-control" onChange={(e) => this.handleChangeField(e, 'title')} type="text" id="TileTitle" name="title" ref="title" value={data.title} data-parsley-required data-parsley-minlength="2"/>
                 </div>
                 {(this.props.editMode === false) ?
                   (<div>
@@ -85,29 +85,21 @@ export default class TileForm extends Component {
                       <label htmlFor="TileTargetUrl">Clickthrough URL</label>
                       <input className="form-control" type="text" id="TileTargetUrl" name="target_url" ref="target_url" defaultValue={data.target_url} data-parsley-required data-parsley-type="url"/>
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="TileEnhancedImageUri">Enhanced Image URI</label>
-                      <input className="form-control" type="text" id="TileEnhancedImageUri" name="enhanced_image_uri" ref="enhanced_image_uri" defaultValue={data.enhanced_image_uri} data-parsley-required data-parsley-type="url"/>
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="TileImageUri">Image URI</label>
-                      <input className="form-control" type="text" id="TileImageUri" name="image_uri" ref="image_uri" defaultValue={data.image_uri} data-parsley-required data-parsley-type="url"/>
-                    </div>
                   </div>)
                   : null
                 }
                 <div className="form-group">
                   <label htmlFor="TileBgColor">Background Color</label>
-                  <div className="input-group colorpicker-input-group">
+                  <div className="input-group colorpicker-input-group" data-field="bg_color">
                     <span className="input-group-addon"><i></i></span>
-                    <input className="form-control" type="text" id="TileBgColor" name="bg_color" ref="bg_color" defaultValue={data.bg_color} />
+                    <input className="form-control" type="text" onChange={(e) => this.handleChangeField(e, 'bg_color')} id="TileBgColor" name="bg_color" ref="bg_color" value={data.bg_color} />
                   </div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="TileTitleBgColor">Title Background Color</label>
-                  <div className="input-group colorpicker-input-group">
+                  <div className="input-group colorpicker-input-group" data-field="title_bg_color">
                     <span className="input-group-addon"><i></i></span>
-                    <input className="form-control" type="text" id="TileTitleBgColor" name="title_bg_color" ref="title_bg_color" defaultValue={data.title_bg_color} />
+                    <input className="form-control" onChange={(e) => this.handleChangeField(e, 'title_bg_color')} type="text" id="TileTitleBgColor" name="title_bg_color" ref="title_bg_color" value={data.title_bg_color} />
                   </div>
                 </div>
                 <div className="form-group">
@@ -117,16 +109,51 @@ export default class TileForm extends Component {
                     <option value="sponsored">Sponsored</option>
                   </select>
                 </div>
-                {(this.props.editMode)
-                  ? (<div className="form-group">
-                  <label htmlFor="TileStatus">Approval Status</label>
-                  <select className="form-control" id="TileStatus" name="status" ref="status" defaultValue={data.status} >
-                    <option value="unapproved">Unapproved</option>
-                    <option value="disapproved">Disapproved</option>
-                    <option value="approved">Approved</option>
-                  </select>
-                </div>)
-                  : <input type="hidden" name="status" ref="status" value="unapproved"/>}
+                  {(this.props.editMode)
+                      ? ( <div className="hide">
+                        <div className="form-group">
+                          <label htmlFor="TileStatus">Approval Status</label>
+                          <select className="form-control" id="TileStatus" name="status" ref="status" defaultValue={data.status} disabled="true">
+                            <option value="unapproved">Unapproved</option>
+                            <option value="disapproved">Disapproved</option>
+                            <option value="approved">Approved</option>
+                          </select>
+                        </div>
+                      </div>)
+                    : <input type="hidden" name="status" ref="status" value="unapproved"/>}
+              </div>
+              <div className="col-xs-4 col-xs-push-4">
+                {(this.props.editMode === false) ?
+                  <div>
+                    <div className="form-group">
+                      <label >Static Image</label>
+                      <TileDropzone Tile={this.props.Tile} fieldName="enhanced_image_uri" handleFileUpload={(file) => this.handleFileUpload(file, 'enhanced_image_uri')} />
+                      <label >Static Image URI</label>
+                      <input className="form-control" onChange={(e) => this.handleChangeField(e, 'enhanced_image_uri')} type="text" id="TileEnhancedImageUri" name="enhanced_image_uri" ref="enhanced_image_uri" value={data.enhanced_image_uri} data-parsley-required data-parsley-type="url"/>
+                    </div>
+                    <div className="form-group">
+                      <label >Rollover Image</label>
+                      <TileDropzone Tile={this.props.Tile} fieldName="image_uri" handleFileUpload={(file) => this.handleFileUpload(file, 'image_uri')} />
+                      <label htmlFor="TileImageUri">Rollover Image URI</label>
+                      <input className="form-control" onChange={(e) => this.handleChangeField(e, 'image_uri')} type="text" id="TileImageUri" name="image_uri" ref="image_uri" value={data.image_uri} data-parsley-required data-parsley-type="url"/>
+                    </div>
+                  </div>
+                  :
+                  <div>
+                    <div className="tile-preview">
+                      <div className="tile-image" style={ { backgroundColor: this.props.Tile.details.bg_color, backgroundImage: 'url(' + this.props.Tile.details.enhanced_image_uri + ')' } }></div>
+                      <div className="tile-title" style={ {backgroundColor: this.props.Tile.details.title_bg_color} }>{this.props.Tile.details.title}</div>
+                    </div>
+                    <br/>
+                    <label className="tile-label"> Static Image</label>
+                    <div className="tile-preview">
+                      <div className="tile-image" style={ { backgroundColor: this.props.Tile.details.bg_color, backgroundImage: 'url(' + this.props.Tile.details.image_uri + ')' } }></div>
+                      <div className="tile-title" style={ {backgroundColor: this.props.Tile.details.title_bg_color} }>{this.props.Tile.details.title}</div>
+                    </div>
+                    <br/>
+                    <label className="tile-label"> Rollover Image</label>
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -134,6 +161,44 @@ export default class TileForm extends Component {
           <button onClick={(e) => this.handleFormSubmit(e)} className="form-submit">Save {spinner}</button>
         </form>
       </div>
+    );
+  }
+
+  bindColorPickerEvents(){
+    const context = this;
+
+    $('.colorpicker-input-group').colorpicker({horizontal: true}).on('changeColor.colorpicker', function(e){
+      const field = $(e.target).attr('data-field');
+      const value = $(e.target).find('input').val();
+
+      context.props.dispatch(tileSetDetailsVar(field, value));
+    });
+
+    $('.colorpicker-input-group input').on('blur', function(e){
+      const field = $(e.target).parents('.colorpicker-input-group').attr('data-field');
+
+      context.props.dispatch(tileSetDetailsVar(field, e.target.value));
+    });
+  }
+
+  handleChangeField(e, field){
+    const { dispatch } = this.props;
+
+    dispatch(tileSetDetailsVar(field, e.target.value));
+  }
+
+  handleFileUpload(file, fieldName) {
+    const { dispatch } = this.props;
+
+    const data = new FormData();
+    data.append('creative', file[0]);
+
+    dispatch(uploadImage(data, fieldName === 'enhanced_image_uri'))
+      .then(function(response){
+        if(response.result !== undefined){
+          dispatch(tileSetDetailsVar(fieldName, response.result));
+        }
+      }
     );
   }
 

@@ -3,11 +3,15 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import { updateDocTitle } from 'actions/App/AppActions';
+import { tileClearDetails } from 'actions/Tiles/TileActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
 import TileForm from 'components/Tiles/TileForm/TileForm';
 
 export default class TileCreatePage extends Component {
+  componentWillMount(){
+    this.props.Tile.details = {};
+  }
   componentDidMount(){
     this.fetchTileDetails(this.props);
   }

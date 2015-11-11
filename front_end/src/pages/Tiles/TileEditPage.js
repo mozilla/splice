@@ -25,7 +25,7 @@ export default class TileEditPage extends Component {
       output = (
         <div>
           <div className="form-module">
-            <div className="form-module-header">Edit Tile - {this.props.Tile.details.name}</div>
+            <div className="form-module-header">Edit Tile - {this.props.Tile.details.title}</div>
             <div className="form-module-body">
               { (this.props.Tile.details.id)
                 ? <TileForm editMode={true} {...this.props} />
@@ -50,7 +50,7 @@ export default class TileEditPage extends Component {
       })
       .then(() => {
         if(this.props.Tile.details !== undefined){
-          updateDocTitle('Edit Tile - ' + this.props.Tile.details.name);
+          updateDocTitle('Edit Tile - ' + this.props.Tile.details.title);
         }
       });
   }

@@ -79,7 +79,7 @@
 }
 select.form-control{
   cursor: pointer;
-  background: #fff url(/public/img/select-downarrow.png) right center no-repeat;
+  background: #fff url(../public/img/select-downarrow.png) right center no-repeat;
 }
 .form-group.file-upload-form-group{
   padding: 20px 0 20px 0;
@@ -120,14 +120,14 @@ select.form-control{
         }
         height: 32px;
         width: 26px;
-        background: #fff url(/public/img/select-downarrow.png) right center no-repeat;
+        background: #fff url(../public/img/select-downarrow.png) right center no-repeat;
       }
     }
   }
   .select2-container--default.select2-container--open{
     .select2-selection--single{
       .select2-selection__arrow{
-        background-image: url(/public/img/select-uparrow.png);
+        background-image: url(../public/img/select-uparrow.png);
       }
     }
   }
