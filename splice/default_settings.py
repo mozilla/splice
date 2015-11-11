@@ -40,7 +40,7 @@ class DefaultConfig(object):
     }
 
     S3 = {
-        "bucket": "moz-tiles-local",
+        "bucket": "moz-tiles-dev",
         "tile_index_key": "tile_index.v3.json"
     }
 
