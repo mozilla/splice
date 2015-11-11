@@ -11,38 +11,44 @@
     font-size: 14px;
   }
 
-  .tile-preview{
-    padding: 0;
-    @include all-shadow();
-    border-radius: 10px;
-    margin-bottom: 15px;
-
-    .tile-image{
-      height: 180px;
-      width: 290px;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-color: #bbb;
-    }
-    .tile-title{
-      font-family: "Lucida Grande", sans-serif;
-      width: 290px;
-      height: 30px;
-      border-bottom-left-radius: 10px;
-      border-bottom-right-radius: 10px;
-      padding: 0 5px;
-      font-size: 13px;
-      line-height: 30px;
-      color: #5c5c5c;
-      font-weight: normal;
-      background-color: #f2f2f2;
-    }
-  }
   .tile-default{
     margin-right: 30px;
   }
+}
+.tile-preview{
+  padding: 0;
+  @include all-shadow();
+  border-radius: 10px;
+  margin-bottom: 15px;
+  display: inline-block;
+
+  .tile-image{
+    height: 180px;
+    width: 290px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #bbb;
+  }
+  .tile-title{
+    font-family: "Lucida Grande", sans-serif;
+    width: 290px;
+    height: 30px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 0 5px;
+    font-size: 13px;
+    line-height: 30px;
+    color: #5c5c5c;
+    font-weight: normal;
+    text-align: center;
+    background-color: #f2f2f2;
+  }
+}
+.tile-label{
+  width: 290px;
+  text-align: center;
 }
 .tile-status-buttons{
   text-align: center;

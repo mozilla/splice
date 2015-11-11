@@ -4,9 +4,8 @@ import { Link } from 'react-router';
 import { displayMessage, shownMessage } from 'actions/App/AppActions';
 import { createTile, updateTile, fetchTiles, uploadImage, tileSetDetailsVar } from 'actions/Tiles/TileActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
-import Dropzone from 'react-dropzone';
 
-require('./TileForm.scss');
+import TileDropzone from 'components/Tiles/TileDropzone/TileDropzone';
 
 window.$ = require('jquery');
 window.jQuery = $;
@@ -128,44 +127,33 @@ export default class TileForm extends Component {
                   <div>
                     <div className="form-group">
                       <label >Static Image</label>
-                      <Dropzone onDrop={(file) => this.handleFileUpload(file, true) } multiple={false} className="tile-dropzone">
-                        {(this.props.Tile.details.enhanced_image_uri === undefined) ?
-                          (<div>
-                            <div className="tile-text">Drag File Here</div>
-                            <div className="tile-text-or"> or </div>
-                            <div className="tile-upload-btn">Upload Image</div>
-                          </div>)
-                          :
-                          (<div className="tile-preview">
-                            <div className="tile-image" style={{backgroundColor: this.props.Tile.details.bg_color, backgroundImage: 'url(' + this.props.Tile.details.enhanced_image_uri + ')' }}></div>
-                            <div className="tile-title" style={{backgroundColor: this.props.Tile.details.title_bg_color}}>{this.props.Tile.details.title}</div>
-                          </div>)}
-                      </Dropzone>
+                      <TileDropzone Tile={this.props.Tile} fieldName="enhanced_image_uri" handleFileUpload={(file) => this.handleFileUpload(file, 'enhanced_image_uri')} />
                       <label >Static Image URI</label>
                       <input className="form-control" onChange={(e) => this.handleChangeField(e, 'enhanced_image_uri')} type="text" id="TileEnhancedImageUri" name="enhanced_image_uri" ref="enhanced_image_uri" value={data.enhanced_image_uri} data-parsley-required data-parsley-type="url"/>
                     </div>
                     <div className="form-group">
                       <label >Rollover Image</label>
-                      <Dropzone onDrop={(file) => this.handleFileUpload(file, false) } multiple={false} className="tile-dropzone">
-                        {(this.props.Tile.details.image_uri === undefined) ?
-                          (<div>
-                            <div className="tile-text">Drag File Here</div>
-                            <div className="tile-text-or"> or </div>
-                            <div className="tile-upload-btn">Upload Image</div>
-                          </div>)
-                          :
-                          (<div className="tile-preview">
-                            <div className="tile-image" style={{backgroundColor: this.props.Tile.details.bg_color, backgroundImage: 'url(' + this.props.Tile.details.image_uri + ')' }}></div>
-                            <div className="tile-title" style={{backgroundColor: this.props.Tile.details.title_bg_color}}>{this.props.Tile.details.title}</div>
-                          </div>)}
-                      </Dropzone>
+                      <TileDropzone Tile={this.props.Tile} fieldName="image_uri" handleFileUpload={(file) => this.handleFileUpload(file, 'image_uri')} />
                       <label htmlFor="TileImageUri">Rollover Image URI</label>
                       <input className="form-control" onChange={(e) => this.handleChangeField(e, 'image_uri')} type="text" id="TileImageUri" name="image_uri" ref="image_uri" value={data.image_uri} data-parsley-required data-parsley-type="url"/>
                     </div>
                   </div>
-                  : null
+                  :
+                  <div>
+                    <div className="tile-preview">
+                      <div className="tile-image" style={ { backgroundColor: this.props.Tile.details.bg_color, backgroundImage: 'url(' + this.props.Tile.details.enhanced_image_uri + ')' } }></div>
+                      <div className="tile-title" style={ {backgroundColor: this.props.Tile.details.title_bg_color} }>{this.props.Tile.details.title}</div>
+                    </div>
+                    <br/>
+                    <label className="tile-label"> Static Image</label>
+                    <div className="tile-preview">
+                      <div className="tile-image" style={ { backgroundColor: this.props.Tile.details.bg_color, backgroundImage: 'url(' + this.props.Tile.details.image_uri + ')' } }></div>
+                      <div className="tile-title" style={ {backgroundColor: this.props.Tile.details.title_bg_color} }>{this.props.Tile.details.title}</div>
+                    </div>
+                    <br/>
+                    <label className="tile-label"> Rollover Image</label>
+                  </div>
                 }
-
               </div>
             </div>
           </div>
@@ -199,7 +187,7 @@ export default class TileForm extends Component {
     dispatch(tileSetDetailsVar(field, e.target.value));
   }
 
-  handleFileUpload(file, isEnhanced) {
+  handleFileUpload(file, fieldName) {
     const { dispatch } = this.props;
 
     const data = new FormData();
@@ -208,12 +196,7 @@ export default class TileForm extends Component {
     dispatch(uploadImage(data, isEnhanced))
       .then(function(response){
         if(response.result !== undefined){
-          if(isEnhanced){
-            dispatch(tileSetDetailsVar('enhanced_image_uri', response.result));
-          }
-          else{
-            dispatch(tileSetDetailsVar('image_uri', response.result));
-          }
+          dispatch(tileSetDetailsVar(fieldName, response.result));
         }
       }
     );

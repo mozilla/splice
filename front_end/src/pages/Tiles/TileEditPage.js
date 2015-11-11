@@ -50,7 +50,7 @@ export default class TileEditPage extends Component {
       })
       .then(() => {
         if(this.props.Tile.details !== undefined){
-          updateDocTitle('Edit Tile - ' + this.props.Tile.details.name);
+          updateDocTitle('Edit Tile - ' + this.props.Tile.details.title);
         }
       });
   }
