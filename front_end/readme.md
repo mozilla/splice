@@ -14,13 +14,12 @@ Install [node.js](https://nodejs.org/en/).
 
 `npm install` to install dependencies.
 
-`npm install gulp -g` install gulp.
 
-`gulp serve` to start a local server with hot reloading.
+`npm start` to start a local server with hot reloading.
 
-`gulp build:dist` to build production code in the /dist directory.
+`npm run build:dist` to build production code in the /dist directory.
 
-`node node_modules/karma/bin/karma start` to run tests.
+`npm test` to run tests.
 
 ## Features
 
