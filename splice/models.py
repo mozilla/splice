@@ -62,6 +62,7 @@ class Channel(db.Model):
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     name = db.Column(db.String(32), nullable=False, unique=True)
     created_at = db.Column(db.DateTime(), server_default=db.func.now())
+    adgroups = db.relationship("Adgroup", backref="channel")
 
 
 class Distribution(db.Model):
