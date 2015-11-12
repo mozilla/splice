@@ -22,7 +22,7 @@ def get_country_code():
         yield dict(country_name=name, country_code=code)
 
 
-def insert(env, drop=False):
+def insert(env, drop=False, load_stats=False):
     # import models here to delay the db instantiation
     from splice.models import (Account, Country, Campaign, CampaignCountry,
                                Channel, Adgroup, AdgroupCategory, Tile, impression_stats_daily)
@@ -67,13 +67,15 @@ def insert(env, drop=False):
             tile = Tile(**record)
             session.add(tile)
 
-        for record in parse_csv("impression_stats.csv"):
-            i = insertSql(impression_stats_daily)
-            i = i.values(**record)
-            session.execute(i)
+        if load_stats:
+            for record in parse_csv("impression_stats.csv"):
+                i = insertSql(impression_stats_daily)
+                i = i.values(**record)
+                session.execute(i)
 
         session.commit()
     return True
+
 
 if __name__ == '__main__':
     db_name = 'splice_test'
@@ -88,4 +90,4 @@ if __name__ == '__main__':
     db_stats_uri = os.environ.get('TEST_DB_STATS_URI') or 'postgres://localhost/%s' % db_stats_name
     env = Environment.instance(test=True, test_db_uri=db_uri, test_db_stats_uri=db_stats_uri)
 
-    insert(env, True)
+    insert(env, drop=True, load_stats=True)

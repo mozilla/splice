@@ -20,11 +20,11 @@ class BaseTestCase(TestCase):
     def create_app(self):
         return self.env.application
 
-    def setUp(self):
+    def setUp(self, load_stats=False):
         if self.load_fixtures:
             from splice.models import Channel
 
-            populate_database.insert(env, drop=True)
+            populate_database.insert(env, drop=True, load_stats=load_stats)
 
             self.channels = (
                 env.db.session

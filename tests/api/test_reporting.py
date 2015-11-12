@@ -7,7 +7,7 @@ from nose.tools import assert_equal
 class TestReportingAPI(BaseTestCase):
 
     def setUp(self):
-        super(TestReportingAPI, self).setUp()
+        super(TestReportingAPI, self).setUp(load_stats=True)
 
     def test_reporting_stats(self):
         """Test reporting stats 200 response"""
