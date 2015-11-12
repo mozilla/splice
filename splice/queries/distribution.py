@@ -15,7 +15,18 @@ from splice.web.api.tile_upload import load_bucketer
 Dists = namedtuple("Dists", ['legacy', 'directory', 'suggested'])
 
 
-def _tile_dict(tile, bucketer, legacy=False):
+def _create_tiles(tile, bucketer, legacy=False):
+    """Create the new Directory/Suggested/Legacy tiles
+
+    Params:
+        tile: sqlalchemy record for tiles table
+        bucketer: dict of buckets
+        legacy: flag to create legacy tile
+    Return:
+        List of tile dicts. It returns multiple new tiles if the argument tile is a
+        suggested tile with multiple categories. Otherwise, it returns a one item list.
+    """
+    new_tiles = []
     tile_dict = dict(
         directoryId=tile.id,
         url=tile.target_url,
@@ -24,27 +35,38 @@ def _tile_dict(tile, bucketer, legacy=False):
         type=tile.type,
         imageURI=switch_to_cdn_url(tile.image_uri),
         enhancedImageURI=switch_to_cdn_url(tile.enhanced_image_uri))
-    if not legacy:
-        # only suggested tiles have categories
-        if tile.adgroup.categories:
-            # TODO(najiang@mozilla.com) only grab the first category here.
-            # We should create multiple tiles for multiple categories, with
-            # each tile has a frecent site list based on the category.
-            bucket = bucketer[tile.adgroup.categories[0].category]
-            frequency_caps = {"daily": tile.adgroup.frequency_cap_daily, "total": tile.adgroup.frequency_cap_total}
-            tile_dict.update(dict(
+    if not legacy and tile.adgroup.categories:
+        for category in tile.adgroup.categories:
+            bucket = bucketer[category.category]
+            frequency_caps = {"daily": tile.adgroup.frequency_cap_daily,
+                              "total": tile.adgroup.frequency_cap_total}
+            copy = dict(tile_dict)
+            copy.update(dict(
                 titleBgColor=tile.title_bg_color,
                 frecent_sites=bucket["sites"],
                 frequency_caps=frequency_caps,
                 adgroup_name=bucket["adgroup_name"],
-                adgroup_categories=[category.category for category in tile.adgroup.categories],
-                explanation=tile.adgroup.explanation,
+                adgroup_categories=[category.category],
+                explanation=tile.adgroup.explanation or bucket["explanation"],
                 check_inadjacency=tile.adgroup.check_inadjacency))
-    return tile_dict
+            new_tiles.append(copy)
+    else:
+        new_tiles.append(tile_dict)
+
+    return new_tiles
 
 
 def switch_to_cdn_url(image_uri):
-    """See https://github.com/oyiptong/splice/issues/203"""
+    """Switch the S3 URI with the CDN URI
+
+    We store the S3 URI in the database to allow campaign managers to view the
+    uploaded images without suffering from the CDN latency. When preparing to
+    generate tiles for the Firefox, it's necessary to replace the S3 URIs with
+    the CDN ones, as Firefox only allows images hosted on a trusted URI, e.g.
+    "tiles.cdn.mozilla.net".
+
+    See https://github.com/oyiptong/splice/issues/203 for more details.
+    """
     from splice.environment import Environment
 
     env = Environment.instance()
@@ -65,7 +87,7 @@ def get_possible_distributions(today=None, channel_id=None):
         .filter(Tile.paused == false())
         .filter(Adgroup.paused == false())
         .filter(Campaign.paused == false())
-        .filter(Campaign.end_date > today)
+        .filter(Campaign.end_date >= today)
         .filter(Campaign.start_date <= today)
         .join(Adgroup)
         .join(Campaign)
@@ -85,18 +107,18 @@ def get_possible_distributions(today=None, channel_id=None):
         channel = tile.adgroup.channel.name
         safe_channel_name = urllib.quote(channel)
 
-        tile_dict = _tile_dict(tile, bucketer)
-        legacy_dict = _tile_dict(tile, bucketer, True)
+        new_tiles = _create_tiles(tile, bucketer)
+        legacy_tiles = _create_tiles(tile, bucketer, True)
         suggested = len(tile.adgroup.categories) > 0
 
         for country in countries:
             key = (safe_channel_name, country.country_code, locale)
             value = tiles.setdefault(key, Dists(legacy=[], directory=[], suggested=[]))
             if suggested:
-                value.suggested.append(tile_dict)
+                value.suggested.extend(new_tiles)
             else:
-                value.directory.append(tile_dict)
-                value.legacy.append(legacy_dict)
+                value.directory.extend(new_tiles)
+                value.legacy.extend(legacy_tiles)
 
     tile_index = {}
     for (channel, country, locale), (legacy, directory, suggested) in tiles.items():
