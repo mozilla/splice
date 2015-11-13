@@ -3,6 +3,7 @@ import mock
 from tests.base import BaseTestCase
 from nose.tools import assert_equal
 from flask import url_for, json
+from splice.queries.distribution import multiplex_directory_tiles
 
 
 class TestDistributionAPI(BaseTestCase):
@@ -58,3 +59,33 @@ class TestDistributionAPI(BaseTestCase):
         url = url_for('api.distributions.distributions', date="2015-10-01")
         response = self.client.post(url)
         assert_equal(response.status_code, 400)
+
+    def test_multiplex_directory_tiles(self):
+        tile1 = {"type": "sponsored", "directoryId": 1, "url": "www.test.com"}
+        tile2 = {"type": "sponsored", "directoryId": 2, "url": "www.test1.com"}
+        tile3 = {"type": "affiliate", "directoryId": 3, "url": "www.mozilla.org"}
+        tile4 = {"type": "affiliate", "directoryId": 4, "url": "www.mozilla.org"}
+        tiles = [tile1, tile2, tile3, tile4]
+        ret = multiplex_directory_tiles(tiles)
+        assert_equal(len(ret), 4)
+        assert_equal([
+            [tile3, tile1],
+            [tile4, tile1],
+            [tile3, tile2],
+            [tile4, tile2]
+        ], ret)
+        ret = multiplex_directory_tiles(tiles[2:])
+        assert_equal(len(ret), 2)
+        assert_equal([
+            [tile3],
+            [tile4]
+        ], ret)
+        ret = multiplex_directory_tiles(tiles[:2])
+        assert_equal(len(ret), 2)
+        assert_equal([
+            [tile1],
+            [tile2]
+        ], ret)
+        ret = multiplex_directory_tiles(tiles[:1])
+        assert_equal(len(ret), 1)
+        assert_equal([[tile1]], ret)

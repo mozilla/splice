@@ -6,7 +6,9 @@ import json
 from datetime import datetime
 from collections import defaultdict
 from collections import namedtuple
+from itertools import product
 
+from furl import furl
 from sqlalchemy.sql.expression import false
 from splice.models import Tile, Adgroup, Campaign, CampaignCountry
 from splice.web.api.tile_upload import load_bucketer
@@ -154,3 +156,50 @@ def get_possible_distributions(today=None, channel_id=None):
             "force_upload": True
         })
     return artifacts
+
+
+_SENTINEL = object()
+
+
+def multiplex_directory_tiles(tiles):
+    """Directory tile multiplexer that creates all possible combinations of the
+    tile sets based on its type and the target url. Given multiple sponsored tiles,
+    it'll pick one of them and create a new tile set with other directory tiles.
+    It also multiplexes the tiles with the same TLD+1 target url (e.g. www.mozilla.org).
+    Therefore, given a tile set with N sponsored tiles and M identical TLD+1 tiles, the
+    total number of multiplexed directory tile set is N*M.
+
+    Params:
+        tiles: a list of original tiles.
+    Return:
+        A list of tile sets. Note that the sponsored directory tile is always the
+        3rd entry in the list, other tiles will be sorted by the tile id.
+    """
+    if len(tiles) <= 1:
+        return [tiles]
+
+    sponsored = []
+    tlds = defaultdict(list)
+    for tile in tiles:
+        if tile["type"] == "sponsored":
+            sponsored.append(tile)
+        else:
+            url = furl(tile["url"]).netloc
+            tlds[url].append(tile)
+
+    # if no sponsored tiles, use a sentinel instead
+    if not sponsored:
+        sponsored.append(_SENTINEL)
+
+    ret = []
+    # Cartesian product of the identical tld tiles and the sponsored tiles
+    for multiplex in product(sponsored, *tlds.values()):
+        copy = list(multiplex)
+        sponsored_tile, rest = copy[0], copy[1:]
+        rest.sort(key=lambda tile: tile["directoryId"])
+        # if the sponsored tile is not the sentinel, insert into tile list
+        if not (len(sponsored) == 1 and sponsored_tile is _SENTINEL):
+            rest.insert(2, sponsored_tile)  # sponsored tile always takes the 3rd place
+        ret.append(rest)
+
+    return ret
