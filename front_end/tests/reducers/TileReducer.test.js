@@ -74,4 +74,15 @@ describe('Tile ', () => {
       {name: "new name"}
     );
   });
+
+  it('should handle TILE_SET_DETAILS_VAR', () => {
+    expect(
+      Tile({ details: { title: 'initialName' } }, {
+        type: types.TILE_SET_DETAILS_VAR,
+        variable: 'title',
+        value: 'newName'
+      }).details).toEqual({
+      title: 'newName'
+    });
+  });
 });

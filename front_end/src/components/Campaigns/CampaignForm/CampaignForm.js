@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
 
-import { displayMessage, shownMessage } from 'actions/App/AppActions';
+import { displayMessage, shownMessage, formChanged, formSaved } from 'actions/App/AppActions';
 import { createCampaign, updateCampaign} from 'actions/Campaigns/CampaignActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
 import { formatDate, apiDate } from 'helpers/DateHelpers';
@@ -20,6 +19,12 @@ bindFormConfig();
 require('parsleyjs');
 
 export default class CampaignForm extends Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+  }
+
   componentDidMount() {
     this.frontEndScripts();
   }
@@ -66,7 +71,7 @@ export default class CampaignForm extends Component {
                   ? (<div className="form-group">
                   <label htmlFor="AccountPaused">Paused</label>
                   <div className="onoffswitch">
-                    <input type="checkbox" name="paused" ref="paused" className="onoffswitch-checkbox" id="AccountPaused" defaultChecked={data.paused} value="true"/>
+                    <input type="checkbox" onChange={this.handleChange} name="paused" ref="paused" className="onoffswitch-checkbox" id="AccountPaused" defaultChecked={data.paused} value="true"/>
                     <label className="onoffswitch-label" htmlFor="AccountPaused"></label>
                   </div>
                 </div>)
@@ -78,13 +83,13 @@ export default class CampaignForm extends Component {
               <div className="col-xs-4">
                 <div className="form-group">
                   <label htmlFor="CampaignName">Campaign Name</label>
-                  <input className="form-control" type="text" id="CampaignName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
+                  <input className="form-control" type="text" onChange={this.handleChange}  id="CampaignName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
                 </div>
               </div>
               <div className="col-xs-4 col-xs-push-3">
                 <div className="form-group">
                   <label htmlFor="CampaignChannelId">How do you want to reach people?</label>
-                  <CustomRadio inputName="channel_id" selected={this.props.Campaign.details.channel_id} options={this.props.Init.channels} />
+                  <CustomRadio inputName="channel_id" selected={this.props.Campaign.details.channel_id} options={this.props.Init.channels} handleChange={this.handleChange} />
                 </div>
               </div>
             </div>
@@ -98,7 +103,7 @@ export default class CampaignForm extends Component {
               <div className="col-xs-6">
                 <div className="form-group">
                   <label htmlFor="CampaignCountries">Countries</label><br/>
-                  <select className="form-control js-select" style={{width: '100%'}} id="CampaignCountries" name="countries[]" ref="countries" multiple="multiple" defaultValue={data.countries} data-parsley-required>
+                  <select className="form-control js-select" onChange={this.handleChange} style={{width: '100%'}} id="CampaignCountries" name="countries[]" ref="countries" multiple="multiple" defaultValue={data.countries} data-parsley-required>
                     {countries}
                   </select>
                 </div>
@@ -114,19 +119,19 @@ export default class CampaignForm extends Component {
               <div className="col-xs-3">
                 <div className="form-group">
                   <label htmlFor="CampaignStartDate">Start Date</label>
-                  <input className="form-control" type="text" id="CampaignStartDate" name="start_date" ref="start_date" defaultValue={formatDate(data.start_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
+                  <input className="form-control" type="text" onChange={this.handleChange} id="CampaignStartDate" name="start_date" ref="start_date" defaultValue={formatDate(data.start_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
                 </div>
               </div>
               <div className="col-xs-3">
                 <div className="form-group">
                   <label htmlFor="CampaignEndDate">End Date</label>
-                  <input className="form-control" type="text" id="CampaignEndDate" name="end_date" ref="end_date" defaultValue={formatDate(data.end_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
+                  <input className="form-control" type="text" onChange={this.handleChange} id="CampaignEndDate" name="end_date" ref="end_date" defaultValue={formatDate(data.end_date, 'YYYY-MM-DD')} data-parsley-dateformat data-parsley-required />
                 </div>
               </div>
             </div>
           </div>
 
-          <button onClick={(e) => this.handleFormSubmit(e)} className="form-submit" >Save {spinner}</button>
+          <button onClick={this.handleFormSubmit} className="form-submit" >Save {spinner}</button>
 
         </form>
       </div>
@@ -134,17 +139,27 @@ export default class CampaignForm extends Component {
   }
 
   frontEndScripts(){
+    const context = this;
     bindFormValidators();
 
-    $('.js-select').select2();
+    $('.js-select').select2().on('change', function(){
+      context.handleChange();
+    });
 
     const options = {
       useCurrent: true,
       format: 'YYYY-MM-DD',
       showTodayButton: true
     };
-    $('#CampaignStartDate').datetimepicker(options);
-    $('#CampaignEndDate').datetimepicker(options);
+    $('#CampaignStartDate, #CampaignEndDate').datetimepicker(options).blur(function(){
+      context.handleChange();
+    });
+  }
+
+  handleChange(){
+    if(this.props.App.formChanged !== true){
+      this.props.dispatch(formChanged());
+    }
   }
 
   handleFormSubmit(e) {
@@ -218,6 +233,8 @@ export default class CampaignForm extends Component {
       else{
         dispatch(displayMessage('success', 'Campaign Created Successfully') );
       }
+
+      dispatch(formSaved());
       history.pushState(null, '/campaigns/' + response.result.id);
     }
   }

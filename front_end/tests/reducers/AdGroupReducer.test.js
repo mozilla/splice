@@ -74,4 +74,15 @@ describe('AdGroup ', () => {
       {name: "new name"}
     );
   });
+
+  it('should handle ADGROUP_SET_DETAILS_VAR', () => {
+    expect(
+      AdGroup({ details: { name: 'initialName' } }, {
+        type: types.ADGROUP_SET_DETAILS_VAR,
+        variable: 'name',
+        value: 'newName'
+      }).details).toEqual({
+      name: 'newName'
+    });
+  });
 });

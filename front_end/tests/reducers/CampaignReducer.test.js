@@ -74,4 +74,17 @@ describe('Campaign ', () => {
       {name: "new name"}
     );
   });
+
+  it('should handle CAMPAIGN_SET_FILTER', () => {
+    expect(
+      Campaign({ filters: { past: false, scheduled: false, inFlight: true } }, {
+        type: types.CAMPAIGN_SET_FILTER,
+        variable: 'past',
+        value: true
+      }).filters).toEqual({
+      past: true,
+      scheduled: false,
+      inFlight: true
+    });
+  });
 });

@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import reactMixin from 'react-mixin';
+import { Link, Lifecycle } from 'react-router';
 
 import { updateDocTitle } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
 import TileForm from 'components/Tiles/TileForm/TileForm';
 
-export default class TileEditPage extends Component {
+@reactMixin.decorate(Lifecycle)
+class TileEditPage extends Component {
+  constructor(props) {
+    super(props);
+    this.routerWillLeave = this.routerWillLeave.bind(this);
+  }
+
   componentWillMount() {
     this.fetchTileDetails(this.props);
   }
@@ -39,6 +46,12 @@ export default class TileEditPage extends Component {
     return output;
   }
 
+  routerWillLeave() {
+    if(this.props.App.formChanged){
+      return 'Your progress is not saved. Are you sure you want to leave?';
+    }
+  }
+
   fetchTileDetails(props) {
     const { dispatch } = props;
 
@@ -61,6 +74,7 @@ TileEditPage.propTypes = {};
 // Which props do we want to inject, given the global state?
 function select(state) {
   return {
+    App: state.App,
     Init: state.Init,
     Account: state.Account,
     Campaign: state.Campaign,

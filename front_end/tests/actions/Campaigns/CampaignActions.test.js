@@ -65,4 +65,29 @@ describe('actions', () => {
     };
     expect(actions.receiveUpdateCampaign(json)).toEqual(expectedAction);
   });
+
+  it('should request bulk upload', () => {
+    const expectedAction = {
+      type: actions.REQUEST_BULK_UPLOAD
+    };
+    expect(actions.requestBulkUpload()).toEqual(expectedAction);
+  });
+
+  it('should receive bulk upload', () => {
+    const json = {result: [{test: 'test'}]};
+    const expectedAction = {
+      type: actions.RECEIVE_BULK_UPLOAD,
+      json: json
+    };
+    expect(actions.receiveBulkUpload(json)).toEqual(expectedAction);
+  });
+
+  it('should set filter', () => {
+    const expectedAction = {
+      type: actions.CAMPAIGN_SET_FILTER,
+      variable: 'past',
+      value: true
+    };
+    expect(actions.campaignSetFilter('past', true)).toEqual(expectedAction);
+  });
 });

@@ -7,6 +7,14 @@ require('./TileDropzone.scss');
 
 export default class TileDropzone extends Component {
   render() {
+    let spinner;
+    if(this.props.fieldName === 'enhanced_image_uri' && this.props.Tile.isUploadingEnhancedImage){
+      spinner = (<div><br/><img src="./public/img/ajax-loader-dark.gif" /></div>);
+    }
+    else if(this.props.fieldName === 'image_uri' && this.props.Tile.isUploadingImage){
+      spinner = (<div><br/><img src="./public/img/ajax-loader-dark.gif" /></div>);
+    }
+
     return (
       <Dropzone onDrop={(file) => this.props.handleFileUpload(file) } multiple={false} className="tile-dropzone">
         {(this.props.Tile.details[this.props.fieldName] === undefined || this.props.Tile.details[this.props.fieldName] === '') ?
@@ -14,6 +22,7 @@ export default class TileDropzone extends Component {
             <div className="tile-text">Drag File Here</div>
             <div className="tile-text-or"> or </div>
             <div className="tile-upload-btn">Upload Image</div>
+            {spinner}
           </div>)
           :
           (<div className="tile-preview">
