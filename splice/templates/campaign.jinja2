@@ -6,7 +6,7 @@
   <title></title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link rel="shortcut icon" type="image/x-icon" href="/public/img/favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='build/campaign-manager/public/img/favicon.ico') }}">
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800|Montserrat:400,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -18,6 +18,6 @@
     <p>Loading...</p>
   </div>
 
-  <script type="text/javascript" src="main.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='build/campaign-manager/main.js') }}"></script>
 </body>
 </html>
