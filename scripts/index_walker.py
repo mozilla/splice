@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# coding=utf-8
+# -*- coding: <encoding name> -*-
 from StringIO import StringIO
 
 import requests
