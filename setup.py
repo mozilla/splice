@@ -8,5 +8,5 @@ setup(
     author="Mozilla",
     packages=find_packages(),
     include_package_data=True,
-    scripts=["scripts/manage.py", "scripts/tile_index_crawl.py", "scripts/rs_to_pg.py"],
+    scripts=["scripts/manage.py", "scripts/tile_index_crawl.py", "scripts/rs_to_pg.py", "scripts/index_walker.py"],
 )
