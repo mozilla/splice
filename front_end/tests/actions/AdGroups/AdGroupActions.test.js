@@ -65,4 +65,13 @@ describe('actions', () => {
     };
     expect(actions.receiveUpdateAdGroup(json)).toEqual(expectedAction);
   });
+
+  it('should set details var', () => {
+    const expectedAction = {
+      type: actions.ADGROUP_SET_DETAILS_VAR,
+      variable: 'type',
+      value: 'suggested'
+    };
+    expect(actions.adGroupSetDetailsVar('type', 'suggested')).toEqual(expectedAction);
+  });
 });

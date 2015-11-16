@@ -31,13 +31,9 @@ export default class CampaignViewPage extends Component {
             <div className="col-xs-6">
               <CampaignDetails Campaign={this.props.Campaign} Init={this.props.Init}/>
             </div>
-            <div className="col-xs-6">
-              <div className="pull-right">
-                <Link className="btn btn-default" to={'/campaigns/' + this.props.Campaign.details.id + '/bulkupload'}>Bulk Upload <i className="fa fa-upload"></i></Link>
-              </div>
-            </div>
           </div>
           <Link className="create-link" to={'/campaigns/' + this.props.Campaign.details.id + '/createadgroup'}>Create Ad Group <i className="fa fa-plus"></i></Link>
+          <Link className="upload-link create-link" to={'/campaigns/' + this.props.Campaign.details.id + '/bulkupload'}>Bulk Upload <i className="fa fa-upload"></i></Link>
           <AdGroupList rows={this.props.AdGroup.rows}
                        isFetching={this.props.AdGroup.isFetching}/>
         </div>

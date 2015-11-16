@@ -8,7 +8,7 @@ window.$ = require('jquery');
 export default class CustomRadio extends Component {
   constructor(props) {
     super(props);
-    this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   render() {
@@ -19,13 +19,11 @@ export default class CustomRadio extends Component {
             {this.props.options.map((row, index) =>
               <div className="custom-radio-option" key={'custom-radio-' + index}>
                 <label htmlFor={this.props.inputName + index}>
-                {(row.id === this.props.selected)
-                  ? <i className="fa fa-circle" ></i>
-                  : <i className="fa fa-circle-thin" ></i>
-                }
+                 <i className={'custom-radio-icon ' + ((row.id === this.props.selected) ? 'active' : '') }>
+                 </i>
                  {_.capitalize(row.name)}
                 </label>
-                <input type="radio" name={this.props.inputName} id={this.props.inputName + index} className="custom-radio-input" onChange={this.handleOnChange} value={row.id} defaultChecked={(row.id === this.props.selected)} data-parsley-required/>
+                <input type="radio" name={this.props.inputName} id={this.props.inputName + index} className="custom-radio-input" onChange={this.handleChange} value={row.id} defaultChecked={(row.id === this.props.selected)} data-parsley-required/>
               </div>
             )}
           </div>
@@ -34,16 +32,16 @@ export default class CustomRadio extends Component {
     );
   }
 
-  handleOnChange(e){
+  handleChange(e){
     const elem = $(e.target);
     const button = elem.parents('.custom-radio-option');
     const options = elem.parents('.custom-radio-options');
 
-    options.find('i.fa-circle').removeClass('fa-circle').addClass('fa-circle-thin');
-    button.find('i.fa').removeClass('fa-circle-thin').addClass('fa-circle');
+    options.find('.custom-radio-icon.active').removeClass('active');
+    button.find('.custom-radio-icon').addClass('active');
 
-    if(this.props.onChange !== undefined){
-      this.props.onChange(elem.attr('data-key'));
+    if(this.props.handleChange !== undefined){
+      this.props.handleChange(elem.attr('data-key'));
     }
   }
 }
@@ -52,5 +50,5 @@ CustomRadio.propTypes = {
   inputName: PropTypes.string.isRequired,
   selected: PropTypes.number,
   options: PropTypes.array.isRequired,
-  onChange: PropTypes.func
+  handleChange: PropTypes.func
 };

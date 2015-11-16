@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import { updateDocTitle, pageVisit } from 'actions/App/AppActions';
-import { fetchCampaigns, campaignSetPast, campaignSetScheduled, campaignSetInFlight } from 'actions/Campaigns/CampaignActions';
+import { fetchCampaigns, campaignSetFilter } from 'actions/Campaigns/CampaignActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 
 import AccountDetails from 'components/Accounts/AccountDetails/AccountDetails';
@@ -43,9 +43,9 @@ export default class AccountViewPage extends Component {
                 Filters
               </div>
               <div className="list-filter-dropdown" >
-                {this.generateFilter('past', 'Past', this.props.Campaign.past)}
-                {this.generateFilter('scheduled', 'Scheduled', this.props.Campaign.scheduled)}
-                {this.generateFilter('inFlight', 'In Flight', this.props.Campaign.inFlight)}
+                {this.generateFilter('past', 'Past', this.props.Campaign.filters.past)}
+                {this.generateFilter('scheduled', 'Scheduled', this.props.Campaign.filters.scheduled)}
+                {this.generateFilter('inFlight', 'In Flight', this.props.Campaign.filters.inFlight)}
                 <div className="clearfix"></div>
               </div>
             </div>
@@ -78,20 +78,7 @@ export default class AccountViewPage extends Component {
   handleToggleFilter(varName, value){
     const { dispatch } = this.props;
 
-    switch(varName){
-      case 'past':
-        dispatch(campaignSetPast(value));
-        break;
-      case 'scheduled':
-        dispatch(campaignSetScheduled(value));
-        break;
-      case 'inFlight':
-        dispatch(campaignSetInFlight(value));
-        break;
-      default:
-        break;
-    }
-
+    dispatch(campaignSetFilter(varName, value));
     dispatch(fetchCampaigns(this.props.Account.details.id));
   }
 

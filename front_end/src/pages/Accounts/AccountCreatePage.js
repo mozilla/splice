@@ -31,7 +31,7 @@ class AccountCreatePage extends Component {
     );
   }
 
-  routerWillLeave(nextLocation) {
+  routerWillLeave() {
     if(this.props.App.formChanged){
       return 'Your progress is not saved. Are you sure you want to leave?';
     }
