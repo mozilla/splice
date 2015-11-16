@@ -65,4 +65,13 @@ describe('actions', () => {
     };
     expect(actions.receiveUpdateTile(json)).toEqual(expectedAction);
   });
+
+  it('should set details var', () => {
+    const expectedAction = {
+      type: actions.TILE_SET_DETAILS_VAR,
+      variable: 'title',
+      value: 'newTitle'
+    };
+    expect(actions.tileSetDetailsVar('title', 'newTitle')).toEqual(expectedAction);
+  });
 });

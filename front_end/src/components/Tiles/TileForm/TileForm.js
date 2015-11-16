@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-import { displayMessage, shownMessage } from 'actions/App/AppActions';
+import { displayMessage, shownMessage, formChanged, formSaved } from 'actions/App/AppActions';
 import { createTile, updateTile, fetchTiles, uploadImage, tileSetDetailsVar } from 'actions/Tiles/TileActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
 
@@ -17,6 +17,12 @@ bindFormConfig();
 require('parsleyjs');
 
 export default class TileForm extends Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+  }
+
   componentDidMount(){
     bindFormValidators();
 
@@ -69,7 +75,7 @@ export default class TileForm extends Component {
                   ? (<div className="form-group">
                   <label htmlFor="TilePaused">Paused</label>
                   <div className="onoffswitch">
-                    <input type="checkbox" name="paused" ref="paused" className="onoffswitch-checkbox" id="TilePaused" defaultChecked={data.paused} value="true"/>
+                    <input type="checkbox" onChange={this.handleChange} name="paused" ref="paused" className="onoffswitch-checkbox" id="TilePaused" defaultChecked={data.paused} value="true"/>
                     <label className="onoffswitch-label" htmlFor="TilePaused"></label>
                   </div>
                 </div>)
@@ -83,7 +89,7 @@ export default class TileForm extends Component {
                   (<div>
                     <div className="form-group">
                       <label htmlFor="TileTargetUrl">Clickthrough URL</label>
-                      <input className="form-control" type="text" id="TileTargetUrl" name="target_url" ref="target_url" defaultValue={data.target_url} data-parsley-required data-parsley-type="url"/>
+                      <input className="form-control" onChange={this.handleChange} type="text" id="TileTargetUrl" name="target_url" ref="target_url" defaultValue={data.target_url} data-parsley-required data-parsley-type="url"/>
                     </div>
                   </div>)
                   : null
@@ -104,7 +110,7 @@ export default class TileForm extends Component {
                 </div>
                 <div className="form-group">
                   <label htmlFor="TileType">Type</label>
-                  <select className="form-control" id="TileType" name="type" ref="type" defaultValue={data.type} >
+                  <select className="form-control" onChange={this.handleChange} id="TileType" name="type" ref="type" defaultValue={data.type} >
                     <option value="affiliate">Affiliate</option>
                     <option value="sponsored">Sponsored</option>
                   </select>
@@ -113,7 +119,7 @@ export default class TileForm extends Component {
                       ? ( <div className="hide">
                         <div className="form-group">
                           <label htmlFor="TileStatus">Approval Status</label>
-                          <select className="form-control" id="TileStatus" name="status" ref="status" defaultValue={data.status} disabled="true">
+                          <select className="form-control" onChange={this.handleChange} id="TileStatus" name="status" ref="status" defaultValue={data.status} disabled="true">
                             <option value="unapproved">Unapproved</option>
                             <option value="disapproved">Disapproved</option>
                             <option value="approved">Approved</option>
@@ -158,7 +164,7 @@ export default class TileForm extends Component {
             </div>
           </div>
 
-          <button onClick={(e) => this.handleFormSubmit(e)} className="form-submit">Save {spinner}</button>
+          <button onClick={this.handleFormSubmit} className="form-submit">Save {spinner}</button>
         </form>
       </div>
     );
@@ -181,10 +187,17 @@ export default class TileForm extends Component {
     });
   }
 
+  handleChange(){
+    if(this.props.App.formChanged !== true){
+      this.props.dispatch(formChanged());
+    }
+  }
+
   handleChangeField(e, field){
     const { dispatch } = this.props;
 
     dispatch(tileSetDetailsVar(field, e.target.value));
+    this.handleChange();
   }
 
   handleFileUpload(file, fieldName) {
@@ -197,6 +210,11 @@ export default class TileForm extends Component {
       .then(function(response){
         if(response.result !== undefined){
           dispatch(tileSetDetailsVar(fieldName, response.result));
+        }
+        else{
+          dispatch(displayMessage('error', response.message) );
+          dispatch(shownMessage());
+          window.scrollTo(0, 0);
         }
       }
     );
@@ -262,6 +280,7 @@ export default class TileForm extends Component {
       else{
         dispatch(displayMessage('success', 'Tile Created Successfully') );
       }
+      dispatch(formSaved());
       history.pushState(null, '/tiles/' + response.result.id);
     }
   }

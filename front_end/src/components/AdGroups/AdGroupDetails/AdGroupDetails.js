@@ -20,6 +20,7 @@ export default class AdGroupDetails extends Component {
 
     const suggestedFields = (
         <div>
+          <p><strong>Explanation:</strong> {data.explanation}</p>
           <p><strong>Frequency Cap Daily:</strong> {data.frequency_cap_daily}</p>
           <p><strong>Frequency Cap Total:</strong> {data.frequency_cap_total}</p>
           <p><strong>Categories:</strong> {categories}</p>
@@ -45,7 +46,6 @@ export default class AdGroupDetails extends Component {
             </div>
           </div>
           <div className="details-panel-body">
-            <p><strong>Explanation:</strong> {data.explanation}</p>
             <p><strong>Type:</strong> {_.capitalize(data.type)}</p>
             {(data.type === 'suggested') ? suggestedFields : null }
             <p><strong>Locale:</strong> {data.locale}</p>

@@ -27,12 +27,6 @@ export const RECEIVE_TILE = 'RECEIVE_TILE';
 
 export const TILE_SET_DETAILS_VAR = 'TILE_SET_DETAILS_VAR';
 
-export const TILE_CLEAR_DETAILS = 'TILE_CLEAR_DETAILS';
-
-export function tileClearDetails(){
-  return {type: TILE_CLEAR_DETAILS};
-}
-
 export function tileSetDetailsVar(variable, value){
   return {type: TILE_SET_DETAILS_VAR, variable: variable, value: value};
 }

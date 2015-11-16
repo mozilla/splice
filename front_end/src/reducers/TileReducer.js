@@ -11,8 +11,7 @@ import {
   RECEIVE_TILES,
   REQUEST_TILE,
   RECEIVE_TILE,
-  TILE_SET_DETAILS_VAR,
-  TILE_CLEAR_DETAILS
+  TILE_SET_DETAILS_VAR
 } from 'actions/Tiles/TileActions';
 
 const initialState = {
@@ -26,10 +25,6 @@ const initialState = {
 
 export function Tile(state = initialState, action = null) {
   switch (action.type) {
-    case TILE_CLEAR_DETAILS:
-      return _.assign({}, state, {
-        details: {}
-      });
     case TILE_SET_DETAILS_VAR:
       return _.assign({}, state, {
         details: _.assign({}, state.details, {

@@ -26,7 +26,7 @@ class AccountEditPage extends Component {
   }
 
   render() {
-    let output = (<div/>);
+    let output = null;
 
     if(this.props.Account.details){
       output = (
@@ -47,7 +47,7 @@ class AccountEditPage extends Component {
     return output;
   }
 
-  routerWillLeave(nextLocation) {
+  routerWillLeave() {
     if(this.props.App.formChanged){
       return 'Your progress is not saved. Are you sure you want to leave?';
     }

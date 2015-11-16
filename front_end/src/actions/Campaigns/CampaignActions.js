@@ -22,9 +22,7 @@ export const RECEIVE_CAMPAIGNS = 'RECEIVE_CAMPAIGNS';
 export const REQUEST_CAMPAIGN = 'REQUEST_CAMPAIGN';
 export const RECEIVE_CAMPAIGN = 'RECEIVE_CAMPAIGN';
 
-export const CAMPAIGN_SET_PAST = 'CAMPAIGN_SET_PAST';
-export const CAMPAIGN_SET_SCHEDULED = 'CAMPAIGN_SET_SCHEDULED';
-export const CAMPAIGN_SET_IN_FLIGHT = 'CAMPAIGN_SET_IN_FLIGHT';
+export const CAMPAIGN_SET_FILTER = 'CAMPAIGN_SET_FILTER';
 
 export function requestCreateCampaign() {
   return {type: REQUEST_CREATE_CAMPAIGN};
@@ -79,21 +77,10 @@ export function receiveCampaigns(json) {
   };
 }
 
-export function campaignSetPast(value) {
+export function campaignSetFilter(variable, value) {
   return {
-    type: CAMPAIGN_SET_PAST,
-    value: value
-  };
-}
-export function campaignSetScheduled(value) {
-  return {
-    type: CAMPAIGN_SET_SCHEDULED,
-    value: value
-  };
-}
-export function campaignSetInFlight(value) {
-  return {
-    type: CAMPAIGN_SET_IN_FLIGHT,
+    type: CAMPAIGN_SET_FILTER,
+    variable: variable,
     value: value
   };
 }
@@ -187,9 +174,9 @@ export function fetchCampaigns(accountId = null) {
     // Return a promise to wait for
     return fetch(apiUrl + '/api/campaigns' +
         '?account_id=' + accountId +
-        '&past=' + campaign.past +
-        '&scheduled=' + campaign.scheduled +
-        '&in_flight=' + campaign.inFlight
+        '&past=' + campaign.filters.past +
+        '&scheduled=' + campaign.filters.scheduled +
+        '&in_flight=' + campaign.filters.inFlight
       )
       .then(response => response.json())
       .then(json => new Promise(resolve => {
