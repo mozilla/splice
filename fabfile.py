@@ -102,7 +102,7 @@ def build_ui():
 
     with lcd('front_end'):
         local('npm install')
-        local('npm build:dist')
+        local('npm run build:dist')
         local('mv dist ../splice/static/build/campaign-manager')
 
 
