@@ -125,27 +125,35 @@ def get_possible_distributions(today=None, channel_id=None):
     tile_index = {}
     for (channel, country, locale), (legacy, directory, suggested) in tiles.items():
         country_locale = "%s/%s" % (country, locale)
+        legacy_keys, ag_keys = [], []
+
         # v2
-        legacy_json = json.dumps({locale: legacy}, sort_keys=True)
-        legacy_hsh = hashlib.sha1(legacy_json).hexdigest()
-        legacy_key = "{0}/{1}.{2}.json".format(channel, country_locale, legacy_hsh)
-        artifacts[channel].append({
-            "key": legacy_key,
-            "data": legacy_json})
+        for legacy_tiles in multiplex_directory_tiles(legacy):
+            legacy_json = json.dumps({'locale': legacy_tiles}, sort_keys=True)
+            legacy_hsh = hashlib.sha1(legacy_json).hexdigest()
+            legacy_key = "{0}/{1}.{2}.json".format(channel, country_locale, legacy_hsh)
+            legacy_keys.append(legacy_key)
+            artifacts[channel].append({
+                "key": legacy_key,
+                "data": legacy_json})
 
         # v3
-        ag = json.dumps({'suggested': suggested, 'directory': directory}, sort_keys=True)
-        ag_hsh = hashlib.sha1(ag).hexdigest()
-        ag_key = "{0}/{1}.{2}.ag.json".format(channel, country_locale, ag_hsh)
-        artifacts[channel].append({
-            "key": ag_key,
-            "data": ag,
-        })
+        for ag_tiles in multiplex_directory_tiles(directory):
+            ag = json.dumps({'suggested': suggested, 'directory': ag_tiles}, sort_keys=True)
+            ag_hsh = hashlib.sha1(ag).hexdigest()
+            ag_key = "{0}/{1}.{2}.ag.json".format(channel, country_locale, ag_hsh)
+            ag_keys.append(ag_key)
+            artifacts[channel].append({
+                "key": ag_key,
+                "data": ag,
+            })
 
         tile_index_channel = tile_index.setdefault(channel, {'__ver__': 3})
+        all_legacy_keys = [os.path.join(env.config.CLOUDFRONT_BASE_URL, key) for key in legacy_keys]
+        all_ag_keys = [os.path.join(env.config.CLOUDFRONT_BASE_URL, key) for key in ag_keys]
         tile_index_channel[country_locale] = {
-            'legacy': os.path.join(env.config.CLOUDFRONT_BASE_URL, legacy_key),
-            'ag': os.path.join(env.config.CLOUDFRONT_BASE_URL, ag_key),
+            'legacy': all_legacy_keys,
+            'ag': all_ag_keys
         }
 
     # the index files
@@ -169,11 +177,11 @@ def multiplex_directory_tiles(tiles):
     Therefore, given a tile set with N sponsored tiles and M identical TLD+1 tiles, the
     total number of multiplexed directory tile set is N*M.
 
-    Note: this function will NOT handle the same tld+1 URL between sponsored and
+    Note: this function will NOT handle the same tld+1 URL between the sponsored and
     non-sponsered tiles.
 
     Params:
-        tiles: a list of original tiles.
+        tiles: a list of tiles.
     Return:
         A list of tile sets. Note that the sponsored directory tile is always the
         3rd entry in the list, other tiles will be sorted by the tile id.
