@@ -149,8 +149,8 @@ def get_possible_distributions(today=None, channel_id=None):
             })
 
         tile_index_channel = tile_index.setdefault(channel, {'__ver__': 3})
-        all_legacy_keys = [os.path.join(env.config.CLOUDFRONT_BASE_URL, key) for key in legacy_keys]
-        all_ag_keys = [os.path.join(env.config.CLOUDFRONT_BASE_URL, key) for key in ag_keys]
+        all_legacy_keys = [os.path.join(env.config.CLOUDFRONT_BASE_URL, k) for k in legacy_keys]
+        all_ag_keys = [os.path.join(env.config.CLOUDFRONT_BASE_URL, k) for k in ag_keys]
         tile_index_channel[country_locale] = {
             'legacy': all_legacy_keys,
             'ag': all_ag_keys
