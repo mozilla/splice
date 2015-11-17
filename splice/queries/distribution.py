@@ -173,11 +173,14 @@ def multiplex_directory_tiles(tiles):
     """Directory tile multiplexer that creates all possible combinations of the
     tile sets based on its type and the target url. Given multiple sponsored tiles,
     it'll pick one of them and create a new tile set with other directory tiles.
-    It also multiplexes the tiles with the same TLD+1 target url (e.g. www.mozilla.org).
-    Therefore, given a tile set with N sponsored tiles and M identical TLD+1 tiles, the
+    It also multiplexes the tiles with the same Full Qualified Domain Name(FQDN).
+    For example, "https://www.mozilla.org/pocket" and "https://www.mozilla.org/gears"
+    share the same FQDN "www.mozilla.org".
+
+    Therefore, given a tile set with N sponsored tiles and M identical FQDN tiles, the
     total number of multiplexed directory tile set is N*M.
 
-    Note: this function will NOT handle the same tld+1 URL between the sponsored and
+    Note: this function will NOT handle the same FQDN between the sponsored and
     non-sponsered tiles.
 
     Params:
@@ -187,21 +190,21 @@ def multiplex_directory_tiles(tiles):
         3rd entry in the list, other tiles will be sorted by the tile id.
     """
     sponsored = []
-    tlds = defaultdict(list)
+    fqdns = defaultdict(list)
     for tile in tiles:
         if tile["type"] == "sponsored":
             sponsored.append(tile)
         else:
             url = furl(tile["url"]).netloc
             assert url, "URL: %s is invalid" % tile["url"]
-            tlds[url].append(tile)
+            fqdns[url].append(tile)
 
     # if no sponsored tiles found, use a sentinel instead
     if not sponsored:
         sponsored.append(_SENTINEL)
 
-    # Cartesian product of the identical tld tiles and the sponsored tiles
-    for multiplex in product(sponsored, *tlds.values()):
+    # Cartesian product of the identical FQDN tiles and the sponsored tiles
+    for multiplex in product(sponsored, *fqdns.values()):
         copy = list(multiplex)
         sponsored_tile, rest = copy[0], copy[1:]
         rest.sort(key=lambda tile: tile["directoryId"])
