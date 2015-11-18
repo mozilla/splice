@@ -22,3 +22,4 @@ pytz==2015.6
 Pillow==3.0.0
 pyOpenSSL==0.15.1
 ndg-httpsclient==0.4.0
+Fabric==1.8.1
