@@ -16,7 +16,8 @@ module.exports = {
 
   output: {
     path: assetPath,
-    filename: 'main.js'
+    filename: 'main.js',
+    publicPath: '/static/build/campaign-manager/'
   },
   progress: true,
   entry: [
