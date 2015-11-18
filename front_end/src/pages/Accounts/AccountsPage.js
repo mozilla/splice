@@ -12,7 +12,7 @@ export default class AccountsPage extends Component {
     pageVisit('Accounts', this);
 
     const { dispatch } = this.props;
-    if (this.props.Account.row.length === 0) {
+    if (this.props.Account.rows.length === 0) {
       dispatch(fetchAccounts());
     }
   }
