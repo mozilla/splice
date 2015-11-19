@@ -17,6 +17,7 @@ ARBITRARY_FUTURE = datetime.datetime.strptime('2525-01-01', "%Y-%m-%d").date()
 
 # coding=utf-8
 _titles = {
+    "BarkBox": ("BarkBox", "BarkBox"),
     "CLIQZ": ("CLIQZ", "CLIQZ"),
     "FedEx": ("FedEx", "FedEx"),
     "YouTube": ("YouTube", "YouTube"),
@@ -28,6 +29,7 @@ _titles = {
     "Wikipedia": ("Wikipedia", "Wikipedia"),
     "Trulia": ("Trulia", "Trulia"),
     "Amazon": ("Amazon", "Amazon"),
+    "CITIZENFOUR": ("CITIZENFOUR", "CITIZENFOUR"),
     "Booking.com": ("Booking.com", "Booking.com"),
     "Casper": ("Casper", "Casper"),
     "NFL": ("NFL", "NFL"),
@@ -40,11 +42,17 @@ _titles = {
     "Get Disconnect": ("Get Disconnect", "Get Disconnect"),
     "Descarga Disconnect": ("Get Disconnect", "Descarga Disconnect"),
     "TurboTax": ("TurboTax", "TurboTax"),
+    "ImpôtRapide": ("TurboTax", "ImpôtRapide"),
     "Wired": ("Condé Nast", "Wired"),
     "WIRED": ("Condé Nast", "Wired"),
     "The Scene": ("Condé Nast", "The Scene"),
     "Glamour": ("Condé Nast", "Glamour"),
     "Ars Technica": ("Condé Nast", "Ars Technica"),
+    "Details": ("Condé Nast", "Details"),
+    "GQ": ("Condé Nast", "GQ"),
+    "EFF": ("EFF", "EFF"),
+    "Electronic Frontier Foundation": ("EFF", "EFF"),
+    "Fortune": ("Time Inc", "Fortune"),
     "Mozilla Gear": ("Mozilla", "Mozilla Gear"),
     "Firefox Help and Support": ("Mozilla", "Firefox Help and Support"),
     "Firefox Sync": ("Mozilla", "Firefox Sync"),
@@ -85,6 +93,7 @@ _target_url_in = [
     ("https://www.mozilla.org/firefox/android/?utm_source=suggested-tiles&utm_medium=tiles&utm_content=mozillafans&utm_campaign=firefoxforandroid", ("Mozilla", "Firefox for Android ST")),
     ("marketplace.firefox.com", ("Mozilla", "Firefox Marketplace")),
     ("https://www.mozilla.com/privacy/tips?utm_source=firefox&utm_medium=directorytile&utm_campaign=DPD15", ("Mozilla", "Get Smart on Privacy")),
+    ("https://www.mozilla.org/firefox/private-browsing/?utm_source=directory-tiles&utm_medium=tiles&utm_content=TPV1&utm_campaign=fx-fall-15", ("Mozilla", "Tracking Protection")),
     ("https://www.mozilla.com/en-US/?utm_source=directory-tiles&utm_medium=firefox-browser", ("Mozilla", "Mozilla")),
     ("https://www.mozilla.org/en-US/?utm_source=directory-tiles&utm_medium=firefox-browser", ("Mozilla", "Mozilla")),
     ("http://contribute.mozilla.org/", ("Mozilla", "Mozilla Community")),
@@ -120,10 +129,10 @@ _target_urls = {
 }
 
 _ids = {
-    629: ("Mozilla", "fennec Tiles"),
-    630: ("Mozilla", "fennec Tiles"),
-    631: ("Mozilla", "fennec Tiles"),
-    632: ("Mozilla", "fennec Tiles"),
+    629: ("Mozilla", "Fennec Tiles"),
+    630: ("Mozilla", "Fennec Tiles"),
+    631: ("Mozilla", "Fennec Tiles"),
+    632: ("Mozilla", "Fennec Tiles"),
 }
 
 insane_identity_counter = 0
