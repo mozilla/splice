@@ -6,7 +6,9 @@ import json
 from datetime import datetime
 from collections import defaultdict
 from collections import namedtuple
+from itertools import product
 
+from furl import furl
 from sqlalchemy.sql.expression import false
 from splice.models import Tile, Adgroup, Campaign, CampaignCountry
 from splice.web.api.tile_upload import load_bucketer
@@ -123,27 +125,35 @@ def get_possible_distributions(today=None, channel_id=None):
     tile_index = {}
     for (channel, country, locale), (legacy, directory, suggested) in tiles.items():
         country_locale = "%s/%s" % (country, locale)
+        legacy_keys, ag_keys = [], []
+
         # v2
-        legacy_json = json.dumps({locale: legacy}, sort_keys=True)
-        legacy_hsh = hashlib.sha1(legacy_json).hexdigest()
-        legacy_key = "{0}/{1}.{2}.json".format(channel, country_locale, legacy_hsh)
-        artifacts[channel].append({
-            "key": legacy_key,
-            "data": legacy_json})
+        for legacy_tiles in multiplex_directory_tiles(legacy):
+            legacy_json = json.dumps({'locale': legacy_tiles}, sort_keys=True)
+            legacy_hsh = hashlib.sha1(legacy_json).hexdigest()
+            legacy_key = "{0}/{1}.{2}.json".format(channel, country_locale, legacy_hsh)
+            legacy_keys.append(legacy_key)
+            artifacts[channel].append({
+                "key": legacy_key,
+                "data": legacy_json})
 
         # v3
-        ag = json.dumps({'suggested': suggested, 'directory': directory}, sort_keys=True)
-        ag_hsh = hashlib.sha1(ag).hexdigest()
-        ag_key = "{0}/{1}.{2}.ag.json".format(channel, country_locale, ag_hsh)
-        artifacts[channel].append({
-            "key": ag_key,
-            "data": ag,
-        })
+        for ag_tiles in multiplex_directory_tiles(directory):
+            ag = json.dumps({'suggested': suggested, 'directory': ag_tiles}, sort_keys=True)
+            ag_hsh = hashlib.sha1(ag).hexdigest()
+            ag_key = "{0}/{1}.{2}.ag.json".format(channel, country_locale, ag_hsh)
+            ag_keys.append(ag_key)
+            artifacts[channel].append({
+                "key": ag_key,
+                "data": ag,
+            })
 
         tile_index_channel = tile_index.setdefault(channel, {'__ver__': 3})
+        all_legacy_keys = [os.path.join(env.config.CLOUDFRONT_BASE_URL, k) for k in legacy_keys]
+        all_ag_keys = [os.path.join(env.config.CLOUDFRONT_BASE_URL, k) for k in ag_keys]
         tile_index_channel[country_locale] = {
-            'legacy': os.path.join(env.config.CLOUDFRONT_BASE_URL, legacy_key),
-            'ag': os.path.join(env.config.CLOUDFRONT_BASE_URL, ag_key),
+            'legacy': all_legacy_keys,
+            'ag': all_ag_keys
         }
 
     # the index files
@@ -154,3 +164,51 @@ def get_possible_distributions(today=None, channel_id=None):
             "force_upload": True
         })
     return artifacts
+
+
+_SENTINEL = object()
+
+
+def multiplex_directory_tiles(tiles):
+    """Directory tile multiplexer that creates all possible combinations of the
+    tile sets based on its type and the target url. Given multiple sponsored tiles,
+    it'll pick one of them and create a new tile set with other directory tiles.
+    It also multiplexes the tiles with the same Full Qualified Domain Name(FQDN).
+    For example, "https://www.mozilla.org/pocket" and "https://www.mozilla.org/gears"
+    share the same FQDN "www.mozilla.org".
+
+    Therefore, given a tile set with N sponsored tiles and M identical FQDN tiles, the
+    total number of multiplexed directory tile set is N*M.
+
+    Note: this function will NOT handle the same FQDN between the sponsored and
+    non-sponsered tiles.
+
+    Params:
+        tiles: a list of tiles.
+    Return:
+        A list of tile sets. Note that the sponsored directory tile is always the
+        3rd entry in the list, other tiles will be sorted by the tile id.
+    """
+    sponsored = []
+    fqdns = defaultdict(list)
+    for tile in tiles:
+        if tile["type"] == "sponsored":
+            sponsored.append(tile)
+        else:
+            url = furl(tile["url"]).netloc
+            assert url, "URL: %s is invalid" % tile["url"]
+            fqdns[url].append(tile)
+
+    # if no sponsored tiles found, use a sentinel instead
+    if not sponsored:
+        sponsored.append(_SENTINEL)
+
+    # Cartesian product of the identical FQDN tiles and the sponsored tiles
+    for multiplex in product(sponsored, *fqdns.values()):
+        copy = list(multiplex)
+        sponsored_tile, rest = copy[0], copy[1:]
+        rest.sort(key=lambda tile: tile["directoryId"])
+        # if the sponsored tile is not the sentinel, insert into tile list
+        if not (len(sponsored) == 1 and sponsored_tile is _SENTINEL):
+            rest.insert(2, sponsored_tile)  # sponsored tile always takes the 3rd place
+        yield rest
