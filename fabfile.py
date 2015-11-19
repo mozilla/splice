@@ -96,6 +96,8 @@ def deploy_cold():
 
 
 def build_ui():
+    local('rm -rf splice/static/build')
+
     with lcd('ui'):
         local('npm install')
         local('npm run bundle')

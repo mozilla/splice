@@ -1,5 +1,5 @@
-exports.devApi = "'http://tbg-staging-1.thebuddygroup.com:5000'";
-exports.liveApi = "'http://tbg-staging-1.thebuddygroup.com:5000'";
+exports.devApi = "''";
+exports.liveApi = "''";
 exports.development = true;
 exports.devTools = false;
 
