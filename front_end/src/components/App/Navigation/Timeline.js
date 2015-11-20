@@ -10,7 +10,10 @@ export default class Timeline extends Component {
   getCancelLink(){
     let output;
 
-    if(this.props.location.pathname.match(/\/accounts\/create/)){
+    if(this.props.location.pathname.match(/\/accounts\/create/) ||
+      this.props.location.pathname.match(/\/campaigns\/create/) ||
+      this.props.location.pathname.match(/\/adgroups\/create/) ||
+      this.props.location.pathname.match(/\/tiles\/create/) ){
       output = '/';
     }
     else if(this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}\/edit/) ||
@@ -105,17 +108,20 @@ export default class Timeline extends Component {
 
   isCampaign(){
     return (this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}\/createcampaign/) ||
+            this.props.location.pathname.match(/\/campaigns\/create/) ||
             this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/edit/) ||
             this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/bulkupload/));
   }
 
   isAdGroup(){
     return (this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/createadgroup/) ||
-    this.props.location.pathname.match(/\/adgroups\/[0-9]{1,10}\/edit/) );
+            this.props.location.pathname.match(/\/adgroups\/create/) ||
+            this.props.location.pathname.match(/\/adgroups\/[0-9]{1,10}\/edit/) );
   }
 
   isTile(){
     return (this.props.location.pathname.match(/\/adgroups\/[0-9]{1,10}\/createtile/) ||
-    this.props.location.pathname.match(/\/tiles\/[0-9]{1,10}\/edit/) );
+            this.props.location.pathname.match(/\/tiles\/create/) ||
+            this.props.location.pathname.match(/\/tiles\/[0-9]{1,10}\/edit/) );
   }
 }

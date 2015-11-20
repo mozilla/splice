@@ -90,45 +90,57 @@ select.form-control{
   }
 }
 
-/* Select 2 */
-.app-container{
-  select.js-select{
-    display:none;
-  }
-  .js-select{
-    width: 100%;
-  }
-  .form-group.has-error .select2-selection{
+/* React-select */
+.app-container {
+
+  .form-group.has-error .Select-control {
     border-color: #a94442;
   }
-  .select2-container--default{
-    .select2-selection--multiple{
+  .Select {
+    .Select-control {
       border-radius: 0;
+      min-height: 38px;
+      height: auto;
     }
-    .select2-selection--single{
-      border-radius: 0;
-      height: 34px;
-
-      .select2-selection__rendered{
-        line-height: normal;
-        padding-top: 6px;
-        padding-left: 12px;
+    .Select-arrow-zone {
+      .Select-arrow {
+        display: none;
       }
-      .select2-selection__arrow{
-        b{
-          display: none;
-        }
-        height: 32px;
-        width: 26px;
-        background: #fff url(../public/img/select-downarrow.png) right center no-repeat;
+      height: 32px;
+      width: 26px;
+      background: #fff url(../public/img/select-downarrow.png) right center no-repeat;
+    }
+    .Select-menu-outer{
+      border-radius: 0;
+
+      .Select-option.is-focused {
+        background-color: $color-light-gray;
       }
     }
   }
-  .select2-container--default.select2-container--open{
-    .select2-selection--single{
-      .select2-selection__arrow{
-        background-image: url(../public/img/select-uparrow.png);
-      }
+  .Select.is-open {
+    .Select-arrow-zone {
+      background-image: url(../public/img/select-uparrow.png);
+    }
+  }
+  .Select-item{
+    background-color: $color-aqua;
+    border-color: $color-light-gray;
+    color: $font-color-default;
+    border-radius: 5px;
+
+    .Select-item-icon{
+      border-right: 0;
+      font: normal normal normal 14px/1 FontAwesome;
+    }
+    .Select-item-icon:hover {
+      background-color: $color-aqua;
+      color: $font-color-default;
+    }
+    .Select-item-label{
+      padding-right: 10px;
+      padding-left: 2px;
+      font-size: 14px;
     }
   }
 }

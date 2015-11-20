@@ -9,9 +9,21 @@ import './SideBar.scss';
 
 export default class SideBar extends Component {
   componentDidMount(){
-    $(document).on('click', '.side-bar a', function(){
+    $(document).on('click', '.accounts-list a, .submenu a', function(){
       $('.side-bar').slideUp();
       $('.c-hamburger').removeClass('is-active');
+    });
+
+    $(document).on('mouseover', '.button.create', function(){
+      $('.side-bar .submenu').css('top', 0);
+
+      const subH = $('.side-bar .submenu').height();
+      const subT = $('.side-bar .submenu').offset().top;
+      const windowH = $(window).height();
+
+      if((subH + subT) > windowH){
+        $('.side-bar .submenu').css('top', (windowH + $(window).scrollTop()) - (subH + subT) );
+      }
     });
 
     const context = this;
@@ -48,7 +60,16 @@ export default class SideBar extends Component {
           </ul>
         </div>
 
-        <div className="create button"><Link to="/accounts/create">Create <i className="fa fa-plus"></i></Link></div>
+        <div className="create button">
+          <a> Create <i className="fa fa-plus"></i> </a>
+
+          <ul className="submenu">
+            <li><Link to="/accounts/create">Account</Link></li>
+            <li><Link to="/campaigns/create">Campaign</Link></li>
+            <li><Link to="/adgroups/create">Ad Group</Link></li>
+            <li><Link to="/tiles/create">Tile</Link></li>
+          </ul>
+        </div>
         {/*<div className="approval button"><Link to={'/approvals'} >Approval Queue <i className="fa fa-check"></i></Link></div>*/}
       </div>
     );

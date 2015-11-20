@@ -5,6 +5,7 @@ import { Link, Lifecycle } from 'react-router';
 
 import { updateDocTitle } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
+import { fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import TileForm from 'components/Tiles/TileForm/TileForm';
 
@@ -16,6 +17,8 @@ class TileCreatePage extends Component {
   }
 
   componentWillMount(){
+    this.props.Campaign.rows = [];
+    this.props.AdGroup.rows = [];
     this.props.Tile.details = {};
   }
   componentDidMount(){
@@ -35,7 +38,7 @@ class TileCreatePage extends Component {
       output = (
         <div>
           <div className="form-module">
-            <div className="form-module-header">{this.props.AdGroup.details.name}: Create Tile</div>
+            <div className="form-module-header">{(this.props.params.adGroupId && this.props.AdGroup.details.name) ? this.props.AdGroup.details.name + ':  ' : '' }Create Tile</div>
             <div className="form-module-body">
               <TileForm editMode={false} {...this.props}/>
             </div>
@@ -57,15 +60,20 @@ class TileCreatePage extends Component {
 
     updateDocTitle('Create Tile');
 
-    dispatch(fetchHierarchy('adGroup', props))
-      .catch(function(){
-        props.history.replaceState(null, '/error404');
-      })
-      .then(() => {
-        if(this.props.AdGroup.details !== undefined){
-          updateDocTitle(this.props.AdGroup.details.name + ': Create Tile');
-        }
-      });
+    if(this.props.params.adGroupId !== undefined) {
+      dispatch(fetchHierarchy('adGroup', props))
+        .catch(function(){
+          props.history.replaceState(null, '/error404');
+        })
+        .then(() => {
+          if (this.props.AdGroup.details !== undefined) {
+            updateDocTitle(this.props.AdGroup.details.name + ': Create Tile');
+          }
+        });
+    }
+    else {
+      dispatch(fetchAccounts());
+    }
   }
 }
 

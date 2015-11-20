@@ -85,11 +85,14 @@ export default class TopBar extends Component {
     return this.props.location.pathname.match(/\/accounts\/create/) ||
       this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}\/edit/) ||
       this.props.location.pathname.match(/\/accounts\/[0-9]{1,10}\/createcampaign/) ||
+      this.props.location.pathname.match(/\/campaigns\/create/) ||
       this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/edit/) ||
       this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/createadgroup/) ||
       this.props.location.pathname.match(/\/campaigns\/[0-9]{1,10}\/bulkupload/) ||
+      this.props.location.pathname.match(/\/adgroups\/create/) ||
       this.props.location.pathname.match(/\/adgroups\/[0-9]{1,10}\/edit/) ||
       this.props.location.pathname.match(/\/adgroups\/[0-9]{1,10}\/createtile/) ||
+      this.props.location.pathname.match(/\/tiles\/create/) ||
       this.props.location.pathname.match(/\/tiles\/[0-9]{1,10}\/edit/);
   }
 
