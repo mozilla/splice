@@ -3,8 +3,10 @@
 import React, { Component } from 'react';
 import { Router, Route, IndexRoute } from 'react-router';
 import { connect } from 'react-redux';
-import { formSaved } from 'actions/App/AppActions';
+import { formSaved, saveLocationLog } from 'actions/App/AppActions';
 import createHistory from 'history/lib/createHashHistory';
+import Cookie from 'react-cookie';
+
 // Use _key instead of _k.
 const history = createHistory({
   queryKey: false
@@ -80,6 +82,31 @@ export default class App extends Component {
     if(this.props.App.formChanged === true){
       this.props.dispatch(formSaved());
     }
+
+    this.logLocation();
+  }
+
+  logLocation(){
+    const limit = 5;
+
+    let url = window.location.hash;
+    url = url.replace('#', '');
+
+    let log = this.props.App.locationLog;
+    if (log === undefined) {
+      log = [];
+    }
+    else{
+      if(log[0] !== url){
+        log.unshift(url);
+      }
+    }
+
+    if (log.length > limit) {
+      log = log.slice(0, limit);
+    }
+
+    this.props.dispatch(saveLocationLog(log));
   }
 }
 
