@@ -1,16 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 
 import { displayMessage, shownMessage, formChanged, formSaved } from 'actions/App/AppActions';
-import { createCampaign, updateCampaign} from 'actions/Campaigns/CampaignActions';
+import { createCampaign, updateCampaign, campaignSetDetailsVar} from 'actions/Campaigns/CampaignActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
 import { formatDate, apiDate } from 'helpers/DateHelpers';
 import CustomRadio from 'components/Forms/CustomRadio/CustomRadio';
 import Moment from 'moment';
+import ReactSelect from 'react-select';
 
 window.$ = require('jquery');
 window.jQuery = $;
-require('select2');
-require('select2/dist/css/select2.min.css');
+require('react-select/dist/react-select.min.css');
 require('eonasdan-bootstrap-datetimepicker');
 require('eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
 require('jquery-serializejson');
@@ -26,14 +26,17 @@ export default class CampaignForm extends Component {
   }
 
   componentDidMount() {
+    bindFormValidators();
     this.frontEndScripts();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.Campaign.details.id !== this.props.Campaign.details.id ||
         prevProps.Account.details.id !== this.props.Account.details.id ){
-      this.frontEndScripts();
+      bindFormValidators();
     }
+    this.frontEndScripts();
+    $('.Select input[type="hidden"]').trigger('keyup');
   }
 
   render() {
@@ -42,29 +45,59 @@ export default class CampaignForm extends Component {
       spinner = <img src="/public/img/ajax-loader-aqua.gif" />;
     }
 
-    let data = this.props.Campaign.details;
-    if(this.props.editMode === false){
-      data = {};
-    }
-    if(data.account_id === undefined){
+    const data = this.props.Campaign.details;
+
+    const accounts = [];
+    const countries = [];
+
+    if(data.account_id === undefined && this.props.params.accountId !== undefined){
       data.account_id = this.props.params.accountId;
     }
+    else if(this.props.Account.rows !== undefined) {
+      this.props.Account.rows.map((row, index) =>
+        accounts.push({value: row.id, label: row.name})
+      );
+    }
 
-    const channels = this.props.Init.channels.map((row, index) =>
-        <option key={'channel-' + index} value={row.id}>{_.capitalize(row.name)}</option>
-    );
-
-    const countries = this.props.Init.countries.map((row, index) =>
-        <option key={'country-' + index} value={row.country_code}>{row.country_name}</option>
-    );
+    if (this.props.Init.countries !== undefined) {
+      this.props.Init.countries.map((row, index) =>
+        countries.push({value: row.country_code, label: row.country_name})
+      );
+    }
 
     return (
       <div>
-        <form id="CampaignForm" ref="form" key={'campaignform-' + ((this.props.editMode) ? 'edit-' + data.id : 'create-' + data.account_id )}>
+        <form id="CampaignForm" ref="form" key={'campaignform-' + ((this.props.editMode) ? 'edit-' + data.id : 'create' )}>
           {(this.props.editMode) ? (<input type="hidden" name="id" ref="id" value={data.id}/>) : null}
-          <input type="hidden" name="account_id" ref="account_id" value={data.account_id} />
 
           <div className="container-fluid field-container">
+            {(this.props.editMode === false && this.props.params.account_id === undefined) ?
+                <div>
+                  <div className="row">
+                    <div className="col-xs-4">
+                      <div className="form-group">
+                        <label htmlFor="AccountId">Account</label>
+                        <ReactSelect
+                          className="account-select"
+                          name="account_id"
+                          value={data.selected_account_id}
+                          options={accounts}
+                          onChange={(id, option) => this.handleSelectAccount(id, option)}
+                          placeholder=""
+                          clearable={false}
+                          inputProps={{
+                          'id': 'AccountId',
+                          'data-parsley-excluded': true
+                        }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <hr/>
+                </div>
+              : <input type="hidden" name="account_id" ref="account_id" value={data.account_id} />
+            }
+
             <div className="row">
               <div className="col-xs-4">
                 {(this.props.editMode)
@@ -103,9 +136,20 @@ export default class CampaignForm extends Component {
               <div className="col-xs-6">
                 <div className="form-group">
                   <label htmlFor="CampaignCountries">Countries</label><br/>
-                  <select className="form-control js-select" onChange={this.handleChange} style={{width: '100%'}} id="CampaignCountries" name="countries[]" ref="countries" multiple="multiple" defaultValue={data.countries} data-parsley-required>
-                    {countries}
-                  </select>
+                  <ReactSelect
+                    className="countries-select"
+                    name="countries[]"
+                    value={data.countries}
+                    multi={true}
+                    options={countries}
+                    onChange={(id, options) => this.handleMultiSelect(id, options, 'countries')}
+                    placeholder=""
+                    clearable={false}
+                    inputProps={{
+                      'id': 'CampaignCountries',
+                      'data-parsley-excluded': true
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -140,11 +184,6 @@ export default class CampaignForm extends Component {
 
   frontEndScripts(){
     const context = this;
-    bindFormValidators();
-
-    $('.js-select').select2().on('change', function(){
-      context.handleChange();
-    });
 
     const options = {
       useCurrent: true,
@@ -156,6 +195,16 @@ export default class CampaignForm extends Component {
     });
   }
 
+  handleSelectAccount(id, option){
+    this.props.dispatch(campaignSetDetailsVar('selected_account_id', id));
+    this.handleChange();
+  }
+
+  handleMultiSelect(id, options, varName){
+    this.props.dispatch(campaignSetDetailsVar(varName, options));
+    this.handleChange();
+  }
+
   handleChange(){
     if(this.props.App.formChanged !== true){
       this.props.dispatch(formChanged());
@@ -165,13 +214,19 @@ export default class CampaignForm extends Component {
   handleFormSubmit(e) {
     e.preventDefault();
 
-    //Exclude validation of Select2 inputs.
-    $('input.select2-search__field').attr('data-parsley-excluded', true);
+    $('input[name="account_id"]')
+      .attr('data-parsley-required', 'true');
+    $('input[name="countries[]"]')
+      .attr('data-parsley-required', 'true')
+      .attr('data-parsley-mincheck', '1');
 
     const form = $('#CampaignForm').parsley();
 
     if(form.validate()){
       const formData = $('#CampaignForm').serializeJSON();
+
+      formData.countries = $('input[name="countries[]"]').val().split(',');
+
       if(formData.start_date.trim() !== ''){
         formData.start_date = apiDate(formData.start_date);
       }

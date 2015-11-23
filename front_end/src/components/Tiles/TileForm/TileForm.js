@@ -4,7 +4,9 @@ import { Link } from 'react-router';
 import { displayMessage, shownMessage, formChanged, formSaved } from 'actions/App/AppActions';
 import { createTile, updateTile, fetchTiles, uploadImage, tileSetDetailsVar } from 'actions/Tiles/TileActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
-
+import { fetchCampaigns, receiveCampaigns } from 'actions/Campaigns/CampaignActions';
+import { fetchAdGroups, receiveAdGroups } from 'actions/AdGroups/AdGroupActions';
+import ReactSelect from 'react-select';
 import TileDropzone from 'components/Tiles/TileDropzone/TileDropzone';
 
 window.$ = require('jquery');
@@ -12,7 +14,7 @@ window.jQuery = $;
 require('jquery-serializejson');
 require('bootstrap-colorpicker');
 require('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
-
+require('react-select/dist/react-select.min.css');
 bindFormConfig();
 require('parsleyjs');
 
@@ -26,7 +28,6 @@ export default class TileForm extends Component {
   componentDidMount(){
     bindFormValidators();
 
-    $('.js-select').select2();
     this.bindColorPickerEvents();
   }
 
@@ -35,40 +36,111 @@ export default class TileForm extends Component {
         prevProps.AdGroup.details.id !== this.props.AdGroup.details.id){
       bindFormValidators();
 
-      $('.js-select').select2();
       this.bindColorPickerEvents();
     }
+    $('input[name="account_id"], input[name="campaign_id"], input[name="adgroup_id"]').trigger('keyup');
   }
 
   render() {
     let spinner;
-    if(this.props.Tile.isSaving){
-      spinner = <img src="/public/img/ajax-loader-aqua.gif" />;
+    if (this.props.Tile.isSaving) {
+      spinner = <img src="/public/img/ajax-loader-aqua.gif"/>;
     }
 
     const data = this.props.Tile.details;
 
-    if(data.adgroup_id === undefined){
+    const accounts = [];
+    const campaigns = [];
+    const adGroups = [];
+
+    if (data.adgroup_id === undefined && this.props.params.adGroupId !== undefined) {
       data.adgroup_id = this.props.params.adGroupId;
     }
-
-    const categories = this.props.Init.categories.map((row, index) =>
-        <option key={'categories-' + index} value={row}>{row}</option>
-    );
-    const channels = this.props.Init.channels.map((row, index) =>
-        <option key={'channel-' + index} value={row.id}>{_.capitalize(row.name)}</option>
-    );
-    const locales = this.props.Init.locales.map((row, index) =>
-        <option key={'locales-' + index} value={row}>{row}</option>
-    );
+    else if (this.props.Account.rows !== undefined) {
+      this.props.Account.rows.map((row, index) =>
+        accounts.push({value: row.id, label: row.name})
+      );
+    }
+    if (this.props.Campaign.rows !== undefined) {
+      this.props.Campaign.rows.map((row, index) =>
+        campaigns.push({value: row.id, label: row.name})
+      );
+    }
+    if (this.props.Campaign.rows !== undefined) {
+      this.props.AdGroup.rows.map((row, index) =>
+        adGroups.push({value: row.id, label: row.name})
+      );
+    }
 
     return (
       <div>
-        <form id="TileForm" ref="form" key={'tileform-' + ((this.props.editMode) ? 'edit-' + data.id : 'create-' + data.adgroup_id )}>
+        <form id="TileForm" ref="form" key={'tileform-' + ((this.props.editMode) ? 'edit-' + data.id : 'create' )}>
           {(this.props.editMode) ? (<input type="hidden" id="TileId" name="id" ref="id" value={data.id}/>) : null}
-          <input type="hidden" name="adgroup_id" ref="adgroup_id" value={data.adgroup_id} />
 
           <div className="container-fluid field-container">
+            {(this.props.editMode === false && this.props.params.adGroupId === undefined) ?
+              <div>
+                <div className="row">
+                  <div className="col-xs-4">
+                    <div className="form-group">
+                      <label htmlFor="AccountId">Account</label>
+                      <ReactSelect
+                        className="account-select"
+                        name="account_id"
+                        value={this.props.Tile.details.account_id}
+                        options={accounts}
+                        onChange={(id, option) => this.handleSelectAccount(id, option)}
+                        placeholder=""
+                        clearable={false}
+                        inputProps={{
+                          'id': 'AccountId',
+                          'data-parsley-excluded': true
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-xs-4">
+                    <div className="form-group">
+                      <label htmlFor="CampaignId">Campaign</label>
+                      <ReactSelect
+                        className="campaign-select"
+                        name="campaign_id"
+                        value={this.props.Tile.details.campaign_id}
+                        options={campaigns}
+                        onChange={(id, option) => this.handleSelectCampaign(id, option)}
+                        placeholder=""
+                        clearable={false}
+                        inputProps={{
+                          'id': 'CampaignId',
+                          'data-parsley-excluded': true
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-xs-4">
+                    <div className="form-group">
+                      <label htmlFor="AdGroupId">Ad Group</label>
+                      <ReactSelect
+                        className="adgroup-select"
+                        name="adgroup_id"
+                        value={this.props.Tile.details.adgroup_id}
+                        options={adGroups}
+                        onChange={(id, option) => this.handleSelectAdGroup(id, option)}
+                        placeholder=""
+                        clearable={false}
+                        inputProps={{
+                          'id': 'AdGroupId',
+                          'data-parsley-excluded': true
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <hr/>
+              </div>
+              : <input type="hidden" name="adgroup_id" ref="adgroup_id" value={data.adgroup_id} />
+            }
+
             <div className="row">
               <div className="col-xs-4">
                 {(this.props.editMode)
@@ -187,6 +259,39 @@ export default class TileForm extends Component {
     });
   }
 
+  handleSelectAccount(id, option){
+    this.props.dispatch(tileSetDetailsVar('account_id', id));
+
+    if(id !== ''){
+      this.props.dispatch(fetchCampaigns(id, true, true, true));
+    }
+    else{
+      this.props.dispatch(receiveCampaigns({ results: [] }));
+    }
+
+    this.handleSelectCampaign('');
+    this.handleChange();
+  }
+
+  handleSelectCampaign(id, option) {
+    this.props.dispatch(tileSetDetailsVar('campaign_id', id));
+
+    if (id !== '') {
+      this.props.dispatch(fetchAdGroups(id));
+    }
+    else {
+      this.props.dispatch(receiveAdGroups({results: []}));
+    }
+
+    this.handleSelectAdGroup('');
+    this.handleChange();
+  }
+
+  handleSelectAdGroup(id, option){
+    this.props.dispatch(tileSetDetailsVar('adgroup_id', id));
+    this.handleChange();
+  }
+
   handleChange(){
     if(this.props.App.formChanged !== true){
       this.props.dispatch(formChanged());
@@ -197,7 +302,6 @@ export default class TileForm extends Component {
     const { dispatch } = this.props;
 
     dispatch(tileSetDetailsVar(field, e.target.value));
-    this.handleChange();
   }
 
   handleFileUpload(file, fieldName) {
@@ -222,6 +326,9 @@ export default class TileForm extends Component {
 
   handleFormSubmit(e) {
     e.preventDefault();
+
+    $('input[name="account_id"], input[name="campaign_id"], input[name="adgroup_id"]')
+      .attr('data-parsley-required', 'true');
 
     const form = $('#TileForm').parsley();
 

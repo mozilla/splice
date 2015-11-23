@@ -14,6 +14,8 @@ export const LIST_TYPE_SELECT = 'LIST_TYPE_SELECT';
 export const FORM_CHANGED = 'FORM_CHANGED';
 export const FORM_SAVED = 'FORM_SAVED';
 
+export const SAVE_LOCATION_LOG = 'SAVE_LOCATION_LOG';
+
 export function updateDocTitle(title) {
   document.subTitle = title;
   document.title = 'Splice | ' + document.subTitle;
@@ -54,4 +56,8 @@ export function formChanged(){
 
 export function formSaved(){
   return {type: FORM_SAVED};
+}
+
+export function saveLocationLog(log) {
+  return {type: SAVE_LOCATION_LOG, log: log};
 }
