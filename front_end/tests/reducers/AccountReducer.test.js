@@ -14,9 +14,9 @@ describe('Account ', () => {
     expect(
       Account(undefined, {
         type: types.RECEIVE_ACCOUNTS,
-        json: {results: [{text: "Run the tests"}] }
+        json: {results: [{text: 'Run the tests'}] }
       }).rows).toEqual(
-      [{text: "Run the tests"}]
+      [{text: 'Run the tests'}]
     );
   });
 
@@ -24,9 +24,9 @@ describe('Account ', () => {
     expect(
       Account(undefined, {
         type: types.RECEIVE_ACCOUNT,
-        json: { result: {text: "Run the tests"} }
+        json: { result: {text: 'Run the tests'} }
       }).details).toEqual(
-      {text: "Run the tests"}
+      {text: 'Run the tests'}
     );
   });
 
@@ -35,29 +35,29 @@ describe('Account ', () => {
     expect(
       Account(undefined, {
         type: types.RECEIVE_CREATE_ACCOUNT,
-        json: {result: {text: "Run the tests"} }
+        json: {result: {text: 'Run the tests'} }
       }).rows
     ).toEqual([
-        {text: "Run the tests"}
+        {text: 'Run the tests'}
       ]);
 
     //Test adding when state is explicitly set
     expect(
       Account({
         rows: [
-          {text: "Use Redux"},
-          {text: "Learn to connect it to React"},
-          {text: "Run the tests"}
+          {text: 'Use Redux'},
+          {text: 'Learn to connect it to React'},
+          {text: 'Run the tests'}
         ]
       }, {
         type: types.RECEIVE_CREATE_ACCOUNT,
-        json: {result: {text: "Last test"} }
+        json: {result: {text: 'Last test'} }
       }).rows
     ).toEqual([
-        {text: "Last test"},
-        {text: "Use Redux"},
-        {text: "Learn to connect it to React"},
-        {text: "Run the tests"}
+        {text: 'Last test'},
+        {text: 'Use Redux'},
+        {text: 'Learn to connect it to React'},
+        {text: 'Run the tests'}
       ]);
   });
 
@@ -65,13 +65,13 @@ describe('Account ', () => {
     //Test Updating when state is explicitly set
     expect(
       Account({
-        details: {name: "test"}
+        details: {name: 'test'}
       }, {
         type: types.RECEIVE_UPDATE_ACCOUNT,
-        json: {result: {name: "new name"} }
+        json: {result: {name: 'new name'} }
       }).details
     ).toEqual(
-      {name: "new name"}
+      {name: 'new name'}
     );
   });
 });

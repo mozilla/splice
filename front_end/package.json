@@ -92,7 +92,7 @@
     "webpack-dev-server": "~1.10.1"
   },
   "scripts": {
-    "test": "karma start --reporters dots --single-run --browsers Firefox",
+    "test": "karma start --reporters dots --single-run --browsers Firefox && mocha ./node_tests/**/*.test.js",
     "build:dist": "gulp build:dist",
     "start": "gulp serve"
   }

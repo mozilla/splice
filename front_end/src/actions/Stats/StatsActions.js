@@ -1,12 +1,8 @@
 import fetch from 'isomorphic-fetch';
 import queryString from 'query-string';
+import * as config from 'helpers/config';
 
-let apiUrl;
-if (typeof __DEVELOPMENT__ !== 'undefined' && __DEVELOPMENT__ === true) {
-  apiUrl = __DEVAPI__;
-} else {
-  apiUrl = __LIVEAPI__;
-}
+const apiUrl = config.get('API_URL');
 
 export const REQUEST_STATS = 'REQUEST_STATS';
 export const RECEIVE_STATS = 'RECEIVE_STATS';

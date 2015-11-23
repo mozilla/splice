@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
+import * as config from 'helpers/config';
 
 export function finalCreateStore(reducer) {
   const loggerMiddleware = createLogger({
@@ -9,7 +10,7 @@ export function finalCreateStore(reducer) {
   });
 
   let result;
-  if (typeof __DEVTOOLS__ !== 'undefined' && __DEVTOOLS__ === true) {
+  if (config.get('DEVTOOLS') === true) {
     const { devTools } = require('redux-devtools');
     result = compose(
       applyMiddleware(
@@ -18,8 +19,7 @@ export function finalCreateStore(reducer) {
       ),
       devTools()
     )(createStore);
-  } else if ((typeof __DEVTOOLS__ !== 'undefined' && __DEVTOOLS__ === false) &&
-    (typeof __DEVELOPMENT__ !== 'undefined' && __DEVELOPMENT__ === true)) {
+  } else if (config.get('DEVTOOLS') === false && config.get('DEVELOPMENT') === true) {
     result = compose(
       applyMiddleware(
         thunkMiddleware,

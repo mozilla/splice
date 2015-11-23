@@ -6,6 +6,8 @@ import WebpackDevServer from 'webpack-dev-server';
 import del from 'del';
 import RunSequnence from 'run-sequence';
 
+import webpackConfig from './webpack.config';
+
 var rename = require("gulp-rename");
 
 const $ = gulpLoadPlugins();
@@ -17,7 +19,7 @@ gulp.task('clean', (cb) => {
 
 // run webpack bundler
 gulp.task('bundle', (cb) => {
-  const config = require(`./webpack.${options.dist ? 'dist.' : ''}config`);
+  const config = webpackConfig('production');
   const bundler = webpack(config);
 
   function bundlerCallback(err, stats) {
@@ -63,7 +65,7 @@ gulp.task('build:watch', ['clean'], (cb) => {
 });
 
 gulp.task('serve', () => {
-  const config = require('./webpack.config');
+  const config = webpackConfig('development');
   const bundler = webpack(config);
 
   let server = new WebpackDevServer(bundler, {

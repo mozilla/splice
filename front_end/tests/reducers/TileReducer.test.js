@@ -14,9 +14,9 @@ describe('Tile ', () => {
     expect(
       Tile(undefined, {
         type: types.RECEIVE_TILES,
-        json: {results: [{text: "Run the tests"}] }
+        json: {results: [{text: 'Run the tests'}] }
       }).rows).toEqual(
-      [{text: "Run the tests"}]
+      [{text: 'Run the tests'}]
     );
   });
 
@@ -24,9 +24,9 @@ describe('Tile ', () => {
     expect(
       Tile(undefined, {
         type: types.RECEIVE_TILE,
-        json: { result: {text: "Run the tests"} }
+        json: { result: {text: 'Run the tests'} }
       }).details).toEqual(
-      {text: "Run the tests"}
+      {text: 'Run the tests'}
     );
   });
 
@@ -35,29 +35,29 @@ describe('Tile ', () => {
     expect(
       Tile(undefined, {
         type: types.RECEIVE_CREATE_TILE,
-        json: {result: {text: "Run the tests"} }
+        json: {result: {text: 'Run the tests'} }
       }).rows
     ).toEqual([
-        {text: "Run the tests"}
+        {text: 'Run the tests'}
       ]);
 
     //Test adding when state is explicitly set
     expect(
       Tile({
         rows: [
-          {text: "Use Redux"},
-          {text: "Learn to connect it to React"},
-          {text: "Run the tests"}
+          {text: 'Use Redux'},
+          {text: 'Learn to connect it to React'},
+          {text: 'Run the tests'}
         ]
       }, {
         type: types.RECEIVE_CREATE_TILE,
-        json: {result: {text: "Last test"} }
+        json: {result: {text: 'Last test'} }
       }).rows
     ).toEqual([
-        {text: "Last test"},
-        {text: "Use Redux"},
-        {text: "Learn to connect it to React"},
-        {text: "Run the tests"}
+        {text: 'Last test'},
+        {text: 'Use Redux'},
+        {text: 'Learn to connect it to React'},
+        {text: 'Run the tests'}
       ]);
   });
 
@@ -65,13 +65,13 @@ describe('Tile ', () => {
     //Test Updating when state is explicitly set
     expect(
       Tile({
-        details: {name: "test"}
+        details: {name: 'test'}
       }, {
         type: types.RECEIVE_UPDATE_TILE,
-        json: {result: {name: "new name"} }
+        json: {result: {name: 'new name'} }
       }).details
     ).toEqual(
-      {name: "new name"}
+      {name: 'new name'}
     );
   });
 
