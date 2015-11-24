@@ -59,12 +59,12 @@ class AccountEditPage extends Component {
     updateDocTitle('Edit Account');
 
     dispatch(fetchHierarchy('account', props))
-      .catch(function(){
-        props.history.replaceState(null, '/error404');
-      })
       .then(() => {
-        if(this.props.Account.details){
+        if(this.props.Account.details.id){
           updateDocTitle('Edit Account - ' + this.props.Account.details.name);
+        }
+        else{
+          props.history.replaceState(null, '/error404');
         }
       });
   }

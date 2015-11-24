@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import { fetchHelper } from 'helpers/FetchHelpers';
 import * as config from 'helpers/config';
 
 const apiUrl = config.get('API_URL');
@@ -68,20 +69,16 @@ export function createAdGroup(data) {
   return function next(dispatch) {
     dispatch(requestCreateAdGroup());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/adgroups', {
+    const url = apiUrl + '/api/adgroups';
+    const options = {
       method: 'post',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: data
-    })
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveCreateAdGroup(json));
-        resolve(json);
-      })
-    );
+    };
+    return fetchHelper(url, options, receiveCreateAdGroup, dispatch);
   };
 }
 
@@ -90,20 +87,16 @@ export function updateAdGroup(adGroupId, data) {
   return function next(dispatch) {
     dispatch(requestUpdateAdGroup());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/adgroups/' + adGroupId, {
+    const url = apiUrl + '/api/adgroups/' + adGroupId;
+    const options = {
       method: 'put',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: data
-    })
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveUpdateAdGroup(json));
-        resolve(json);
-      })
-    );
+    };
+    return fetchHelper(url, options, receiveUpdateAdGroup, dispatch);
   };
 }
 
@@ -112,25 +105,17 @@ export function fetchAdGroup(adGroupId) {
   return function next(dispatch) {
     dispatch(requestAdGroup());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/adgroups/' + adGroupId)
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveAdGroup(json));
-        resolve();
-      }));
+    const url = apiUrl + '/api/adgroups/' + adGroupId;
+    return fetchHelper(url, null, receiveAdGroup, dispatch);
   };
 }
 
-export function fetchAdGroups(campaignId = null) {
+export function fetchAdGroups(campaignId) {
   // thunk middleware knows how to handle functions
   return function next(dispatch) {
     dispatch(requestAdGroups());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/adgroups' + '?campaign_id=' + campaignId)
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveAdGroups(json));
-        resolve();
-      }));
+    const url = apiUrl + '/api/adgroups?campaign_id=' + campaignId;
+    return fetchHelper(url, null, receiveAdGroups, dispatch);
   };
 }

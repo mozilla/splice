@@ -11,45 +11,53 @@ export function fetchHierarchy(mode, props) {
       const accountId = parseInt(props.params.accountId, 10);
 
       return dispatch(fetchAccount(accountId)).then(() => {
-        dispatch(fetchCampaigns(getState().Account.details.id));
+        if(getState().Account.details.id){
+          dispatch(fetchCampaigns(getState().Account.details.id));
+        }
       });
     }
     else if(mode === 'campaign') {
       const campaignId = parseInt(props.params.campaignId, 10);
 
       return dispatch(fetchCampaign(campaignId)).then(() => {
-        dispatch(fetchAdGroups(getState().Campaign.details.id));
-        dispatch(fetchAccount(getState().Campaign.details.account_id));
-        dispatch(fetchCampaigns(getState().Campaign.details.account_id));
+        if(getState().Campaign.details.id){
+          dispatch(fetchAdGroups(getState().Campaign.details.id));
+          dispatch(fetchAccount(getState().Campaign.details.account_id));
+          dispatch(fetchCampaigns(getState().Campaign.details.account_id));
+        }
       });
     }
     else if(mode === 'adGroup') {
       const adGroupId = parseInt(props.params.adGroupId, 10);
 
       return dispatch(fetchAdGroup(adGroupId)).then(() => {
-        dispatch(fetchTiles(getState().AdGroup.details.id));
-        dispatch(fetchAdGroups(getState().AdGroup.details.campaign_id));
-
-        dispatch(fetchCampaign(getState().AdGroup.details.campaign_id)).then(() => {
-          dispatch(fetchAccount(getState().Campaign.details.account_id));
-          dispatch(fetchCampaigns(getState().Campaign.details.account_id));
-        });
-      });
-    }
-    else if(mode === 'tile') {
-      const tileId = parseInt(props.params.tileId, 10);
-
-      return dispatch(fetchTile(tileId)).then(() => {
-        dispatch(fetchTiles(getState().Tile.details.adgroup_id));
-
-        dispatch(fetchAdGroup(getState().Tile.details.adgroup_id)).then(() => {
+        if(getState().AdGroup.details.id){
+          dispatch(fetchTiles(getState().AdGroup.details.id));
           dispatch(fetchAdGroups(getState().AdGroup.details.campaign_id));
 
           dispatch(fetchCampaign(getState().AdGroup.details.campaign_id)).then(() => {
             dispatch(fetchAccount(getState().Campaign.details.account_id));
             dispatch(fetchCampaigns(getState().Campaign.details.account_id));
           });
-        });
+        }
+      });
+    }
+    else if(mode === 'tile') {
+      const tileId = parseInt(props.params.tileId, 10);
+
+      return dispatch(fetchTile(tileId)).then(() => {
+        if(getState().Tile.details.id){
+          dispatch(fetchTiles(getState().Tile.details.adgroup_id));
+
+          dispatch(fetchAdGroup(getState().Tile.details.adgroup_id)).then(() => {
+            dispatch(fetchAdGroups(getState().AdGroup.details.campaign_id));
+
+            dispatch(fetchCampaign(getState().AdGroup.details.campaign_id)).then(() => {
+              dispatch(fetchAccount(getState().Campaign.details.account_id));
+              dispatch(fetchCampaigns(getState().Campaign.details.account_id));
+            });
+          });
+        }
       });
     }
   };

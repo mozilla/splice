@@ -60,12 +60,12 @@ class CampaignCreatePage extends Component {
 
     if(this.props.params.accountId !== undefined){
       dispatch(fetchHierarchy('account', props))
-        .catch(function(){
-          props.history.replaceState(null, '/error404');
-        })
         .then(() => {
-          if(this.props.Account.details){
+          if(this.props.Account.details.id){
             updateDocTitle(this.props.Account.details.name + ': Create Campaign');
+          }
+          else{
+            props.history.replaceState(null, '/error404');
           }
         });
     }

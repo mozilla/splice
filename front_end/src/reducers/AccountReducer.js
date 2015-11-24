@@ -17,18 +17,19 @@ const initialState = {
 };
 
 export function Account(state = initialState, action = null) {
+  let data;
   switch (action.type) {
     case REQUEST_CREATE_ACCOUNT:
       return _.assign({}, state, {
         isSaving: true
       });
     case RECEIVE_CREATE_ACCOUNT:
-      let rows = state.rows;
+      data = state.rows;
       if(action.json.result !== undefined){
-        rows = [action.json.result, ...state.rows];
+        data = [action.json.result, ...state.rows];
       }
       return _.assign({}, state, {
-        rows: rows,
+        rows: data,
         isSaving: false
       });
     case REQUEST_UPDATE_ACCOUNT:
@@ -36,12 +37,12 @@ export function Account(state = initialState, action = null) {
         isSaving: true
       });
     case RECEIVE_UPDATE_ACCOUNT:
-      let details = state.details;
+      data = state.details;
       if(action.json.result !== undefined){
-        details = action.json.result;
+        data = action.json.result;
       }
       return _.assign({}, state, {
-        details: details,
+        details: data,
         isSaving: false
       });
     case REQUEST_ACCOUNTS:
@@ -49,8 +50,12 @@ export function Account(state = initialState, action = null) {
         isFetching: true
       });
     case RECEIVE_ACCOUNTS:
+      data = [];
+      if(action.json.results !== undefined){
+        data = action.json.results;
+      }
       return _.assign({}, state, {
-        rows: action.json.results,
+        rows: data,
         isFetching: false
       });
     case REQUEST_ACCOUNT:
@@ -58,8 +63,12 @@ export function Account(state = initialState, action = null) {
         isFetching: true
       });
     case RECEIVE_ACCOUNT:
+      data = {};
+      if(action.json.result !== undefined){
+        data = action.json.result;
+      }
       return _.assign({}, state, {
-        details: action.json.result,
+        details: data,
         isFetching: false
       });
     default:

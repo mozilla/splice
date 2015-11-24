@@ -24,10 +24,19 @@ export function fetchStats(query = {}) {
     dispatch(requestStats());
 
     return fetch(apiUrl + '/api/stats?' + queryString.stringify(query))
-      .then(response => response.json())
+      .then(function(response) {
+        if (response.status !== 200) {
+          console.log(response); //eslint-disable-line no-console
+        }
+        return response.json();
+      })
       .then(json => new Promise(resolve => {
         dispatch(receiveStats(query, json));
         resolve();
-      }));
+      }))
+      .catch(function(e){
+        dispatch(receiveStats(query, {}));
+        console.log(e); //eslint-disable-line no-console
+      });
   };
 }

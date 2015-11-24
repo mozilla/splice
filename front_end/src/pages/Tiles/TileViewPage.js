@@ -45,12 +45,12 @@ export default class TileViewPage extends Component {
     updateDocTitle('Tile View');
 
     dispatch(fetchHierarchy('tile', props))
-      .catch(function(){
-        props.history.replaceState(null, '/error404');
-      })
       .then(() => {
-        if(this.props.Tile.details) {
+        if(this.props.Tile.details.id) {
           pageVisit('Tile - ' + this.props.Tile.details.title, this);
+        }
+        else{
+          props.history.replaceState(null, '/error404');
         }
     });
   }

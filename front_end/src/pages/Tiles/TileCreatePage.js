@@ -62,12 +62,12 @@ class TileCreatePage extends Component {
 
     if(this.props.params.adGroupId !== undefined) {
       dispatch(fetchHierarchy('adGroup', props))
-        .catch(function(){
-          props.history.replaceState(null, '/error404');
-        })
         .then(() => {
-          if (this.props.AdGroup.details !== undefined) {
+          if (this.props.AdGroup.details.id) {
             updateDocTitle(this.props.AdGroup.details.name + ': Create Tile');
+          }
+          else{
+            props.history.replaceState(null, '/error404');
           }
         });
     }

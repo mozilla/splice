@@ -58,12 +58,12 @@ class TileEditPage extends Component {
     updateDocTitle('Edit Tile');
 
     dispatch(fetchHierarchy('tile', props))
-      .catch(function(){
-        props.history.replaceState(null, '/error404');
-      })
       .then(() => {
-        if(this.props.Tile.details !== undefined){
+        if(this.props.Tile.details.id){
           updateDocTitle('Edit Tile - ' + this.props.Tile.details.title);
+        }
+        else{
+          props.history.replaceState(null, '/error404');
         }
       });
   }

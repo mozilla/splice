@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import * as config from 'helpers/config';
+import { fetchHelper } from 'helpers/FetchHelpers';
 
 const apiUrl = config.get('API_URL');
 
@@ -62,20 +63,16 @@ export function createAccount(data) {
   return function next(dispatch) {
     dispatch(requestCreateAccount());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/accounts', {
+    const url = apiUrl + '/api/accounts';
+    const options = {
       method: 'post',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: data
-    })
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveCreateAccount(json));
-        resolve(json);
-      })
-    );
+    };
+    return fetchHelper(url, options, receiveCreateAccount, dispatch);
   };
 }
 
@@ -84,20 +81,16 @@ export function updateAccount(accountId, data) {
   return function next(dispatch) {
     dispatch(requestUpdateAccount());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/accounts/' + accountId, {
+    const url = apiUrl + '/api/accounts/' + accountId;
+    const options = {
       method: 'put',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: data
-    })
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveUpdateAccount(json));
-        resolve(json);
-      })
-    );
+    };
+    return fetchHelper(url, options, receiveUpdateAccount, dispatch);
   };
 }
 
@@ -106,14 +99,8 @@ export function fetchAccount(accountId) {
   return function next(dispatch) {
     dispatch(requestAccount());
     // Return a promise to wait for
-    //return fetch('http://localhost:9999/public/mock/account_' + accountId + '.json')
-    return fetch(apiUrl + '/api/accounts/' + accountId)
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveAccount(json));
-        resolve();
-      })
-    );
+    const url = apiUrl + '/api/accounts/' + accountId;
+    return fetchHelper(url, null, receiveAccount, dispatch);
   };
 }
 
@@ -122,12 +109,7 @@ export function fetchAccounts() {
   return function next(dispatch) {
     dispatch(requestAccounts());
     // Return a promise to wait for
-    //return fetch('http://localhost:9999/public/mock/accounts.json')
-    return fetch(apiUrl + '/api/accounts')
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveAccounts(json));
-        resolve(json);
-      }));
+    const url = apiUrl + '/api/accounts';
+    return fetchHelper(url, null, receiveAccounts, dispatch);
   };
 }

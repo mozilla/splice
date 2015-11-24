@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import { displayMessage, shownMessage, formChanged, formSaved } from 'actions/App/AppActions';
-import { createTile, updateTile, fetchTiles, uploadImage, tileSetDetailsVar } from 'actions/Tiles/TileActions';
+import { createTile, updateTile, fetchTiles, uploadImage, uploadEnhancedImage, tileSetDetailsVar } from 'actions/Tiles/TileActions';
 import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
 import { fetchCampaigns, receiveCampaigns } from 'actions/Campaigns/CampaignActions';
 import { fetchAdGroups, receiveAdGroups } from 'actions/AdGroups/AdGroupActions';
@@ -310,7 +310,12 @@ export default class TileForm extends Component {
     const data = new FormData();
     data.append('creative', file[0]);
 
-    dispatch(uploadImage(data, fieldName === 'enhanced_image_uri'))
+    let func = uploadImage;
+    if(fieldName === 'enhanced_image_uri'){
+      func = uploadEnhancedImage;
+    }
+
+    dispatch(func(data))
       .then(function(response){
         if(response.result !== undefined){
           dispatch(tileSetDetailsVar(fieldName, response.result));

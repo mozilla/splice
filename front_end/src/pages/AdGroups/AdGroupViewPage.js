@@ -48,12 +48,12 @@ export default class AdGroupViewPage extends Component {
     updateDocTitle('Ad Group View');
 
     dispatch(fetchHierarchy('adGroup', props))
-      .catch(function(){
-        props.history.replaceState(null, '/error404');
-      })
       .then(() => {
-        if(this.props.AdGroup.details) {
+        if(this.props.AdGroup.details.id) {
           pageVisit('Ad Group - ' + this.props.AdGroup.details.name, this);
+        }
+        else{
+          props.history.replaceState(null, '/error404');
         }
     });
   }

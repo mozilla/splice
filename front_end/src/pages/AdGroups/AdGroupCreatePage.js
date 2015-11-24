@@ -61,12 +61,12 @@ class AdGroupCreatePage extends Component {
 
     if(this.props.params.campaignId !== undefined){
       dispatch(fetchHierarchy('campaign', props))
-        .catch(function(){
-          props.history.replaceState(null, '/error404');
-        })
         .then(() => {
-          if(this.props.Campaign.details !== undefined){
+          if(this.props.Campaign.details.id){
             updateDocTitle(this.props.Campaign.details.name + ': Create Ad Group');
+          }
+          else{
+            props.history.replaceState(null, '/error404');
           }
         });
     }

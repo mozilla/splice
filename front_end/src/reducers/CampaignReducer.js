@@ -26,6 +26,7 @@ const initialState = {
 };
 
 export function Campaign(state = initialState, action = null) {
+  let data;
   switch (action.type) {
     case CAMPAIGN_SET_DETAILS_VAR:
       return _.assign({}, state, {
@@ -38,12 +39,12 @@ export function Campaign(state = initialState, action = null) {
         isSaving: true
       });
     case RECEIVE_CREATE_CAMPAIGN:
-      let rows = state.rows;
+      data = state.rows;
       if(action.json.result !== undefined){
-        rows = [action.json.result, ...state.rows];
+        data = [action.json.result, ...state.rows];
       }
       return _.assign({}, state, {
-        rows: rows,
+        rows: data,
         isSaving: false
       });
     case REQUEST_UPDATE_CAMPAIGN:
@@ -51,12 +52,12 @@ export function Campaign(state = initialState, action = null) {
         isSaving: true
       });
     case RECEIVE_UPDATE_CAMPAIGN:
-      let details = state.details;
+      data = state.details;
       if(action.json.result !== undefined){
-        details = action.json.result;
+        data = action.json.result;
       }
       return _.assign({}, state, {
-        details: details,
+        details: data,
         isSaving: false
       });
     case REQUEST_BULK_UPLOAD:
@@ -72,8 +73,12 @@ export function Campaign(state = initialState, action = null) {
         isFetching: true
       });
     case RECEIVE_CAMPAIGNS:
+      data = [];
+      if(action.json.results !== undefined){
+        data = action.json.results;
+      }
       return _.assign({}, state, {
-        rows: action.json.results,
+        rows: data,
         isFetching: false
       });
     case REQUEST_CAMPAIGN:
@@ -81,8 +86,12 @@ export function Campaign(state = initialState, action = null) {
         isFetching: true
       });
     case RECEIVE_CAMPAIGN:
+      data = {};
+      if(action.json.result !== undefined){
+        data = action.json.result;
+      }
       return _.assign({}, state, {
-        details: action.json.result,
+        details: data,
         isFetching: false
       });
     case CAMPAIGN_SET_FILTER:

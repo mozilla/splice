@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import { fetchHelper } from 'helpers/FetchHelpers';
 import * as config from 'helpers/config';
 
 const apiUrl = config.get('API_URL');
@@ -22,13 +23,8 @@ export function fetchInit() {
   return function next(dispatch) {
     dispatch(requestInit());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/init/all')
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveInit(json));
-        resolve();
-      })
-    );
+    const url = apiUrl + '/api/init/all';
+    return fetchHelper(url, null, receiveInit, dispatch);
   };
 }
 
