@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask_restful import Api, Resource, marshal, fields, reqparse, inputs
 from splice.queries.reporting import get_stats
 from splice.models import Tile, Adgroup
+from sqlalchemy.exc import InvalidRequestError
 
 reporting_bp = Blueprint('api.reporting', __name__, url_prefix='/api')
 api = Api(reporting_bp)
@@ -12,21 +13,24 @@ valid_group_by = {
     'month': fields.Integer,
     'category': fields.String,
     'locale': fields.String,
-    'country_code': fields.String
+    'country_code': fields.String,
+    'account_id': fields.Integer,
+    'adgroup_id': fields.Integer,
+    'campaign_id': fields.Integer,
 }
 
 valid_filters = {
     'account_id': {'type': int, 'store_missing': False},
-    'adgroup_id': {'type': int, 'store_missing': False},
     'campaign_id': {'type': int, 'store_missing': False},
-    'account_id': {'type': int, 'store_missing': False},
+    'adgroup_id': {'type': int, 'store_missing': False},
     'type': {'choices': Tile.TYPES, 'store_missing': False},
     'adgroup_type': {'choices': Adgroup.TYPE, 'store_missing': False},
     'country_code': {'store_missing': False},
     'locale': {'store_missing': False},
     'channel_id': {'type': int, 'store_missing': False},
     'start_date': {'type': inputs.date, 'store_missing': False},
-    'end_date': {'type': inputs.date, 'store_missing': False}
+    'end_date': {'type': inputs.date, 'store_missing': False},
+    'tile_id': {'type': int, 'action': 'append', 'store_missing': False}
 }
 
 
@@ -65,12 +69,13 @@ class ReportingAPI(Resource):
 
         group_by = args['group_by']
 
-        stats = get_stats(group_by=group_by, filters=filter_args)
-
-        if not stats:
-            return {'results': []}
+        try:
+            stats = get_stats(group_by=group_by, filters=filter_args)
+        except InvalidRequestError as e:
+            return {'message': e.message}, 400
         else:
-            return {'results': marshal(stats, reporting_fields(group_by))}
+            return {'results': marshal(stats, reporting_fields(group_by)) if stats else []}
+
 
 api.add_resource(ReportingAPI, '/stats', endpoint='stats')
 
