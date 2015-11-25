@@ -99,8 +99,16 @@ select.form-control{
   .Select {
     .Select-control {
       border-radius: 0;
-      min-height: 38px;
-      height: auto;
+      height: 34px;
+
+      .Select-input{
+        height: 34px;
+
+        input{
+          height: 34px;
+          line-height: 34px;
+        }
+      }
     }
     .Select-arrow-zone {
       .Select-arrow {
@@ -128,6 +136,7 @@ select.form-control{
     border-color: $color-light-gray;
     color: $font-color-default;
     border-radius: 5px;
+    margin: 4px 0 0 5px;
 
     .Select-item-icon{
       border-right: 0;
