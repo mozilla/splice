@@ -10,7 +10,7 @@ from splice.environment import Environment
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import insert, update
 from sqlalchemy import create_engine
-from splice.models import Adgroup, Country, Account, CampaignCountry
+from splice.models import Adgroup, Account, CampaignCountry
 from tld import get_tld
 import os
 import base64
@@ -185,19 +185,13 @@ def _update_image(bucket, image_url, tile_id, column='image_uri'):
 
 def main():
     """
-    NOTE: This script MUST be run on alembic migration version 16fa35dd63a2 - please selectively
-    upgrade to this version before running this script, then after sucessful running, continue to
-    fully migrate your db.
-
-    manage.py db upgrade 16fa35dd63a2
-    python index_walker.py
+    Usage:
     manage.py db upgrade
+    python index_walker.py
 
     This script is going to populate Account and Campaign database structures.  It does this
     by reading the currently deployed tile distributions (s3), where it determines the currently active
     tile set, as well as the geo-targetting data (currently only country level) for each tile/adgroup.
-
-    The script also loads the countries table from fixtures.
 
     The script will discriminate between 'active' and 'inactive' adgroups based on whether or not
     the adgroup exists in the current distribution.  Inactive adgroups are given start/end dates
@@ -252,9 +246,6 @@ def main():
     # print "active", str(active_tiles)
 
     env = Environment.instance()
-
-    # get the country data out of the fixtures
-    country_codes = [dict(country_name=cname, country_code=cc) for cc, cname in env._load_countries()]
 
     db_uri = env.config.SQLALCHEMY_DATABASE_URI
     engine = create_engine(db_uri)
@@ -352,16 +343,15 @@ def main():
 
                 tile_ids = image_hashes.get(new_hash)
                 if tile_ids:
+                    print "image: %s" % image.key
                     session.execute("update tiles set image_uri = '%s' where id in (%s)" %
                                     (new_uri, ','.join(str(tid) for tid in tile_ids)))
 
                 tile_ids = enhanced_image_hashes.get(new_hash)
                 if tile_ids:
+                    print "enhanced_image: %s" % image.key
                     session.execute("update tiles set enhanced_image_uri = '%s' where id in (%s)" %
                                     (new_uri, ','.join(str(tid) for tid in tile_ids)))
-
-            country_stmt = insert(Country).values(country_codes)
-            session.execute(country_stmt)
 
             account_stmt = insert(Account).values([dict(id=aid, name=aname) for aname, aid in accounts.iteritems()])
             session.execute(account_stmt)
