@@ -12,6 +12,9 @@ from sqlalchemy.sql import insert, update
 from sqlalchemy import create_engine
 from splice.models import Adgroup, Country, Account, CampaignCountry
 from tld import get_tld
+import os
+import base64
+import hashlib
 
 ARBITRARY_FUTURE = datetime.datetime.strptime('2525-01-01', "%Y-%m-%d").date()
 
@@ -169,6 +172,17 @@ def safe_str(obj):
         return unicode(obj).encode('unicode_escape')
 
 
+def _update_image(bucket, image_url, tile_id, column='image_uri'):
+    env = Environment.instance()
+    if image_url and not image_url.startswith('http'):
+        imgs = list(bucket.list(prefix="images/%s" % image_url))
+        if len(imgs):
+            uri = os.path.join('https://%s.s3.amazonaws.com' % env.config.S3['bucket'], imgs[0])
+            print "updating %s for tile=%s" % (column, tile_id)
+            return "update tiles set %s = '%s' where id = %s" % (column, uri, tile_id)
+    return None
+
+
 def main():
     """
     NOTE: This script MUST be run on alembic migration version 16fa35dd63a2 - please selectively
@@ -256,7 +270,8 @@ def main():
         # collate/generate campaign and account data
         # stmt = select([Adgroup.id, Tile.target_url, Adgroup.channel_id, Adgroup.created_at]). \
         #     where(Tile.adgroup_id == Adgroup.id)
-        stmt = """SELECT a.id, t.target_url, t.title, a.channel_id, a.created_at, c.name
+        stmt = """SELECT a.id, t.target_url, t.title, a.channel_id, a.created_at, c.name,
+                    t.id, t.image_uri, t.enhanced_image_uri
                   FROM adgroups a
                   JOIN tiles t on t.adgroup_id = a.id
                   JOIN channels c on a.channel_id = c.id"""
@@ -269,12 +284,11 @@ def main():
         countries = defaultdict(set)
         accounts = dict()
 
-        for adgroup_id, url, title, channel, created_at, channel_name in result:
+        for adgroup_id, url, title, channel, created_at, channel_name, tile_id, i_url, ei_url in result:
             assert all(x is not None for x in (adgroup_id, url, channel)), \
                 "Some of %s is None" % str((adgroup_id, url, channel))
 
             # do tld -> account mapping substitution
-
             active = adgroup_id in active_tiles
             account_name, campaign_name = derive_account_campaign(adgroup_id, title, url)
             curr = (account_name, campaign_name, channel, active)
@@ -310,6 +324,7 @@ def main():
 
             adgroups[campaign_id].append(adgroup_id)
 
+
         # insert data into new tables
         Session = sessionmaker(bind=engine)
         session = Session()
@@ -318,6 +333,33 @@ def main():
         session._model_changes = None
 
         try:
+            # grab all s3 images and reproduce image hash
+            bucket = env.s3.get_bucket(env.config.S3["bucket"])
+            images = bucket.list('images/')
+
+            image_hashes = defaultdict(list)
+            enhanced_image_hashes = defaultdict(list)
+            stmt = "SELECT t.id, t.image_uri, t.enhanced_image_uri FROM tiles t"
+            for tile_id, image_uri, enhanced_image_uri in connection.execute(stmt):
+                image_hashes[image_uri].append(tile_id)
+                enhanced_image_hashes[enhanced_image_uri].append(tile_id)
+
+            for image in images:
+                ext = image.key.split('.')[-1]
+                new_hash = hashlib.sha1("data:image/%s;base64,%s" %
+                                        (ext, base64.b64encode(image.get_contents_as_string()))).hexdigest()
+                new_uri = image.generate_url(expires_in=0, query_auth=False)
+
+                tile_ids = image_hashes.get(new_hash)
+                if tile_ids:
+                    session.execute("update tiles set image_uri = '%s' where id in (%s)" %
+                                    (new_uri, ','.join(str(tid) for tid in tile_ids)))
+
+                tile_ids = enhanced_image_hashes.get(new_hash)
+                if tile_ids:
+                    session.execute("update tiles set enhanced_image_uri = '%s' where id in (%s)" %
+                                    (new_uri, ','.join(str(tid) for tid in tile_ids)))
+
             country_stmt = insert(Country).values(country_codes)
             session.execute(country_stmt)
 
