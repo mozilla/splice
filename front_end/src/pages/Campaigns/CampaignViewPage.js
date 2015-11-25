@@ -49,12 +49,12 @@ export default class CampaignViewPage extends Component {
     updateDocTitle('Campaign View');
 
     dispatch(fetchHierarchy('campaign', props))
-      .catch(function(){
-        props.history.replaceState(null, '/error404');
-      })
       .then(() => {
-        if(this.props.Campaign.details) {
+        if(this.props.Campaign.details.id) {
           pageVisit('Campaign - ' + this.props.Campaign.details.name, this);
+        }
+        else{
+          props.history.replaceState(null, '/error404');
         }
     });
   }

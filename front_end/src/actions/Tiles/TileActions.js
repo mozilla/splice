@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import { fetchHelper } from 'helpers/FetchHelpers';
 import * as config from 'helpers/config';
 
 const apiUrl = config.get('API_URL');
@@ -49,40 +50,30 @@ export function receiveUpdateTile(json) {
   };
 }
 
-export function requestImageUpload(isEnhanced) {
-  let output;
-
-  if(isEnhanced){
-    output = {
-      type: REQUEST_ENHANCED_IMAGE_UPLOAD
-    };
-  }
-  else{
-    output = {
-      type: REQUEST_IMAGE_UPLOAD
-    };
-  }
-
-  return output;
+export function requestImageUpload() {
+  return {
+    type: REQUEST_IMAGE_UPLOAD
+  };
 }
 
-export function receiveImageUpload(json, isEnhanced) {
-  let output;
+export function receiveImageUpload(json) {
+  return {
+    type: RECEIVE_IMAGE_UPLOAD,
+    json: json
+  };
+}
 
-  if(isEnhanced){
-    output = {
-      type: RECEIVE_ENHANCED_IMAGE_UPLOAD,
-      json: json
-    };
-  }
-  else{
-    output = {
-      type: RECEIVE_IMAGE_UPLOAD,
-      json: json
-    };
-  }
+export function requestEnhancedImageUpload() {
+  return {
+    type: REQUEST_ENHANCED_IMAGE_UPLOAD
+  };
+}
 
-  return output;
+export function receiveEnhancedImageUpload(json) {
+  return {
+    type: RECEIVE_ENHANCED_IMAGE_UPLOAD,
+    json: json
+  };
 }
 
 export function requestTile() {
@@ -110,20 +101,16 @@ export function createTile(data) {
   return function next(dispatch) {
     dispatch(requestCreateTile());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/tiles', {
+    const url = apiUrl + '/api/tiles';
+    const options = {
       method: 'post',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: data
-    })
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveCreateTile(json));
-        resolve(json);
-      })
-    );
+    };
+    return fetchHelper(url, options, receiveCreateTile, dispatch);
   };
 }
 
@@ -132,41 +119,50 @@ export function updateTile(tileId, data) {
   return function next(dispatch) {
     dispatch(requestUpdateTile());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/tiles/' + tileId, {
+    const url = apiUrl + '/api/tiles/' + tileId;
+    const options = {
       method: 'put',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: data
-    })
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveUpdateTile(json));
-        resolve(json);
-      })
-    );
+    };
+    return fetchHelper(url, options, receiveUpdateTile, dispatch);
   };
 }
 
-export function uploadImage(data, isEnhanced){
+export function uploadEnhancedImage(data){
   // thunk middleware knows how to handle functions
   return function next(dispatch) {
-    dispatch(requestImageUpload(isEnhanced));
+    dispatch(requestEnhancedImageUpload());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/tiles/creative/upload', {
+    const url = apiUrl + '/api/tiles/creative/upload';
+    const options = {
       method: 'post',
       headers: {
         'Accept': 'application/json'
       },
       body: data
-    })
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-          dispatch(receiveImageUpload(json, isEnhanced));
-          resolve(json);
-        })
-      );
+    };
+    return fetchHelper(url, options, receiveEnhancedImageUpload, dispatch);
+  };
+}
+
+export function uploadImage(data){
+  // thunk middleware knows how to handle functions
+  return function next(dispatch) {
+    dispatch(requestImageUpload());
+    // Return a promise to wait for
+    const url = apiUrl + '/api/tiles/creative/upload';
+    const options = {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json'
+      },
+      body: data
+    };
+    return fetchHelper(url, options, receiveImageUpload, dispatch);
   };
 }
 
@@ -175,30 +171,17 @@ export function fetchTile(tileId) {
   return function next(dispatch) {
     dispatch(requestTile());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/tiles/' + tileId)
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveTile(json));
-        resolve();
-      }));
+    const url = apiUrl + '/api/tiles/' + tileId;
+    return fetchHelper(url, null, receiveTile, dispatch);
   };
 }
 
-export function fetchTiles(adGroupId = null) {
+export function fetchTiles(adGroupId) {
   // thunk middleware knows how to handle functions
   return function next(dispatch) {
     dispatch(requestTiles());
     // Return a promise to wait for
-    let params = '';
-    if (adGroupId !== null) {
-      params = '?adgroup_id=' + adGroupId;
-    }
-
-    return fetch(apiUrl + '/api/tiles' + params)
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveTiles(json));
-        resolve();
-      }));
+    const url = apiUrl + '/api/tiles?adgroup_id=' + adGroupId;
+    return fetchHelper(url, null, receiveTiles, dispatch);
   };
 }

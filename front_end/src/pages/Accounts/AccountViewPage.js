@@ -96,12 +96,12 @@ export default class AccountViewPage extends Component {
     updateDocTitle('Account View');
 
     dispatch(fetchHierarchy('account', props))
-      .catch(function(){
-        props.history.replaceState(null, '/error404');
-      })
       .then(() => {
-        if(this.props.Account.details){
+        if(this.props.Account.details.id){
           pageVisit('Account - ' + this.props.Account.details.name, this);
+        }
+        else{
+          props.history.replaceState(null, '/error404');
         }
     });
   }

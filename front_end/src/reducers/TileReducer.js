@@ -24,6 +24,7 @@ const initialState = {
 };
 
 export function Tile(state = initialState, action = null) {
+  let data;
   switch (action.type) {
     case TILE_SET_DETAILS_VAR:
       return _.assign({}, state, {
@@ -36,12 +37,12 @@ export function Tile(state = initialState, action = null) {
         isSaving: true
       });
     case RECEIVE_CREATE_TILE:
-      let rows = state.rows;
+      data = state.rows;
       if(action.json.result !== undefined){
-        rows = [action.json.result, ...state.rows];
+        data = [action.json.result, ...state.rows];
       }
       return _.assign({}, state, {
-        rows: rows,
+        rows: data,
         isSaving: false
       });
     case REQUEST_UPDATE_TILE:
@@ -49,12 +50,12 @@ export function Tile(state = initialState, action = null) {
         isSaving: true
       });
     case RECEIVE_UPDATE_TILE:
-      let details = state.details;
+      data = state.details;
       if(action.json.result !== undefined){
-        details = action.json.result;
+        data = action.json.result;
       }
       return _.assign({}, state, {
-        details: details,
+        details: data,
         isSaving: false
       });
     case REQUEST_ENHANCED_IMAGE_UPLOAD:
@@ -78,8 +79,12 @@ export function Tile(state = initialState, action = null) {
         isFetching: true
       });
     case RECEIVE_TILES:
+      data = [];
+      if(action.json.results !== undefined){
+        data = action.json.results;
+      }
       return _.assign({}, state, {
-        rows: action.json.results,
+        rows: data,
         isFetching: false
       });
     case REQUEST_TILE:
@@ -87,8 +92,12 @@ export function Tile(state = initialState, action = null) {
         isFetching: true
       });
     case RECEIVE_TILE:
+      data = {};
+      if(action.json.result !== undefined){
+        data = action.json.result;
+      }
       return _.assign({}, state, {
-        details: action.json.result,
+        details: data,
         isFetching: false
       });
     default:

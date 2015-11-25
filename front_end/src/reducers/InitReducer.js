@@ -12,6 +12,7 @@ const initialState = {
 };
 
 export function Init(state = initialState, action = null) {
+  let data;
   switch (action.type) {
     case REQUEST_INIT:{
       return _.assign({}, state, {
@@ -19,11 +20,15 @@ export function Init(state = initialState, action = null) {
       });
     }
     case RECEIVE_INIT:
+      data = state;
+      if(action.json !== undefined){
+        data = action.json.result;
+      }
       return _.assign({}, state, {
-        categories: action.json.result.categories,
-        channels: action.json.result.channels,
-        countries: action.json.result.countries,
-        locales: action.json.result.locales,
+        categories: data.categories,
+        channels: data.channels,
+        countries: data.countries,
+        locales: data.locales,
         isFetching: false
       });
     default:
