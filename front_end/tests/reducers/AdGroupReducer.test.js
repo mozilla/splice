@@ -14,9 +14,9 @@ describe('AdGroup ', () => {
     expect(
       AdGroup(undefined, {
         type: types.RECEIVE_ADGROUPS,
-        json: {results: [{text: "Run the tests"}] }
+        json: {results: [{text: 'Run the tests'}] }
       }).rows).toEqual(
-      [{text: "Run the tests"}]
+      [{text: 'Run the tests'}]
     );
   });
 
@@ -24,9 +24,9 @@ describe('AdGroup ', () => {
     expect(
       AdGroup(undefined, {
         type: types.RECEIVE_ADGROUP,
-        json: { result: {text: "Run the tests"} }
+        json: { result: {text: 'Run the tests'} }
       }).details).toEqual(
-      {text: "Run the tests"}
+      {text: 'Run the tests'}
     );
   });
 
@@ -35,29 +35,29 @@ describe('AdGroup ', () => {
     expect(
       AdGroup(undefined, {
         type: types.RECEIVE_CREATE_ADGROUP,
-        json: {result: {text: "Run the tests"} }
+        json: {result: {text: 'Run the tests'} }
       }).rows
     ).toEqual([
-        {text: "Run the tests"}
+        {text: 'Run the tests'}
       ]);
 
     //Test adding when state is explicitly set
     expect(
       AdGroup({
         rows: [
-          {text: "Use Redux"},
-          {text: "Learn to connect it to React"},
-          {text: "Run the tests"}
+          {text: 'Use Redux'},
+          {text: 'Learn to connect it to React'},
+          {text: 'Run the tests'}
         ]
       }, {
         type: types.RECEIVE_CREATE_ADGROUP,
-        json: {result: {text: "Last test"} }
+        json: {result: {text: 'Last test'} }
       }).rows
     ).toEqual([
-        {text: "Last test"},
-        {text: "Use Redux"},
-        {text: "Learn to connect it to React"},
-        {text: "Run the tests"}
+        {text: 'Last test'},
+        {text: 'Use Redux'},
+        {text: 'Learn to connect it to React'},
+        {text: 'Run the tests'}
       ]);
   });
 
@@ -65,13 +65,13 @@ describe('AdGroup ', () => {
     //Test Updating when state is explicitly set
     expect(
       AdGroup({
-        details: {name: "test"}
+        details: {name: 'test'}
       }, {
         type: types.RECEIVE_UPDATE_ADGROUP,
-        json: {result: {name: "new name"} }
+        json: {result: {name: 'new name'} }
       }).details
     ).toEqual(
-      {name: "new name"}
+      {name: 'new name'}
     );
   });
 

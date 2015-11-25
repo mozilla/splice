@@ -4,6 +4,7 @@ import { Campaign } from './CampaignReducer.js';
 import { AdGroup } from './AdGroupReducer.js';
 import { Tile } from './TileReducer.js';
 import { Init } from './InitReducer.js';
+import { Stat } from './StatReducer.js';
 
 export {
   App,
@@ -11,5 +12,6 @@ export {
   Campaign,
   AdGroup,
   Tile,
-  Init
+  Init,
+  Stat
 };

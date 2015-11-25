@@ -14,9 +14,9 @@ describe('Campaign ', () => {
     expect(
       Campaign(undefined, {
         type: types.RECEIVE_CAMPAIGNS,
-        json: {results: [{text: "Run the tests"}] }
+        json: {results: [{text: 'Run the tests'}] }
       }).rows).toEqual(
-      [{text: "Run the tests"}]
+      [{text: 'Run the tests'}]
     );
   });
 
@@ -24,9 +24,9 @@ describe('Campaign ', () => {
     expect(
       Campaign(undefined, {
         type: types.RECEIVE_CAMPAIGN,
-        json: { result: {text: "Run the tests"} }
+        json: { result: {text: 'Run the tests'} }
       }).details).toEqual(
-      {text: "Run the tests"}
+      {text: 'Run the tests'}
     );
   });
 
@@ -35,29 +35,29 @@ describe('Campaign ', () => {
     expect(
       Campaign(undefined, {
         type: types.RECEIVE_CREATE_CAMPAIGN,
-        json: {result: {text: "Run the tests"} }
+        json: {result: {text: 'Run the tests'} }
       }).rows
     ).toEqual([
-        {text: "Run the tests"}
+        {text: 'Run the tests'}
       ]);
 
     //Test adding when state is explicitly set
     expect(
       Campaign({
         rows: [
-          {text: "Use Redux"},
-          {text: "Learn to connect it to React"},
-          {text: "Run the tests"}
+          {text: 'Use Redux'},
+          {text: 'Learn to connect it to React'},
+          {text: 'Run the tests'}
         ]
       }, {
         type: types.RECEIVE_CREATE_CAMPAIGN,
-        json: {result: {text: "Last test"} }
+        json: {result: {text: 'Last test'} }
       }).rows
     ).toEqual([
-        {text: "Last test"},
-        {text: "Use Redux"},
-        {text: "Learn to connect it to React"},
-        {text: "Run the tests"}
+        {text: 'Last test'},
+        {text: 'Use Redux'},
+        {text: 'Learn to connect it to React'},
+        {text: 'Run the tests'}
       ]);
   });
 
@@ -65,13 +65,13 @@ describe('Campaign ', () => {
     //Test Updating when state is explicitly set
     expect(
       Campaign({
-        details: {name: "test"}
+        details: {name: 'test'}
       }, {
         type: types.RECEIVE_UPDATE_CAMPAIGN,
-        json: {result: {name: "new name"} }
+        json: {result: {name: 'new name'} }
       }).details
     ).toEqual(
-      {name: "new name"}
+      {name: 'new name'}
     );
   });
 

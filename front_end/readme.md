@@ -1,4 +1,4 @@
-# Readme 
+# Readme
 
 This project is based on [react-redux-scaffold](https://github.com/lcjnil/react-redux-scaffold).
 
@@ -6,14 +6,13 @@ Work in progress, issues are welcome.
 
 ## Config
 
-Modify `settings.conf.js` variables `devApi` or `liveApi` with your API url. (Use single quotes within double quotes).  
+Create a `settings.conf.js` file and export any variables you want to change. Look at `settings.default.conf.js` for default settings.
 
 ## Run
 
 Install [node.js](https://nodejs.org/en/).
 
 `npm install` to install dependencies.
-
 
 `npm start` to start a local server with hot reloading.
 

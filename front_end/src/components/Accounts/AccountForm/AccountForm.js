@@ -24,10 +24,8 @@ export default class AccountForm extends Component {
 
   componentDidMount(){
     bindFormValidators();
-    if(this.props.App.formChanged === true){
-      this.props.dispatch(formSaved());
-    }
   }
+
   componentDidUpdate(prevProps) {
     if (prevProps.Account.details.id !== this.props.Account.details.id ){
       bindFormValidators();

@@ -11,7 +11,7 @@ export default class TileList extends Component {
 					<TileRow {...row} key={index}/>
 			);
 		} else {
-			spinner = (<img src="./public/img/ajax-loader-navy.gif"/>);
+			spinner = (<img src={require('../../../public/img/ajax-loader-navy.gif')}/>);
 		}
 
 		return (

@@ -14,7 +14,7 @@ export function bindFormConfig() {
     errorTemplate: '<span class="text-danger"></span>',
     //successClass: 'has-success',
     errorClass: 'has-error',
-    excluded: 'input[type=button], input[type=submit], input[type=reset], input[type=hidden], [disabled]'
+    excluded: 'input[type=button], input[type=submit], input[type=reset], [disabled]'
   };
 }
 

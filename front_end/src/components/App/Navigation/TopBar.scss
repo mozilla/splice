@@ -17,24 +17,26 @@
 
 .header-bar{
   overflow: auto;
-  background-color: $color-light-gray;
+  background-color: white;
   height: 50px;
+  display: flex;
 
   h1{
+    padding-left: 15px;
+    flex-grow: 1;
     font-size: 25px;
-    float:left;
     margin: 0;
     line-height: 50px;
     vertical-align: middle;
     font-family: $font-heading;
+    border-bottom: 1px solid $border-blue;
   }
   h1 a{
     color: $font-color-default;
     text-decoration: none;
   }
   .navigation-toggle{
-    float:left;
-    margin: 0 15px 0 0;
+    margin: 0;
     background-color: darkgray;
     color: white;
     cursor: pointer;

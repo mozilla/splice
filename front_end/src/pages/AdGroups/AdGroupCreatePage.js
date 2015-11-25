@@ -5,6 +5,7 @@ import { Link, Lifecycle } from 'react-router';
 
 import { updateDocTitle } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
+import { fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import AdGroupForm from 'components/AdGroups/AdGroupForm/AdGroupForm';
 
@@ -16,6 +17,7 @@ class AdGroupCreatePage extends Component {
   }
 
   componentWillMount(){
+    this.props.Campaign.rows = [];
     this.props.AdGroup.details = {};
   }
   componentDidMount(){
@@ -35,7 +37,7 @@ class AdGroupCreatePage extends Component {
       output = (
         <div>
           <div className="form-module">
-            <div className="form-module-header">{this.props.Campaign.details.name}: Create Ad Group</div>
+            <div className="form-module-header">{(this.props.params.campaignId && this.props.Campaign.details.name) ? this.props.Campaign.details.name + ': ' : ''} Create Ad Group</div>
             <div className="form-module-body">
               <AdGroupForm editMode={false} {...this.props}/>
             </div>
@@ -57,15 +59,20 @@ class AdGroupCreatePage extends Component {
 
     updateDocTitle('Edit AdGroup');
 
-    dispatch(fetchHierarchy('campaign', props))
-      .catch(function(){
-        props.history.replaceState(null, '/error404');
-      })
-      .then(() => {
-        if(this.props.Campaign.details !== undefined){
-          updateDocTitle(this.props.Campaign.details.name + ': Create Ad Group');
-        }
-      });
+    if(this.props.params.campaignId !== undefined){
+      dispatch(fetchHierarchy('campaign', props))
+        .catch(function(){
+          props.history.replaceState(null, '/error404');
+        })
+        .then(() => {
+          if(this.props.Campaign.details !== undefined){
+            updateDocTitle(this.props.Campaign.details.name + ': Create Ad Group');
+          }
+        });
+    }
+    else{
+      dispatch(fetchAccounts());
+    }
   }
 }
 

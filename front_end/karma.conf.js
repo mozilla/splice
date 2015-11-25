@@ -1,7 +1,11 @@
-var webpack = require('webpack');
-var settings = require('./settings.conf.js');
+const webpack = require('webpack');
+const generateWebpack = require('./build_utils/generate-webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const appConfig = require('./build_utils/load-config')({preset: 'test', allowOverride: false});
+
+const webpackConfig = generateWebpack(appConfig);
+webpackConfig.plugins.push(new ExtractTextPlugin('public/css/styles.css'));
 
 module.exports = function (config) {
   config.set({
@@ -16,21 +20,7 @@ module.exports = function (config) {
     },
     reporters: ['dots'], //report results in this format
     autoWatch: true,
-    webpack: { //kind of a copy of your webpack config
-      resolve: settings.webpack_resolve,
-      module: {
-        loaders: settings.webpack_modules_loaders
-      },
-      plugins: [
-        new ExtractTextPlugin('public/css/styles.css'),
-        new webpack.DefinePlugin({
-          __DEVELOPMENT__: false,
-          __DEVTOOLS__: false, // <-------- DISABLE redux-devtools HERE
-          __DEVAPI__: settings.devApi,
-          __LIVEAPI__: settings.liveApi
-        })
-      ]
-    },
+    webpack: webpackConfig,
     webpackServer: {
       noInfo: true //please don't spam the console when running in karma!
     }

@@ -14,6 +14,10 @@ h2 {
   margin: 0;
 }
 
+h1.ib {
+  display: inline-block;
+}
+
 input {
   margin: 0 25px 0 0;
 }
@@ -82,12 +86,23 @@ div.busy * {
   padding: 25px;
 }
 
-/* Tile filtering and previewing */
-#pickers {
-  padding: 5px 0;
+
+/* Date time picker */
+.rdt {
+  display: inline-block;
+  margin: 0 0 0 10px;
 }
 
-#pickers select {
+.rdt input {
+  width: 250px;
+}
+
+/* Tile filtering and previewing */
+.pickers {
+  margin: 10px 0;
+}
+
+.pickers select {
   margin: 0 15px 0 5px;
 }
 

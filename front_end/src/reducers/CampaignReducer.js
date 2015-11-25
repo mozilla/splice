@@ -9,7 +9,8 @@ import {
   RECEIVE_CAMPAIGNS,
   REQUEST_CAMPAIGN,
   RECEIVE_CAMPAIGN,
-  CAMPAIGN_SET_FILTER
+  CAMPAIGN_SET_FILTER,
+  CAMPAIGN_SET_DETAILS_VAR
 } from 'actions/Campaigns/CampaignActions';
 
 const initialState = {
@@ -26,6 +27,12 @@ const initialState = {
 
 export function Campaign(state = initialState, action = null) {
   switch (action.type) {
+    case CAMPAIGN_SET_DETAILS_VAR:
+      return _.assign({}, state, {
+        details: _.assign({}, state.details, {
+          [action.variable]: action.value
+        })
+      });
     case REQUEST_CREATE_CAMPAIGN:
       return _.assign({}, state, {
         isSaving: true

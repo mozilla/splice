@@ -1,11 +1,7 @@
 import fetch from 'isomorphic-fetch';
+import * as config from 'helpers/config';
 
-let apiUrl;
-if (typeof __DEVELOPMENT__ !== 'undefined' && __DEVELOPMENT__ === true) {
-  apiUrl = __DEVAPI__;
-} else {
-  apiUrl = __LIVEAPI__;
-}
+const apiUrl = config.get('API_URL');
 
 export const REQUEST_CREATE_TILE = 'REQUEST_CREATE_TILE';
 export const RECEIVE_CREATE_TILE = 'RECEIVE_CREATE_TILE';

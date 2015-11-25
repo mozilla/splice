@@ -5,7 +5,8 @@ export default class RecentlyViewedList extends Component {
   render() {
     let output = null;
     let rows;
-    if (this.props.recentlyViewedRows !== undefined && this.props.recentlyViewedRows !== null) {
+
+    if (this.props.recentlyViewedRows !== undefined && this.props.recentlyViewedRows !== null && this.props.recentlyViewedRows.length > 0) {
       rows = this.props.recentlyViewedRows.map((recentlyViewedRow, index) =>
           <RecentlyViewedRow {...recentlyViewedRow} key={index}/>
       );

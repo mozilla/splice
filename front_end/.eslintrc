@@ -30,6 +30,9 @@
     "node": true,
     "browser": true
   },
+  "globals": [
+    "__CONFIG__"
+  ],
   "extends": [
     "airbnb",
     "airplus"

@@ -8,7 +8,7 @@ from sqlalchemy.exc import InvalidRequestError
 from splice.schemas import API_TILE_SCHEMA_POST, API_TILE_SCHEMA_PUT
 from splice.models import Tile
 from splice.queries.common import session_scope
-from splice.queries.tile import get_tiles_by_adgroup_id, insert_tile, get_tile, update_tile
+from splice.queries.tile import get_tiles, insert_tile, get_tile, update_tile
 from splice.web.api.tile_upload import VALID_CREATIVE_EXTS, single_creative_upload
 
 
@@ -63,8 +63,11 @@ class TileListAPI(Resource):
 
     def get(self):
         args = self.reqparse_get.parse_args()
-        tiles = get_tiles_by_adgroup_id(args['adgroup_id'])
-        return {"results": marshal(tiles, tile_fields)}
+        tiles = get_tiles(filters={'adgroup_id': args['adgroup_id']})
+        if tiles:
+            return {"results": marshal(tiles, tile_fields)}
+        else:
+            return {"results": []}
 
     def post(self):
         """ HTTP end point to create new tile. Note the initial status of a new

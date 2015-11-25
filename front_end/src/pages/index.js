@@ -19,6 +19,7 @@ import TileCreatePage from './Tiles/TileCreatePage.js';
 import TileEditPage from './Tiles/TileEditPage.js';
 import ApprovalsPage from './Approvals/ApprovalsPage.js';
 import Error404Page from './Errors/Error404Page.js';
+import Reporting from './Reporting/ReportingPage.js';
 
 export {
   AppPage,
@@ -41,6 +42,7 @@ export {
   TileCreatePage,
   TileEditPage,
   ApprovalsPage,
+  Reporting,
   Error404Page
 };
 

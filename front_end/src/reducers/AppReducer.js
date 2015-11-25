@@ -4,13 +4,16 @@ import {
   REMOVE_MESSAGE,
   LIST_TYPE_SELECT,
   FORM_CHANGED,
-  FORM_SAVED
+  FORM_SAVED,
+  GET_LOCATION_LOG,
+  SAVE_LOCATION_LOG
 } from 'actions/App/AppActions';
 
 import { GET_RECENTLY_VIEWED } from 'actions/App/RecentlyViewedActions';
 
 const initialState = {
   recentlyViewed: [],
+  locationLog: [],
   listType: 'accounts',
   message: {
     display: false,
@@ -71,6 +74,10 @@ export function App(state = initialState, action = null) {
     case FORM_SAVED:
       return _.assign({}, state, {
         formChanged: false
+      });
+    case SAVE_LOCATION_LOG:
+      return _.assign({}, state, {
+        locationLog: action.log
       });
     default:
       return state;

@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
-import { shownMessage, removeMessage } from 'actions/App/AppActions';
+import { shownMessage, removeMessage, formSaved } from 'actions/App/AppActions';
 import { fetchInit } from 'actions/Init/InitActions';
 import { fetchAccounts } from 'actions/Accounts/AccountActions';
 
@@ -24,6 +24,12 @@ export default class AppPage extends Component {
     $(window).bind('beforeunload', function() {
       if (context.props.App.formChanged) {
         return 'Your progress has not been saved.';
+      }
+    });
+
+    $( window ).unload(function() {
+      if(context.props.App.formChanged === true) {
+        dispatch(formSaved());
       }
     });
   }

@@ -1,45 +1,77 @@
-from splice.models import Adgroup, Tile
+from splice.models import Adgroup, AdgroupCategory, Tile
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
-from sqlalchemy.sql import exists
+from sqlalchemy.sql import exists, func
 
 from splice.queries.common import row_to_dict
 
 
-def get_tiles_by_adgroup_id(adgroup_id):
-    from splice.environment import Environment
+def needs_adgroup_join(filters):
+    """
+    Check if we need to join on adgroups table to do our filters
+    """
+    adgroup_filters = set(['campaign_id', 'adgroup_type', 'channel_id', 'locale'])
+    return adgroup_filters.issubset(filters)
 
+
+def add_filters(query, filters, group_by):
+    """
+    Builds filters into a tile query from a dict
+    """
+    if not filters:
+        return query
+    if 'adgroup_id' in filters:
+        query = query.filter(Tile.adgroup_id == filters['adgroup_id'])
+    if 'campaign_id' in filters:
+        query = query.filter(Adgroup.campaign_id == filters['campaign_id'])
+    if 'type' in filters:
+        query = query.filter(Tile.type == filters['type'])
+    if 'adgroup_type' in filters:
+        query = query.filter(Adgroup.type == filters['adgroup_type'])
+    if 'channel_id' in filters:
+        query = query.filter(Adgroup.channel_id == filters['channel_id'])
+    if 'locale' in filters:
+        query = query.filter(Adgroup.locale == filters['locale'])
+
+    if needs_adgroup_join(filters) and group_by != 'category':
+        query = query.join(Adgroup, Tile.adgroup_id == Adgroup.id)
+
+    return query
+
+
+def get_tiles(group_by=None, limit_fields=None, filters=None):
+    from splice.environment import Environment
     env = Environment.instance()
 
-    rows = (
-        env.db.session
-        .query(Tile)
-        .filter(Tile.adgroup_id == adgroup_id)
-        .order_by(Tile.id.desc())
-        .all()
-    )
-    output = [row_to_dict(d) for d in rows]
+    fields = [Tile]
+    formatRow = row_to_dict
 
-    return output
+    if group_by == 'category':
+        fields = [AdgroupCategory.category, func.array_agg(Tile.id).label('tile_ids')]
+        formatRow = (lambda r: r._asdict())
+    elif limit_fields:
+        fields = [getattr(Tile, field) for field in limit_fields]
+        formatRow = (lambda r: r._asdict())
 
+    # Base query
+    rows = env.db.session.query(*fields)
 
-def get_tiles_by_campaign(campaign_id):  # pragma: no cover
-    from splice.environment import Environment
+    # Add joins / group by
+    if group_by == 'category':
+        rows = (
+            rows
+            .select_from(Tile)
+            .join(AdgroupCategory, Tile.adgroup_id == AdgroupCategory.adgroup_id)
+            .join(Adgroup, AdgroupCategory.adgroup_id == Adgroup.id)
+            .group_by(AdgroupCategory.category)
+        )
+    else:
+        rows = rows.order_by(Tile.id.desc())
 
-    env = Environment.instance()
+    rows = add_filters(rows, filters, group_by)
+    rows = rows.all()
 
-    rows = (
-        env.db.session
-        .query(Tile)
-        .join(Adgroup, Tile.adgroup_id == Adgroup.id)
-        .filter(Adgroup.campaign_id == campaign_id)
-        .order_by(Tile.id.desc())
-        .all()
-    )
-
-    output = [row_to_dict(d) for d in rows] if rows else None
-
-    return output
+    return [formatRow(r) for r in rows] if rows else None
 
 
 def get_tile(id):

@@ -7,3 +7,10 @@
 @import 'app/tables';
 @import 'app/forms';
 @import 'app/switch';
+
+@import '../pages/Reporting/reporting';
+
+// Todo: move these to components
+@import '../pages/Reporting/input';
+@import '../pages/Reporting/select';
+@import '../pages/Reporting/table';

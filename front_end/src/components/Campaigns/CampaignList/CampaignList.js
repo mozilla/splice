@@ -11,7 +11,7 @@ export default class CampaignList extends Component {
           <CampaignRow {...row} key={index} init_channels={this.props.init_channels} init_countries={this.props.init_countries}/>
       );
     } else {
-      spinner = (<img src="./public/img/ajax-loader-navy.gif"/>);
+      spinner = (<img src={require('../../../public/img/ajax-loader-navy.gif')}/>);
     }
 
     return (

@@ -5,6 +5,7 @@ import { Link, Lifecycle } from 'react-router';
 
 import { updateDocTitle } from 'actions/App/AppActions';
 import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
+import { fetchAccounts } from 'actions/Accounts/AccountActions';
 
 import CampaignForm from 'components/Campaigns/CampaignForm/CampaignForm';
 
@@ -14,7 +15,9 @@ class CampaignCreatePage extends Component {
     super(props);
     this.routerWillLeave = this.routerWillLeave.bind(this);
   }
-
+  componentWillMount(){
+    this.props.Campaign.details = {};
+  }
   componentDidMount() {
     this.fetchAccountDetails(this.props);
   }
@@ -32,7 +35,7 @@ class CampaignCreatePage extends Component {
       output = (
         <div>
           <div className="form-module">
-            <div className="form-module-header">{this.props.Account.details.name}: Create Campaign</div>
+            <div className="form-module-header">{ (this.props.Account.details.name) ? this.props.Account.details.name + ': ' : ''}Create Campaign</div>
             <div className="form-module-body">
               <CampaignForm editMode={false} {...this.props} />
             </div>
@@ -55,15 +58,20 @@ class CampaignCreatePage extends Component {
 
     updateDocTitle('Create Campaign');
 
-    dispatch(fetchHierarchy('account', props))
-      .catch(function(){
-        props.history.replaceState(null, '/error404');
-      })
-      .then(() => {
-        if(this.props.Account.details){
-          updateDocTitle(this.props.Account.details.name + ': Create Campaign');
-        }
-      });
+    if(this.props.params.accountId !== undefined){
+      dispatch(fetchHierarchy('account', props))
+        .catch(function(){
+          props.history.replaceState(null, '/error404');
+        })
+        .then(() => {
+          if(this.props.Account.details){
+            updateDocTitle(this.props.Account.details.name + ': Create Campaign');
+          }
+        });
+    }
+    else{
+      dispatch(fetchAccounts());
+    }
   }
 }
 
