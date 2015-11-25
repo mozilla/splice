@@ -42,7 +42,7 @@ export default class AccountDetails extends Component {
         </div>
       );
     } else {
-      details = <img src="./public/img/ajax-loader-navy.gif"/>;
+      details = <img src={require('../../../public/img/ajax-loader-navy.gif')}/>;
     }
 
     return details;
