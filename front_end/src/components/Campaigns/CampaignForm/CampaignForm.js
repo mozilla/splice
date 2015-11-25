@@ -71,7 +71,7 @@ export default class CampaignForm extends Component {
           {(this.props.editMode) ? (<input type="hidden" name="id" ref="id" value={data.id}/>) : null}
 
           <div className="container-fluid field-container">
-            {(this.props.editMode === false && this.props.params.account_id === undefined) ?
+            {(this.props.editMode === false && this.props.params.accountId === undefined) ?
                 <div>
                   <div className="row">
                     <div className="col-xs-4">
