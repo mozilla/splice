@@ -77,12 +77,12 @@ export default class CampaignBulkUploadPage extends Component {
     updateDocTitle('Campaign Bulk Upload');
 
     dispatch(fetchHierarchy('campaign', props))
-      .catch(function(){
-        props.history.replaceState(null, '/error404');
-      })
       .then(() => {
-        if(this.props.Campaign.details) {
+        if(this.props.Campaign.details.id) {
           updateDocTitle('Campaign Bulk Upload - ' + this.props.Campaign.details.name);
+        }
+        else{
+          props.history.replaceState(null, '/error404');
         }
     });
   }

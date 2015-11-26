@@ -58,12 +58,12 @@ class AdGroupEditPage extends Component {
     updateDocTitle('Edit AdGroup');
 
     dispatch(fetchHierarchy('adGroup', props))
-      .catch(function(){
-        props.history.replaceState(null, '/error404');
-      })
       .then(() => {
-        if(this.props.AdGroup.details !== undefined){
+        if(this.props.AdGroup.details.id){
           updateDocTitle('Edit AdGroup - ' + this.props.AdGroup.details.name);
+        }
+        else{
+          props.history.replaceState(null, '/error404');
         }
       });
   }

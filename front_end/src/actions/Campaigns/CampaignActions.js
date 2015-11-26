@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import * as config from 'helpers/config';
+import { fetchHelper } from 'helpers/FetchHelpers';
 
 const apiUrl = config.get('API_URL');
 
@@ -92,20 +93,16 @@ export function createCampaign(data) {
   return function next(dispatch) {
     dispatch(requestCreateCampaign());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/campaigns', {
+    const url = apiUrl + '/api/campaigns';
+    const options = {
       method: 'post',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: data
-    })
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveCreateCampaign(json));
-        resolve(json);
-      })
-    );
+    };
+    return fetchHelper(url, options, receiveCreateCampaign, dispatch);
   };
 }
 
@@ -114,20 +111,16 @@ export function updateCampaign(campaignId, data) {
   return function next(dispatch) {
     dispatch(requestUpdateCampaign());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/campaigns/' + campaignId, {
+    const url = apiUrl + '/api/campaigns/' + campaignId;
+    const options = {
       method: 'put',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: data
-    })
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveUpdateCampaign(json));
-        resolve(json);
-      })
-    );
+    };
+    return fetchHelper(url, options, receiveUpdateCampaign, dispatch);
   };
 }
 
@@ -136,19 +129,15 @@ export function bulkupload(campaignId, data){
   return function next(dispatch) {
     dispatch(requestBulkUpload());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/campaigns/' + campaignId + '/bulkupload', {
+    const url = apiUrl + '/api/campaigns/' + campaignId + '/bulkupload';
+    const options = {
       method: 'post',
       headers: {
         'Accept': 'application/json'
       },
       body: data
-    })
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveBulkUpload(json));
-        resolve(json);
-      })
-    );
+    };
+    return fetchHelper(url, options, receiveBulkUpload, dispatch);
   };
 }
 
@@ -157,16 +146,12 @@ export function fetchCampaign(campaignId) {
   return function next(dispatch) {
     dispatch(requestCampaign());
     // Return a promise to wait for
-    return fetch(apiUrl + '/api/campaigns/' + campaignId)
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveCampaign(json));
-        resolve(json);
-      }));
+    const url = apiUrl + '/api/campaigns/' + campaignId;
+    return fetchHelper(url, null, receiveCampaign, dispatch);
   };
 }
 
-export function fetchCampaigns(accountId = null, past = null, scheduled = null, inFlight = null) {
+export function fetchCampaigns(accountId, past = null, scheduled = null, inFlight = null) {
   // thunk middleware knows how to handle functions
   return function next(dispatch, state) {
     dispatch(requestCampaigns());
@@ -186,17 +171,11 @@ export function fetchCampaigns(accountId = null, past = null, scheduled = null, 
       i = campaign.filters.inFlight;
     }
 
-    // Return a promise to wait for
-    return fetch(apiUrl + '/api/campaigns' +
-        '?account_id=' + accountId +
-        '&past=' + p +
-        '&scheduled=' + s +
-        '&in_flight=' + i
-      )
-      .then(response => response.json())
-      .then(json => new Promise(resolve => {
-        dispatch(receiveCampaigns(json));
-        resolve(json);
-      }));
+    const url = apiUrl + '/api/campaigns' +
+      '?account_id=' + accountId +
+      '&past=' + p +
+      '&scheduled=' + s +
+      '&in_flight=' + i;
+    return fetchHelper(url, null, receiveCampaigns, dispatch);
   };
 }
