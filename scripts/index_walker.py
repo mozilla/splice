@@ -10,13 +10,17 @@ from splice.environment import Environment
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import insert, update
 from sqlalchemy import create_engine
-from splice.models import Adgroup, Country, Account, CampaignCountry
+from splice.models import Adgroup, Account, CampaignCountry
 from tld import get_tld
+import os
+import base64
+import hashlib
 
 ARBITRARY_FUTURE = datetime.datetime.strptime('2525-01-01', "%Y-%m-%d").date()
 
 # coding=utf-8
 _titles = {
+    "BarkBox": ("BarkBox", "BarkBox"),
     "CLIQZ": ("CLIQZ", "CLIQZ"),
     "FedEx": ("FedEx", "FedEx"),
     "YouTube": ("YouTube", "YouTube"),
@@ -28,6 +32,7 @@ _titles = {
     "Wikipedia": ("Wikipedia", "Wikipedia"),
     "Trulia": ("Trulia", "Trulia"),
     "Amazon": ("Amazon", "Amazon"),
+    "CITIZENFOUR": ("CITIZENFOUR", "CITIZENFOUR"),
     "Booking.com": ("Booking.com", "Booking.com"),
     "Casper": ("Casper", "Casper"),
     "NFL": ("NFL", "NFL"),
@@ -40,11 +45,17 @@ _titles = {
     "Get Disconnect": ("Get Disconnect", "Get Disconnect"),
     "Descarga Disconnect": ("Get Disconnect", "Descarga Disconnect"),
     "TurboTax": ("TurboTax", "TurboTax"),
+    "ImpôtRapide": ("TurboTax", "ImpôtRapide"),
     "Wired": ("Condé Nast", "Wired"),
     "WIRED": ("Condé Nast", "Wired"),
     "The Scene": ("Condé Nast", "The Scene"),
     "Glamour": ("Condé Nast", "Glamour"),
     "Ars Technica": ("Condé Nast", "Ars Technica"),
+    "Details": ("Condé Nast", "Details"),
+    "GQ": ("Condé Nast", "GQ"),
+    "EFF": ("EFF", "EFF"),
+    "Electronic Frontier Foundation": ("EFF", "EFF"),
+    "Fortune": ("Time Inc", "Fortune"),
     "Mozilla Gear": ("Mozilla", "Mozilla Gear"),
     "Firefox Help and Support": ("Mozilla", "Firefox Help and Support"),
     "Firefox Sync": ("Mozilla", "Firefox Sync"),
@@ -85,6 +96,7 @@ _target_url_in = [
     ("https://www.mozilla.org/firefox/android/?utm_source=suggested-tiles&utm_medium=tiles&utm_content=mozillafans&utm_campaign=firefoxforandroid", ("Mozilla", "Firefox for Android ST")),
     ("marketplace.firefox.com", ("Mozilla", "Firefox Marketplace")),
     ("https://www.mozilla.com/privacy/tips?utm_source=firefox&utm_medium=directorytile&utm_campaign=DPD15", ("Mozilla", "Get Smart on Privacy")),
+    ("https://www.mozilla.org/firefox/private-browsing/?utm_source=directory-tiles&utm_medium=tiles&utm_content=TPV1&utm_campaign=fx-fall-15", ("Mozilla", "Tracking Protection")),
     ("https://www.mozilla.com/en-US/?utm_source=directory-tiles&utm_medium=firefox-browser", ("Mozilla", "Mozilla")),
     ("https://www.mozilla.org/en-US/?utm_source=directory-tiles&utm_medium=firefox-browser", ("Mozilla", "Mozilla")),
     ("http://contribute.mozilla.org/", ("Mozilla", "Mozilla Community")),
@@ -120,10 +132,10 @@ _target_urls = {
 }
 
 _ids = {
-    629: ("Mozilla", "fennec Tiles"),
-    630: ("Mozilla", "fennec Tiles"),
-    631: ("Mozilla", "fennec Tiles"),
-    632: ("Mozilla", "fennec Tiles"),
+    629: ("Mozilla", "Fennec Tiles"),
+    630: ("Mozilla", "Fennec Tiles"),
+    631: ("Mozilla", "Fennec Tiles"),
+    632: ("Mozilla", "Fennec Tiles"),
 }
 
 insane_identity_counter = 0
@@ -160,21 +172,26 @@ def safe_str(obj):
         return unicode(obj).encode('unicode_escape')
 
 
+def _update_image(bucket, image_url, tile_id, column='image_uri'):
+    env = Environment.instance()
+    if image_url and not image_url.startswith('http'):
+        imgs = list(bucket.list(prefix="images/%s" % image_url))
+        if len(imgs):
+            uri = os.path.join('https://%s.s3.amazonaws.com' % env.config.S3['bucket'], imgs[0])
+            print "updating %s for tile=%s" % (column, tile_id)
+            return "update tiles set %s = '%s' where id = %s" % (column, uri, tile_id)
+    return None
+
+
 def main():
     """
-    NOTE: This script MUST be run on alembic migration version 16fa35dd63a2 - please selectively
-    upgrade to this version before running this script, then after sucessful running, continue to
-    fully migrate your db.
-
-    manage.py db upgrade 16fa35dd63a2
-    python index_walker.py
+    Usage:
     manage.py db upgrade
+    python index_walker.py
 
     This script is going to populate Account and Campaign database structures.  It does this
     by reading the currently deployed tile distributions (s3), where it determines the currently active
     tile set, as well as the geo-targetting data (currently only country level) for each tile/adgroup.
-
-    The script also loads the countries table from fixtures.
 
     The script will discriminate between 'active' and 'inactive' adgroups based on whether or not
     the adgroup exists in the current distribution.  Inactive adgroups are given start/end dates
@@ -230,9 +247,6 @@ def main():
 
     env = Environment.instance()
 
-    # get the country data out of the fixtures
-    country_codes = [dict(country_name=cname, country_code=cc) for cc, cname in env._load_countries()]
-
     db_uri = env.config.SQLALCHEMY_DATABASE_URI
     engine = create_engine(db_uri)
     connection = engine.connect()
@@ -247,7 +261,8 @@ def main():
         # collate/generate campaign and account data
         # stmt = select([Adgroup.id, Tile.target_url, Adgroup.channel_id, Adgroup.created_at]). \
         #     where(Tile.adgroup_id == Adgroup.id)
-        stmt = """SELECT a.id, t.target_url, t.title, a.channel_id, a.created_at, c.name
+        stmt = """SELECT a.id, t.target_url, t.title, a.channel_id, a.created_at, c.name,
+                    t.id, t.image_uri, t.enhanced_image_uri
                   FROM adgroups a
                   JOIN tiles t on t.adgroup_id = a.id
                   JOIN channels c on a.channel_id = c.id"""
@@ -260,12 +275,11 @@ def main():
         countries = defaultdict(set)
         accounts = dict()
 
-        for adgroup_id, url, title, channel, created_at, channel_name in result:
+        for adgroup_id, url, title, channel, created_at, channel_name, tile_id, i_url, ei_url in result:
             assert all(x is not None for x in (adgroup_id, url, channel)), \
                 "Some of %s is None" % str((adgroup_id, url, channel))
 
             # do tld -> account mapping substitution
-
             active = adgroup_id in active_tiles
             account_name, campaign_name = derive_account_campaign(adgroup_id, title, url)
             curr = (account_name, campaign_name, channel, active)
@@ -309,8 +323,34 @@ def main():
         session._model_changes = None
 
         try:
-            country_stmt = insert(Country).values(country_codes)
-            session.execute(country_stmt)
+            # grab all s3 images and reproduce image hash
+            bucket = env.s3.get_bucket(env.config.S3["bucket"])
+            images = bucket.list('images/')
+
+            image_hashes = defaultdict(list)
+            enhanced_image_hashes = defaultdict(list)
+            stmt = "SELECT t.id, t.image_uri, t.enhanced_image_uri FROM tiles t"
+            for tile_id, image_uri, enhanced_image_uri in connection.execute(stmt):
+                image_hashes[image_uri].append(tile_id)
+                enhanced_image_hashes[enhanced_image_uri].append(tile_id)
+
+            for image in images:
+                ext = image.key.split('.')[-1]
+                new_hash = hashlib.sha1("data:image/%s;base64,%s" %
+                                        (ext, base64.b64encode(image.get_contents_as_string()))).hexdigest()
+                new_uri = image.generate_url(expires_in=0, query_auth=False)
+
+                tile_ids = image_hashes.get(new_hash)
+                if tile_ids:
+                    print "image: %s" % image.key
+                    session.execute("update tiles set image_uri = '%s' where id in (%s)" %
+                                    (new_uri, ','.join(str(tid) for tid in tile_ids)))
+
+                tile_ids = enhanced_image_hashes.get(new_hash)
+                if tile_ids:
+                    print "enhanced_image: %s" % image.key
+                    session.execute("update tiles set enhanced_image_uri = '%s' where id in (%s)" %
+                                    (new_uri, ','.join(str(tid) for tid in tile_ids)))
 
             account_stmt = insert(Account).values([dict(id=aid, name=aname) for aname, aid in accounts.iteritems()])
             session.execute(account_stmt)
