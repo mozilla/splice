@@ -13,8 +13,6 @@ window.$ = require('jquery');
 window.jQuery = $;
 require('jquery-serializejson');
 require('bootstrap-colorpicker');
-require('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
-require('react-select/dist/react-select.min.css');
 bindFormConfig();
 require('parsleyjs');
 

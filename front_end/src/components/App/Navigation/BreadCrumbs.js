@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
-import './BreadCrumb.scss';
-
 export default class BreadCrumbs extends Component {
   getName(data, isTile){
     let name;

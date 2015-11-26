@@ -3,16 +3,14 @@ import { Link } from 'react-router';
 
 import Dropzone from 'react-dropzone';
 
-require('./TileDropzone.scss');
-
 export default class TileDropzone extends Component {
   render() {
     let spinner;
     if(this.props.fieldName === 'enhanced_image_uri' && this.props.Tile.isUploadingEnhancedImage){
-      spinner = (<div><br/><img src={require('../../../public/img/ajax-loader-dark.gif')} /></div>);
+      spinner = (<div><br/><img src="public/img/ajax-loader-dark.gif" /></div>);
     }
     else if(this.props.fieldName === 'image_uri' && this.props.Tile.isUploadingImage){
-      spinner = (<div><br/><img src={require('../../../public/img/ajax-loader-dark.gif')} /></div>);
+      spinner = (<div><br/><img src="public/img/ajax-loader-dark.gif" /></div>);
     }
 
     return (

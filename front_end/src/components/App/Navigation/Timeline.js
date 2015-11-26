@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
-import './Timeline.scss';
-
 window.$ = require('jquery');
 window.jQuery = $;
 

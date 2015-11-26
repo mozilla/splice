@@ -9,7 +9,6 @@ import ReactSelect from 'react-select';
 
 window.$ = require('jquery');
 window.jQuery = $;
-require('react-select/dist/react-select.min.css');
 require('jquery-serializejson');
 
 bindFormConfig();
