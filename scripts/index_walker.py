@@ -315,7 +315,6 @@ def main():
 
             adgroups[campaign_id].append(adgroup_id)
 
-
         # insert data into new tables
         Session = sessionmaker(bind=engine)
         session = Session()
