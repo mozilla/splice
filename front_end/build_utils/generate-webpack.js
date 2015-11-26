@@ -1,7 +1,8 @@
-'use strict';
 const webpack = require('webpack');
 const path = require('path');
-const absolute = (relPath) => path.join(__dirname, '../', relPath);
+const absolute = function (relPath) {
+  return path.join(__dirname, '../', relPath);
+};
 const assign = require('lodash').assign;
 
 // Generates a webpack configuration given:
@@ -48,12 +49,12 @@ module.exports = function generateWebpack(config, extension) {
           loader: 'react-hot!babel'
         }, {
           test: /\.scss/,
-          loader: `style!css?${sourceMap}!autoprefixer!sass?${sourceMap}`
+          loader: 'style!css?' + sourceMap + '!autoprefixer!sass?' + sourceMap
 
         }, {
           test: /\.css$/,
           exclude: [/\.raw\.css$/, /\.useable\.css$/],
-          loader: `style!css?${sourceMap}!autoprefixer`
+          loader: 'style!css?' + sourceMap + '!autoprefixer'
         }, {
           test: /\.raw\.css$/,
           loader: 'style!raw!autoprefixer'

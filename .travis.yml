@@ -9,10 +9,11 @@ cache:
         - .pip_download_cache
         - "$HOME/virtualenv/python2.7.9"
         - front_end/node_modules
+# temporarily disable node 4
+# before_install:
+#   - nvm install 4
+#   - nvm use 4
 # command to install dependencies
-before_install:
-  - nvm install 4
-  - nvm use 4
 install: pip install -r requirements.txt -r requirements-dev.txt
 env: TEST_DB_URI=postgres://postgres@127.0.0.1:5432/travis_ci_test TEST_DB_STATS_URI=postgres://postgres@127.0.0.1:5432/travis_ci_stats_test
 before_script:

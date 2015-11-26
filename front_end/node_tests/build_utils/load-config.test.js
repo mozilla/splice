@@ -1,7 +1,7 @@
 const loadConfig = require('../../build_utils/load-config');
 const presets = require('../../settings.default.conf.js');
 const expect = require('expect');
-const assign = Object.assign;
+const assign = require('lodash').assign;
 const path = require('path');
 const localConfigFixture = require('./load-config.fixtures.js');
 
