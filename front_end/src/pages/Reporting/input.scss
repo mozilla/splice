@@ -13,4 +13,7 @@
   position: relative;
   width: 100%;
   padding: 0 10px;
+  &:focus {
+    border-color: $pink;
+  }
 }

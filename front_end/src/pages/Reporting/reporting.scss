@@ -77,7 +77,7 @@
 
   // Report settings sidebar
   .report-settings {
-    .Select + .Select {
+    .Select-control + .Select {
       margin-top: 5px;
     }
     section {
@@ -107,6 +107,24 @@
     }
   }
 
+  // Input and Select overrides
+  input.form-control,
+  .Select-control {
+    border-color: darken($border-blue, 3%);
+  }
+  input.form-control:focus,
+  .is-focused:not(.is-open)>.Select-control {
+    border-color: $pink;
+    box-shadow: none;
+  }
+  .Select-option.is-focused {
+    background-color: $light-blue;
+  }
+  .Select + .Select {
+    margin-top: 10px;
+  }
+
+  // Btn overrides
   .btn {
     border-radius: 2px;
 
