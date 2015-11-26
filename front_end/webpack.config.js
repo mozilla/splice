@@ -6,7 +6,6 @@
  */
 'use strict';
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const assetPath = require('path').join(__dirname, 'dist');
 const generateWebpack = require('./build_utils/generate-webpack');
@@ -49,7 +48,6 @@ module.exports = function (preset) {
   } else {
     // Production config
     webpackConfig.plugins = webpackConfig.plugins.concat([
-      new ExtractTextPlugin('public/css/styles.css'),
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.OccurenceOrderPlugin(),
       new webpack.optimize.UglifyJsPlugin({

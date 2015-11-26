@@ -1,0 +1,62 @@
+/*
+* ========================================
+* External dependencies
+* ========================================
+*/
+@import 'bootstrap-sass/assets/stylesheets/_bootstrap-sprockets.scss';
+@import 'bootstrap-sass/assets/stylesheets/_bootstrap.scss';
+@import 'font-awesome/css/font-awesome.min.css';
+@import 'perfect-scrollbar/src/css/main.scss';
+@import 'react-select/scss/default.scss';
+@import 'eonasdan-bootstrap-datetimepicker/src/sass/_bootstrap-datetimepicker.scss';
+@import 'bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css';
+/*
+* ========================================
+* Base
+* ========================================
+*/
+@import './styles/variables';
+@import './styles/bootstrap-override';
+
+
+/*
+* ========================================
+* App
+* ========================================
+*/
+@import './styles/app/app';
+@import './styles/app/animations';
+@import './styles/app/details';
+@import './styles/app/tables';
+@import './styles/app/forms';
+@import './styles/app/switch';
+
+
+/*
+* ========================================
+* Pages
+* ========================================
+*/
+@import './pages/Reporting/reporting';
+// Todo: move these to components
+@import './pages/Reporting/input';
+@import './pages/Reporting/select';
+@import './pages/Reporting/table';
+
+
+/*
+* ========================================
+* Components
+* ========================================
+*/
+@import './components/Accounts/AccountDetails/AccountDetails';
+@import './components/App/CustomDropdown/CustomDropdown';
+@import './components/App/Navigation/AccountNavigation';
+@import './components/App/Navigation/BreadCrumb';
+@import './components/App/navigation/SideBar';
+@import './components/App/navigation/Timeline';
+@import './components/App/navigation/TopBar';
+@import './components/App/navigation/HamburgerIcon';
+@import './components/Forms/CustomRadio/CustomRadio';
+@import './components/Tiles/TileDropzone/TileDropzone';
+@import './components/Tiles/TilePreview/TilePreview';

@@ -3,8 +3,6 @@ import { Link } from 'react-router';
 
 import { formatDate } from 'helpers/DateHelpers';
 
-import './AccountDetails.scss';
-
 export default class AccountDetails extends Component {
   render() {
     const data = this.props.Account.details;
@@ -42,7 +40,7 @@ export default class AccountDetails extends Component {
         </div>
       );
     } else {
-      details = <img src={require('../../../public/img/ajax-loader-navy.gif')}/>;
+      details = <img src="public/img/ajax-loader-navy.gif" />;
     }
 
     return details;

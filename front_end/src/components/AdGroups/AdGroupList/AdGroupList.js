@@ -11,7 +11,7 @@ export default class AdGroupList extends Component {
           <AdGroupRow {...row} key={index}/>
       );
     } else {
-      spinner = (<img src={require('../../../public/img/ajax-loader-navy.gif')}/>);
+      spinner = (<img src="public/img/ajax-loader-navy.gif"/>);
     }
 
     return (
