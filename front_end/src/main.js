@@ -10,11 +10,6 @@ import * as reducers from './reducers';
 import Routes from './routes.js';
 import * as config from 'helpers/config';
 
-import './styles/main.scss';
-
-require('bootstrap-webpack');
-require('font-awesome/css/font-awesome.min.css');
-
 import { finalCreateStore } from './finalCreateStore';
 
 const reducer = combineReducers(reducers);

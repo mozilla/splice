@@ -69,7 +69,7 @@ gulp.task('serve', () => {
   const bundler = webpack(config);
 
   let server = new WebpackDevServer(bundler, {
-    contentBase: './src',
+    contentBase: './dist',
     publicPath: '/',
     hot: true,
     stats: {

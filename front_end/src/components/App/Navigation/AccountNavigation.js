@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
-import './AccountNavigation.scss';
-
 export default class AccountNavigation extends Component {
   render() {
     let accountActive = '';

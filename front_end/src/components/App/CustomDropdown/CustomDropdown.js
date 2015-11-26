@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-import './CustomDropdown.scss';
-
 window.$ = require('jquery');
 
 export default class CustomDropdown extends Component {

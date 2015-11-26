@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 
 import Ps from 'perfect-scrollbar';
-require('perfect-scrollbar/dist/css/perfect-scrollbar.min.css');
 
 window.$ = require('jquery');
-import './SideBar.scss';
 
 export default class SideBar extends Component {
   componentDidMount(){

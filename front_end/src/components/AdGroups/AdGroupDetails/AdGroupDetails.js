@@ -54,7 +54,7 @@ export default class AdGroupDetails extends Component {
         </div>
       );
     } else {
-      details = <img src={require('../../../public/img/ajax-loader-navy.gif')}/>;
+      details = <img src="public/img/ajax-loader-navy.gif"/>;
     }
 
     return details;

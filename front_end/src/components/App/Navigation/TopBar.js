@@ -7,8 +7,6 @@ import SideBar from 'components/App/Navigation/SideBar.js';
 import AccountNavigation from 'components/App/Navigation/AccountNavigation.js';
 import BreadCrumbs from 'components/App/Navigation/BreadCrumbs.js';
 import Timeline from 'components/App/Navigation/Timeline.js';
-import './TopBar.scss';
-import './HamburgerIcon.scss';
 
 import Ps from 'perfect-scrollbar';
 
