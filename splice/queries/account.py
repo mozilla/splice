@@ -16,6 +16,7 @@ def get_accounts():
         .all()
     )
     output = [row_to_dict(d) for d in rows]
+    env.db.session.close()
 
     return output
 
@@ -29,6 +30,7 @@ def get_account(id):
         env.db.session
         .query(Account).get(id)
     )
+    env.db.session.close()
     return row_to_dict(row) if row else None
 
 

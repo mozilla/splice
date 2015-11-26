@@ -163,6 +163,7 @@ def get_possible_distributions(today=None, channel_id=None):
             "data": json.dumps(tile_index_channel, sort_keys=True),
             "force_upload": True
         })
+    env.db.session.close()
     return artifacts
 
 

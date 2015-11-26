@@ -86,5 +86,5 @@ def get_stats(group_by, filters=None):
         rows = rows.filter(base_table.c.date <= filters['end_date'])
 
     rows = rows.all()
-
+    env.db.session.close()
     return [r._asdict() for r in rows] if rows else None

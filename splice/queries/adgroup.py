@@ -37,6 +37,7 @@ def get_adgroups_by_campaign_id(campaign_id):
         new['categories'] = categories
         output.append(new)
 
+    env.db.session.close()
     return output
 
 
@@ -49,7 +50,8 @@ def get_adgroup(id):
         env.db.session
         .query(Adgroup).get(id)
     )
-    if row is None:
+    if row is None:  # pragma: no cover
+        env.db.session.close()
         return None
 
     new = row_to_dict(row)
@@ -57,6 +59,7 @@ def get_adgroup(id):
     for category in row.categories:
         categories.append(category.category)
     new['categories'] = categories
+    env.db.session.close()
 
     return new
 

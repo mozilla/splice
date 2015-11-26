@@ -34,6 +34,7 @@ def get_campaigns(account_id=None, past=True, in_flight=True, scheduled=True, ut
                 (scheduled and row.start_date.date() >= utctoday)):
             campaigns.append(ret)
 
+    env.db.session.close()
     return campaigns
 
 
@@ -52,8 +53,10 @@ def get_campaign(campaign_id):
         for country in row.countries:
             countries.append(country.country_code)
         ret['countries'] = countries
+        env.db.session.close()
         return ret
     else:
+        env.db.session.close()
         return None
 
 
