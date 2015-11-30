@@ -153,12 +153,13 @@ export default class TileForm extends Component {
                 </div>)
                   : <input type="hidden" name="paused" ref="paused" value={false}/>
                 }
-                <div className="form-group">
-                  <label htmlFor="TileTitle">Headline</label>
-                  <input className="form-control" onChange={(e) => this.handleChangeField(e, 'title')} type="text" id="TileTitle" name="title" ref="title" value={data.title} data-parsley-required data-parsley-minlength="2"/>
-                </div>
+
                 {(this.props.editMode === false) ?
                   (<div>
+                    <div className="form-group">
+                      <label htmlFor="TileTitle">Headline</label>
+                      <input className="form-control" onChange={(e) => this.handleChangeField(e, 'title')} type="text" id="TileTitle" name="title" ref="title" value={data.title} data-parsley-required data-parsley-minlength="2"/>
+                    </div>
                     <div className="form-group">
                       <label htmlFor="TileTargetUrl">Clickthrough URL</label>
                       <input className="form-control" onChange={this.handleChange} type="text" id="TileTargetUrl" name="target_url" ref="target_url" defaultValue={data.target_url} data-parsley-required data-parsley-type="url"/>
@@ -205,13 +206,19 @@ export default class TileForm extends Component {
                   <div>
                     <div className="form-group">
                       <label >Static Image</label>
+                      <input type="hidden" id="static_image_placeholder"/>
                       <TileDropzone Tile={this.props.Tile} fieldName="enhanced_image_uri" handleFileUpload={(file) => this.handleFileUpload(file, 'enhanced_image_uri')} />
+                    </div>
+                    <div className="form-group">
                       <label >Static Image URI</label>
                       <input className="form-control" onChange={(e) => this.handleChangeField(e, 'enhanced_image_uri')} type="text" id="TileEnhancedImageUri" name="enhanced_image_uri" ref="enhanced_image_uri" value={data.enhanced_image_uri} data-parsley-required data-parsley-type="url"/>
                     </div>
                     <div className="form-group">
                       <label >Rollover Image</label>
+                      <input type="hidden" id="rollover_image_placeholder"/>
                       <TileDropzone Tile={this.props.Tile} fieldName="image_uri" handleFileUpload={(file) => this.handleFileUpload(file, 'image_uri')} />
+                    </div>
+                    <div className="form-group">
                       <label htmlFor="TileImageUri">Rollover Image URI</label>
                       <input className="form-control" onChange={(e) => this.handleChangeField(e, 'image_uri')} type="text" id="TileImageUri" name="image_uri" ref="image_uri" value={data.image_uri} data-parsley-required data-parsley-type="url"/>
                     </div>
@@ -307,30 +314,52 @@ export default class TileForm extends Component {
   handleFileUpload(file, fieldName) {
     const { dispatch } = this.props;
 
-    const data = new FormData();
-    data.append('creative', file[0]);
-
-    let func = uploadImage;
+    let field;
     if(fieldName === 'enhanced_image_uri'){
-      func = uploadEnhancedImage;
+      field = $('#static_image_placeholder').parsley();
     }
+    else{
+      field = $('#rollover_image_placeholder').parsley();
+    }
+    window.ParsleyUI.removeError(field, 'uploadError');
 
-    dispatch(func(data))
-      .then(function(response){
-        if(response.result !== undefined){
-          dispatch(tileSetDetailsVar(fieldName, response.result));
-        }
-        else{
-          dispatch(displayMessage('error', response.message) );
-          dispatch(shownMessage());
-          window.scrollTo(0, 0);
-        }
+    const extension = file[0].name.split('.').pop().toLowerCase();
+    if(_.includes(['png', 'jpg', 'svg'], extension)){
+      const data = new FormData();
+      data.append('creative', file[0]);
+
+      let func = uploadImage;
+      if(fieldName === 'enhanced_image_uri'){
+        func = uploadEnhancedImage;
       }
-    );
+
+      dispatch(func(data))
+        .then(function(response){
+            if(response.result !== undefined){
+              dispatch(tileSetDetailsVar(fieldName, response.result));
+            }
+            else{
+              dispatch(displayMessage('error', response.message) );
+              dispatch(shownMessage());
+              window.scrollTo(0, 0);
+            }
+          }
+        );
+    }
+    else{
+      window.ParsleyUI.addError(field, 'uploadError', 'Invalid file type. <br/> Valid file types .png, .jpg, .svg');
+      dispatch(displayMessage('error', 'Validation Errors') );
+      dispatch(shownMessage());
+    }
   }
 
   handleFormSubmit(e) {
     e.preventDefault();
+
+    const staticField = $('#static_image_placeholder').parsley();
+    const rolloverField = $('#rollover_image_placeholder').parsley();
+    window.ParsleyUI.removeError(staticField, 'uploadError');
+    window.ParsleyUI.removeError(rolloverField, 'uploadError');
 
     $('input[name="account_id"], input[name="campaign_id"], input[name="adgroup_id"]')
       .attr('data-parsley-required', 'true');
