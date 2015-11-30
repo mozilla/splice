@@ -20,7 +20,6 @@ ARBITRARY_FUTURE = datetime.datetime.strptime('2525-01-01', "%Y-%m-%d").date()
 
 # coding=utf-8
 _titles = {
-    "BarkBox": ("BarkBox", "BarkBox"),
     "CLIQZ": ("CLIQZ", "CLIQZ"),
     "FedEx": ("FedEx", "FedEx"),
     "YouTube": ("YouTube", "YouTube"),
@@ -53,6 +52,7 @@ _titles = {
     "Ars Technica": ("Condé Nast", "Ars Technica"),
     "Details": ("Condé Nast", "Details"),
     "GQ": ("Condé Nast", "GQ"),
+    "Allure": ("Condé Nast", "Allure"),
     "EFF": ("EFF", "EFF"),
     "Electronic Frontier Foundation": ("EFF", "EFF"),
     "Fortune": ("Time Inc", "Fortune"),
@@ -119,7 +119,11 @@ _target_url_in = [
     ("http://europe.mozilla.org/privacy/you", ("Mozilla", "Privacy Principles")),
     ("https://openstandard.mozilla.org/", ("Mozilla", "The Open Standard")),
     ("https://webmaker.org/", ("Mozilla", "Webmaker")),
-    ("https://www.mozilla.com/firefox/tiles", ("Mozilla", "A brand new tiles experience"))
+    ("https://www.mozilla.com/firefox/tiles", ("Mozilla", "A brand new tiles experience")),
+    ("https://www.mozilla.org/firefox/private-browsing/?utm_source=directory-tiles&utm_medium=tiles&utm_content=TPV1&utm_campaign=fx-fall-15", ("Mozilla", "Private Browsing With Tracking Protection")),
+    ("https://www.mozilla.org/teach/smarton/tracking/?utm_source=directory-tiles&utm_medium=tiles&utm_content=SOTV1&utm_campaign=smarton", ("Mozilla", "Get Smart on Tracking")),
+    ("https://donate.mozilla.org/?&amount=10&ref=EOYFR2015&utm_campaign=EOYFR2015&utm_source=directory-tiles&utm_medium=tiles&utm_content=dapper_v1", ("Mozilla", "Donate to Mozilla")),
+    ("https://app.adjust.com/2uo1qc?campaign=tiles&adgroup=directory&creative=general&fallback=https%3A%2F%2Fitunes.apple.com%2Fapp%2Fapple-store%2Fid989804926%3Fpt%3D373246%26ct%3Dadjust_tracker%26mt%3D8I", ("Mozilla", "Firefox for iOS"))
 ]
 
 _target_urls = {
@@ -129,6 +133,36 @@ _target_urls = {
         ("Mozilla", "MDN Directory"),
     "https://developer.mozilla.org":
         ("Mozilla", "MDN Directory"),
+        "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_tile_image1&utm_content=102790":
+        ("BarkBox", "BarkBox Directory"),
+        "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_animals_general&utm_content=102944":
+        ("BarkBox", "BarkBox Suggested"),
+        "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_health_fitness&utm_content=102945":
+        ("BarkBox", "BarkBox Suggested"),
+        "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_health_general&utm_content=102946":
+        ("BarkBox", "BarkBox Suggested"),
+        "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_entertainment_humor&utm_content=102947":
+        ("BarkBox", "BarkBox Suggested"),
+        "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_entertainment_general&utm_content=102948":
+        ("BarkBox", "BarkBox Suggested"),
+        "https://barkshop.com/gifts?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_retail_gift&utm_content=503545":
+        ("BarkBox", "BarkBox Suggested"),
+        "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rg:CyberWkPh:1":
+        ("Jet.com", "Jet.com Directory"),
+        "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:na:st_rc:na:1":
+        ("Jet.com", "Jet.com Suggested"),
+        "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rc:na:1":
+        ("Jet.com", "Jet.com Suggested"),
+        "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:na:st_rg:na:1":
+        ("Jet.com", "Jet.com Suggested"),
+        "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rg:na:1":
+        ("Jet.com", "Jet.com Suggested"),
+        "http://www.toms.com/?cid=mozilla_directory&utm_medium=directory&utm_source=mozilla":
+        ("Toms", "Toms Directory"),
+        "www.toms.com/improving-lives?cid=mozilla_suggested&utm_medium=suggested&utm_source=mozilla&utm_campaign=fashion_women":
+        ("Toms", "Toms Suggested"),
+        "www.toms.com/improving-lives?cid=mozilla_suggested&utm_medium=suggested&utm_source=mozilla&utm_campaign=fashion_men":
+        ("Toms", "Toms Suggested"),
 }
 
 _ids = {

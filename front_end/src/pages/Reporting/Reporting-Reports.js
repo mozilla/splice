@@ -3,7 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import Select from 'react-select';
-import {Table} from 'react-table';
+import {Table} from 'react-tabular';
 
 import {fetchCampaigns, fetchCampaign, campaignSetFilter} from 'actions/Campaigns/CampaignActions';
 import {fetchAccounts} from 'actions/Accounts/AccountActions';
