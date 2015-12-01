@@ -71,6 +71,7 @@ def get_tiles(group_by=None, limit_fields=None, filters=None):
     rows = add_filters(rows, filters, group_by)
     rows = rows.all()
 
+    env.db.session.close()
     return [formatRow(r) for r in rows] if rows else None
 
 
@@ -83,6 +84,7 @@ def get_tile(id):
         env.db.session
         .query(Tile).get(id)
     )
+    env.db.session.close()
     return row_to_dict(row) if row else None
 
 
