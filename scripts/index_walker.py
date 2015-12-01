@@ -147,8 +147,10 @@ _target_urls = {
         ("BarkBox", "BarkBox Suggested"),
     "https://barkshop.com/gifts?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_retail_gift&utm_content=503545":
         ("BarkBox", "BarkBox Suggested"),
-    "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rg:CyberWkPh:1":
+    "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:dt:CyberWkPh:1":
         ("Jet.com", "Jet.com Directory"),
+    "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rg:CyberWkPh:1":
+        ("Jet.com", "Jet.com Suggested"),
     "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:na:st_rc:na:1":
         ("Jet.com", "Jet.com Suggested"),
     "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rc:na:1":
@@ -158,11 +160,15 @@ _target_urls = {
     "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rg:na:1":
         ("Jet.com", "Jet.com Suggested"),
     "http://www.toms.com/?cid=mozilla_directory&utm_medium=directory&utm_source=mozilla":
-        ("Toms", "Toms Directory"),
-    "www.toms.com/improving-lives?cid=mozilla_suggested&utm_medium=suggested&utm_source=mozilla&utm_campaign=fashion_women":
-        ("Toms", "Toms Suggested"),
-    "www.toms.com/improving-lives?cid=mozilla_suggested&utm_medium=suggested&utm_source=mozilla&utm_campaign=fashion_men":
-        ("Toms", "Toms Suggested"),
+        ("TOMS", "TOMS Directory"),
+    "http://www.toms.com/improving-lives?cid=mozilla_suggested&utm_medium=suggested&utm_source=mozilla&utm_campaign=fashion_women":
+        ("TOMS", "TOMS Suggested"),
+    "http://www.toms.com/improving-lives?cid=mozilla_suggested&utm_medium=suggested&utm_source=mozilla&utm_campaign=fashion_men":
+        ("TOMS", "TOMS Suggested"),
+    "http://www.toms.com/?cid=mozilla_suggested&utm_medium=suggested&utm_source=mozilla&utm_campaign=lifestyle_men":
+        ("TOMS", "TOMS Suggested"),
+    "http://www.toms.com/?cid=mozilla_suggested&utm_medium=suggested&utm_source=mozilla&utm_campaign=lifestyle_women":
+        ("TOMS", "TOMS Suggested")
 }
 
 _ids = {
@@ -170,6 +176,22 @@ _ids = {
     630: ("Mozilla", "Fennec Tiles"),
     631: ("Mozilla", "Fennec Tiles"),
     632: ("Mozilla", "Fennec Tiles"),
+}
+
+_campaign_countries = {
+    "BarkBox": ["US"],
+    "Condé Nast": ["US"],
+    "Jet.com": ["US"],
+    "TOMS": ["US"],
+    "Quartz": ["US"],
+    "EFF": ["US"],
+    "Yahoo": ["US"],
+    "Squarespace": ["US"],
+    "CLIQZ": ["DE"],
+    "Times Inc": ["US"],
+    "Cars.com": ["US"],
+    "Casper.com": ["US"],
+    "NFL": ["US"],
 }
 
 insane_identity_counter = 0
@@ -345,6 +367,9 @@ def main():
                 # append all the countries
                 for sub_country_code, sub_locale in tile_geodes[adgroup_id]:
                     countries[campaign_id].add(sub_country_code)
+                # this fixes the closed campaigns can't get the correct country code as above
+                if account_name in _campaign_countries:
+                    countries[campaign_id] = countries[campaign_id].union(_campaign_countries[account_name])
                 # print "campaign", ctuple
 
             adgroups[campaigns[curr][0]].append(adgroup_id)
@@ -406,10 +431,12 @@ def main():
 
             adgroup_updates = [update(Adgroup)
                                .where(Adgroup.id.in_(tuple(adgroup_ids)))
-                               .values(dict(campaign_id=cid))
+                               .values(dict(campaign_id=cid, type="directory", name="adgoup_cpmg_%d" % cid))
                                for cid, adgroup_ids in adgroups.iteritems()]
             for adgroup_stmt in adgroup_updates:
                 session.execute(adgroup_stmt)
+            # set the type for the suggested adgroups
+            session.execute("update adgroups set type = 'suggested' where id in (select distinct adgroup_id from adgroup_sites)")
 
             session.commit()
         except Exception as e:
