@@ -156,6 +156,7 @@ class BucketerRelated(db.Model):
     source = db.Column(db.String(64), primary_key=True)
     score = db.Column(db.Float(), default=1)
 
+
 class BucketerComscore(db.Model):
     __tablename__ = "bucketer_comscore"
 
