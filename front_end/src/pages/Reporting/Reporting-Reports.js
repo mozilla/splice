@@ -95,12 +95,12 @@ const ReportingReports = React.createClass({
             <section className="flex-wrapper">
               <div className="form-group half">
                 <label>Start Date</label>
-                <input className="Input" value={reportSettings.start_date}
+                <input className="form-control" value={reportSettings.start_date}
                   onChange={(e) => this.setState({start_date: e.target.value})} />
               </div>
               <div className="form-group half">
                 <label>End Date</label>
-                <input className="Input" value={reportSettings.end_date}
+                <input className="form-control" value={reportSettings.end_date}
                   onChange={(e) => this.setState({end_date: e.target.value})} />
               </div>
             </section>
