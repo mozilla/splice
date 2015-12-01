@@ -6,9 +6,8 @@ import traceback
 from splice.models import (BucketerDomain, BucketerRelated, BucketerComscore, BucketerModel)
 from splice.bucketer.domain_map import DomainMap
 from sqlalchemy import delete
-import numpy as np
-from scipy import stats
 import sys
+import math
 
 
 def addOrMerge(session, entry, options):
@@ -101,17 +100,32 @@ def clearBucketerTables(session, options):
         print "Flushing after deletion"
         session.flush()
 
+## this code is lifted from http://jmduke.com/posts/basic-linear-regressions-in-python/
+def basic_linear_regression(x, y):
+    # Basic computations to save a little time.
+    length = len(x)
+    sum_x = sum(x)
+    sum_y = sum(y)
+
+    # Sum{x^2}, and Sum{xy} respectively.
+    sum_x_squared = sum(map(lambda a: a * a, x))
+    sum_of_products = sum([x[i] * y[i] for i in range(length)])
+
+    # Magic formulae!
+    slope = (sum_of_products - (sum_x * sum_y) / length) / (sum_x_squared - ((sum_x ** 2) / length))
+    intercept = (sum_y - slope * sum_x) / length
+    variance = sum([(y[i] - intercept - slope*x[i])**2 for i in range(length)]) / length
+    return slope, intercept, math.sqrt(variance)
+
 def fitAndSaveModel(session, domainMap, options):
     print "Fitting and saving rank model"
-    log_x = np.log(domainMap.getModelRanks())
-    log_y = np.log(domainMap.getModelUsers())
-    slope, intercept, r_value, p_value, std_er = stats.linregress(log_x,log_y)
+    log_x = map(lambda a: math.log(a), domainMap.getModelRanks())
+    log_y = map(lambda a: math.log(a), domainMap.getModelUsers())
+    slope, intercept, std_er = basic_linear_regression(log_x, log_y)
     session.add(BucketerModel(
                 description = "Log regresssion on alexa_rank:users pairs",
                 slope = slope,
                 intercept = intercept,
-                r_value = r_value,
-                p_value = p_value,
                 std_er = std_er))
 
 def readJsonDump(file, env, options):
@@ -149,7 +163,7 @@ def main():
         '\n  JSON FILE    domains.json file'
         '\n\nExamples:'
         '\n  %prog domains.json'
-        '\n  You can download domains.json from s3://moz-tiles-maksik/bucketer/domains.json'
+        '\n  Download domains.json from s3://moz-tiles-maksik/bucketer/domains.json'
     )
     parser.set_defaults(
         quiet=False,

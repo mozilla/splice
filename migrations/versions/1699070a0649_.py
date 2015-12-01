@@ -1,13 +1,13 @@
 """empty message
 
-Revision ID: f72d081ea07
+Revision ID: 1699070a0649
 Revises: 4c862338fcfa
-Create Date: 2015-11-24 16:59:52.472809
+Create Date: 2015-12-01 10:59:44.827216
 
 """
 
 # revision identifiers, used by Alembic.
-revision = 'f72d081ea07'
+revision = '1699070a0649'
 down_revision = '4c862338fcfa'
 branch_labels = None
 depends_on = None
@@ -44,8 +44,6 @@ def upgrade_():
     sa.Column('description', sa.String(length=128), nullable=False),
     sa.Column('slope', sa.Float(), nullable=False),
     sa.Column('intercept', sa.Float(), nullable=False),
-    sa.Column('r_value', sa.Float(), nullable=False),
-    sa.Column('p_value', sa.Float(), nullable=False),
     sa.Column('std_er', sa.Float(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )

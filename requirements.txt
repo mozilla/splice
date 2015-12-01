@@ -23,5 +23,3 @@ Pillow==3.0.0
 pyOpenSSL==0.15.1
 ndg-httpsclient==0.4.0
 Fabric==1.8.1
-numpy==1.10.1
-scipy==0.16.1

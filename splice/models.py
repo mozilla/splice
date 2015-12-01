@@ -174,8 +174,6 @@ class BucketerModel(db.Model):
     description = db.Column(db.String(128), nullable=False)
     slope = db.Column(db.Float(), nullable=False)
     intercept = db.Column(db.Float(), nullable=False)
-    r_value = db.Column(db.Float(), nullable=False)
-    p_value = db.Column(db.Float(), nullable=False)
     std_er = db.Column(db.Float(), nullable=False)
 
 
