@@ -133,35 +133,35 @@ _target_urls = {
         ("Mozilla", "MDN Directory"),
     "https://developer.mozilla.org":
         ("Mozilla", "MDN Directory"),
-        "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_tile_image1&utm_content=102790":
+    "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_tile_image1&utm_content=102790":
         ("BarkBox", "BarkBox Directory"),
-        "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_animals_general&utm_content=102944":
+    "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_animals_general&utm_content=102944":
         ("BarkBox", "BarkBox Suggested"),
-        "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_health_fitness&utm_content=102945":
+    "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_health_fitness&utm_content=102945":
         ("BarkBox", "BarkBox Suggested"),
-        "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_health_general&utm_content=102946":
+    "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_health_general&utm_content=102946":
         ("BarkBox", "BarkBox Suggested"),
-        "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_entertainment_humor&utm_content=102947":
+    "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_entertainment_humor&utm_content=102947":
         ("BarkBox", "BarkBox Suggested"),
-        "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_entertainment_general&utm_content=102948":
+    "https://barkbox.com/?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_entertainment_general&utm_content=102948":
         ("BarkBox", "BarkBox Suggested"),
-        "https://barkshop.com/gifts?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_retail_gift&utm_content=503545":
+    "https://barkshop.com/gifts?utm_source=mozilla&utm_medium=sponsorships&utm_campaign=mozilla_st_retail_gift&utm_content=503545":
         ("BarkBox", "BarkBox Suggested"),
-        "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rg:CyberWkPh:1":
+    "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rg:CyberWkPh:1":
         ("Jet.com", "Jet.com Directory"),
-        "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:na:st_rc:na:1":
+    "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:na:st_rc:na:1":
         ("Jet.com", "Jet.com Suggested"),
-        "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rc:na:1":
+    "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rc:na:1":
         ("Jet.com", "Jet.com Suggested"),
-        "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:na:st_rg:na:1":
+    "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:na:st_rg:na:1":
         ("Jet.com", "Jet.com Suggested"),
-        "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rg:na:1":
+    "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rg:na:1":
         ("Jet.com", "Jet.com Suggested"),
-        "http://www.toms.com/?cid=mozilla_directory&utm_medium=directory&utm_source=mozilla":
+    "http://www.toms.com/?cid=mozilla_directory&utm_medium=directory&utm_source=mozilla":
         ("Toms", "Toms Directory"),
-        "www.toms.com/improving-lives?cid=mozilla_suggested&utm_medium=suggested&utm_source=mozilla&utm_campaign=fashion_women":
+    "www.toms.com/improving-lives?cid=mozilla_suggested&utm_medium=suggested&utm_source=mozilla&utm_campaign=fashion_women":
         ("Toms", "Toms Suggested"),
-        "www.toms.com/improving-lives?cid=mozilla_suggested&utm_medium=suggested&utm_source=mozilla&utm_campaign=fashion_men":
+    "www.toms.com/improving-lives?cid=mozilla_suggested&utm_medium=suggested&utm_source=mozilla&utm_campaign=fashion_men":
         ("Toms", "Toms Suggested"),
 }
 
@@ -347,7 +347,7 @@ def main():
                     countries[campaign_id].add(sub_country_code)
                 # print "campaign", ctuple
 
-            adgroups[campaign_id].append(adgroup_id)
+            adgroups[campaigns[curr][0]].append(adgroup_id)
 
         # insert data into new tables
         Session = sessionmaker(bind=engine)
