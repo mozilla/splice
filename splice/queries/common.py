@@ -27,6 +27,10 @@ def row_to_dict(row):
     return {c.name: getattr(row, c.name) for c in row.__table__.columns}
 
 
+def tuple_to_dict(row):
+    return row._asdict()
+
+
 def get_frecent_sites_for_tile(tile_id, conn=None):
     stmt = (select([AdgroupSite.site])
             .where(and_(AdgroupSite.adgroup_id == Adgroup.id,
