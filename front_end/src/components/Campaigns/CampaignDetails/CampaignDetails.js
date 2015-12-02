@@ -47,10 +47,10 @@ export default class CampaignDetails extends Component {
                 <div className="data-value">
                   <strong>Schedule</strong>
                   <div>Start</div>
-                  <div className="small">{(data.start_date !== null) ? formatDate(data.start_date, 'M/D/YYYY') : ''}</div>
+                  <div className="small">{(data.start_date !== null) ? formatDate(data.start_date, 'YYYY-MM-DD') : ''}</div>
                   <div>|</div>
                   <div>End</div>
-                  <div className="small">{(data.end_date !== null) ? formatDate(data.end_date, 'M/D/YYYY') : ''}</div>
+                  <div className="small">{(data.end_date !== null) ? formatDate(data.end_date, 'YYYY-MM-DD') : ''}</div>
                 </div>
               </div>
             </div>
@@ -58,7 +58,7 @@ export default class CampaignDetails extends Component {
               <div className="col-xs-4">
                 <div className="data-value">
                   <strong>Created</strong>
-                  {formatDate(data.created_at, 'M/D/YYYY')}
+                  {formatDate(data.created_at, 'YYYY-MM-DD')}
                 </div>
               </div>
             </div>

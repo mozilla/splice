@@ -49,7 +49,7 @@ export default class AdGroupDetails extends Component {
             <p><strong>Type:</strong> {_.capitalize(data.type)}</p>
             {(data.type === 'suggested') ? suggestedFields : null }
             <p><strong>Locale:</strong> {data.locale}</p>
-            <p><strong>Created:</strong> {formatDate(data.created_at, 'M/D/YYYY')}</p>
+            <p><strong>Created:</strong> {formatDate(data.created_at, 'YYYY-MM-DD')}</p>
           </div>
         </div>
       );

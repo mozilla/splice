@@ -12,7 +12,7 @@ export default class TileRow extends Component {
 				<td>{_.capitalize(this.props.type)}</td>
 				<td className={'status ' + ((this.props.paused) ? 'paused' : 'active')}>{(this.props.paused) ? 'Paused' : 'Active'}</td>
 				<td className={'status ' + this.props.status}>{_.capitalize(this.props.status)}</td>
-				<td>{formatDate(this.props.created_at, 'M/D/YYYY')}</td>
+				<td>{formatDate(this.props.created_at, 'YYYY-MM-DD')}</td>
 			</tr>
 		);
 	}

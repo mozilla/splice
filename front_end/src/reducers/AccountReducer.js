@@ -6,11 +6,14 @@ import {
   REQUEST_ACCOUNTS,
   RECEIVE_ACCOUNTS,
   REQUEST_ACCOUNT,
-  RECEIVE_ACCOUNT
+  RECEIVE_ACCOUNT,
+  REQUEST_ACCOUNT_STATS,
+  RECEIVE_ACCOUNT_STATS
 } from 'actions/Accounts/AccountActions';
 
 const initialState = {
   rows: [],
+  stats: [],
   details: {},
   isSaving: false,
   isFetching: false
@@ -69,6 +72,19 @@ export function Account(state = initialState, action = null) {
       }
       return _.assign({}, state, {
         details: data,
+        isFetching: false
+      });
+    case REQUEST_ACCOUNT_STATS:
+      return _.assign({}, state, {
+        isFetching: true
+      });
+    case RECEIVE_ACCOUNT_STATS:
+      data = [];
+      if(action.json.results !== undefined){
+        data = action.json.results;
+      }
+      return _.assign({}, state, {
+        stats: data,
         isFetching: false
       });
     default:

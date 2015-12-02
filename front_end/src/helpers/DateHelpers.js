@@ -2,8 +2,11 @@ import Moment from 'moment';
 
 export function formatDate(dateValue, outputFormat) {
   let output;
-  if(dateValue !== undefined){
+  if(dateValue){
     output = Moment(dateValue).utcOffset('+0000').format(outputFormat);
+  }
+  else{
+    output = Moment().utcOffset('+0000').format(outputFormat);
   }
 
   return output;

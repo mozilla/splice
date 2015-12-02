@@ -9,7 +9,8 @@ export const DISPLAY_MESSAGE = 'DISPLAY_MESSAGE';
 export const SHOWN_MESSAGE = 'SHOWN_MESSAGE';
 export const REMOVE_MESSAGE = 'REMOVE_MESSAGE';
 
-export const LIST_TYPE_SELECT = 'LIST_TYPE_SELECT';
+export const SET_LIST_TYPE = 'SET_LIST_TYPE';
+export const SET_LIST_DATE_RANGE = 'SET_LIST_DATE_RANGE';
 
 export const FORM_CHANGED = 'FORM_CHANGED';
 export const FORM_SAVED = 'FORM_SAVED';
@@ -46,8 +47,12 @@ export function removeMessage(){
   };
 }
 
-export function listTypeSelect(value) {
-  return {type: LIST_TYPE_SELECT, value: value};
+export function setListType(value) {
+  return {type: SET_LIST_TYPE, value: value};
+}
+
+export function setListDateRange(value){
+  return {type: SET_LIST_DATE_RANGE, value: value};
 }
 
 export function formChanged(){

@@ -32,7 +32,7 @@ export default class TileDetails extends Component {
 						<p><strong>BG Color:</strong> {(data.bg_color !== '' && data.bg_color !== null) ? <i className="fa fa-square" style={{color: data.bg_color}}></i> : '' } {data.bg_color}</p>
 						<p><strong>Title BG Color:</strong> {(data.title_bg_color !== '' && data.title_bg_color !== null) ? <i className="fa fa-square" style={{color: data.title_bg_color}}></i> : '' }  {data.title_bg_color}</p>
 						<p><strong>Type:</strong> {_.capitalize(data.type)}</p>
-						<p><strong>Created:</strong> {formatDate(data.created_at, 'M/D/YYYY')}</p>
+						<p><strong>Created:</strong> {formatDate(data.created_at, 'YYYY-MM-DD')}</p>
 					</div>
 				</div>
 			);

@@ -93,6 +93,9 @@ select.styled{
         background-color: $color-pink;
         color: #fff;
       }
+      th.number{
+        text-align: right;
+      }
     }
 
     tbody{
@@ -103,12 +106,16 @@ select.styled{
         background-color: #f0f0f1;
         padding: 10px 15px;
         font-size: 14px;
+        vertical-align: top;
       }
       tr:nth-child(even) td{
         background-color: #fff;
       }
       td.status{
         text-transform: uppercase;
+      }
+      td.number{
+        text-align: right;
       }
       td.status.active, td.status.approved{
         background-color: $color-aqua;
@@ -125,8 +132,16 @@ select.styled{
   }
 
   .module-table.data-table{
+    overflow: auto;
+
+    table{
+      table-layout: fixed;
+      width: auto;
+    }
+
     tbody td{
       font-size: 14px;
+      overflow: hidden;
     }
   }
 }

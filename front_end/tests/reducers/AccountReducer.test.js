@@ -74,4 +74,16 @@ describe('Account ', () => {
       {name: 'new name'}
     );
   });
+
+  it('should handle RECEIVE_ACCOUNT_STATS', () => {
+    //Test Updating when state is explicitly set
+    expect(
+      Account(undefined, {
+        type: types.RECEIVE_ACCOUNT_STATS,
+        json: {results: [{clicked: 1}] }
+      }).stats
+    ).toEqual(
+      [{clicked: 1}]
+    );
+  });
 });

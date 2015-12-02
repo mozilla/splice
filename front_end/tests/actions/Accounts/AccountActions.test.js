@@ -65,4 +65,20 @@ describe('actions', () => {
     };
     expect(actions.receiveUpdateAccount(json)).toEqual(expectedAction);
   });
+
+  it('should request to account stats', () => {
+    const expectedAction = {
+      type: actions.REQUEST_ACCOUNT_STATS
+    };
+    expect(actions.requestAccountStats()).toEqual(expectedAction);
+  });
+
+  it('should receive account stats', () => {
+    const json = {result: [{clicked: 1}]};
+    const expectedAction = {
+      type: actions.RECEIVE_ACCOUNT_STATS,
+      json: json
+    };
+    expect(actions.receiveAccountStats(json)).toEqual(expectedAction);
+  });
 });
