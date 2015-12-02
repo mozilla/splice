@@ -8,7 +8,7 @@ export default class AdGroupRow extends Component {
     return (
       <tr>
         <td>{this.props.id}</td>
-        <td><Link to={'/adgroups/' + this.props.id}>{(this.props.name !== '' ) ? this.props.name : '(No Name)' }</Link></td>
+        <td><Link to={'/adgroups/' + this.props.id}>{(this.props.name) ? this.props.name : '(No Name)' }</Link></td>
         <td>{this.props.locale}</td>
         <td>{_.capitalize(this.props.type)}</td>
         <td className={'status ' + ((this.props.paused) ? 'paused' : 'active')}>{(this.props.paused) ? 'Paused' : 'Active'}</td>
