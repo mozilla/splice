@@ -8,7 +8,7 @@ export default class TileRow extends Component {
 		return (
 			<tr>
 				<td>{this.props.id}</td>
-				<td><Link to={'/tiles/' + this.props.id}>{(this.props.title !== '' ) ? this.props.title : '(No Title)' }</Link></td>
+				<td><Link to={'/tiles/' + this.props.id}>{(this.props.title) ? this.props.title : '(No Title)' }</Link></td>
 				<td>{_.capitalize(this.props.type)}</td>
 				<td className={'status ' + ((this.props.paused) ? 'paused' : 'active')}>{(this.props.paused) ? 'Paused' : 'Active'}</td>
 				<td className={'status ' + this.props.status}>{_.capitalize(this.props.status)}</td>

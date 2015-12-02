@@ -8,23 +8,19 @@ export default class BreadCrumbs extends Component {
     let name;
 
     if(isTile){
-      if(data.title !== undefined) {
-        if (data.title.trim() === '') {
-          name = '(No Title)';
-        }
-        else {
-          name = data.title;
-        }
+      if (data.title) {
+        name = data.title;
+      }
+      else {
+        name = '(No Title)';
       }
     }
     else {
-      if(data.name !== undefined){
-        if(data.name.trim() === ''){
-          name = '(No Name)';
-        }
-        else{
-          name = data.name;
-        }
+      if(data.name){
+        name = data.name;
+      }
+      else{
+        name = '(No Name)';
       }
     }
     return name;
