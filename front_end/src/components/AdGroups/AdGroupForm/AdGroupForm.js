@@ -152,7 +152,7 @@ export default class AdGroupForm extends Component {
                   <label htmlFor="AdGroupName">Ad Group Name</label>
                   <input className="form-control" type="text" onChange={this.handleChange} id="AdGroupName" name="name" ref="name" defaultValue={data.name} data-parsley-required data-parsley-minlength="2"/>
                 </div>
-                {(this.props.AdGroup.details.type === 'suggested')
+                {(this.props.AdGroup.details.type === 'suggested' && this.props.editMode === false)
                   ? <div className="form-group">
                       <textarea className="form-control" onChange={this.handleChange} placeholder="Description" type="text" id="AdGroupExplanation" name="explanation" ref="explanation" defaultValue={data.explanation} />
                     </div>
