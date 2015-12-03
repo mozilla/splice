@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { formatDate } from 'helpers/DateHelpers';
-import { getChannel, getCountry } from 'actions/Init/InitActions';
+import { getChannel } from 'actions/Init/InitActions';
+import CampaignCountries from 'components/Campaigns/CampaignCountries/CampaignCountries';
 
 export default class CampaignRow extends Component {
   render() {
@@ -12,31 +13,12 @@ export default class CampaignRow extends Component {
         <td>{this.props.id}</td>
         <td><Link to={'/campaigns/' + this.props.id}>{this.props.name}</Link></td>
         <td>{(channel) ? _.capitalize(channel.name) : ''}</td>
-        <td>{this.outputCountries(this.props.countries)}</td>
+        <td><CampaignCountries countries={this.props.countries} initCountries={this.props.init_countries}/></td>
         <td className={'status ' + ((this.props.paused) ? 'paused' : 'active')}>{(this.props.paused) ? 'Paused' : 'Active'}</td>
         <td>{formatDate(this.props.start_date, 'M/D/YYYY')}</td>
         <td>{formatDate(this.props.end_date, 'M/D/YYYY')}</td>
       </tr>
     );
-  }
-
-  outputCountries(countries){
-    let output = '';
-    const countryNames = [];
-    let country;
-
-    countries.map((row, index) => {
-      country = getCountry(row, this.props.init_countries);
-      if (country !== undefined && country.country_name !== undefined) {
-        countryNames.push(country.country_name);
-      }
-    });
-
-    if(countryNames.length > 0){
-      output = countryNames.join(', ');
-    }
-
-    return output;
   }
 }
 
