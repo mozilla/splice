@@ -149,6 +149,8 @@ _target_urls = {
         ("BarkBox", "BarkBox Suggested"),
     "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:dt:CyberWkPh:1":
         ("Jet.com", "Jet.com Directory"),
+    "https://jet.com/landing/holidayshop?jcmp=afl:moz:dt_jet:na:na:na:holiday15off:dt:na:1":
+        ("Jet.com", "Jet.com Directory"),
     "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:20off:st_rg:CyberWkPh:1":
         ("Jet.com", "Jet.com Suggested"),
     "https://jet.com/?jcmp=afl:moz:dt_jet:na:na:na:na:st_rc:na:1":
