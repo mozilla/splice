@@ -2,33 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import { formatDate } from 'helpers/DateHelpers';
-import { getChannel, getCountry } from 'actions/Init/InitActions';
+import { getChannel } from 'actions/Init/InitActions';
+import CampaignCountries from 'components/Campaigns/CampaignCountries/CampaignCountries';
 
 export default class CampaignDetails extends Component {
-  getCountries(){
-    const data = this.props.Campaign.details;
-    const context = this;
-
-    let countries = '';
-    if(data.countries !== undefined && data.countries !== null &&
-      this.props.Init.countries !== undefined && this.props.Init.countries !== null){
-      data.countries.map(function(val, index){
-        if(index !== 0){
-          countries += ', ';
-        }
-        const country = getCountry(val, context.props.Init.countries);
-        if(country) {
-          countries += country.country_name;
-        }
-      });
-    }
-    return countries;
-  }
-
   render() {
     const data = this.props.Campaign.details;
-
-    const countries = this.getCountries();
 
     const channel = getChannel(data.channel_id, this.props.Init.channels);
 
@@ -61,7 +40,7 @@ export default class CampaignDetails extends Component {
               <div className="col-xs-4">
                 <div className="data-value">
                   <strong>Countries</strong>
-                  {countries}
+                  <CampaignCountries countries={data.countries} initCountries={this.props.Init.countries}/>
                 </div>
               </div>
               <div className="col-xs-4">
