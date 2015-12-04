@@ -356,10 +356,14 @@ export default class TileForm extends Component {
   handleFormSubmit(e) {
     e.preventDefault();
 
-    const staticField = $('#static_image_placeholder').parsley();
-    const rolloverField = $('#rollover_image_placeholder').parsley();
-    window.ParsleyUI.removeError(staticField, 'uploadError');
-    window.ParsleyUI.removeError(rolloverField, 'uploadError');
+    if($('#static_image_placeholder').length > 0){
+      const staticField = $('#static_image_placeholder').parsley();
+      window.ParsleyUI.removeError(staticField, 'uploadError');
+    }
+    if($('#rollover_image_placeholder').length > 0){
+      const rolloverField = $('#rollover_image_placeholder').parsley();
+      window.ParsleyUI.removeError(rolloverField, 'uploadError');
+    }
 
     $('input[name="account_id"], input[name="campaign_id"], input[name="adgroup_id"]')
       .attr('data-parsley-required', 'true');
