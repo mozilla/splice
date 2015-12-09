@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/oyiptong/splice",
   "dependencies": {
-    "history": "^1.13.1",
+    "history": "1.13.1",
     "isomorphic-fetch": "^2.2.0",
     "moment": "^2.10.6",
     "react": "^0.14.2",
