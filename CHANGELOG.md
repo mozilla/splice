@@ -1,3 +1,11 @@
+2.0.2
+=====
+Lock the package for the front_end and ui
+
+2.0.1
+=====
+Fix various bugs in the migration script
+
 2.0.0
 =====
 Initial Commit of 2.0.0

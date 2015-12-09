@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="splice",
-    version="2.0.0",
+    version="2.0.2",
     description="Link authoring tool for " +
                 "Firefox Directory and Enhanced Tiles",
     author="Mozilla",
