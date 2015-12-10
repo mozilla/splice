@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { updateDocTitle, listTypeSelect } from 'actions/App/AppActions';
-import { fetchAccounts } from 'actions/Accounts/AccountActions';
+import { updateDocTitle } from 'actions/App/AppActions';
+import { fetchAccounts, fetchAccountStats } from 'actions/Accounts/AccountActions';
 import { fetchCampaigns } from 'actions/Campaigns/CampaignActions';
 import { fetchRecentlyViewed } from 'actions/App/RecentlyViewedActions';
 
@@ -14,11 +14,7 @@ export default class HomePage extends Component {
   componentDidMount() {
     updateDocTitle('Home');
 
-    const { dispatch } = this.props;
-    if (this.props.Account.rows.length === 0) {
-      this.props.dispatch(fetchAccounts());
-    }
-    dispatch(fetchRecentlyViewed());
+    this.props.dispatch(fetchRecentlyViewed());
   }
 
   render() {
@@ -33,25 +29,11 @@ export default class HomePage extends Component {
           <div className="col-xs-12">
             <AppList Account={this.props.Account}
                      App={this.props.App}
-                     handleListTypeSelect={value => this.handleListTypeSelect(value)}/>
+                     />
           </div>
         </div>
       </div>
     );
-  }
-
-  handleListTypeSelect(value) {
-    this.props.dispatch(listTypeSelect(value));
-    switch (value) {
-      case 'accounts':
-        this.props.dispatch(fetchAccounts());
-        break;
-      case 'campaigns':
-        //this.props.dispatch(fetchCampaigns());
-        break;
-      default:
-        break;
-    }
   }
 }
 

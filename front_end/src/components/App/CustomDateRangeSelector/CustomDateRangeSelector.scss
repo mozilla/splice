@@ -1,13 +1,13 @@
 @import '../../../styles/variables';
 
-.custom-dropdown-wrapper{
+.custom-date-range-wrapper{
   position: relative;
   height: 35px;
 }
-.custom-dropdown{
+.custom-date-range{
   position: relative;
 }
-.custom-dropdown-button{
+.custom-date-range-button{
   border: 1px solid #fff;
   color: #fff;
   padding: 0px 60px 0 40px;
@@ -20,10 +20,10 @@
   line-height: 35px;
   cursor: pointer;
 }
-.custom-dropdown-button.active{
+.custom-date-range-button.active{
   background-image: url(../../../public/img/select-uparrow-dark.png);
 }
-.custom-dropdown-options{
+.custom-date-range-options{
   color: #fff;
   font-size: 14px;
   background-color: $color-dark-gray;
@@ -31,11 +31,32 @@
   border-top: 0px;
   display: none;
 
-  .custom-dropdown-option {
+  .custom-date-range-option {
     padding: 10px 15px;
     cursor: pointer;
   }
-  .custom-dropdown-option:hover{
+  .custom-date-range-option:hover{
     background-color: rgba(255, 255, 255, .1);
+  }
+  .date-input-group{
+    padding: 15px;
+    color: $font-color-default;
+
+    .date-input{
+      margin-bottom: 5px;
+      color: $font-color-default;
+      display: block;
+      width: 150px;
+      padding: 2px 5px;
+    }
+    .apply-btn{
+      margin-top: 15px;
+      display: block;
+      background-color: $color-aqua;
+      border: 0px;
+      color: $font-color-default;
+      text-transform: uppercase;
+      padding: 1px 10px;
+    }
   }
 }

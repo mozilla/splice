@@ -16,6 +16,9 @@ export const RECEIVE_ACCOUNTS = 'RECEIVE_ACCOUNTS';
 export const REQUEST_ACCOUNT = 'REQUEST_ACCOUNT';
 export const RECEIVE_ACCOUNT = 'RECEIVE_ACCOUNT';
 
+export const REQUEST_ACCOUNT_STATS = 'REQUEST_ACCOUNT_STATS';
+export const RECEIVE_ACCOUNT_STATS = 'RECEIVE_ACCOUNT_STATS';
+
 export function requestCreateAccount() {
   return {type: REQUEST_CREATE_ACCOUNT};
 }
@@ -54,6 +57,15 @@ export function requestAccounts() {
 export function receiveAccounts(json) {
   return {
     type: RECEIVE_ACCOUNTS,
+    json: json
+  };
+}
+export function requestAccountStats() {
+  return {type: REQUEST_ACCOUNT_STATS};
+}
+export function receiveAccountStats(json) {
+  return {
+    type: RECEIVE_ACCOUNT_STATS,
     json: json
   };
 }
@@ -111,5 +123,22 @@ export function fetchAccounts() {
     // Return a promise to wait for
     const url = apiUrl + '/api/accounts';
     return fetchHelper(url, null, receiveAccounts, dispatch);
+  };
+}
+
+export function fetchAccountStats(params){
+  return function next(dispatch){
+    dispatch(requestAccountStats());
+
+    let paramString = '';
+
+    _.forOwn(params, function(value, key){
+      if(key && value){
+        paramString += '&' + key + '=' + value;
+      }
+    });
+
+    const url = apiUrl + '/api/stats?group_by=account_id' + paramString;
+    return fetchHelper(url, null, receiveAccountStats, dispatch);
   };
 }

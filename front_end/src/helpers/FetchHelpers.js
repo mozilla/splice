@@ -1,5 +1,6 @@
 /* eslint no-console:0 */
 
+import { displayMessage, shownMessage } from 'actions/App/AppActions';
 import fetch from 'isomorphic-fetch';
 
 export function fetchHelper(url, options, callback, dispatch){
@@ -16,11 +17,19 @@ export function fetchHelper(url, options, callback, dispatch){
       return json;
     })
     .then(json => new Promise(resolve => {
-      dispatch(callback(json));
+      if(json !== undefined){
+        dispatch(callback(json));
+      }
+      else{
+        dispatch(callback({}));
+      }
       resolve(json);
     }))
     .catch(function(e){
       dispatch(callback({}));
+      dispatch(displayMessage('error', 'API error, the service could be offline. Please contact the system administrator') );
+      dispatch(shownMessage());
+
       console.log(e);
     });
 }

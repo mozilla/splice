@@ -12,7 +12,7 @@ export default class AdGroupRow extends Component {
         <td>{this.props.locale}</td>
         <td>{_.capitalize(this.props.type)}</td>
         <td className={'status ' + ((this.props.paused) ? 'paused' : 'active')}>{(this.props.paused) ? 'Paused' : 'Active'}</td>
-        <td>{formatDate(this.props.created_at, 'M/D/YYYY')}</td>
+        <td>{formatDate(this.props.created_at, 'YYYY-MM-DD')}</td>
       </tr>
     );
   }

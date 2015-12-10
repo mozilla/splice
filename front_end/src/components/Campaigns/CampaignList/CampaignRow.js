@@ -15,8 +15,8 @@ export default class CampaignRow extends Component {
         <td>{(channel) ? _.capitalize(channel.name) : ''}</td>
         <td><CampaignCountries countries={this.props.countries} initCountries={this.props.init_countries}/></td>
         <td className={'status ' + ((this.props.paused) ? 'paused' : 'active')}>{(this.props.paused) ? 'Paused' : 'Active'}</td>
-        <td>{formatDate(this.props.start_date, 'M/D/YYYY')}</td>
-        <td>{formatDate(this.props.end_date, 'M/D/YYYY')}</td>
+        <td>{formatDate(this.props.start_date, 'YYYY-MM-DD')}</td>
+        <td>{formatDate(this.props.end_date, 'YYYY-MM-DD')}</td>
       </tr>
     );
   }

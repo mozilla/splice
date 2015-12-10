@@ -2,7 +2,8 @@ import {
   DISPLAY_MESSAGE,
   SHOWN_MESSAGE,
   REMOVE_MESSAGE,
-  LIST_TYPE_SELECT,
+  SET_LIST_TYPE,
+  SET_LIST_DATE_RANGE,
   FORM_CHANGED,
   FORM_SAVED,
   GET_LOCATION_LOG,
@@ -15,6 +16,7 @@ const initialState = {
   recentlyViewed: [],
   locationLog: [],
   listType: 'accounts',
+  listDateRange: '30days',
   message: {
     display: false,
     type: '',
@@ -63,9 +65,13 @@ export function App(state = initialState, action = null) {
       return _.assign({}, state, {
         recentlyViewed: result
       });
-    case LIST_TYPE_SELECT:
+    case SET_LIST_TYPE:
       return _.assign({}, state, {
         listType: action.value
+      });
+    case SET_LIST_DATE_RANGE:
+      return _.assign({}, state, {
+        listDateRange: action.value
       });
     case FORM_CHANGED:
       return _.assign({}, state, {

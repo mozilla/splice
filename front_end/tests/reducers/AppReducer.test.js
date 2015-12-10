@@ -53,12 +53,20 @@ describe('App ', () => {
     );
   });
 
-  it('should handle LIST_TYPE_SELECT', () => {
+  it('should handle SET_LIST_TYPE', () => {
     expect(
       App(undefined, {
-        type: types.LIST_TYPE_SELECT,
+        type: types.SET_LIST_TYPE,
         value: 'campaigns'
       }).listType).toEqual('campaigns');
+  });
+
+  it('should handle SET_LIST_DATE_RANGE', () => {
+    expect(
+      App(undefined, {
+        type: types.SET_LIST_DATE_RANGE,
+        value: {start: '2015-12-03', end: '2015-12-24'}
+      }).listDateRange).toEqual({start: '2015-12-03', end: '2015-12-24'});
   });
 
   it('should handle FORM_CHANGED', () => {

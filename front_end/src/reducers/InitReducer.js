@@ -21,9 +21,10 @@ export function Init(state = initialState, action = null) {
     }
     case RECEIVE_INIT:
       data = state;
-      if(action.json !== undefined){
+      if(action.json.result !== undefined){
         data = action.json.result;
       }
+
       return _.assign({}, state, {
         categories: data.categories,
         channels: data.channels,

@@ -27,9 +27,9 @@ export default class SideBar extends Component {
     });
 
     const context = this;
-    $(window).resize(function(){
+    $(window).on('resize', _.debounce(function(){
       context.handleResize();
-    });
+    }, 150));
     this.handleResize();
 
     Ps.initialize($('.accounts-list').get(0));
