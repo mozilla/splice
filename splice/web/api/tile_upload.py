@@ -54,7 +54,7 @@ def bulk_upload(uploaded_zip_file, assets, campaign_id, channel_id):
 
 
 def upload_signed_content(content, name):
-    """Load a signed content file to S3, return the url if succeeds
+    """Upload a signed content file to S3, return the url if succeeds
 
     Params:
         content: file object of the target creative
@@ -76,7 +76,7 @@ def sign_content_payload(content, name):
     hash = hashlib.sha384(content).hexdigest()
     r = requests.post(Environment.instance().config.SIGNING_SERVICE_URL,
                       json={"content": "%s" % hash},
-                      headers={'Content-Type':'application/json'})
+                      headers={'Content-Type': 'application/json'})
     try:
         if r.status_code != 200:
             msg = "Error when signing file %s: error_code: %s" % (name, r.status_code)
