@@ -46,6 +46,9 @@ class DefaultConfig(object):
 
     CLOUDFRONT_BASE_URL = "https://d3bhweee2a5al5.cloudfront.net"
 
+    # endpoint of the signing service
+    SIGNING_SERVICE_URL = "http://127.0.0.1:8000/sign"
+
     LOG_HANDLERS = {
         'application': {
             'handler': logging.handlers.SysLogHandler,

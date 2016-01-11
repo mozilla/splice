@@ -5,6 +5,7 @@ import StringIO
 import zipfile
 import random
 import traceback
+import requests
 
 from PIL import Image
 from furl import furl
@@ -23,6 +24,7 @@ MIME_EXTENSIONS = {
     "gif": "image/gif",
     "jpeg": "image/jpg",
     "svg": "image/svg+xml",
+    "html": "text/html"
 }
 VALID_CREATIVE_EXTS = set(MIME_EXTENSIONS.keys())
 
@@ -49,6 +51,43 @@ def bulk_upload(uploaded_zip_file, assets, campaign_id, channel_id):
     except Exception as e:
         env.log(traceback.format_exc())  # only log the stack trace at the top level
         raise e
+
+
+def upload_signed_content(content, name):
+    """Load a signed content file to S3, return the url if succeeds
+
+    Params:
+        content: file object of the target creative
+        ext: file name
+    """
+    try:
+        buf = content.read()
+        signature, hash = sign_content_payload(buf, name)
+        bucket, headers = setup_s3()
+        ext = name.rsplit('.', 1)[1].lower()
+        url = upload_content_to_s3(buf, hash, signature['B64asn1'], ext, bucket, headers)
+    except Exception as e:
+        raise Exception("Failed to upload content: %s" % e)
+
+    return url
+
+
+def sign_content_payload(content, name):
+    hash = hashlib.sha384(content).hexdigest()
+    r = requests.post(Environment.instance().config.SIGNING_SERVICE_URL,
+                      json={"content": "%s" % hash},
+                      headers={'Content-Type':'application/json'})
+    try:
+        if r.status_code != 200:
+            msg = "Error when signing file %s: error_code: %s" % (name, r.status_code)
+            env.log(msg)
+            raise Exception(msg)
+    except Exception as e:
+        msg = "Error when signing file: %s, %s" % (name, e)
+        env.log(msg)
+        raise e
+    else:
+        return r.json(), hash
 
 
 def single_creative_upload(creative, ext):
@@ -158,6 +197,22 @@ def upload_creative_to_s3(image, ext, bucket, headers, key_cache):
 
     url = os.path.join('https://%s.s3.amazonaws.com' % env.config.S3['bucket'], s3_key)
     key_cache[s3_key] = url
+    return url
+
+
+def upload_content_to_s3(content, hash, signature, ext, bucket, headers):
+    s3_key = "content/{0}.{1}".format(hash, ext)
+
+    key = bucket.get_key(s3_key)
+    if key is None:  # pragma: no cover
+        key = Key(bucket)
+        key.name = s3_key
+        headers['Content-Type'] = MIME_EXTENSIONS[ext]
+        headers['X-amz-meta-content-signature'] = signature
+        key.set_contents_from_string(content, headers=headers)
+        key.set_acl("public-read")
+
+    url = os.path.join('https://%s.s3.amazonaws.com' % env.config.S3['bucket'], s3_key)
     return url
 
 
