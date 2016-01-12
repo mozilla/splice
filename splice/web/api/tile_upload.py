@@ -65,7 +65,7 @@ def upload_signed_content(content, name):
         signature, hash = sign_content_payload(buf, name)
         bucket, headers = setup_s3()
         ext = name.rsplit('.', 1)[1].lower()
-        url = upload_content_to_s3(buf, hash, signature['B64asn1'], ext, bucket, headers)
+        url = upload_content_to_s3(buf, hash, signature['B64url'], ext, bucket, headers)
     except Exception as e:
         raise Exception("Failed to upload content: %s" % e)
 

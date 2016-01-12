@@ -4,7 +4,6 @@ import (
 	"crypto/ecdsa"
 	"crypto/rand"
 	"crypto/x509"
-	"encoding/asn1"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -22,7 +21,7 @@ type ecdsaSignature struct {
 }
 
 type SignedContent struct {
-	B64url  string
+	B64url string
 }
 
 type Content struct {

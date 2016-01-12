@@ -170,7 +170,7 @@ class TestTileUpload(BaseTestCase):
         assert_equal(response.status_code, 400)
 
     @mock.patch('splice.web.api.tile_upload.sign_content_payload',
-                return_value=({"B64asn1": "keyid=1;p256ecdsa=MGUCMG73F1go+7AQMa"},
+                return_value=({"B64url": "keyid=1;p256ecdsa=MGUCMG73F1go+7AQMa"},
                               "JKLFD132FDSAFDSHLLSDFC23"))
     @mock.patch('splice.web.api.tile_upload.upload_content_to_s3',
                 return_value=("https://tiles-local-dev.s3.amazonaws.com/demo.html"))
@@ -183,7 +183,7 @@ class TestTileUpload(BaseTestCase):
         signMock.side_effect = Exception("Can't reach to the signing server")
         self.assertRaises(Exception, tile_upload.upload_signed_content, f, "test.html")
 
-        signMock.return_value = ({"B64asn1": "keyid=1;p256ecdsa=MGUCMG73F1go+7AQMa"},
+        signMock.return_value = ({"B64url": "keyid=1;p256ecdsa=MGUCMG73F1go+7AQMa"},
                                  "JKLFD132FDSAFDSHLLSDFC23")
         uploadMock.side_effect = Exception("Can't reach to the s3 server")
 
@@ -194,7 +194,7 @@ class TestTileUpload(BaseTestCase):
         """Test the API endpoint for the content upload """
         s3_key = "somehash"
         mock_signature = "keyid=1;p256ecdsa=MGUCMG73F1go+7AQMa"
-        signMock.return_value = ({"B64asn1": mock_signature}, s3_key)
+        signMock.return_value = ({"B64url": mock_signature}, s3_key)
         url = url_for('api.tile.handler_content_upload')
         data = {
             'content': (StringIO.StringIO("<html><html/>"), 'test.html'),
