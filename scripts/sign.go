@@ -22,7 +22,6 @@ type ecdsaSignature struct {
 }
 
 type SignedContent struct {
-	B64asn1 string
 	B64url  string
 }
 
@@ -47,19 +46,14 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	sigAsn1Bytes, err := asn1.Marshal(ecdsaSignature{ecdsaSig.R, ecdsaSig.S})
-	if err != nil {
-		panic(err)
-	}
 	sigWebCryptoBytes := make([]byte, len(ecdsaSig.R.Bytes())+len(ecdsaSig.S.Bytes()))
 	copy(sigWebCryptoBytes[:len(ecdsaSig.R.Bytes())], ecdsaSig.R.Bytes())
 	copy(sigWebCryptoBytes[len(ecdsaSig.R.Bytes()):], ecdsaSig.S.Bytes())
-	strASN1 := fmt.Sprintf("keyid=1;p256ecdsa=%s", base64.StdEncoding.EncodeToString(sigAsn1Bytes))
-	strB64URL := fmt.Sprintf("keyid=1;p256ecdsa=%s", encode(sigAsn1Bytes))
-	signedContent := SignedContent{strASN1, strB64URL}
+	strB64URL := fmt.Sprintf("keyid=1;p256ecdsa=%s", encode(sigWebCryptoBytes))
+	signedContent := SignedContent{strB64URL}
 
 	output, _ := json.Marshal(signedContent)
-	fmt.Println("Signing content with signature:", strASN1[:30], "...")
+	fmt.Println("Signing content with signature:", strB64URL)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(output)
 }
