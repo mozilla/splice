@@ -66,6 +66,7 @@ def insert(env, drop=False, load_stats=False):
         for record in parse_csv("tiles.csv"):
             tile = Tile(**record)
             session.add(tile)
+            session.commit()  # intentionally commit to simulate the different created time
 
         if load_stats:
             for record in parse_csv("impression_stats.csv"):

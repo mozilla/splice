@@ -3,7 +3,6 @@ import mock
 from tests.base import BaseTestCase
 from nose.tools import assert_equal
 from flask import url_for, json
-from splice.queries.distribution import multiplex_directory_tiles
 
 
 class TestDistributionAPI(BaseTestCase):
@@ -43,6 +42,17 @@ class TestDistributionAPI(BaseTestCase):
             total += len(artifacts)
         assert_equal(total, 3)
 
+    def test_get_all_distributions_ordering(self):
+        url = url_for('api.distributions.distributions', date="2015-10-01", channel_id=3)
+        response = self.client.get(url)
+        assert_equal(response.status_code, 200)
+        resp = json.loads(response.data)["results"]
+        artifacts = resp['desktop-prerelease']
+        distribution = json.loads(artifacts[1]['data'])
+        directory_tiles = distribution['directory']
+        tile_titles = [t['title'] for t in directory_tiles]
+        assert_equal(['Pocket for Firefox', 'MDN'], tile_titles)
+
     def test_get_all_distributions_failure(self):
         url = url_for('api.distributions.distributions', date="2000-10-01")
         response = self.client.get(url)
@@ -59,39 +69,3 @@ class TestDistributionAPI(BaseTestCase):
         url = url_for('api.distributions.distributions', date="2015-10-01")
         response = self.client.post(url)
         assert_equal(response.status_code, 400)
-
-    def test_multiplex_directory_tiles(self):
-        tile1 = {"type": "sponsored", "directoryId": 1, "url": "http://www.test.com"}
-        tile2 = {"type": "sponsored", "directoryId": 2, "url": "http://www.test1.com"}
-        tile3 = {"type": "affiliate", "directoryId": 3, "url": "http://www.mozilla.org"}
-        tile4 = {"type": "affiliate", "directoryId": 4, "url": "http://www.mozilla.org"}
-        tile5 = {"type": "affiliate", "directoryId": 5, "url": "http://developer.mozilla.org"}
-        tiles = [tile1, tile2, tile3, tile4, tile5]
-        ret = list(multiplex_directory_tiles(tiles))
-        assert_equal(len(ret), 4)
-        assert_equal([
-            [tile3, tile5, tile1],
-            [tile4, tile5, tile1],
-            [tile3, tile5, tile2],
-            [tile4, tile5, tile2]
-        ], ret)
-        ret = list(multiplex_directory_tiles(tiles[2:]))
-        assert_equal(len(ret), 2)
-        assert_equal([
-            [tile3, tile5],
-            [tile4, tile5]
-        ], ret)
-        ret = list(multiplex_directory_tiles([tile1, tile3, tile5]))
-        assert_equal(len(ret), 1)
-        assert_equal([
-            [tile3, tile5, tile1],
-        ], ret)
-        ret = list(multiplex_directory_tiles(tiles[:2]))
-        assert_equal(len(ret), 2)
-        assert_equal([
-            [tile1],
-            [tile2]
-        ], ret)
-        ret = list(multiplex_directory_tiles(tiles[:1]))
-        assert_equal(len(ret), 1)
-        assert_equal([[tile1]], ret)

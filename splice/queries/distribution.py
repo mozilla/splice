@@ -9,6 +9,7 @@ from collections import namedtuple
 from itertools import product
 
 from furl import furl
+from sqlalchemy.sql import desc
 from sqlalchemy.sql.expression import false
 from splice.models import Tile, Adgroup, Campaign, CampaignCountry
 from splice.web.api.tile_upload import load_bucketer
@@ -36,7 +37,8 @@ def _create_tiles(tile, bucketer, legacy=False):
         title=tile.title,
         type=tile.type,
         imageURI=switch_to_cdn_url(tile.image_uri),
-        enhancedImageURI=switch_to_cdn_url(tile.enhanced_image_uri))
+        enhancedImageURI=switch_to_cdn_url(tile.enhanced_image_uri),
+        created_at=tile.created_at)
     if not legacy and tile.adgroup.categories:
         for category in tile.adgroup.categories:
             bucket = bucketer[category.category]
@@ -77,6 +79,48 @@ def switch_to_cdn_url(image_uri):
 
 
 def get_possible_distributions(today=None, channel_id=None):
+    """Generate all possible distributions for a given date and channel.
+    The result tiles are grouped by the (country, locale, channel_id),
+    a tile index file will be generated as well as the last item of result.
+    Note that all tiles in a distribution will be ordered by the created
+    timestamp descendingly.
+
+    Params:
+        today: date, the target date on which to produce the distributions.
+        The default is None, which means use the current date.
+        channel_id: int, the target channel_id. Will produce distributions
+        for all the channels if not specified.
+    Returns:
+        A distribution dictionary of (channel, distribution_list) type,
+        where channel is the name of the channel, and distribution_list
+        consists of all distributions for that channel. For example:
+        {
+            "desktop": [
+                {
+                    "key": "desktop/US/en-US/some_hash_0.json",
+                    "data": {"distribution_payload"}
+                },
+                {
+                    "key": "desktop/CA/en-US/some_hash_1.json",
+                    "data": {"distribution_payload"}
+                },
+
+                ...,
+
+                {
+                    "key": "desktop/CA/en-GB/some_hash_2.json",
+                    "data": {"distribution_payload"}
+                },
+                {
+                    "key": "desktop_tile_index.json"
+                    "data": {"tile_index_payload"},
+                    "force_upload": True
+                }
+            ]
+        }
+
+    """
+    # TODO(najiang@mozilla.com): Clean up suggested tiles
     from splice.environment import Environment
 
     env = Environment.instance()
@@ -94,7 +138,7 @@ def get_possible_distributions(today=None, channel_id=None):
         .join(Adgroup)
         .join(Campaign)
         .join(CampaignCountry)
-        .order_by(Tile.id))
+        .order_by(desc(Tile.created_at)))
 
     if channel_id is not None:
         query = query.filter(Campaign.channel_id == channel_id)
@@ -123,7 +167,7 @@ def get_possible_distributions(today=None, channel_id=None):
                 value.legacy.extend(legacy_tiles)
 
     tile_index = {}
-    for (channel, country, locale), (legacy, directory, suggested) in tiles.items():
+    for (channel, country, locale), (legacy, directory, _suggested) in tiles.items():
         country_locale = "%s/%s" % (country, locale)
         legacy_keys, ag_keys = [], []
 
@@ -139,7 +183,7 @@ def get_possible_distributions(today=None, channel_id=None):
 
         # v3
         for ag_tiles in multiplex_directory_tiles(directory):
-            ag = json.dumps({'suggested': suggested, 'directory': ag_tiles}, sort_keys=True)
+            ag = json.dumps({'suggested': [], 'directory': ag_tiles}, sort_keys=True)
             ag_hsh = hashlib.sha1(ag).hexdigest()
             ag_key = "{0}/{1}.{2}.ag.json".format(channel, country_locale, ag_hsh)
             ag_keys.append(ag_key)
@@ -170,7 +214,10 @@ _SENTINEL = object()
 
 
 def multiplex_directory_tiles(tiles):
-    """Directory tile multiplexer that creates all possible combinations of the
+    """ TODO(najiang@mozilla.com): simplify this function as there is no mre
+    sponsored tiles.
+
+    Directory tile multiplexer that creates all possible combinations of the
     tile sets based on its type and the target url. Given multiple sponsored tiles,
     it'll pick one of them and create a new tile set with other directory tiles.
     It also multiplexes the tiles with the same Full Qualified Domain Name(FQDN).
@@ -187,7 +234,8 @@ def multiplex_directory_tiles(tiles):
         tiles: a list of tiles.
     Return:
         A list of tile sets. Note that the sponsored directory tile is always the
-        3rd entry in the list, other tiles will be sorted by the tile id.
+        3rd entry in the list, other tiles will be sorted by the created_at time
+        stamp in a descending order.
     """
     sponsored = []
     fqdns = defaultdict(list)
@@ -207,8 +255,10 @@ def multiplex_directory_tiles(tiles):
     for multiplex in product(sponsored, *fqdns.values()):
         copy = list(multiplex)
         sponsored_tile, rest = copy[0], copy[1:]
-        rest.sort(key=lambda tile: tile["directoryId"])
+        rest.sort(key=lambda tile: tile["created_at"], reverse=True)
         # if the sponsored tile is not the sentinel, insert into tile list
         if not (len(sponsored) == 1 and sponsored_tile is _SENTINEL):
             rest.insert(2, sponsored_tile)  # sponsored tile always takes the 3rd place
+        for tile in rest:
+            del tile["created_at"]  # client doesn't need this time stamp
         yield rest
