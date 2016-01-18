@@ -123,6 +123,8 @@ class TestTile(BaseTestCase):
 
         url = url_for('api.tile.tile', tile_id=new["id"])
         new["status"] = "approved"
+        assert_equal(new["position_priority"], "medium")  # test the default value
+        new["position_priority"] = "high"  # update the position_priority here
         data = json.dumps(new)
         response = self.client.put(url, data=data, content_type="application/json")
         assert_equal(response.status_code, 200)
@@ -132,6 +134,7 @@ class TestTile(BaseTestCase):
         response = self.client.get(url)
         resp = json.loads(response.data)
         assert_equal(updated, resp["result"])
+        assert_equal("high", resp["result"]["position_priority"])  # test the update
 
     def test_http_put_404(self):
         """ Test the failure case of HTTP PUT. Editing a missing tile ends up with a 404 error

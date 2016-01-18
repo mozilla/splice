@@ -2,6 +2,7 @@ import hashlib
 import os
 import urllib
 import json
+import copy
 
 from datetime import datetime
 from collections import defaultdict
@@ -38,7 +39,8 @@ def _create_tiles(tile, bucketer, legacy=False):
         type=tile.type,
         imageURI=switch_to_cdn_url(tile.image_uri),
         enhancedImageURI=switch_to_cdn_url(tile.enhanced_image_uri),
-        created_at=tile.created_at)
+        created_at=tile.created_at,
+        position_priority=tile.position_priority)
     if not legacy and tile.adgroup.categories:
         for category in tile.adgroup.categories:
             bucket = bucketer[category.category]
@@ -210,55 +212,32 @@ def get_possible_distributions(today=None, channel_id=None):
     return artifacts
 
 
-_SENTINEL = object()
-
-
 def multiplex_directory_tiles(tiles):
-    """ TODO(najiang@mozilla.com): simplify this function as there is no mre
-    sponsored tiles.
-
-    Directory tile multiplexer that creates all possible combinations of the
-    tile sets based on its type and the target url. Given multiple sponsored tiles,
-    it'll pick one of them and create a new tile set with other directory tiles.
-    It also multiplexes the tiles with the same Full Qualified Domain Name(FQDN).
-    For example, "https://www.mozilla.org/pocket" and "https://www.mozilla.org/gears"
+    """Directory tile multiplexer that creates all possible combinations of the
+    tile sets based on the target url. It multiplexes the tiles with the same
+    Full Qualified Domain Name(FQDN). For example,
+    "https://www.mozilla.org/pocket" and "https://www.mozilla.org/gears"
     share the same FQDN "www.mozilla.org".
-
-    Therefore, given a tile set with N sponsored tiles and M identical FQDN tiles, the
-    total number of multiplexed directory tile set is N*M.
-
-    Note: this function will NOT handle the same FQDN between the sponsored and
-    non-sponsered tiles.
 
     Params:
         tiles: a list of tiles.
     Return:
-        A list of tile sets. Note that the sponsored directory tile is always the
-        3rd entry in the list, other tiles will be sorted by the created_at time
-        stamp in a descending order.
+        A list of tile sets. All tiles will be sorted by the position_priority
+        and the created_at time stamp together in a descending order.
     """
-    sponsored = []
     fqdns = defaultdict(list)
     for tile in tiles:
-        if tile["type"] == "sponsored":
-            sponsored.append(tile)
-        else:
-            url = furl(tile["url"]).netloc
-            assert url, "URL: %s is invalid" % tile["url"]
-            fqdns[url].append(tile)
-
-    # if no sponsored tiles found, use a sentinel instead
-    if not sponsored:
-        sponsored.append(_SENTINEL)
+        url = furl(tile["url"]).netloc
+        assert url, "URL: %s is invalid" % tile["url"]
+        fqdns[url].append(tile)
 
     # Cartesian product of the identical FQDN tiles and the sponsored tiles
-    for multiplex in product(sponsored, *fqdns.values()):
-        copy = list(multiplex)
-        sponsored_tile, rest = copy[0], copy[1:]
-        rest.sort(key=lambda tile: tile["created_at"], reverse=True)
-        # if the sponsored tile is not the sentinel, insert into tile list
-        if not (len(sponsored) == 1 and sponsored_tile is _SENTINEL):
-            rest.insert(2, sponsored_tile)  # sponsored tile always takes the 3rd place
-        for tile in rest:
-            del tile["created_at"]  # client doesn't need this time stamp
-        yield rest
+    for multiplex in product(*fqdns.values()):
+        ret = copy.deepcopy(list(multiplex))  # need to deep copy the list as we have to make the change in place
+        ret.sort(key=lambda tile:
+                    (Tile.POSITION_PRIORITY[tile["position_priority"]], tile["created_at"]),
+                  reverse=True)
+        for tile in ret:  # the client doesn't need following fields
+            del tile["created_at"]
+            del tile["position_priority"]
+        yield ret
