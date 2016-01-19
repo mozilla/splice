@@ -127,7 +127,7 @@ def get_possible_distributions(today=None, channel_id=None):
 
     env = Environment.instance()
     if today is None:
-        today = datetime.utcnow().date()  # progma: no cover
+        today = datetime.utcnow().date()
 
     query = (
         env.db.session

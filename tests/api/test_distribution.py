@@ -22,6 +22,12 @@ class TestDistributionAPI(BaseTestCase):
             total += len(artifacts)
         assert_equal(total, 10)
 
+    def test_get_all_distributions_current_date(self):
+        """test if Splice uses the current date if not otherwise specified"""
+        url = url_for('api.distributions.distributions')
+        response = self.client.get(url)
+        assert_equal(response.status_code, 404)
+
     def test_get_all_distributions_channel_id(self):
         url = url_for('api.distributions.distributions', date="2015-10-01", channel_id=1)
         response = self.client.get(url)
