@@ -127,7 +127,7 @@ def get_possible_distributions(today=None, channel_id=None):
 
     env = Environment.instance()
     if today is None:
-        today = datetime.utcnow().date()
+        today = datetime.utcnow().date()  # progma: no cover
 
     query = (
         env.db.session
@@ -235,8 +235,8 @@ def multiplex_directory_tiles(tiles):
     for multiplex in product(*fqdns.values()):
         ret = copy.deepcopy(list(multiplex))  # need to deep copy the list as we have to make the change in place
         ret.sort(key=lambda tile:
-                    (Tile.POSITION_PRIORITY[tile["position_priority"]], tile["created_at"]),
-                  reverse=True)
+                 (Tile.POSITION_PRIORITY[tile["position_priority"]], tile["created_at"]),
+                 reverse=True)
         for tile in ret:  # the client doesn't need following fields
             del tile["created_at"]
             del tile["position_priority"]

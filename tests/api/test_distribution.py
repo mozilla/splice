@@ -75,6 +75,8 @@ class TestDistributionAPI(BaseTestCase):
 
     def test_multiplex_directory_tiles(self):
         """test the multiplex_directory_tiles function"""
+        def get_tile_id(tile):
+            return tile["directoryId"]
         # target url group 1
         tile1 = {"type": "affiliate", "directoryId": 1, "url": "http://www.test.com",
                  "created_at": datetime(2016, 1, 18, 16, 16, 16), "position_priority": "low"}
@@ -93,7 +95,6 @@ class TestDistributionAPI(BaseTestCase):
         tiles = [tile1, tile2, tile3, tile4, tile5]
         ret = list(multiplex_directory_tiles(tiles))
         assert_equal(len(ret), 3)
-        get_tile_id = lambda tile: tile["directoryId"]
         assert_equal(map(get_tile_id, ret[0]), [2, 3, 1])  # priority ordering
         assert_equal(map(get_tile_id, ret[1]), [4, 2, 1])  # same priority but tile 4 gets created later
         assert_equal(map(get_tile_id, ret[2]), [2, 5, 1])  # priority ordering
