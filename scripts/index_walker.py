@@ -400,7 +400,7 @@ def main():
                 ext = image.key.split('.')[-1]
                 if ext == 'svg':
                     ext = 'svg+xml'
-                elif ext  == 'jpeg':
+                elif ext == 'jpeg':
                     ext = 'jpg'
                 new_hash = hashlib.sha1("data:image/%s;base64,%s" %
                                         (ext, base64.b64encode(image.get_contents_as_string()))).hexdigest()
