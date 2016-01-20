@@ -1,3 +1,10 @@
+2.0.3
+=====
+Add position priority for directory tiles
+
+__note__:
+* Include new database migration in migrations/versions/137eeadf84cb_.py
+
 2.0.2
 =====
 Lock the package for the front_end and ui
