@@ -123,7 +123,8 @@ _target_url_in = [
     ("https://www.mozilla.org/firefox/private-browsing/?utm_source=directory-tiles&utm_medium=tiles&utm_content=TPV1&utm_campaign=fx-fall-15", ("Mozilla", "Private Browsing With Tracking Protection")),
     ("https://www.mozilla.org/teach/smarton/tracking/?utm_source=directory-tiles&utm_medium=tiles&utm_content=SOTV1&utm_campaign=smarton", ("Mozilla", "Get Smart on Tracking")),
     ("https://donate.mozilla.org/?&amount=10&ref=EOYFR2015&utm_campaign=EOYFR2015&utm_source=directory-tiles&utm_medium=tiles&utm_content=dapper_v1", ("Mozilla", "Donate to Mozilla")),
-    ("https://app.adjust.com/2uo1qc?campaign=tiles&adgroup=directory&creative=general&fallback=https%3A%2F%2Fitunes.apple.com%2Fapp%2Fapple-store%2Fid989804926%3Fpt%3D373246%26ct%3Dadjust_tracker%26mt%3D8I", ("Mozilla", "Firefox for iOS"))
+    ("https://app.adjust.com/2uo1qc?campaign=tiles&adgroup=directory&creative=general&fallback=https%3A%2F%2Fitunes.apple.com%2Fapp%2Fapple-store%2Fid989804926%3Fpt%3D373246%26ct%3Dadjust_tracker%26mt%3D8I", ("Mozilla", "Firefox for iOS")),
+    ("http://mzl.la/1Dls1DC", ("Mozilla", "Firefox for Android"))
 ]
 
 _target_urls = {
@@ -397,6 +398,10 @@ def main():
 
             for image in images:
                 ext = image.key.split('.')[-1]
+                if ext == 'svg':
+                    ext = 'svg+xml'
+                elif ext  == 'jpeg':
+                    ext = 'jpg'
                 new_hash = hashlib.sha1("data:image/%s;base64,%s" %
                                         (ext, base64.b64encode(image.get_contents_as_string()))).hexdigest()
                 new_uri = image.generate_url(expires_in=0, query_auth=False)
