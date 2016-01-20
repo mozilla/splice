@@ -1,8 +1,11 @@
 import mock
 
+from datetime import datetime
 from tests.base import BaseTestCase
 from nose.tools import assert_equal
 from flask import url_for, json
+
+from splice.queries.distribution import multiplex_directory_tiles
 
 
 class TestDistributionAPI(BaseTestCase):
@@ -18,6 +21,12 @@ class TestDistributionAPI(BaseTestCase):
         for _, artifacts in resp.items():
             total += len(artifacts)
         assert_equal(total, 10)
+
+    def test_get_all_distributions_current_date(self):
+        """test if Splice uses the current date if not otherwise specified"""
+        url = url_for('api.distributions.distributions')
+        response = self.client.get(url)
+        assert_equal(response.status_code, 404)
 
     def test_get_all_distributions_channel_id(self):
         url = url_for('api.distributions.distributions', date="2015-10-01", channel_id=1)
@@ -69,3 +78,29 @@ class TestDistributionAPI(BaseTestCase):
         url = url_for('api.distributions.distributions', date="2015-10-01")
         response = self.client.post(url)
         assert_equal(response.status_code, 400)
+
+    def test_multiplex_directory_tiles(self):
+        """test the multiplex_directory_tiles function"""
+        def get_tile_id(tile):
+            return tile["directoryId"]
+        # target url group 1
+        tile1 = {"type": "affiliate", "directoryId": 1, "url": "http://www.test.com",
+                 "created_at": datetime(2016, 1, 18, 16, 16, 16), "position_priority": "low"}
+
+        # target url group 2
+        tile2 = {"type": "affiliate", "directoryId": 2, "url": "http://www.test1.com",
+                 "created_at": datetime(2016, 1, 18, 16, 16, 16), "position_priority": "high"}
+
+        # target url group 3
+        tile3 = {"type": "affiliate", "directoryId": 3, "url": "http://www.mozilla.org",
+                 "created_at": datetime(2016, 1, 18, 13, 16, 16), "position_priority": "high"}
+        tile4 = {"type": "affiliate", "directoryId": 4, "url": "http://www.mozilla.org",
+                 "created_at": datetime(2016, 1, 18, 17, 16, 16), "position_priority": "high"}
+        tile5 = {"type": "affiliate", "directoryId": 5, "url": "http://www.mozilla.org",
+                 "created_at": datetime(2016, 1, 18, 16, 16, 16), "position_priority": "medium"}
+        tiles = [tile1, tile2, tile3, tile4, tile5]
+        ret = list(multiplex_directory_tiles(tiles))
+        assert_equal(len(ret), 3)
+        assert_equal(map(get_tile_id, ret[0]), [2, 3, 1])  # priority ordering
+        assert_equal(map(get_tile_id, ret[1]), [4, 2, 1])  # same priority but tile 4 gets created later
+        assert_equal(map(get_tile_id, ret[2]), [2, 5, 1])  # priority ordering
