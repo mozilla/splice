@@ -188,6 +188,14 @@ export default class TileForm extends Component {
                     <option value="sponsored">Sponsored</option>
                   </select>
                 </div>
+                <div className="form-group">
+                  <label htmlFor="TilePosition">Position Priority</label>
+                  <select className="form-control" onChange={this.handleChange} id="TilePosition" name="position_priority" ref="position_priority" defaultValue={data.position_priority} >
+                    <option value="low">low</option>
+                    <option value="medium" selected="selected">medium</option>
+                    <option value="high">high</option>
+                  </select>
+                </div>
                   {(this.props.editMode)
                       ? ( <div className="hide">
                         <div className="form-group">

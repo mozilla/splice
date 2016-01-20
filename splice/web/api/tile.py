@@ -27,7 +27,8 @@ tile_fields = {
     'created_at': fields.DateTime(dt_format='iso8601'),
     'bg_color': fields.String,
     'paused': fields.Boolean,
-    'title_bg_color': fields.String
+    'title_bg_color': fields.String,
+    'position_priority': fields.String
 }
 
 
@@ -54,6 +55,9 @@ class TileListAPI(Resource):
                                    help='Background color', location='json')
         self.reqparse.add_argument('title_bg_color', type=str, default="",
                                    help='Background color of title', location='json')
+        self.reqparse.add_argument('position_priority', type=str, default='medium',
+                                   choices=set(Tile.POSITION_PRIORITY.keys()),
+                                   help='Position priority', location='json')
         self.reqparse.add_argument('paused', type=inputs.boolean, required=True,
                                    help='Tile status', location='json')
         self.reqparse_get = reqparse.RequestParser()
@@ -101,6 +105,10 @@ class TileAPI(Resource):
                                    store_missing=False)
         self.reqparse.add_argument('bg_color', type=str, required=False, store_missing=False,
                                    help='Background color', location='json')
+        self.reqparse.add_argument('position_priority', type=str, required=False,
+                                   store_missing=False,
+                                   choices=set(Tile.POSITION_PRIORITY.keys()),
+                                   help='Position priority', location='json')
         self.reqparse.add_argument('title_bg_color', type=str, required=False, store_missing=False,
                                    help='Background color of title', location='json')
         super(TileAPI, self).__init__()
