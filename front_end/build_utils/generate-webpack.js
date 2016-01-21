@@ -10,7 +10,6 @@ const assign = require('lodash').assign;
 // extension: an object of extra fields to add to the object
 module.exports = function generateWebpack(config, extension) {
   extension = extension || {};
-
   const sourceMap = config.ENV === 'development' ? 'sourceMap' : '';
 
   return assign({
@@ -34,11 +33,19 @@ module.exports = function generateWebpack(config, extension) {
       }],
       loaders: [
         // bootstrap-webpack needs to import jquery as a dependency
-        {test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery'},
+        {
+          test: /bootstrap\/js\//,
+          loader: 'imports?jQuery=jquery'
+        },
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
-          loader: 'react-hot!babel'
+          loader: 'babel',
+          query: {
+            presets: ['react', {
+              'plugins': ['transform-decorators-legacy']
+            }]
+          }
         }
       ]
     },

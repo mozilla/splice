@@ -37,6 +37,8 @@ import {
   Error404Page
 } from './pages/index';
 
+import ReportsPage from './pages/Reporting/Reporting-Reports';
+
 export default class App extends Component {
   render() {
     return (
@@ -71,7 +73,7 @@ export default class App extends Component {
           <Route path="approvals" title="Approval Queue" component={ApprovalsPage}></Route>
 
           <Route path="reporting" title="Reporting" component={Reporting}>
-            <IndexRoute title="Reporting | Reports" component={require('./pages/Reporting/Reporting-Reports')} />
+            <IndexRoute title="Reporting | Reports" component={ReportsPage} />
           </Route>
 
           <Route path="error404" title="Page Not Found" component={Error404Page}></Route>

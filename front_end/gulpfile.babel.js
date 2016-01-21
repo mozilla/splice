@@ -67,7 +67,6 @@ gulp.task('build:watch', ['clean'], (cb) => {
 gulp.task('serve', () => {
   const config = webpackConfig('development');
   const bundler = webpack(config);
-
   let server = new WebpackDevServer(bundler, {
     contentBase: './dist',
     publicPath: '/',
