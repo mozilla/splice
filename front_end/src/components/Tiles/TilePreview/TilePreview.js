@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-require('./TilePreview.scss');
 window.$ = require('jquery');
 
 export default class TilePreview extends Component {
