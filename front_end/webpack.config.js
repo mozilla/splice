@@ -60,4 +60,3 @@ module.exports = function (preset) {
 
   return webpackConfig;
 };
-
