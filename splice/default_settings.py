@@ -47,7 +47,8 @@ class DefaultConfig(object):
     CLOUDFRONT_BASE_URL = "https://d3bhweee2a5al5.cloudfront.net"
 
     # endpoint of the signing service
-    SIGNING_SERVICE_URL = "http://127.0.0.1:8000/sign"
+    SIGNING_SERVICE_URL = "http://127.0.0.1:8000/signature"
+    SIGNING_HAWK_KEY = "S0meR3@llyComplicatedSekr3t"
 
     LOG_HANDLERS = {
         'application': {

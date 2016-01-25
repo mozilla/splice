@@ -6,10 +6,13 @@ import zipfile
 import random
 import traceback
 import requests
+import base64
+import json
 
 from PIL import Image
 from furl import furl
 from collections import defaultdict
+from mohawk import Sender
 from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
 from splice.environment import Environment
@@ -63,9 +66,10 @@ def upload_signed_content(content, name):
     try:
         buf = content.read()
         signature, hash = sign_content_payload(buf, name)
+        print signature
         bucket, headers = setup_s3()
         ext = name.rsplit('.', 1)[1].lower()
-        url = upload_content_to_s3(buf, hash, signature['B64url'], ext, bucket, headers)
+        url = upload_content_to_s3(buf, hash, signature['signatures'][0]['signature'], ext, bucket, headers)
     except Exception as e:
         raise Exception("Failed to upload content: %s" % e)
 
@@ -73,12 +77,32 @@ def upload_signed_content(content, name):
 
 
 def sign_content_payload(content, name):
+    env = Environment.instance()
+
     hash = hashlib.sha384(content).hexdigest()
-    r = requests.post(Environment.instance().config.SIGNING_SERVICE_URL,
-                      json={"content": "%s" % hash},
-                      headers={'Content-Type': 'application/json'})
+    # pass the following header along for the hawk authorization
+
+    # see the content payload reference: https://github.com/mozilla-services/autograph
+    content_payload = [
+        {
+            "template": "content-signature",
+            "input": "%s" % base64.b64encode(hash)
+        }
+    ]
+    content_type = 'application/json'
+    sender = Sender({'id': 'tester',
+                     'key': env.config.SIGNING_HAWK_KEY,
+                     'algorithm': 'sha256'},         # credentials
+                    env.config.SIGNING_SERVICE_URL,  # url
+                    'POST',                          # method
+                    content=json.dumps(content_payload),
+                    content_type=content_type)
+    r = requests.post(env.config.SIGNING_SERVICE_URL,
+                      json=content_payload,
+                      headers={'Content-Type': content_type,
+                               'Authorization': sender.request_header})
     try:
-        if r.status_code != 200:
+        if r.status_code != 201:
             msg = "Error when signing file %s: error_code: %s" % (name, r.status_code)
             env.log(msg)
             raise Exception(msg)
@@ -87,7 +111,7 @@ def sign_content_payload(content, name):
         env.log(msg)
         raise e
     else:
-        return r.json(), hash
+        return r.json()[0], hash
 
 
 def single_creative_upload(creative, ext):
