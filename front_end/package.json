@@ -99,10 +99,11 @@
   },
   "scripts": {
     "test": "karma start --reporters dots --single-run --browsers Firefox && mocha ./node_tests/**/*.test.js",
+    "setup": "mkdir -p dist && npm run build:static && npm run build:fonts && npm run build:css ",
     "build:css": "node-sass ./src/main.scss -o dist --importer build_utils/sass-importer.js --source-map dist/main.css.map",
-    "build:dist": "gulp build:dist",
     "build:static": "cp -r src/static/* dist",
     "build:fonts": "cp -r node_modules/font-awesome/fonts dist",
-    "start": "mkdir -p dist && npm run build:static && npm run build:fonts && npm run build:css && npm run build:css -- -w & gulp serve"
+    "build:dist": "npm run setup && gulp bundle:dist",
+    "start": "npm run setup && npm run build:css -- -w & gulp serve"
   }
 }

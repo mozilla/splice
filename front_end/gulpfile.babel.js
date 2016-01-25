@@ -13,10 +13,6 @@ var rename = require("gulp-rename");
 const $ = gulpLoadPlugins();
 let options = {};
 
-gulp.task('clean', (cb) => {
-  del(['dist/'], cb);
-});
-
 // run webpack bundler
 gulp.task('bundle', (cb) => {
   const config = webpackConfig('production');
@@ -36,32 +32,6 @@ gulp.task('bundle', (cb) => {
 gulp.task('bundle:dist', (cb) => {
   options.dist = true;
   RunSequnence('bundle', cb);
-});
-
-gulp.task('assets', (cb) => {
-  gulp.src('src/public/**')
-    .pipe(gulp.dest('dist/public/'))
-    .pipe($.size({title: 'assets'}));
-
-  gulp.src('src/index.html')
-    .pipe(gulp.dest('dist'))
-    .pipe($.size({title: 'index.html'}));
-});
-
-gulp.task('build', ['clean'], (cb) => {
-  RunSequnence(['assets', 'bundle'], cb)
-});
-
-gulp.task('build:dist', ['clean'], (cb) => {
-  options.dist = true;
-  RunSequnence(['assets', 'bundle'], cb)
-});
-
-gulp.task('build:watch', ['clean'], (cb) => {
-  options.watch = true;
-  RunSequnence(['build'], () => {
-    gulp.watch('src/public/**', ['assets']);
-  });
 });
 
 gulp.task('serve', () => {
