@@ -4,7 +4,7 @@
   "description": "The new Splice UI. Built with redux.",
   "scripts": {
     "start": "node server.js",
-    "bundle": "./node_modules/webpack/bin/webpack.js && mkdir -p ../splice/static/build/distribution-viewer && cp -r static/ ../splice/static/build/distribution-viewer/"
+    "bundle": "./node_modules/webpack/bin/webpack.js && mkdir -p ../splice/static/build/distribution-viewer && cp -r static/* ../splice/static/build/distribution-viewer/."
   },
   "repository": {
     "type": "git",
