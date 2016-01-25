@@ -1,3 +1,7 @@
+2.0.4
+=====
+Fix bundle/deploy script for distribution viewer.
+
 2.0.3
 =====
 Add position priority for directory tiles
