@@ -1,3 +1,10 @@
+2.0.5
+=====
+Fix various issues:
+* missing static files for front end
+* add campaign "Get Smart on Surveillance"
+* fix the issue when handling raw image hashes
+
 2.0.4
 =====
 Fix bundle/deploy script for distribution viewer.
