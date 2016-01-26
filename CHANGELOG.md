@@ -1,3 +1,7 @@
+2.0.6
+=====
+Fix the build script for Linux
+
 2.0.5
 =====
 Fix various issues:
