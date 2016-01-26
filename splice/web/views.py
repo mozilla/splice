@@ -6,6 +6,7 @@ env = Environment.instance()
 
 campaign_static_path = env.application.config['STATIC_DIR'] + '/build/campaign-manager'
 
+
 @root.route('/', methods=['GET'])
 def index():
     return render_template('index.jinja2')
@@ -15,9 +16,11 @@ def index():
 def distribution():
     return render_template('distribution.jinja2')
 
+
 @root.route('/campaign', methods=['GET'])
 def campaign():
     return send_from_directory(campaign_static_path, 'index.html')
+
 
 def register_routes(app):
     app.register_blueprint(root)
