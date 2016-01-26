@@ -34,7 +34,7 @@ export default class CampaignBulkUploadPage extends Component {
   render() {
     let spinner;
     if(this.props.Campaign.isSaving){
-      spinner = <img src="/public/img/ajax-loader-aqua.gif" />;
+      spinner = <img src ={__CONFIG__.WEBPACK_PUBLIC_PATH + 'public/img/ajax-loader-aqua.gif'} />;
     }
 
     let output = (<div/>);
