@@ -48,7 +48,7 @@ class DefaultConfig(object):
 
     # endpoint of the signing service
     SIGNING_SERVICE_URL = "http://127.0.0.1:8000/signature"
-    SIGNING_HAWK_KEY = "S0meR3@llyComplicatedSekr3t"
+    SIGNING_HAWK_KEY = "fs5wgcer9qj819kfptdlp8gm227ewxnzvsuj9ztycsx08hfhzu"
 
     LOG_HANDLERS = {
         'application': {
