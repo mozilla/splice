@@ -76,7 +76,10 @@ def switch_to_cdn_url(image_uri):
     from splice.environment import Environment
 
     env = Environment.instance()
-    basename = os.path.basename(image_uri)
+    try:
+        basename = os.path.basename(image_uri)
+    except:
+        basename = image_uri  # if the image_uri is a hash string, use it directly
     return os.path.join(env.config.CLOUDFRONT_BASE_URL, "images/%s" % basename)
 
 
