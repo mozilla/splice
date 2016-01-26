@@ -12,6 +12,7 @@ from sqlalchemy.sql import insert, update
 from sqlalchemy import create_engine
 from splice.models import Adgroup, Account, CampaignCountry
 from tld import get_tld
+from furl import furl
 import os
 import base64
 import hashlib
@@ -405,6 +406,14 @@ def main():
                 new_hash = hashlib.sha1("data:image/%s;base64,%s" %
                                         (ext, base64.b64encode(image.get_contents_as_string()))).hexdigest()
                 new_uri = image.generate_url(expires_in=0, query_auth=False)
+                # remove x-amz-security-token, which is inserted even if query_auth=False
+                # ref: https://github.com/boto/boto/issues/1477
+                uri = furl(new_uri)
+                try:
+                    uri.args.pop('x-amz-security-token')
+                except:
+                    pass
+                new_uri = uri.url
 
                 tile_ids = image_hashes.get(new_hash)
                 if tile_ids:
