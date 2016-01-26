@@ -5,7 +5,8 @@
 */
 @import 'bootstrap-sass/assets/stylesheets/_bootstrap-sprockets.scss';
 @import 'bootstrap-sass/assets/stylesheets/_bootstrap.scss';
-@import 'font-awesome/css/font-awesome.min.css';
+$fa-font-path: 'fonts';
+@import 'font-awesome/scss/font-awesome.scss';
 @import 'perfect-scrollbar/src/css/main.scss';
 @import 'react-select/scss/default.scss';
 @import 'eonasdan-bootstrap-datetimepicker/src/sass/_bootstrap-datetimepicker.scss';

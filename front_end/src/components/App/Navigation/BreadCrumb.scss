@@ -29,7 +29,7 @@
         height: 7px;
         width: 17px;
         display: inline-block;
-        background: url(../../../public/img/breadcrumbs/breadcrumb-arrow.png) no-repeat center center;
+        background: url(public/img/breadcrumbs/breadcrumb-arrow.png) no-repeat center center;
         position: relative;
         top: -2px;
         margin-left: 3px;
@@ -49,7 +49,7 @@
       font-weight: 700;
 
       .down-arrow{
-        background: url(../../../public/img/breadcrumbs/breadcrumb-arrow-active.png) no-repeat center center;
+        background: url(public/img/breadcrumbs/breadcrumb-arrow-active.png) no-repeat center center;
       }
     }
 
@@ -69,17 +69,17 @@
 
   .branch{
     padding-left: 120px;
-    background: url(../../../public/img/breadcrumbs/breadcrumb-branch-short.png) no-repeat left top;
+    background: url(public/img/breadcrumbs/breadcrumb-branch-short.png) no-repeat left top;
   }
   .branch.active, .branch.parent{
-    background: url(../../../public/img/breadcrumbs/breadcrumb-branch-short-active.png) no-repeat left top;
+    background: url(public/img/breadcrumbs/breadcrumb-branch-short-active.png) no-repeat left top;
   }
   .line{
     padding-left: 120px;
-    background: url(../../../public/img/breadcrumbs/breadcrumb-line.png) no-repeat left top;
+    background: url(public/img/breadcrumbs/breadcrumb-line.png) no-repeat left top;
   }
   .line.active, .line.parent{
-    background: url(../../../public/img/breadcrumbs/breadcrumb-line-active.png) no-repeat left top;
+    background: url(public/img/breadcrumbs/breadcrumb-line-active.png) no-repeat left top;
   }
   .dropdown-menu{
     left: 110px;

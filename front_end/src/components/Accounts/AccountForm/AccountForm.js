@@ -38,7 +38,7 @@ export default class AccountForm extends Component {
   render() {
     let spinner;
     if(this.props.Account.isSaving){
-      spinner = <img src="/public/img/ajax-loader-aqua.gif" />;
+      spinner = <img src ={__CONFIG__.WEBPACK_PUBLIC_PATH + 'public/img/ajax-loader-aqua.gif'} />;
     }
 
     let data = this.props.Account.details;

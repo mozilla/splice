@@ -44,19 +44,19 @@
 
     .timeline-dot{
       padding: 0 10px 0 18px;
-      background: url(../../../public/img/timelines/dot.png) no-repeat left center;
+      background: url(public/img/timelines/dot.png) no-repeat left center;
     }
     .timeline-line{
       padding: 0 10px 0 108px;
-      background: url(../../../public/img/timelines/line.png) no-repeat left center;
+      background: url(public/img/timelines/line.png) no-repeat left center;
     }
     .timeline-dot.active{
-      background-image: url(../../../public/img/timelines/dot-active.png);
+      background-image: url(public/img/timelines/dot-active.png);
       color: $color-pink;
       font-weight: 700;
     }
     .timeline-line.active{
-      background-image: url(../../../public/img/timelines/line-active.png);
+      background-image: url(public/img/timelines/line-active.png);
       color: $color-pink;
       font-weight: 700;
     }
