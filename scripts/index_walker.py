@@ -125,7 +125,8 @@ _target_url_in = [
     ("https://www.mozilla.org/teach/smarton/tracking/?utm_source=directory-tiles&utm_medium=tiles&utm_content=SOTV1&utm_campaign=smarton", ("Mozilla", "Get Smart on Tracking")),
     ("https://donate.mozilla.org/?&amount=10&ref=EOYFR2015&utm_campaign=EOYFR2015&utm_source=directory-tiles&utm_medium=tiles&utm_content=dapper_v1", ("Mozilla", "Donate to Mozilla")),
     ("https://app.adjust.com/2uo1qc?campaign=tiles&adgroup=directory&creative=general&fallback=https%3A%2F%2Fitunes.apple.com%2Fapp%2Fapple-store%2Fid989804926%3Fpt%3D373246%26ct%3Dadjust_tracker%26mt%3D8I", ("Mozilla", "Firefox for iOS")),
-    ("http://mzl.la/1Dls1DC", ("Mozilla", "Firefox for Android"))
+    ("http://mzl.la/1Dls1DC", ("Mozilla", "Firefox for Android")),
+    ("https://www.mozilla.org/teach/smarton/surveillance/?utm_source=directory-tiles&utm_medium=tiles&utm_content=SOSV1&utm_campaign=smarton", ("Mozilla", "Get Smart On Surveillance"))
 ]
 
 _target_urls = {
