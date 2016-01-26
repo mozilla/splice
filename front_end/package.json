@@ -81,6 +81,7 @@
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-sourcemap-loader": "^0.3.5",
     "karma-webpack": "^1.7.0",
+    "minimist": "^1.2.0",
     "mocha": "^2.3.0",
     "moment": "^2.10.6",
     "node-sass": "^3.3.2",
@@ -99,10 +100,12 @@
   },
   "scripts": {
     "test": "karma start --reporters dots --single-run --browsers Firefox && mocha ./node_tests/**/*.test.js",
+    "setup": "mkdir -p dist && npm run build:static && npm run build:fonts && npm run build:css ",
     "build:css": "node-sass ./src/main.scss -o dist --importer build_utils/sass-importer.js --source-map dist/main.css.map",
-    "build:dist": "gulp build:dist",
     "build:static": "cp -r src/static/* dist",
     "build:fonts": "cp -r node_modules/font-awesome/fonts dist",
-    "start": "mkdir -p dist && npm run build:static && npm run build:fonts && npm run build:css && npm run build:css -- -w & gulp serve"
+    "build:html": "node ./build_utils/generate-html",
+    "build:dist": "npm run setup && npm run build:html -- --base-path /static/build/campaign-manager -o dist && gulp bundle:dist",
+    "start": "npm run setup && npm run build:html -- --base-path . -o dist && npm run build:css -- -w & gulp serve"
   }
 }

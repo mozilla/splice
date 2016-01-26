@@ -10,7 +10,7 @@ export default class AccountList extends Component {
           <AccountRow {...row} key={index}/>
       );
     } else {
-      spinner = (<img src="./public/img/ajax-loader-navy.gif" />);
+      spinner = (<img src={__CONFIG__.WEBPACK_PUBLIC_PATH + 'public/img/ajax-loader-navy.gif'} />);
     }
 
     return (
