@@ -273,36 +273,42 @@ def main():
 
     All writes to the database are transactional.
 
-    This script is *not* idempotent, and will therefore check that accounts and campaigns tables are empty
-    before running.
+    This script is *not* idempotent, and will therefore check that accounts and campaigns tables are empty before running.
 
     :return:
     """
-    r = requests.get('https://tiles-resources-prod-tiless3-qbv71djahz3b.s3.amazonaws.com/desktop_tile_index_v3.json')
+    index_files = [
+        'https://tiles-resources-prod-tiless3-qbv71djahz3b.s3.amazonaws.com/hello_tile_index_v3.json',
+        'https://tiles-resources-prod-tiless3-qbv71djahz3b.s3.amazonaws.com/android_tile_index_v3.json',
+        'https://tiles-resources-prod-tiless3-qbv71djahz3b.s3.amazonaws.com/desktop_tile_index_v3.json',
+        'https://tiles-resources-prod-tiless3-qbv71djahz3b.s3.amazonaws.com/desktop-prerelease_tile_index_v3.json'
+    ]
     active_tiles = set()
     tile_geodes = defaultdict(set)
 
-    if 200 <= r.status_code <= 299:
-        data = json.loads(r.text)
+    for index in index_files:
+        r = requests.get(index)
+        if 200 <= r.status_code <= 299:
+            data = json.loads(r.text)
 
-        for geo_locale, dist_dict in data.iteritems():
-            try:
-                ag = dist_dict.get('ag')
-                if ag:
-                    geode = tuple(geo_locale.split('/'))
-                    print "processing ", geo_locale
-                    ag_r = requests.get(ag)
-                    if 200 <= ag_r.status_code <= 299:
-                        tiles = json.loads(ag_r.text)
-                        directory_tiles = tiles['directory']
-                        suggested_tiles = tiles['suggested']
-                        newts = set(chain((t['directoryId'] for t in directory_tiles),
-                                          (t['directoryId'] for t in suggested_tiles)))
-                        active_tiles.update(newts)
-                        for tile_id in newts:
-                            tile_geodes[tile_id].add(geode)
-            except:
-                print "skipping ", geo_locale
+            for geo_locale, dist_dict in data.iteritems():
+                try:
+                    ag = dist_dict.get('ag')
+                    if ag:
+                        geode = tuple(geo_locale.split('/'))
+                        print "processing ", geo_locale
+                        ag_r = requests.get(ag)
+                        if 200 <= ag_r.status_code <= 299:
+                            tiles = json.loads(ag_r.text)
+                            directory_tiles = tiles['directory']
+                            suggested_tiles = tiles['suggested']
+                            newts = set(chain((t['directoryId'] for t in directory_tiles),
+                                        (t['directoryId'] for t in suggested_tiles)))
+                            active_tiles.update(newts)
+                            for tile_id in newts:
+                                tile_geodes[tile_id].add(geode)
+                except:
+                    print "skipping ", geo_locale
 
     # print "active", str(active_tiles)
 
