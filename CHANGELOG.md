@@ -1,3 +1,8 @@
+2.0.7
+=====
+Add prerelease/hello/android to the index walker
+Upgrade Babel-eslint to 4.1.7
+
 2.0.6
 =====
 Fix the build script for Linux
