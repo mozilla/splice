@@ -85,7 +85,7 @@ def main():
 
     # extract tiles urls from tile index
     try:
-        tiles_urls = set([
+        urls = [
             tiles_url
             for index in validate(
                 grequests.imap(
@@ -99,7 +99,14 @@ def main():
             for key, value in index.json().iteritems()
             if '/' in key
             for tiles_url in value.values()
-        ])
+        ]
+
+        tiles_urls = set()
+        for url in urls:
+            if type(url) is list:
+                tiles_urls.update(url)
+            else:
+                tiles_urls.add(url)
 
         if not options.quiet:
             print('NOTICE: tiles urls extracted: %s' % len(tiles_urls))
