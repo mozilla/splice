@@ -37,10 +37,12 @@ def _create_tiles(tile, bucketer, legacy=False):
         bgColor=tile.bg_color,
         title=tile.title,
         type=tile.type,
-        imageURI=switch_to_cdn_url(tile.image_uri),
-        enhancedImageURI=switch_to_cdn_url(tile.enhanced_image_uri),
         created_at=tile.created_at,
         position_priority=tile.position_priority)
+    if tile.image_uri:
+        tile_dict['imageURI'] = switch_to_cdn_url(tile.image_uri)
+    if tile.enhanced_image_uri:
+        tile_dict['enhancedImageURI'] = switch_to_cdn_url(tile.enhanced_image_uri)
     if not legacy and tile.adgroup.categories:
         for category in tile.adgroup.categories:
             bucket = bucketer[category.category]
