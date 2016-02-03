@@ -1,3 +1,7 @@
+2.0.8
+=====
+Fix a bug that will create invalid image field in tile assest
+
 2.0.7
 =====
 Add prerelease/hello/android to the index walker
