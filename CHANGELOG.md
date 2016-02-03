@@ -1,3 +1,46 @@
+2.0.8
+=====
+Fix a bug that will create invalid image field in tile assest
+
+2.0.7
+=====
+Add prerelease/hello/android to the index walker
+Upgrade Babel-eslint to 4.1.7
+
+2.0.6
+=====
+Fix the build script for Linux
+
+2.0.5
+=====
+Fix various issues:
+* missing static files for front end
+* add campaign "Get Smart on Surveillance"
+* fix the issue when handling raw image hashes
+
+2.0.4
+=====
+Fix bundle/deploy script for distribution viewer.
+
+2.0.3
+=====
+Add position priority for directory tiles
+
+__note__:
+* Include new database migration in migrations/versions/137eeadf84cb_.py
+
+2.0.2
+=====
+Lock the package for the front_end and ui
+
+2.0.1
+=====
+Fix various bugs in the migration script
+
+2.0.0
+=====
+Initial Commit of 2.0.0
+
 1.1.37
 ======
 * Update the bundle.js. Otherwise, same as 1.1.36.

@@ -9,8 +9,7 @@ export default class App extends Component {
           <div id="nav">
             <ul>
               <li><span>Firefox Tiles</span></li>
-              <li><Link to="/authoring" activeClassName="active">Authoring</Link></li>
-              <li><Link to="/upcoming" activeClassName="active">Upcoming</Link></li>
+              <li><Link to="/distributions" activeClassName="active">Distributions</Link></li>
             </ul>
           </div>
         </div>

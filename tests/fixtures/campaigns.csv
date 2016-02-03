@@ -1,0 +1,5 @@
+name,paused,channel_id,account_id,start_date,end_date
+MozDirectory,false,1,1,2015-09-30T16:06:55+00:00,2015-10-30T16:06:55+00:00
+MozSuggested,false,3,1,2015-09-10T16:06:55+00:00,2015-10-23T16:06:55+00:00
+BookingDirectory,false,1,2,2015-09-23T11:04:55+00:00,2015-10-5T11:04:55+00:00
+YahooSuggested,false,3,3,2015-10-03T14:04:55+00:00,2015-11-20T10:04:55+00:00

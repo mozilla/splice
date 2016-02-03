@@ -1,9 +1,59 @@
-from datetime import datetime
-from sqlalchemy import text
+import pytz
 from splice.environment import Environment
+
 
 db = Environment.instance().db
 metadata = db.metadata
+
+
+class Account(db.Model):
+    __tablename__ = "accounts"
+
+    id = db.Column('id', db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
+    name = db.Column('name', db.String(length=255), nullable=False, unique=True)
+    contact_name = db.Column('contact_name', db.String(length=255), nullable=True)
+    contact_email = db.Column('contact_email', db.String(length=255), nullable=True)
+    contact_phone = db.Column('contact_phone', db.String(length=255), nullable=True)
+    created_at = db.Column('created_at', db.DateTime(), server_default=db.func.now(), nullable=False)
+    campaigns = db.relationship("Campaign", backref="account")
+
+
+class UTCAwareDateTime(db.TypeDecorator):
+    '''UTC aware datetime, not naive ones.'''
+    impl = db.DateTime
+
+    def process_result_value(self, value, dialect):
+        return value.replace(tzinfo=pytz.utc)
+
+
+class Campaign(db.Model):
+    __tablename__ = "campaigns"
+
+    id = db.Column('id', db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
+    start_date = db.Column('start_date', UTCAwareDateTime(timezone=True), nullable=True)
+    end_date = db.Column('end_date', UTCAwareDateTime(timezone=True), nullable=True)
+    name = db.Column('name', db.String(length=255), nullable=False)
+    paused = db.Column('paused', db.Boolean(), nullable=False, default=False)
+    channel_id = db.Column('channel_id', db.Integer(), db.ForeignKey("channels.id"))
+    account_id = db.Column('account_id', db.Integer(), db.ForeignKey("accounts.id"))
+    created_at = db.Column('created_at', db.DateTime(), server_default=db.func.now(), nullable=False)
+    __table_args__ = (db.UniqueConstraint('account_id', 'name', name="UQ_CAMPAIGN_ACCOUNT_ID_NAME"),)
+    adgroups = db.relationship("Adgroup", backref="campaign")
+    countries = db.relationship("CampaignCountry")
+
+
+class Country(db.Model):
+    __tablename__ = "countries"
+
+    country_code = db.Column('country_code', db.String(length=255), primary_key=True)
+    country_name = db.Column('country_name', db.String(length=255), nullable=True)
+
+
+class CampaignCountry(db.Model):
+    __tablename__ = "campaign_countries"
+
+    country_code = db.Column('country_code', db.String(length=5), db.ForeignKey("countries.country_code"), primary_key=True)
+    campaign_id = db.Column('campaign_id', db.Integer(), db.ForeignKey("campaigns.id"), primary_key=True)
 
 
 class Channel(db.Model):
@@ -11,7 +61,8 @@ class Channel(db.Model):
 
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     name = db.Column(db.String(32), nullable=False, unique=True)
-    created_at = db.Column(db.DateTime(), default=datetime.utcnow)
+    created_at = db.Column(db.DateTime(), server_default=db.func.now())
+    adgroups = db.relationship("Adgroup", backref="channel")
 
 
 class Distribution(db.Model):
@@ -22,13 +73,15 @@ class Distribution(db.Model):
     channel_id = db.Column(db.Integer(), db.ForeignKey('channels.id'), nullable=False)
     deployed = db.Column(db.Boolean(), default=False)
     scheduled_start_date = db.Column(db.DateTime(), nullable=True)
-    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
 
 
 class Tile(db.Model):
     __tablename__ = "tiles"
 
     TYPES = {"organic", "sponsored", "affiliate"}
+    STATUS = {"approved", "unapproved", "disapproved"}
+    POSITION_PRIORITY = {"low": 0, "medium": 1, "high": 2}
 
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     target_url = db.Column(db.Text(), nullable=False)
@@ -36,36 +89,38 @@ class Tile(db.Model):
     title_bg_color = db.Column(db.String(16), nullable=True)
     title = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(40), nullable=False)
-    locale = db.Column(db.String(14), nullable=False)
+    paused = db.Column('paused', db.Boolean(), nullable=False, default=False)
     adgroup_id = db.Column(db.Integer(), db.ForeignKey("adgroups.id"))
 
     image_uri = db.Column(db.Text(), nullable=False)
     enhanced_image_uri = db.Column(db.Text(), nullable=True)
+    status = db.Column(db.String(16), nullable=False, server_default=u'unapproved')
+    position_priority = db.Column(db.String(16), server_default=u'medium', nullable=False)
 
-    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
 
 
 class Adgroup(db.Model):
     __tablename__ = "adgroups"
 
+    TYPE = {"directory", "suggested"}
+
     id = db.Column(db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
     locale = db.Column(db.String(14), nullable=False)
 
-    # we have both the string and datetime objects to allow for optional timezones on the client
-    # the datetime objects are always UTC
-    start_date = db.Column(db.String(30), nullable=True)
-    end_date = db.Column(db.String(30), nullable=True)
-    start_date_dt = db.Column(db.DateTime(timezone=False), nullable=True)
-    end_date_dt = db.Column(db.DateTime(timezone=False), nullable=True)
-
+    type = db.Column(db.String(16))
+    paused = db.Column('paused', db.Boolean(), nullable=False, default=False)
     frequency_cap_daily = db.Column(db.Integer())
     frequency_cap_total = db.Column(db.Integer())
     name = db.Column(db.String(255))
     explanation = db.Column(db.String(255))
-    check_inadjacency = db.Column(db.Boolean(), nullable=False, server_default=text('false'))
+    check_inadjacency = db.Column(db.Boolean(), nullable=False, default=False)
+    # TODO(najiang@mozilla.com): channel_id is deprecated, leave it here only for backwards compatibility
     channel_id = db.Column(db.Integer(), db.ForeignKey("channels.id"))
-    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+    campaign_id = db.Column(db.Integer(), db.ForeignKey("campaigns.id"))
+    created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
     tiles = db.relationship("Tile", backref="adgroup")
+    categories = db.relationship("AdgroupCategory")
 
 
 class AdgroupSite(db.Model):
@@ -75,7 +130,7 @@ class AdgroupSite(db.Model):
     adgroup_id = db.Column(db.Integer(), db.ForeignKey("adgroups.id"))
     active = db.Column(db.Boolean(), default=True)
     site = db.Column(db.String(1024), nullable=False)
-    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
 
 
 class AdgroupCategory(db.Model):

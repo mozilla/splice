@@ -1,126 +1,77 @@
+import moment from 'moment';
+
 import { combineReducers } from 'redux';
 import {
-  SELECT_CHANNEL, SELECT_LOCALE, SELECT_TYPE,
-  REQUEST_LOCALES, REQUEST_TILES,
-  RECEIVE_LOCALES, RECEIVE_TILES
+  LOAD_DISTRIBUTION_START,
+  LOAD_DISTRIBUTION_SUCCESS,
+  LOAD_DISTRIBUTION_ERROR,
+  SELECT_DATE,
+  SELECT_CHANNEL,
+  SELECT_LOCALE,
+  SELECT_TYPE
 } from '../actions/WebtilesPreviewer';
 
-function selectedChannel(state = 'desktop', action) {
+function selectedDate(state = moment(), action) {
   switch (action.type) {
+  case SELECT_DATE:
+    return action.moment;
+  default:
+    return state;
+  }
+}
+
+function distribution(state = {
+  fetchUrl: '/api/distributions',
+  isLoaded: false,
+  isLoading: false,
+  errorMessage: null,
+  selectedChannel: null,
+  selectedLocale: null,
+  selectedType: null,
+  channels: {}
+}, action) {
+  switch (action.type) {
+  case LOAD_DISTRIBUTION_START:
+    return Object.assign({}, state, {
+      isLoaded: false,
+      isLoading: true,
+      errorMessage: null,
+      selectedChannel: null,
+      selectedLocale: null,
+      selectedType: null,
+      channels: {}
+    });
+  case LOAD_DISTRIBUTION_SUCCESS:
+    let channels = action.results;
+    let selectedChannel = channels.desktop ? 'desktop' : Object.keys(channels)[0];
+    let selectedLocale = Object.keys(channels[selectedChannel])[0];
+    return Object.assign({}, state, {
+      isLoaded: true,
+      isLoading: false,
+      selectedChannel,
+      selectedLocale,
+      selectedType: 'directory',
+      channels
+    });
+  case LOAD_DISTRIBUTION_ERROR:
+    return Object.assign({}, state, {
+      isLoading: false,
+      errorMessage: action.message
+    });
   case SELECT_CHANNEL:
-    return action.channel;
-  default:
-    return state;
-  }
-}
-
-function selectedLocale(state = null, action) {
-  switch (action.type) {
+    return Object.assign({}, state, {
+      selectedChannel: action.channel,
+      selectedLocale: Object.keys(state.channels[action.channel])[0],
+      selectedType: 'directory'
+    });
   case SELECT_LOCALE:
-    return action.locale;
-  case RECEIVE_LOCALES:
-    return Object.keys(action.locales)[0];
-  default:
-    return state;
-  }
-}
-
-function selectedType(state = null, action) {
-  switch (action.type) {
+    return Object.assign({}, state, {
+      selectedLocale: action.locale,
+      selectedType: 'directory'
+    });
   case SELECT_TYPE:
-    return action.tileType;
-  case RECEIVE_TILES:
-    return 'directory';
-  default:
-    return state;
-  }
-}
-
-function locale(state = {
-  tileIndexUrl: null,
-  isFetching: false,
-  directoryTiles: null,
-  suggestedTiles: null
-}, action) {
-  switch (action.type) {
-  case REQUEST_TILES:
     return Object.assign({}, state, {
-      isFetching: true
-    });
-  case RECEIVE_TILES:
-    return Object.assign({}, state, {
-      isFetching: false,
-      directoryTiles: action.directoryTiles,
-      suggestedTiles: action.suggestedTiles,
-      lastUpdated: action.receivedAt
-    });
-  default:
-    return state;
-  }
-}
-
-function locales(state = [], action) {
-  switch (action.type) {
-  case RECEIVE_LOCALES:
-    return action.locales;
-  case REQUEST_TILES:
-  case RECEIVE_TILES:
-    return Object.assign({}, state, {
-      [action.locale]: locale(state[action.locale], action)
-    });
-  default:
-    return state;
-  }
-}
-
-function channel(state = {
-  localeIndexUrl: null,
-  isFetching: false,
-  locales: null,
-  lastUpdated: null
-}, action) {
-  switch (action.type) {
-  case REQUEST_LOCALES:
-    return Object.assign({}, state, {
-      isFetching: true
-    });
-  case RECEIVE_LOCALES:
-  case RECEIVE_TILES:
-  case REQUEST_TILES:
-    return Object.assign({}, state, {
-      isFetching: false,
-      locales: locales(state.locales, action),
-      lastUpdated: action.receivedAt
-    });
-  default:
-    return state;
-  }
-}
-
-function channels(state = {
-  desktop: {
-    name: 'Desktop',
-    localeIndexUrl: 'https://tiles.cdn.mozilla.net/desktop_tile_index_v3.json',
-    isFetching: false
-  },
-  prerelease: {
-    name: 'Prerelease',
-    localeIndexUrl: 'https://tiles.cdn.mozilla.net/desktop-prerelease_tile_index_v3.json',
-    isFetching: false
-  },
-  android: {
-    name: 'Android',
-    localeIndexUrl: 'https://tiles.cdn.mozilla.net/android_tile_index_v3.json',
-    isFetching: false
-  }
-}, action) {
-  switch (action.type) {
-  case RECEIVE_LOCALES:
-  case REQUEST_LOCALES:
-  case RECEIVE_TILES:
-  case REQUEST_TILES:
-    return Object.assign({}, state, {
-      [action.channel]: channel(state[action.channel], action)
+      selectedType: action.tileType
     });
   default:
     return state;
@@ -128,8 +79,6 @@ function channels(state = {
 }
 
 export const WebtilesPreviewer = combineReducers({
-  channels,
-  selectedChannel,
-  selectedLocale,
-  selectedType
+  selectedDate,
+  distribution
 });

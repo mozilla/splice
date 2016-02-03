@@ -1,0 +1,15 @@
+@import 'variables';
+@import 'bootstrap-override';
+
+@import 'app/app';
+@import 'app/animations';
+@import 'app/details';
+@import 'app/tables';
+@import 'app/forms';
+@import 'app/switch';
+
+@import '../pages/Reporting/reporting';
+
+// Todo: move these to components
+@import '../pages/Reporting/input';
+@import '../pages/Reporting/table';

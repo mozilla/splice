@@ -1,41 +1,47 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { selectChannel, selectLocale, selectType, fetchLocalesIfNeeded, fetchTilesIfNeeded } from '../actions/WebtilesPreviewer';
+import DateTime from 'react-datetime';
+
+import {
+  selectDate,
+  selectChannel,
+  selectLocale,
+  selectType,
+  fetchDistribution
+} from '../actions/WebtilesPreviewer';
 import Picker from '../components/Picker';
 import Tiles from '../components/Tiles';
 
 class WebtilesPreviewer extends Component {
   constructor(props) {
     super(props);
+    this.handleDateChange = this.handleDateChange.bind(this);
     this.handleChannelChange = this.handleChannelChange.bind(this);
     this.handleLocaleChange = this.handleLocaleChange.bind(this);
     this.handleTypeChange = this.handleTypeChange.bind(this);
   }
 
   componentDidMount() {
-    const { dispatch, selectedChannel } = this.props;
-    dispatch(fetchLocalesIfNeeded(selectedChannel));
+    const { dispatch, selectedDate } = this.props;
+    dispatch(fetchDistribution(selectedDate));
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedChannel !== this.props.selectedChannel) {
-      const { dispatch, selectedChannel } = nextProps;
-      dispatch(fetchLocalesIfNeeded(selectedChannel));
-    } else if (nextProps.selectedLocale !== this.props.selectedLocale) {
-      const { dispatch, selectedChannel, selectedLocale } = nextProps;
-      dispatch(fetchTilesIfNeeded(selectedChannel, selectedLocale));
+    if (nextProps.selectedDate !== this.props.selectedDate) {
+      this.props.dispatch(fetchDistribution(nextProps.selectedDate));
     }
+  }
+
+  handleDateChange(nextDate) {
+    this.props.dispatch(selectDate(nextDate));
   }
 
   handleChannelChange(nextChannel) {
     this.props.dispatch(selectChannel(nextChannel));
-    this.props.dispatch(selectLocale(null));
-    this.props.dispatch(selectType('directory'));
   }
 
   handleLocaleChange(nextLocale) {
     this.props.dispatch(selectLocale(nextLocale));
-    this.props.dispatch(selectType('directory'));
   }
 
   handleTypeChange(nextType) {
@@ -44,27 +50,37 @@ class WebtilesPreviewer extends Component {
 
   render() {
     const {
-      selectedChannel,
-      selectedLocale,
-      selectedType,
+      selectedDate,
+      distribution,
       channels,
       locales,
       types,
-      tiles
+      tiles,
+      selectedChannel,
+      selectedLocale,
+      selectedType,
+      errorMessage
     } = this.props;
 
     return (
       <div>
-        <h1>Live Tiles in Production</h1>
-        <div id="pickers">
-          <Picker title="Channel" value={selectedChannel}
-                  onChange={this.handleChannelChange}
-                  options={Object.keys(channels)} />
+        <h1 className="ib">Distribution for</h1>
+        <DateTime onChange={this.handleDateChange}
+                  dateFormat="dddd, MMMM Do YYYY"
+                  timeFormat={false}
+                  value={selectedDate} />
 
-          {locales && selectedLocale &&
+        <div className="pickers">
+          {selectedChannel &&
+            <Picker title="Channel" value={selectedChannel}
+                    onChange={this.handleChannelChange}
+                    options={channels} />
+          }
+
+          {selectedLocale &&
             <Picker title="Country/Locale" value={selectedLocale}
                     onChange={this.handleLocaleChange}
-                    options={Object.keys(locales)} />
+                    options={locales} />
           }
           {selectedType &&
             <Picker title="Type" value={selectedType}
@@ -72,12 +88,16 @@ class WebtilesPreviewer extends Component {
                     options={types} />
           }
 
-          {tiles &&
+          {distribution.isLoaded && tiles &&
             tiles.length + ' tiles'
           }
 
-          {!tiles &&
-            'Loading...'
+          {distribution.isLoading &&
+            <p className="info">Loading tiles...</p>
+          }
+
+          {errorMessage &&
+            <p className="error">{errorMessage}</p>
           }
         </div>
 
@@ -91,33 +111,40 @@ class WebtilesPreviewer extends Component {
 }
 
 WebtilesPreviewer.propTypes = {
-  selectedChannel: PropTypes.string.isRequired,
-  selectedLocale: PropTypes.string,
-  selectedType: PropTypes.string,
-  channels: PropTypes.object.isRequired,
-  locales: PropTypes.object,
+  selectedDate: PropTypes.object.isRequired,
+  distribution: PropTypes.object.isRequired,
+  channels: PropTypes.array.isRequired,
+  locales: PropTypes.array.isRequired,
   types: PropTypes.array.isRequired,
   tiles: PropTypes.array,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  selectedChannel: PropTypes.string,
+  selectedLocale: PropTypes.string,
+  selectedType: PropTypes.string,
+  errorMessage: PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { selectedChannel, selectedLocale, selectedType, channels } = state.WebtilesPreviewer;
-  const { locales } = channels[selectedChannel];
+  const { selectedDate, distribution } = state.WebtilesPreviewer;
+  const { selectedChannel, selectedLocale, selectedType, errorMessage } = distribution;
+  const channels = Object.keys(distribution.channels);
+  const locales = selectedChannel ? Object.keys(distribution.channels[selectedChannel]) : [];
   const types = ['suggested', 'directory'];
   var tiles = [];
-  if (selectedChannel && selectedLocale && selectedType &&
-      state.WebtilesPreviewer.channels[selectedChannel].locales) {
-    tiles = state.WebtilesPreviewer.channels[selectedChannel].locales[selectedLocale][selectedType + 'Tiles'];
+  if (selectedChannel && selectedLocale && selectedType) {
+    tiles = distribution.channels[selectedChannel][selectedLocale][selectedType];
   }
 
   return {
-    selectedChannel,
-    selectedLocale,
-    selectedType,
+    selectedDate,
+    distribution,
     channels,
     locales,
     types,
+    selectedChannel,
+    selectedLocale,
+    selectedType,
+    errorMessage,
     tiles
   };
 }

@@ -1,0 +1,31 @@
+.custom-radio{
+
+  .custom-radio-option{
+    margin: 0 0 0 10px;
+    vertical-align: middle;
+    color: #fff;
+
+    label{
+      cursor: pointer;
+    }
+
+    .custom-radio-input{
+      display: none;
+    }
+
+    .custom-radio-icon{
+      display: inline-block;
+      height: 25px;
+      width: 25px;
+      background: url(public/img/custom-radio.png) no-repeat top;
+      background-size: 25px 50px;
+      margin-right: 8px;
+      vertical-align: middle;
+      position: relative;
+      top: -2px;
+    }
+    .custom-radio-icon.active{
+      background-position: bottom;
+    }
+  }
+}

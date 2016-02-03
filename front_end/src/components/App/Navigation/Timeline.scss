@@ -1,0 +1,64 @@
+@import '../../../styles/variables';
+
+.timeline-container{
+  height: 60px;
+  background-color: $color-light-gray;
+  @include bottom-shadow();
+
+  .timeline-link{
+    height: 60px;
+    width: 185px;
+    text-transform: uppercase;
+    display: inline-block;
+    text-align: center;
+    line-height: 60px;
+    text-decoration: none;
+    @include top-inset-shadow();
+  }
+  .cancel{
+    background-color: $color-dark-gray;
+    color: #fff;
+    float:left;
+    margin-right: 30px;
+  }
+  .save{
+    background-color: $color-pink;
+    color: #fff;
+    float:right;
+    cursor: pointer;
+    margin-left: 30px;
+  }
+
+  .timeline{
+    width: 100%;
+    text-align: center;
+    @include top-inset-shadow();
+
+    ul{
+      padding: 20px 0 0 0
+    }
+
+    li{
+      display: inline-block;
+    }
+
+    .timeline-dot{
+      padding: 0 10px 0 18px;
+      background: url(public/img/timelines/dot.png) no-repeat left center;
+    }
+    .timeline-line{
+      padding: 0 10px 0 108px;
+      background: url(public/img/timelines/line.png) no-repeat left center;
+    }
+    .timeline-dot.active{
+      background-image: url(public/img/timelines/dot-active.png);
+      color: $color-pink;
+      font-weight: 700;
+    }
+    .timeline-line.active{
+      background-image: url(public/img/timelines/line-active.png);
+      color: $color-pink;
+      font-weight: 700;
+    }
+  }
+}

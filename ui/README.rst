@@ -4,6 +4,12 @@ Splice Redux UI
 
 The new Splice UI. Built with redux.
 
+==========================
+Splice Distribution Viewer
+==========================
+
+The new Splice Distribution Viewer App. Built with redux.
+
 
 Project details
 ===============
@@ -37,4 +43,6 @@ Open http://localhost:3000/ in your browser.
 Creating Bundle
 ===============
 
-TODO: Enter instructions here.
+To create a bundle:
+
+    npm run-script bundle

@@ -1,0 +1,132 @@
+@import '../variables';
+
+[hidden] {
+  display: none !important;
+}
+
+html body{
+  font-family: $font-default;
+  font-size: 14px;
+  background-color: $color-navy;
+  color: #363755;
+}
+.disabled{
+  opacity: .5;
+}
+.app-container{
+  min-width: 1170px;
+
+  .content-container{
+    padding: 30px 85px 0 85px;
+  }
+  .btn {
+    margin-right: 10px;
+    border-radius: 0px;
+  }
+}
+
+.table-cell{
+  display: table-cell;
+}
+
+select.styled{
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 0px 60px 0 40px;
+  border-radius: 0px;
+  height: 35px;
+  background: $color-dark-gray url(public/img/select-downarrow-dark.png) no-repeat right center;
+  font-size: 14px;
+  font-weight: normal;
+
+  option{
+    padding: 5px 0px 5px 15px;
+  }
+}
+
+.create-link{
+  height: 35px;
+  display: inline-block;
+  border: 1px solid #fff;
+  padding: 0 25px;
+  line-height: 35px;
+  vertical-align: middle;
+  background-color: $color-pink;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.create-link:hover{
+  color: #fff;
+  text-decoration: none;
+}
+
+.module{
+  margin: 0 0 40px 0;
+
+  .module-header{
+    background-color: $color-dark-gray;
+    height: 50px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 50px;
+    vertical-align: middle;
+    padding-left: 15px;
+  }
+  .module-body{
+    padding: 15px;
+    background-color: #fff;
+  }
+  .module-table{
+    width: 100%;
+
+    thead{
+      th{
+        padding: 15px 15px;
+        font-size: 14px;
+        font-weight: normal;
+        background-color: $color-pink;
+        color: #fff;
+      }
+    }
+
+    tbody{
+      tr:first-child td{
+        @include top-inset-shadow();
+      }
+      td{
+        background-color: #f0f0f1;
+        padding: 10px 15px;
+        font-size: 14px;
+      }
+      tr:nth-child(even) td{
+        background-color: #fff;
+      }
+      td.status{
+        text-transform: uppercase;
+      }
+      td.status.active, td.status.approved{
+        background-color: $color-aqua;
+      }
+      td.status.paused, td.status.unapproved{
+        background-color: $color-gray;
+        color: #fff;
+      }
+      td.status.disapproved{
+        background-color: #000;
+        color: #fff;
+      }
+    }
+  }
+
+  .module-table.data-table{
+    tbody td{
+      font-size: 14px;
+    }
+  }
+}

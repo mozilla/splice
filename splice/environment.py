@@ -7,6 +7,7 @@ from mock import Mock
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate
+from flask.ext.cors import CORS
 
 CONFIG_PATH_LOCATIONS = ['/etc/splice', os.path.abspath(os.path.dirname(__file__))]
 
@@ -25,12 +26,12 @@ class Environment(object):
     _instance = None
 
     @classmethod
-    def instance(cls, config=None, test=False, test_db_uri=None):
+    def instance(cls, config=None, test=False, test_db_uri=None, test_db_stats_uri=None):
         if cls._instance is None:
-            cls._instance = cls(config, test, test_db_uri)
+            cls._instance = cls(config, test, test_db_uri, test_db_stats_uri)
         return cls._instance
 
-    def __init__(self, config, test, test_db_uri):
+    def __init__(self, config, test, test_db_uri, test_db_stats_uri):
         if self.__class__._instance is not None:
             raise EnvironmentUninitializedError()
 
@@ -55,7 +56,7 @@ class Environment(object):
         if test:
             config_obj.ENVIRONMENT = 'test'
             config_obj.SQLALCHEMY_DATABASE_URI = test_db_uri
-            config_obj.SQLALCHEMY_BINDS = {'stats': test_db_uri}
+            config_obj.SQLALCHEMY_BINDS = {'stats': test_db_stats_uri}
             config_obj.SQLALCHEMY_POOL_SIZE = None
             config_obj.SQLALCHEMY_POOL_TIMEOUT = None
             self.log = Mock()
@@ -66,6 +67,7 @@ class Environment(object):
         self.config = config_obj
         app = Flask('splice')
         app.config.from_object(config)
+        CORS(app, resources={r'/api/*': {"origins": "*"}})
 
         if app.config['ENVIRONMENT'] not in app.config['STATIC_ENABLED_ENVS']:
             app.config['STATIC_FOLDER'] = None
@@ -129,9 +131,20 @@ class Environment(object):
         with open(self.config.COUNTRY_FIXTURE_PATH, 'rb') as f:
             reader = csv.reader(f)
             data = [line for line in reader]
-        data.append(("ERROR", "ERROR"))
-        data.append(("STAR", "All Countries"))
+        data.append(["STAR", "All Countries"])
+        data.append(["ERROR", "ERROR"])
         return data
+
+    def _load_category_bucketer(self):
+        import json
+        with open(self.config.BUCKETER_FIXTURE_PATH, 'rb') as f:
+            return json.loads(f.read())
+
+    def _load_categories(self):
+        bucketer = self._load_category_bucketer()
+        categories = [bucket["name"] for bucket in bucketer]
+        categories.sort()
+        return categories
 
     def _load_fixtures(self):
         locales = set(self._load_locales())

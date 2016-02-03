@@ -1,7 +1,10 @@
 import time
 from datetime import datetime
-from fabric.api import local, require, put, run, env, serial
 from distutils.util import strtobool
+
+from fabric.api import local, require, put, run, env, serial
+from fabric.context_managers import lcd
+
 
 env.path = "/home/oyiptong/splice"
 env.use_ssh_config = True
@@ -90,6 +93,19 @@ def deploy_cold():
     setup_virtualenv()
     clean_release_dir()
     set_symlinks()
+
+
+def build_ui():
+    local('rm -rf splice/static/build')
+
+    with lcd('ui'):
+        local('npm install')
+        local('npm run bundle')
+
+    with lcd('front_end'):
+        local('npm install')
+        local('npm run build:dist')
+        local('mv dist ../splice/static/build/campaign-manager')
 
 
 @serial

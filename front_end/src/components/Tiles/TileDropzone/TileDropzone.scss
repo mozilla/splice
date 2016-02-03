@@ -1,0 +1,53 @@
+@import '../../../styles/variables';
+
+.tile-dropzone {
+  border-radius: 10px;
+  height: 210px;
+  width: 290px;
+  margin-bottom: 15px;
+  background-color: $font-color-default;
+  color: #fff;
+  text-align: center;
+
+  .tile-text{
+    text-transform: uppercase;
+    margin: 0 0 20px 0;
+    padding-top: 45px;
+  }
+  .tile-text-or{
+    margin-bottom: 20px;
+  }
+  .tile-upload-btn{
+    background-color: $color-aqua;
+    display: inline-block;
+    padding: 5px 20px;
+    border-radius: 5px;
+    color: $font-color-default;
+    text-transform: uppercase;
+    cursor: default;
+  }
+  .tile-preview{
+    .tile-image{
+      height: 180px;
+      width: 290px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #bbb;
+    }
+    .tile-title{
+      font-family: "Lucida Grande", sans-serif;
+      width: 290px;
+      height: 30px;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      padding: 0 5px;
+      font-size: 13px;
+      line-height: 30px;
+      color: #5c5c5c;
+      font-weight: normal;
+      background-color: #f2f2f2;
+    }
+  }
+}
