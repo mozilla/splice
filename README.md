@@ -38,3 +38,6 @@ Next get your postgresql database setup
 ## Test
 
  * `fab test`: run unit tests and code coverage tools
+
+# Content signing
+Please see [here](content-signing.md)
