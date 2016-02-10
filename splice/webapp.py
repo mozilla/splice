@@ -36,6 +36,9 @@ def setup_routes(app):
         import splice.web.api.distribution
         splice.web.api.distribution.register_routes(app)
 
+        import splice.web.api.content
+        splice.web.api.content.register_routes(app)
+
         register_flask_restful = True
 
 

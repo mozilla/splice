@@ -9,7 +9,7 @@ from splice.schemas import API_TILE_SCHEMA_POST, API_TILE_SCHEMA_PUT
 from splice.models import Tile
 from splice.queries.common import session_scope
 from splice.queries.tile import get_tiles, insert_tile, get_tile, update_tile
-from splice.web.api.tile_upload import VALID_CREATIVE_EXTS, single_creative_upload, upload_signed_content
+from splice.web.api.tile_upload import VALID_CREATIVE_EXTS, single_creative_upload
 
 
 tile_bp = Blueprint('api.tile', __name__, url_prefix='/api')
@@ -151,24 +151,6 @@ def handler_creative_upload():
     try:
         url = single_creative_upload(creative.stream,
                                      creative.filename.rsplit('.', 1)[1])
-    except Exception as e:
-        return jsonify(message="%s" % e), 400
-    else:
-        return jsonify(result=url)
-
-
-@tile_bp.route('/tiles/content/upload', methods=['POST'])
-def handler_content_upload():
-    """Upload a single content to S3, return the URL if succeeds."""
-    def _is_allowed_file(name):
-        return '.' in name and name.rsplit('.', 1)[1].lower() in set(['html', 'xpi', 'zip'])
-
-    content_file = request.files["content"]
-    if not _is_allowed_file(content_file.filename):
-        return jsonify(message="Invalid content uploaded."), 400
-
-    try:
-        url = upload_signed_content(content_file.stream, content_file.filename)
     except Exception as e:
         return jsonify(message="%s" % e), 400
     else:
