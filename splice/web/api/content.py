@@ -1,6 +1,8 @@
 from flask import Blueprint, request
 from flask.json import jsonify
 from splice.web.api.content_upload import upload_signed_content
+from splice.queries.common import session_scope
+from splice.queries.content import get_content, insert_content, update_content
 
 
 content_bp = Blueprint('api.content', __name__, url_prefix='/api')
@@ -22,24 +24,45 @@ def handler_content_upload():
     if not name:
         return jsonify(message="Missing content name in the query string."), 400
 
+    new_content = False
+    content_record = get_content(name)
+    if content_record is None:
+        content_record = {"name": name}
+        new_content = True
+
     if version:
         try:
             version = int(version)
         except:
             return jsonify(message="Invalid version number in the query string."), 400
         else:
+            # make sure the version from the query string is sane
             if version < 0:
                 return jsonify(message="Negative version number in the query string."), 400
+            if not new_content and content_record["version"] < version:
+                return jsonify(message="Given version %d is ahead of the controlled version %d." % (version, content_record["version"])), 400
+            elif new_content and version != 0:
+                return jsonify(message="Failed to find the content with the given version %d. Leave out the version will create a new content." % version), 400
     else:
-        # TODO(najiang@mozilla.com): fetch the current version number from database
-        pass
+        if content_record:
+            version = content_record['version']
+        else:
+            version = 0
+            content_record['version'] = version
 
     try:
-        url = upload_signed_content(content_file.stream, name, version)
+        url, new_version = upload_signed_content(content_file.stream, name, version)
     except Exception as e:
         return jsonify(message="%s" % e), 400
     else:
-        return jsonify(results=url)
+        with session_scope() as session:
+            content_record["version"] = new_version
+            if new_content:
+                record = insert_content(session, content_record)
+            else:
+                # always update the content after signing as the signing key might have changed
+                record = update_content(session, content_record['id'], content_record)
+        return jsonify(results=url, content=record)
 
 
 def register_routes(app):

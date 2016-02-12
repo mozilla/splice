@@ -6,6 +6,16 @@ db = Environment.instance().db
 metadata = db.metadata
 
 
+class Content(db.Model):
+    __tablename__ = "contents"
+
+    id = db.Column('id', db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
+    name = db.Column('name', db.String(length=255), nullable=False, unique=True)
+    version = db.Column('version', db.Integer(), nullable=False)
+    created_at = db.Column('created_at', db.DateTime(), server_default=db.func.now(), nullable=False)
+    key_id = db.Column('key_id', db.String(length=64), nullable=True)
+
+
 class Account(db.Model):
     __tablename__ = "accounts"
 

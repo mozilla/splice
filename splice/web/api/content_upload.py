@@ -37,7 +37,7 @@ def upload_signed_content(content, name, version, freeze=False):
     urls.append(url)
 
     urls.sort()
-    return urls
+    return urls, version
 
 
 def _digest_content(content):
