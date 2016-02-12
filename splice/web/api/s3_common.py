@@ -5,16 +5,18 @@ MIME_EXTENSIONS = {
     "svg": "image/svg+xml",
     "html": "text/html",
     "zip": "application/zip",
-    "xpi": "application/x-xpinstall"
+    "xpi": "application/x-xpinstall",
+    "css": "text/css",
+    "js": "application/javascript"
 }
 
 
-def setup_s3():
+def setup_s3(bucket="bucket"):
     from splice.environment import Environment
     from boto.s3.cors import CORSConfiguration
 
     env = Environment.instance()
-    bucket = env.s3.get_bucket(env.config.S3["bucket"])
+    bucket = env.s3.get_bucket(env.config.S3[bucket])
     cors = CORSConfiguration()
     cors.add_rule("GET", "*", allowed_header="*")
     bucket.set_cors(cors)
