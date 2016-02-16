@@ -49,7 +49,7 @@ class Environment(object):
 
         if not test:
             # load config from environment if it exists
-            config = os.environ.get('SPLICE_SETTINGS', config)
+            config = os.environ.get('SPLICE_SETTINGS', config)  # pragma: no cover
 
         config_obj = load_config_obj(config)
 

@@ -12,7 +12,6 @@ __pycache__/
 .Python
 env/
 bin/
-build/
 develop-eggs/
 dist/
 eggs/
@@ -59,3 +58,6 @@ docs/_build/
 
 # Onyx-specific
 splice-env/
+
+# Local config
+localconfig.py

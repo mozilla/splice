@@ -1,3 +1,9 @@
+===============
+Splice Redux UI
+===============
+
+The new Splice UI. Built with redux.
+
 ==========================
 Splice Distribution Viewer
 ==========================

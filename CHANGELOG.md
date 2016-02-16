@@ -41,6 +41,23 @@ Fix various bugs in the migration script
 =====
 Initial Commit of 2.0.0
 
+1.1.37
+======
+* Update the bundle.js. Otherwise, same as 1.1.36.
+
+1.1.36
+======
+* Properly set the bgColor of tiles from the tile field. 
+
+1.1.35
+======
+* Issue #113 - Port existing Splice UI to new redux stack
+
+1.1.34
+=====
+ * Bug 1205832 - Splice's tile_index_crawl.py script doesn't work with SNI
+ * Upgrade AngularJs to 1.4.5
+
 1.1.33
 =====
  * Bug 1197962 - ingest tiles with adgroup_categories field
