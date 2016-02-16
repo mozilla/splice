@@ -1,6 +1,7 @@
 import mock
 import StringIO
 import json
+import copy
 
 from flask import url_for
 from tests.base import BaseTestCase
@@ -11,6 +12,7 @@ from nose.tools import assert_equal
 class TestContent(BaseTestCase):
     def setUp(self):
         self.zip_file = self.get_fixture_path("content-demo.zip")
+        super(TestContent, self).setUp()
 
     @mock.patch('splice.web.api.content_upload._sign_content')
     @mock.patch('splice.web.api.content_upload.upload_content_to_s3')
@@ -22,7 +24,7 @@ class TestContent(BaseTestCase):
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
-        url = url_for('api.content.handler_content_upload', name="foo", version="0")
+        url = url_for('api.content.handler_content_upload', name="foo")
 
         with open(self.zip_file) as f:
             data = {
@@ -33,6 +35,66 @@ class TestContent(BaseTestCase):
             urls = json.loads(response.data)['results']
             # (2 unsigned + 4 signed) + (manifest) + (the original zip file)
             assert_equal(len(urls), 8)
+
+        # if there is no version specified in the query string, it acts the same as above
+        url_without_version = url_for('api.content.handler_content_upload', name="foo")
+        with open(self.zip_file) as f:
+            data = {
+                'content': (f, 'test.zip'),
+            }
+            response = self.client.post(url_without_version, data=data)
+            assert_equal(response.status_code, 200)
+            urls_again = json.loads(response.data)['results']
+            # (2 unsigned + 4 signed) + (manifest) + (the original zip file)
+            assert_equal(len(urls), 8)
+        assert_equal(urls, urls_again)
+
+    @mock.patch('splice.web.api.content_upload._sign_content')
+    @mock.patch('splice.web.api.content_upload.upload_content_to_s3')
+    def test_upload_content_endpoint_resign(self, s3Mock, signMock):
+        """Test the API endpoint for the content upload - re-sign a content"""
+        dummy_signature = {
+            "certificate": {"encryptionKey": "somerandomkey"},
+            "signatures": [{"signature": "somesignature"}]
+        }
+        signMock.return_value = [dummy_signature] * 4  # four files in the manifest
+        s3Mock.return_value = "http://bucket/content"
+        url = url_for('api.content.handler_content_upload', name="remote_new_tab", version="0")
+
+        with open(self.zip_file) as f:
+            data = {
+                'content': (f, 'test.zip'),
+            }
+            response = self.client.post(url, data=data)
+            assert_equal(response.status_code, 200)
+            content = json.loads(response.data)['content']
+            # re-sign an existing content should not bump up the version
+            assert_equal(content['version'], 1)
+
+    @mock.patch('splice.web.api.content_upload._sign_content')
+    @mock.patch('splice.web.api.content_upload.upload_content_to_s3')
+    def test_upload_content_endpoint_sign_existing(self, s3Mock, signMock):
+        """Test the API endpoint for the content upload - sign an existing content"""
+        dummy_signature = {
+            "certificate": {"encryptionKey": "somerandomkey"},
+            "signatures": [{"signature": "somesignature"}]
+        }
+        signMock.return_value = [dummy_signature] * 4  # four files in the manifest
+        s3Mock.return_value = "http://bucket/content"
+        url = url_for('api.content.handler_content_upload', name="remote_new_tab")
+
+        with open(self.zip_file) as f:
+            data = {
+                'content': (f, 'test.zip'),
+            }
+            response = self.client.post(url, data=data)
+            assert_equal(response.status_code, 200)
+            urls = json.loads(response.data)['results']
+            # (2 unsigned + 4 signed) + (manifest) + (the original zip file)
+            assert_equal(len(urls), 8)
+            content = json.loads(response.data)['content']
+            # it should bump up the version for the existing content
+            assert_equal(content['version'], 2)
 
     @mock.patch('splice.web.api.content_upload._digest_content')
     def test_upload_content_endpoint_failure(self, signMock):
@@ -74,14 +136,21 @@ class TestContent(BaseTestCase):
         data = {
             'content': (StringIO.StringIO("<html><html/>"), 'test.zip'),
         }
-        response = self.client.post(url, data=data)
+        response = self.client.post(url, data=copy.deepcopy(data))
         assert_equal(response.status_code, 400)
 
-        data = {
-            'content': (StringIO.StringIO("<html><html/>"), 'test.zip'),
-        }
         url = url_for('api.content.handler_content_upload', name="foo", version="invalid")
-        response = self.client.post(url, data=data)
+        response = self.client.post(url, data=copy.deepcopy(data))
+        assert_equal(response.status_code, 400)
+
+        # a new content should be versioned from 0
+        url = url_for('api.content.handler_content_upload', name="foo", version=1)
+        response = self.client.post(url, data=copy.deepcopy(data))
+        assert_equal(response.status_code, 400)
+
+        # the specified version is ahead of the controlled version
+        url = url_for('api.content.handler_content_upload', name="remote_new_tab", version=3)
+        response = self.client.post(url, data=copy.deepcopy(data))
         assert_equal(response.status_code, 400)
 
     @mock.patch('requests.post')

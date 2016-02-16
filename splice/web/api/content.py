@@ -24,17 +24,20 @@ def handler_content_upload():
     if not name:
         return jsonify(message="Missing content name in the query string."), 400
 
+    # try to fetch the content from the database
     new_content = False
+    freeze = False
     content_record = get_content(name)
     if content_record is None:
         content_record = {"name": name}
         new_content = True
 
+    # determin the version based on the query string (if specified), and the current version in the database
     if version:
         try:
             version = int(version)
         except:
-            return jsonify(message="Invalid version number in the query string."), 400
+            return jsonify(message="Invalid version number %s." % version), 400
         else:
             # make sure the version from the query string is sane
             if version < 0:
@@ -42,27 +45,39 @@ def handler_content_upload():
             if not new_content and content_record["version"] < version:
                 return jsonify(message="Given version %d is ahead of the controlled version %d." % (version, content_record["version"])), 400
             elif new_content and version != 0:
-                return jsonify(message="Failed to find the content with the given version %d. Leave out the version will create a new content." % version), 400
+                return jsonify(message="Failed to find the content with the given version %d. You can omit the version to create a new content." % version), 400
+
+            if not new_content and version <= content_record["version"]:
+                freeze = True  # re-sign an existing version, do not bump up the version
     else:
-        if content_record:
-            version = content_record['version']
-        else:
+        if new_content:
             version = 0
             content_record['version'] = version
+        else:
+            version = content_record['version']
 
+    # sign the content then upload it to S3
     try:
-        url, new_version = upload_signed_content(content_file.stream, name, version)
+        # TODO(najiang@mozilla.com): return the signing pub key and store it to database?
+        urls, new_version = upload_signed_content(content_file.stream, name, version, freeze)
     except Exception as e:
         return jsonify(message="%s" % e), 400
     else:
-        with session_scope() as session:
+        record = _sync_to_database(content_record, new_content, new_version, freeze)
+        return jsonify(results=urls, content=record)
+
+
+def _sync_to_database(content_record, new_content, new_version, freeze):
+    with session_scope() as session:
+        if new_content:
             content_record["version"] = new_version
-            if new_content:
-                record = insert_content(session, content_record)
-            else:
-                # always update the content after signing as the signing key might have changed
-                record = update_content(session, content_record['id'], content_record)
-        return jsonify(results=url, content=record)
+            record = insert_content(session, content_record)
+        else:
+            # always update the content after signing as the signing key might have changed
+            if not freeze:
+                content_record["version"] = new_version
+            record = update_content(session, content_record['id'], content_record)
+    return record
 
 
 def register_routes(app):

@@ -1,24 +1,7 @@
-
 from sqlalchemy.orm.exc import NoResultFound
 
 from splice.models import Content
 from splice.queries.common import row_to_dict
-
-
-def get_contents():
-    from splice.environment import Environment
-
-    env = Environment.instance()
-
-    rows = (
-        env.db.session
-        .query(Content)
-        .order_by(Content.id.desc())
-        .all()
-    )
-    output = [row_to_dict(d) for d in rows]
-
-    return output
 
 
 def get_content(name):
@@ -39,7 +22,7 @@ def insert_content(session, record):
 
 def update_content(session, content_id, record):
     content = session.query(Content).get(content_id)
-    if content is None:
+    if content is None:  # pragma: no cover
         raise NoResultFound('Content not found')
 
     for key, val in record.items():

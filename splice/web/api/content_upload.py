@@ -21,8 +21,8 @@ def upload_signed_content(content, name, version, freeze=False):
     Params:
         content: file object of the target creative
         name: name of the content
-        version: current version of the content
-        freeze: a boolean flag to prevent splice from bumping up version based on manifest
+        version: the target version of the signing content
+        freeze: a boolean flag to prevent splice from bumping up the version based on manifest
     """
     urls = []
     bucket, headers = setup_s3(bucket="content")
