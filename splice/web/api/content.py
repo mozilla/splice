@@ -8,6 +8,12 @@ from splice.queries.content import get_content, insert_content, update_content
 content_bp = Blueprint('api.content', __name__, url_prefix='/api')
 
 
+@content_bp.route('/content/resignall', methods=['POST'])
+def handler_content_resign_all():
+    # TODO(najiang@mozilla.com): implement re-sign all
+    raise NotImplementedError("Not implemented yet")
+
+
 @content_bp.route('/content/sign', methods=['POST'])
 def handler_content_upload():
     """Signed and upload a piece of content to S3, return the URL if succeeds."""
