@@ -1,8 +1,8 @@
 from flask import Blueprint, request
 from flask.json import jsonify
-from splice.web.api.content_upload import upload_signed_content
+from splice.web.api.content_upload import upload_signed_content, resign_content
 from splice.queries.common import session_scope
-from splice.queries.content import get_content, insert_content, update_content
+from splice.queries.content import get_content, get_contents, insert_content, update_content
 
 
 content_bp = Blueprint('api.content', __name__, url_prefix='/api')
@@ -10,8 +10,16 @@ content_bp = Blueprint('api.content', __name__, url_prefix='/api')
 
 @content_bp.route('/content/resignall', methods=['POST'])
 def handler_content_resign_all():
-    # TODO(najiang@mozilla.com): implement re-sign all
-    raise NotImplementedError("Not implemented yet")
+    succeeded, failed = [], []
+    for content in get_contents():
+        try:
+            resign_content(content['name'], content['version'])
+        except Exception as e:
+            failed.append("%s: %s" % (content['name'], e))
+        else:
+            succeeded.append(content['name'])
+
+    return jsonify(succeeded=succeeded, failed=failed)
 
 
 @content_bp.route('/content/sign', methods=['POST'])

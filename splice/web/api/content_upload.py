@@ -4,6 +4,7 @@ import base64
 import json
 import requests
 import zipfile
+import tempfile
 
 from furl import furl
 from mohawk import Sender
@@ -13,6 +14,49 @@ from splice.environment import Environment
 
 
 env = Environment.instance()
+_ORIGINAL_NAME = "original.zip"
+
+
+def _get_original_content(name, version, bucket):
+    original = tempfile.NamedTemporaryFile(prefix='splice', suffix='.zip')
+    s3_key = "{0}/v{1}/{2}".format(name, version, _ORIGINAL_NAME)
+    k = Key(bucket)
+    k.key = s3_key
+    try:
+        k.get_file(original)
+    except:
+        original.close()
+        return None
+    else:
+        return original
+
+
+def resign_content(name, version):
+    """Re-sign a content till the given version. It downloads the original
+    content file from S3, and only re-signs the assets in the manifest. Also,
+    it won't change the version of the content.
+
+    Params:
+        name: name of the target content
+        version: the current version of the target content
+    Returns: None
+    Exception: an exception will be raised if any error happens
+    """
+    bucket, headers = setup_s3(bucket="content")
+    for v in range(1, version + 1):
+        original = _get_original_content(name, v, bucket)
+        if original is None:  # pragma: no cover
+            raise Exception("can not find original content on S3")
+
+        try:
+            for asset in _digest_content(original):
+                if asset[2] is None:  # skip it if it's not signed
+                    continue
+                upload_content_to_s3(name, v, asset, bucket, headers)
+        except:
+            raise
+        finally:
+            original.close()
 
 
 def upload_signed_content(content, name, version, freeze=False):
@@ -32,7 +76,8 @@ def upload_signed_content(content, name, version, freeze=False):
         url = upload_content_to_s3(name, version, asset, bucket, headers)
         urls.append(url)
     # also upload the original zip file
-    asset = ("original.zip", content.read(), None)
+    content.seek(0)  # rewind the file offset to read the whole content
+    asset = (_ORIGINAL_NAME, content.read(), None)
     url = upload_content_to_s3(name, version, asset, bucket, headers)
     urls.append(url)
 
@@ -122,7 +167,14 @@ def _sign_content(sign_payload):
 
 
 def _extract_entryption_info(signature_dict):
-    encrypt_key = signature_dict["certificate"].get("encryptionKey")  # signing server may not return this key
+    """Extract key and signature from the signing payload
+
+    Note:
+    * signing server may not return this key
+    * signing server returns multiple signatures in several encoding forms,
+      Splice only uses the first one
+    """
+    encrypt_key = signature_dict["certificate"].get("encryptionkey")
     signature = signature_dict["signatures"][0]["signature"]
     return encrypt_key, signature
 
