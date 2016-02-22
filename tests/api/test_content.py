@@ -19,8 +19,8 @@ class TestContent(BaseTestCase):
     def test_upload_content_endpoint(self, s3Mock, signMock):
         """Test the API endpoint for the content upload """
         dummy_signature = {
-            "certificate": {"encryptionKey": "somerandomkey"},
-            "signatures": [{"signature": "somesignature"}]
+            "public_key": "somerandomkey",
+            "content-signature": "somesignature"
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
@@ -54,8 +54,8 @@ class TestContent(BaseTestCase):
     def test_upload_content_endpoint_resign(self, s3Mock, signMock):
         """Test the API endpoint for the content upload - re-sign a content"""
         dummy_signature = {
-            "certificate": {"encryptionKey": "somerandomkey"},
-            "signatures": [{"signature": "somesignature"}]
+            "public_key": "somerandomkey",
+            "content-signature": "somesignature"
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
@@ -76,8 +76,8 @@ class TestContent(BaseTestCase):
     def test_upload_content_endpoint_sign_existing(self, s3Mock, signMock):
         """Test the API endpoint for the content upload - sign an existing content"""
         dummy_signature = {
-            "certificate": {"encryptionKey": "somerandomkey"},
-            "signatures": [{"signature": "somesignature"}]
+            "public_key": "somerandomkey",
+            "content-signature": "somesignature"
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
@@ -170,8 +170,8 @@ class TestContent(BaseTestCase):
     def test_upload_content_endpoint_resign_all(self, origMock, s3Mock, signMock):
         """Test the API endpoint for the content resign all"""
         dummy_signature = {
-            "certificate": {"encryptionKey": "somerandomkey"},
-            "signatures": [{"signature": "somesignature"}]
+            "public_key": "somerandomkey",
+            "content-signature": "somesignature"
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
@@ -183,7 +183,6 @@ class TestContent(BaseTestCase):
         assert_equal(response.status_code, 200)
         succeeded = json.loads(response.data)['succeeded']
         failed = json.loads(response.data)['failed']
-        print failed
         assert_equal(len(succeeded), 3)
         assert_equal(len(failed), 0)
 

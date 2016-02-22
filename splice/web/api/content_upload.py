@@ -118,7 +118,6 @@ def _digest_content(content):
             # the content payload reference: https://github.com/mozilla-services/autograph
             hash = hashlib.sha384(zf.read(s)).hexdigest()
             payload = {
-                "template": "content-signature",
                 "input": "%s" % base64.b64encode(hash)
             }
             sign_payload.append(payload)
@@ -174,8 +173,8 @@ def _extract_entryption_info(signature_dict):
     * signing server returns multiple signatures in several encoding forms,
       Splice only uses the first one
     """
-    encrypt_key = signature_dict["certificate"].get("encryptionkey")
-    signature = signature_dict["signatures"][0]["signature"]
+    encrypt_key = signature_dict.get("public_key")  # this might not be sent by the signing server
+    signature = signature_dict["content-signature"]
     return encrypt_key, signature
 
 
