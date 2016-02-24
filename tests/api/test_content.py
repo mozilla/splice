@@ -34,7 +34,7 @@ class TestContent(BaseTestCase):
             }
             response = self.client.post(url, data=data)
             assert_equal(response.status_code, 200)
-            urls = json.loads(response.data)['results']
+            urls = json.loads(response.data)['uploaded']
             # (2 unsigned + 4 signed) + (manifest) + (the original zip file)
             assert_equal(len(urls), 8)
 
@@ -46,7 +46,7 @@ class TestContent(BaseTestCase):
             }
             response = self.client.post(url_without_version, data=data)
             assert_equal(response.status_code, 200)
-            urls_again = json.loads(response.data)['results']
+            urls_again = json.loads(response.data)['uploaded']
             # (2 unsigned + 4 signed) + (manifest) + (the original zip file)
             assert_equal(len(urls), 8)
         assert_equal(urls, urls_again)
@@ -63,7 +63,7 @@ class TestContent(BaseTestCase):
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
         verifyMock.return_value = True
-        url = url_for('api.content.handler_content_upload', name="remote_new_tab", version="0")
+        url = url_for('api.content.handler_content_upload', name="remote_new_tab", version="1")
 
         with open(self.zip_file) as f:
             data = {
@@ -71,9 +71,8 @@ class TestContent(BaseTestCase):
             }
             response = self.client.post(url, data=data)
             assert_equal(response.status_code, 200)
-            content = json.loads(response.data)['content']
-            # re-sign an existing content should not bump up the version
-            assert_equal(content['version'], 1)
+            version = json.loads(response.data)['version']
+            assert_equal(version["version"], 1)
 
     @mock.patch('splice.web.api.content_upload._verify_signature')
     @mock.patch('splice.web.api.content_upload._sign_content')
@@ -95,7 +94,7 @@ class TestContent(BaseTestCase):
             }
             response = self.client.post(url, data=data)
             assert_equal(response.status_code, 200)
-            urls = json.loads(response.data)['results']
+            urls = json.loads(response.data)['uploaded']
             # (2 unsigned + 4 signed) + (manifest) + (the original zip file)
             assert_equal(len(urls), 8)
             content = json.loads(response.data)['content']
@@ -113,7 +112,7 @@ class TestContent(BaseTestCase):
                 'content': (f, 'test.zip'),
             }
             response = self.client.post(url, data=data)
-            assert_equal(response.status_code, 400)
+            assert_equal(response.status_code, 500)
 
     def test_upload_content_endpoint_missing_name(self):
         """Test the API endpoint for the content upload without posting name"""

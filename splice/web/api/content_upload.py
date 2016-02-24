@@ -27,24 +27,20 @@ def _get_original_content(name, version, bucket):
         k.get_file(original)
     except:
         original.close()
+        # TODO(najiang@mozilla.com) last resort: try to fetch the file from original_url
         return None
     else:
         return original
 
 
-def resign_content(name, version):
+def resign_content(content):
     """Re-sign a content till the given version. It downloads the original
     content file from S3, and only re-signs the assets in the manifest. Also,
     it won't change the version of the content.
-
-    Params:
-        name: name of the target content
-        version: the current version of the target content
-    Returns: None
-    Exception: an exception will be raised if any error happens
     """
-    bucket, headers = setup_s3(bucket="content")
-    for v in range(1, version + 1):
+    bucket, headers = setup_s3(bucket="content-original")
+    for version in content["versions"]:
+        name, v = content["name"], version["version"]
         original = _get_original_content(name, v, bucket)
         if original is None:  # pragma: no cover
             raise Exception("can not find original content on S3")
@@ -61,13 +57,18 @@ def resign_content(name, version):
 
 
 def upload_signed_content(content, name, version, freeze=False):
-    """Upload the signed content file to S3, return all the urls if succeeds
+    """Upload the signed content file to S3, return all the urls upon success
 
     Params:
         content: file object of the target creative
         name: name of the content
         version: the target version of the signing content
         freeze: a boolean flag to prevent splice from bumping up the version based on manifest
+    returns:
+        urls: a list of of ulrs for uploaded assets. The last url is for the original content
+        version: the signed content version. It could be an old version for re-signing,
+        or a new version if the version gets bumped
+        original_hash: base64 encoded sha1 hash of the original content
     """
     urls = []
     bucket, headers = setup_s3(bucket="content")
@@ -77,13 +78,18 @@ def upload_signed_content(content, name, version, freeze=False):
         url = upload_content_to_s3(name, version, asset, bucket, headers)
         urls.append(url)
     # also upload the original zip file
-    content.seek(0)  # rewind the file offset to read the whole content
-    asset = (_ORIGINAL_NAME, content.read(), None)
-    url = upload_content_to_s3(name, version, asset, bucket, headers)
-    urls.append(url)
-
     urls.sort()
-    return urls, version
+
+    # upload the original content to a different bucket
+    bucket_original, _ = setup_s3(bucket="content-original")
+    content.seek(0)  # rewind the file offset to read the whole content
+    raw = content.read()
+    asset = (_ORIGINAL_NAME, raw, None)
+    url = upload_content_to_s3(name, version, asset, bucket_original, headers)
+    urls.append(url)
+    original_hash = base64.b64encode(hashlib.sha1(raw).digest())
+
+    return urls, version, original_hash
 
 
 def _digest_content(content):

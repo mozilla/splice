@@ -2,7 +2,8 @@ from flask import Blueprint, request
 from flask.json import jsonify
 from splice.web.api.content_upload import upload_signed_content, resign_content
 from splice.queries.common import session_scope
-from splice.queries.content import get_content, get_contents, insert_content, update_content
+from splice.queries.content import get_content, get_contents,\
+    insert_content, update_content, update_version, insert_version
 
 
 content_bp = Blueprint('api.content', __name__, url_prefix='/api')
@@ -13,7 +14,7 @@ def handler_content_resign_all():
     succeeded, failed = [], []
     for content in get_contents():
         try:
-            resign_content(content['name'], content['version'])
+            resign_content(content)
         except Exception as e:
             failed.append("%s: %s" % (content['name'], e))
         else:
@@ -40,58 +41,88 @@ def handler_content_upload():
 
     # try to fetch the content from the database
     new_content = False
-    freeze = False
     content_record = get_content(name)
     if content_record is None:
         content_record = {"name": name}
         new_content = True
 
-    # determin the version based on the query string (if specified), and the current version in the database
+    # determine the target version, set freeze to True if working on an existing version
+    try:
+        version, freeze = _get_target_version(content_record, new_content, version)
+    except Exception as e:
+        return jsonify(message="%s" % e), 400
+
+    # sign the content then upload it to S3
+    try:
+        urls, new_version, original_hash = upload_signed_content(content_file.stream, name, version, freeze)
+    except Exception as e:
+        return jsonify(message="%s" % e), 500
+    else:
+        try:
+            content_rec, version_rec = _sync_to_database(content_record, new_content, new_version, urls[-1], original_hash, freeze)
+        except Exception as e:
+            return jsonify(message="%s" % e), 500
+        return jsonify(uploaded=urls, content=content_rec, version=version_rec)
+
+
+def _sync_to_database(content_record, new_content, new_version, original_url, original_hash, freeze):
+    version_record = {
+        "original_url": original_url,
+        "original_hash": original_hash
+    }
+
+    with session_scope() as session:
+        if new_content:
+            # added a new content and its first version
+            content_record["version"] = new_version
+            version_record["version"] = new_version
+            content_record["versions"] = [version_record]
+            content_rec = insert_content(session, content_record)
+            version_rec = content_rec.pop("versions")
+        else:
+            # just worked on an existing content
+            if freeze:
+                # modified an existing version
+                version_rec = update_version(session, content_record['id'], new_version, version_record)
+                content_rec = content_record
+                content_rec.pop("versions")  # pop versions before returning content to the user
+            else:
+                # added a new version
+                content_record["version"] = new_version
+                version_record["version"] = new_version
+                content_record.pop("versions")  # need to pop this field before the update
+                content_rec = update_content(session, content_record['id'], content_record)
+                version_rec = insert_version(session, content_record['id'], version_record)
+        return content_rec, version_rec
+
+
+def _get_target_version(content, is_new, version):
+    """determine the target version based on the query string (if provided), and the current version in the database"""
+    freeze = False
     if version:
         try:
             version = int(version)
         except:
-            return jsonify(message="Invalid version number %s." % version), 400
+            raise Exception("Invalid version number %s." % version)
         else:
             # make sure the version from the query string is sane
             if version < 0:
-                return jsonify(message="Negative version number in the query string."), 400
-            if not new_content and content_record["version"] < version:
-                return jsonify(message="Given version %d is ahead of the controlled version %d." % (version, content_record["version"])), 400
-            elif new_content and version != 0:
-                return jsonify(message="Failed to find the content with the given version %d. You can omit the version to create a new content." % version), 400
+                raise Exception("Negative version number in the query string.")
+            if not is_new and content["version"] < version:
+                raise Exception("Given version %d is ahead of the controlled version %d." % (version, content["version"]))
+            elif is_new and version != 0:
+                raise Exception("Failed to find the content with the given version %d. You can omit the version to create a new content." % version)
 
-            if not new_content and version <= content_record["version"]:
+            if not is_new and version <= content["version"]:
                 freeze = True  # re-sign an existing version, do not bump up the version
     else:
-        if new_content:
-            version = 0
-            content_record['version'] = version
+        if is_new:
+            version = 0  # will be bumped to 1 later during signing
+            content['version'] = version
         else:
-            version = content_record['version']
+            version = content['version']
 
-    # sign the content then upload it to S3
-    try:
-        # TODO(najiang@mozilla.com): return the signing pub key and store it to database?
-        urls, new_version = upload_signed_content(content_file.stream, name, version, freeze)
-    except Exception as e:
-        return jsonify(message="%s" % e), 400
-    else:
-        record = _sync_to_database(content_record, new_content, new_version, freeze)
-        return jsonify(results=urls, content=record)
-
-
-def _sync_to_database(content_record, new_content, new_version, freeze):
-    with session_scope() as session:
-        if new_content:
-            content_record["version"] = new_version
-            record = insert_content(session, content_record)
-        else:
-            # always update the content after signing as the signing key might have changed
-            if not freeze:
-                content_record["version"] = new_version
-            record = update_content(session, content_record['id'], content_record)
-    return record
+    return version, freeze
 
 
 def register_routes(app):

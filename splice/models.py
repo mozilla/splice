@@ -13,7 +13,18 @@ class Content(db.Model):
     name = db.Column('name', db.String(length=255), nullable=False, unique=True)
     version = db.Column('version', db.Integer(), nullable=False)
     created_at = db.Column('created_at', db.DateTime(), server_default=db.func.now(), nullable=False)
-    key_id = db.Column('key_id', db.String(length=64), nullable=True)
+    versions = db.relationship("Version", backref="content")
+
+
+class Version(db.Model):
+    __tablename__ = "versions"
+
+    content_id = db.Column('content_id', db.Integer(), db.ForeignKey("contents.id"), primary_key=True)
+    version = db.Column('version', db.Integer(), nullable=False, primary_key=True)
+    signing_key = db.Column('signing_key', db.Text(), nullable=True)
+    original_url = db.Column('original_url', db.Text(), nullable=False)
+    original_hash = db.Column('original_hash', db.Text(), nullable=False)
+    created_at = db.Column('created_at', db.DateTime(), server_default=db.func.now(), nullable=False)
 
 
 class Account(db.Model):

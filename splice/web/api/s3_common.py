@@ -21,7 +21,7 @@ def setup_s3(bucket="bucket"):
     cors.add_rule("GET", "*", allowed_header="*")
     bucket.set_cors(cors)
     headers = {
-        'Cache-Control': 'public, max-age=31536000',
+        'Cache-Control': 'public, max-age=86400',
         'Content-Disposition': 'inline',
     }
     return bucket, headers
