@@ -14,9 +14,10 @@ class TestContent(BaseTestCase):
         self.zip_file = self.get_fixture_path("content-demo.zip")
         super(TestContent, self).setUp()
 
+    @mock.patch('splice.web.api.content_upload._verify_signature')
     @mock.patch('splice.web.api.content_upload._sign_content')
     @mock.patch('splice.web.api.content_upload.upload_content_to_s3')
-    def test_upload_content_endpoint(self, s3Mock, signMock):
+    def test_upload_content_endpoint(self, s3Mock, signMock, verifyMock):
         """Test the API endpoint for the content upload """
         dummy_signature = {
             "public_key": "somerandomkey",
@@ -24,6 +25,7 @@ class TestContent(BaseTestCase):
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
+        verifyMock.return_value = True
         url = url_for('api.content.handler_content_upload', name="foo")
 
         with open(self.zip_file) as f:
@@ -49,9 +51,10 @@ class TestContent(BaseTestCase):
             assert_equal(len(urls), 8)
         assert_equal(urls, urls_again)
 
+    @mock.patch('splice.web.api.content_upload._verify_signature')
     @mock.patch('splice.web.api.content_upload._sign_content')
     @mock.patch('splice.web.api.content_upload.upload_content_to_s3')
-    def test_upload_content_endpoint_resign(self, s3Mock, signMock):
+    def test_upload_content_endpoint_resign(self, s3Mock, signMock, verifyMock):
         """Test the API endpoint for the content upload - re-sign a content"""
         dummy_signature = {
             "public_key": "somerandomkey",
@@ -59,6 +62,7 @@ class TestContent(BaseTestCase):
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
+        verifyMock.return_value = True
         url = url_for('api.content.handler_content_upload', name="remote_new_tab", version="0")
 
         with open(self.zip_file) as f:
@@ -71,9 +75,10 @@ class TestContent(BaseTestCase):
             # re-sign an existing content should not bump up the version
             assert_equal(content['version'], 1)
 
+    @mock.patch('splice.web.api.content_upload._verify_signature')
     @mock.patch('splice.web.api.content_upload._sign_content')
     @mock.patch('splice.web.api.content_upload.upload_content_to_s3')
-    def test_upload_content_endpoint_sign_existing(self, s3Mock, signMock):
+    def test_upload_content_endpoint_sign_existing(self, s3Mock, signMock, verifyMock):
         """Test the API endpoint for the content upload - sign an existing content"""
         dummy_signature = {
             "public_key": "somerandomkey",
@@ -81,6 +86,7 @@ class TestContent(BaseTestCase):
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
+        verifyMock.return_value = True
         url = url_for('api.content.handler_content_upload', name="remote_new_tab")
 
         with open(self.zip_file) as f:
@@ -164,10 +170,11 @@ class TestContent(BaseTestCase):
         requestsMock.side_effect = Exception("Connection time out")
         self.assertRaises(Exception, content_upload._sign_content, {"content": "some_content"})
 
+    @mock.patch('splice.web.api.content_upload._verify_signature')
     @mock.patch('splice.web.api.content_upload._sign_content')
     @mock.patch('splice.web.api.content_upload.upload_content_to_s3')
     @mock.patch('splice.web.api.content_upload._get_original_content')
-    def test_upload_content_endpoint_resign_all(self, origMock, s3Mock, signMock):
+    def test_upload_content_endpoint_resign_all(self, origMock, s3Mock, signMock, verifyMock):
         """Test the API endpoint for the content resign all"""
         dummy_signature = {
             "public_key": "somerandomkey",
@@ -177,6 +184,7 @@ class TestContent(BaseTestCase):
         s3Mock.return_value = "http://bucket/content"
         # have to open the zip file every time
         origMock.side_effect = lambda a, b, c: open(self.zip_file)
+        verifyMock.return_value = True
         url = url_for('api.content.handler_content_resign_all')
 
         response = self.client.post(url)
@@ -198,3 +206,19 @@ class TestContent(BaseTestCase):
         failed = json.loads(response.data)['failed']
         assert_equal(len(succeeded), 0)
         assert_equal(len(failed), 3)
+
+    def test_verify_signature(self):
+        sign_payload = {
+            'input': 'HWAQswqXxvCKXi5PhXUq/R22Ucc89V4raJBLXkV/mbuCSPT5zoh6kccgop9x28mu'
+        }
+        signature_dict = {
+            'public_key': 'MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE4k3FmG7dFoOt3Tuzl76abTRtK8sb/r/ibCSeVKa96RbrOX2ciscz/TT8wfqBYS/8cN4zMe1+f7wRmkNrCUojZR1ZKmYM2BeiUOMlMoqk2O7+uwsn1DwNQSYP58TkvZt6',
+            'content-signature': 'keyid=appkey1; p384ecdsa=haRzzBXgPEpe9050ybZMIxFoQS3gcESzqxLBYU2SRVEyolnTD815U5NQ4JO2jGanOSqcAbmJUuo1ceSC9p8xFjrCuWU8mEemcRPdNGzu1b3T3tE-SYuANQpaZVBfuy1B',
+            'ref': '51frsk7tsnx42s0cwo9rbc99r',
+            'signature': 'haRzzBXgPEpe9050ybZMIxFoQS3gcESzqxLBYU2SRVEyolnTD815U5NQ4JO2jGanOSqcAbmJUuo1ceSC9p8xFjrCuWU8mEemcRPdNGzu1b3T3tE-SYuANQpaZVBfuy1B'
+        }
+        ret = content_upload._verify_signature(sign_payload, signature_dict)
+        self.assertTrue(ret)
+        sign_payload = {'input': "some random data"}
+        ret = content_upload._verify_signature(sign_payload, signature_dict)
+        self.assertFalse(ret)
