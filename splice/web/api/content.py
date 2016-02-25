@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from flask.json import jsonify
-from splice.web.api.content_upload import sign_content, resign_content
+from splice.web.api.content_upload import handle_content, resign_content
 from splice.queries.common import session_scope
 from splice.queries.content import get_content, get_contents,\
     insert_content, update_content, update_version, insert_version
@@ -25,9 +25,18 @@ def handler_content_resign_all():
 
 @content_bp.route('/content/sign', methods=['POST'])
 def handler_content_upload():
-    """Signed and upload a piece of content to S3, return the URL if succeeds."""
+    """Sign and upload a piece of content to S3
+
+    Query string:
+        name: a required string to specify the name of the content
+
+        version: optional. Can be used if the user wants to work on an
+        existing version, for instance, update a content without changing
+        version. If not specified, Splice uses the current version and the
+        filed 'bump_version' in the manifest to determine the version.
+    """
     def _is_allowed_file(name):
-        return '.' in name and name.rsplit('.', 1)[1].lower() in set(['zip'])
+        return '.' in name and name.rsplit('.', 1)[1].lower() in set(['zip', 'xpi'])
 
     content_file = request.files["content"]
     name = request.args.get('name')
@@ -54,7 +63,7 @@ def handler_content_upload():
 
     # sign the content then upload it to S3
     try:
-        urls, new_version, original_hash = sign_content(content_file.stream, name, version, freeze)
+        urls, new_version, original_hash = handle_content(content_file.stream, name, version, freeze)
     except Exception as e:
         return jsonify(message="%s" % e), 500
     else:
@@ -77,7 +86,7 @@ def _sync_to_database(content_record, new_content, new_version, original_url, or
             content_record["version"] = new_version
             version_record["version"] = new_version
             content_record["versions"] = [version_record]
-            content_rec = insert_content(session, content_record)
+            content_rec = insert_content(session, content_record)  # this inserts the new version as well
             version_rec = content_rec.pop("versions")
         else:
             # just worked on an existing content
@@ -85,19 +94,19 @@ def _sync_to_database(content_record, new_content, new_version, original_url, or
                 # modified an existing version
                 version_rec = update_version(session, content_record['id'], new_version, version_record)
                 content_rec = content_record
-                content_rec.pop("versions")  # pop versions before returning content to the user
+                content_rec.pop("versions")  # pop versions before sending it back to the user
             else:
                 # added a new version
                 content_record["version"] = new_version
                 version_record["version"] = new_version
-                content_record.pop("versions")  # need to pop this field before the update
+                content_record.pop("versions")  # content update doesn't need this field
                 content_rec = update_content(session, content_record['id'], content_record)
                 version_rec = insert_version(session, content_record['id'], version_record)
         return content_rec, version_rec
 
 
 def _get_target_version(content, is_new, version):
-    """determine the target version based on the query string (if provided), and the current version in the database"""
+    """Determine the target version based on the query string(if provided), and the current version in the database"""
     freeze = False
     if version:
         try:

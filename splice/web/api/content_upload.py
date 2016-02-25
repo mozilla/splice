@@ -79,9 +79,9 @@ def resign_content(content):
             original.close()
 
 
-def sign_content(content, name, version, freeze=False):
+def handle_content(content, name, version, freeze=False):
     """Content signing and uploading. The content is a zip file with a manifest file
-    that in turn specifies to-be-signed files and the version control.
+    that in turn specifies the to-be-signed files and the version control flag.
     Once all signatures get verified locally, all the files, including the content
     itself will be uploaded to S3
 
@@ -92,8 +92,10 @@ def sign_content(content, name, version, freeze=False):
         freeze: a boolean flag to prevent splice from bumping up the version based on manifest
     returns:
         urls: a list of of ulrs for uploaded assets. The last url is for the original content
+
         version: the signed content version. It could be an old version for re-signing, or a
-                new version if the version gets bumped
+        new version if the version gets bumped
+
         original_hash: base64 encoded sha1 hash of the original content
     """
     urls = []
@@ -214,7 +216,7 @@ def _verify_signature(sign_payload, signature_dict):
     def un_urlsafe(input):
         input = str(input).replace("_", "/")
         input = str(input).replace("-", "+")
-        if len(input) % 4 > 0:
+        if len(input) % 4 > 0:  # pragma: no cover
             input += "=" * (len(input) % 4)
         return input
 
