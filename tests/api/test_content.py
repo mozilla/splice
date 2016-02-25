@@ -169,11 +169,12 @@ class TestContent(BaseTestCase):
         requestsMock.side_effect = Exception("Connection time out")
         self.assertRaises(Exception, content_upload._sign_content, {"content": "some_content"})
 
+    @mock.patch('splice.web.api.content_upload._check_content_integrity')
     @mock.patch('splice.web.api.content_upload._verify_signature')
     @mock.patch('splice.web.api.content_upload._sign_content')
     @mock.patch('splice.web.api.content_upload.upload_content_to_s3')
     @mock.patch('splice.web.api.content_upload._get_original_content')
-    def test_upload_content_endpoint_resign_all(self, origMock, s3Mock, signMock, verifyMock):
+    def test_resign_all(self, origMock, s3Mock, signMock, verifyMock, integrityMock):
         """Test the API endpoint for the content resign all"""
         dummy_signature = {
             "public_key": "somerandomkey",
@@ -181,9 +182,10 @@ class TestContent(BaseTestCase):
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
-        # have to open the zip file every time
-        origMock.side_effect = lambda a, b, c: open(self.zip_file)
+        # need to open the zip file every time
+        origMock.side_effect = lambda _a, _b, _c, _d: open(self.zip_file)
         verifyMock.return_value = True
+        integrityMock.return_value = True
         url = url_for('api.content.handler_content_resign_all')
 
         response = self.client.post(url)
@@ -192,6 +194,21 @@ class TestContent(BaseTestCase):
         failed = json.loads(response.data)['failed']
         assert_equal(len(succeeded), 3)
         assert_equal(len(failed), 0)
+
+    @mock.patch('splice.web.api.content_upload._check_content_integrity')
+    @mock.patch('splice.web.api.content_upload._get_original_content')
+    def test_resign_all_fail_content_integrity(self, origMock, integrityMock):
+        """Test the API endpoint for the content resign all"""
+        # have to open the zip file every time
+        origMock.side_effect = lambda a, b, c: open(self.zip_file)
+        integrityMock.return_value = False
+        url = url_for('api.content.handler_content_resign_all')
+        response = self.client.post(url)
+        assert_equal(response.status_code, 200)
+        succeeded = json.loads(response.data)['succeeded']
+        failed = json.loads(response.data)['failed']
+        assert_equal(len(succeeded), 0)
+        assert_equal(len(failed), 3)
 
     @mock.patch('splice.web.api.content_upload._sign_content')
     def test_upload_content_endpoint_resign_all_failed(self, signMock):

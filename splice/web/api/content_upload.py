@@ -18,7 +18,13 @@ env = Environment.instance()
 _ORIGINAL_NAME = "original.zip"
 
 
-def _get_original_content(name, version, bucket):
+def _get_original_content(name, version, bucket, url):
+    """Retrieve the original content
+
+    It tries to download from the S3 bucket first, upon failure it will
+    retry downloading from the original url. Return None if none of retrieval
+    works.
+    """
     original = tempfile.NamedTemporaryFile(prefix='splice', suffix='.zip')
     s3_key = "{0}/v{1}/{2}".format(name, version, _ORIGINAL_NAME)
     k = Key(bucket)
@@ -26,24 +32,41 @@ def _get_original_content(name, version, bucket):
     try:
         k.get_file(original)
     except:
+        env.log("Failed to download %s from S3" % s3_key)
+    else:
+        return original
+
+    try:
+        r = requests.get(url)
+        original.write(r.content)
+    except:
+        env.log("Failed to download content from %s" % url)
         original.close()
-        # TODO(najiang@mozilla.com) last resort: try to fetch the file from original_url
         return None
     else:
         return original
 
 
+def _check_content_integrity(content_file, checksum):
+    content_file.seek(0)
+    raw = content_file.read()
+    return base64.b64encode(hashlib.sha1(raw).digest()) == checksum
+
+
 def resign_content(content):
-    """Re-sign a content till the given version. It downloads the original
-    content file from S3, and only re-signs the assets in the manifest. Also,
-    it won't change the version of the content.
+    """Re-sign a content till the given version
+
+    It downloads the original content file first, then re-signs the assets according to
+    the manifest. Also, it won't change the version of the content.
     """
     bucket, headers = setup_s3(bucket="content-original")
     for version in content["versions"]:
-        name, v = content["name"], version["version"]
-        original = _get_original_content(name, v, bucket)
+        name, v, url = content["name"], version["version"], version["original_url"]
+        original = _get_original_content(name, v, bucket, url)
         if original is None:  # pragma: no cover
-            raise Exception("can not find original content on S3")
+            raise Exception("Can not find original content on S3")
+        if not _check_content_integrity(original, version["original_hash"]):
+            raise Exception("Content integrity check failed, the original file may have modified")
 
         try:
             for asset in _digest_content(original):
@@ -56,18 +79,21 @@ def resign_content(content):
             original.close()
 
 
-def upload_signed_content(content, name, version, freeze=False):
-    """Upload the signed content file to S3, return all the urls upon success
+def sign_content(content, name, version, freeze=False):
+    """Content signing and uploading. The content is a zip file with a manifest file
+    that in turn specifies to-be-signed files and the version control.
+    Once all signatures get verified locally, all the files, including the content
+    itself will be uploaded to S3
 
     Params:
-        content: file object of the target creative
+        content: a file object of the target content
         name: name of the content
-        version: the target version of the signing content
+        version: the target version
         freeze: a boolean flag to prevent splice from bumping up the version based on manifest
     returns:
         urls: a list of of ulrs for uploaded assets. The last url is for the original content
-        version: the signed content version. It could be an old version for re-signing,
-        or a new version if the version gets bumped
+        version: the signed content version. It could be an old version for re-signing, or a
+                new version if the version gets bumped
         original_hash: base64 encoded sha1 hash of the original content
     """
     urls = []
@@ -77,10 +103,9 @@ def upload_signed_content(content, name, version, freeze=False):
     for asset in _digest_content(content):
         url = upload_content_to_s3(name, version, asset, bucket, headers)
         urls.append(url)
-    # also upload the original zip file
     urls.sort()
 
-    # upload the original content to a different bucket
+    # upload the original content to its bucket
     bucket_original, _ = setup_s3(bucket="content-original")
     content.seek(0)  # rewind the file offset to read the whole content
     raw = content.read()
@@ -193,12 +218,12 @@ def _verify_signature(sign_payload, signature_dict):
             input += "=" * (len(input) % 4)
         return input
 
-    pubkeystr = un_urlsafe(signature_dict["public_key"])
-    vk = ecdsa.VerifyingKey.from_pem(pubkeystr)
-    sigdata = base64.b64decode(un_urlsafe(signature_dict["signature"].encode("utf-8")))
+    pub_key = un_urlsafe(signature_dict["public_key"])
+    vk = ecdsa.VerifyingKey.from_pem(pub_key)
+    signature = base64.b64decode(un_urlsafe(signature_dict["signature"]))
 
     try:
-        ret = vk.verify_digest(sigdata, base64.b64decode(sign_payload["input"]))
+        ret = vk.verify_digest(signature, base64.b64decode(sign_payload["input"]))
     except Exception as e:
         env.log("Fail to verify signature: %s" % e)
         ret = False
@@ -209,12 +234,10 @@ def _verify_signature(sign_payload, signature_dict):
 def _extract_entryption_info(signature_dict):
     """Extract key and signature from the signing payload
 
-    Note:
-    * signing server may not return this key
-    * signing server returns multiple signatures in several encoding forms,
-      Splice only uses the first one
+    This function might change over time as the signing service evolves
+    Reference: https://github.com/mozilla-services/autograph
     """
-    encrypt_key = signature_dict.get("public_key")  # this might not be sent by the signing server
+    encrypt_key = signature_dict.get("public_key")  # signing server might not send pub key
     signature = signature_dict["content-signature"]
     return encrypt_key, signature
 
