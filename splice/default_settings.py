@@ -10,6 +10,7 @@ class DefaultConfig(object):
     """
     DEBUG = True
     APPLICATION_ROOT = None
+    CONTENT_SIGNING_ONLY = False
     JSONIFY_PRETTYPRINT_REGULAR = True
 
     STATIC_ENABLED_ENVS = {"dev", "test"}
