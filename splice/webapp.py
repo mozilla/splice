@@ -5,8 +5,13 @@ from splice.environment import Environment
 register_flask_restful = False
 
 
-def setup_routes(app):
+def setup_routes(app, content_signing_only):
     global register_flask_restful
+
+    import splice.web.api.content
+    splice.web.api.content.register_routes(app)
+    if content_signing_only:  # pragma: no cover
+        return
 
     import splice.web.views
     splice.web.views.register_routes(app)
@@ -36,13 +41,10 @@ def setup_routes(app):
         import splice.web.api.distribution
         splice.web.api.distribution.register_routes(app)
 
-        import splice.web.api.content
-        splice.web.api.content.register_routes(app)
-
         register_flask_restful = True
 
 
 def create_webapp(*args, **kwargs):
     env = Environment.instance(*args, **kwargs)
-    setup_routes(env.application)
+    setup_routes(env.application, env.config.CONTENT_SIGNING_ONLY)
     return env.application
