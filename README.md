@@ -139,3 +139,6 @@ create database splice_test;
 ```
 
  * `fab test`: run unit tests and code coverage tools
+
+# Content signing
+Please see [here](content-signing.md)

@@ -24,13 +24,21 @@ def get_country_code():
 
 def insert(env, drop=False, load_stats=False):
     # import models here to delay the db instantiation
-    from splice.models import (Account, Country, Campaign, CampaignCountry,
+    from splice.models import (Account, Content, Version, Country, Campaign, CampaignCountry,
                                Channel, Adgroup, AdgroupCategory, Tile, impression_stats_daily)
     with env.application.app_context():
         session = env.db.session
         if drop:
             env.db.drop_all()
             env.db.create_all()
+
+        for record in parse_csv("content.csv"):
+            content = Content(**record)
+            session.add(content)
+
+        for record in parse_csv("versions.csv"):
+            version = Version(**record)
+            session.add(version)
 
         for record in parse_csv("accounts.csv"):
             account = Account(**record)

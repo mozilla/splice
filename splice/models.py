@@ -6,6 +6,28 @@ db = Environment.instance().db
 metadata = db.metadata
 
 
+class Content(db.Model):
+    __tablename__ = "contents"
+
+    id = db.Column('id', db.Integer(), autoincrement=True, primary_key=True, info={"identity": [1, 1]})
+    name = db.Column('name', db.String(length=255), nullable=False, unique=True)
+    version = db.Column('version', db.Integer(), nullable=False)
+    created_at = db.Column('created_at', db.DateTime(), server_default=db.func.now(), nullable=False)
+    versions = db.relationship("Version", backref="content")
+
+
+class Version(db.Model):
+    __tablename__ = "versions"
+
+    content_id = db.Column('content_id', db.Integer(), db.ForeignKey("contents.id"), primary_key=True)
+    version = db.Column('version', db.Integer(), nullable=False, primary_key=True)
+    signing_key = db.Column('signing_key', db.Text(), nullable=True)
+    original_url = db.Column('original_url', db.Text(), nullable=False)
+    original_hash = db.Column('original_hash', db.Text(), nullable=False)
+    last_updated = db.Column('last_updated', db.DateTime(), server_default=db.func.now(), nullable=False)
+    created_at = db.Column('created_at', db.DateTime(), server_default=db.func.now(), nullable=False)
+
+
 class Account(db.Model):
     __tablename__ = "accounts"
 

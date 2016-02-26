@@ -41,10 +41,16 @@ class DefaultConfig(object):
 
     S3 = {
         "bucket": "moz-tiles-dev",
+        "content": "moz-content-dev",
+        "content-original": "moz-content-dev",
         "tile_index_key": "tile_index.v3.json"
     }
 
     CLOUDFRONT_BASE_URL = "https://d3bhweee2a5al5.cloudfront.net"
+
+    # endpoint of the signing service
+    SIGNING_SERVICE_URL = "http://127.0.0.1:8000/signature"
+    SIGNING_HAWK_KEY = "fs5wgcer9qj819kfptdlp8gm227ewxnzvsuj9ztycsx08hfhzu"
 
     LOG_HANDLERS = {
         'application': {

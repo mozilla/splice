@@ -9,21 +9,15 @@ import traceback
 from PIL import Image
 from furl import furl
 from collections import defaultdict
-from boto.s3.cors import CORSConfiguration
 from boto.s3.key import Key
 from splice.environment import Environment
 from splice.queries.common import session_scope
 from splice.queries.adgroup import insert_adgroup
 from splice.queries.tile import insert_tile
+from splice.web.api.s3_common import setup_s3, MIME_EXTENSIONS
 
 
 env = Environment.instance()
-MIME_EXTENSIONS = {
-    "png": "image/png",
-    "gif": "image/gif",
-    "jpeg": "image/jpg",
-    "svg": "image/svg+xml",
-}
 VALID_CREATIVE_EXTS = set(MIME_EXTENSIONS.keys())
 
 
@@ -124,18 +118,6 @@ def insert_ingested_assets(ingested_assets, campaign_id, channel_id, creative_ma
 
                 tile["adgroup_id"] = inserted_adgroup["id"]
                 insert_tile(session, tile)
-
-
-def setup_s3():
-    bucket = env.s3.get_bucket(env.config.S3["bucket"])
-    cors = CORSConfiguration()
-    cors.add_rule("GET", "*", allowed_header="*")
-    bucket.set_cors(cors)
-    headers = {
-        'Cache-Control': 'public, max-age=31536000',
-        'Content-Disposition': 'inline',
-    }
-    return bucket, headers
 
 
 def generate_s3_key(image, ext):

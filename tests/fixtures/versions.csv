@@ -1,0 +1,4 @@
+content_id,version,signing_key,original_url,original_hash
+1,1,keyid=1,http://moz-content-dev.s3.awes.com/remote_new_tab/v1/original.zip,ABCDEF
+2,1,keyid=1,http://moz-content-dev.s3.awes.com/activity_stream/v1/original.zip,ABCDEF
+3,1,keyid=1,http://moz-content-dev.s3.awes.com/snippets/v1/original.zip,ABCDEF
