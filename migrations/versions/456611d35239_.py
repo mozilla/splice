@@ -43,6 +43,7 @@ def upgrade_():
     sa.Column('signing_key', sa.Text(), nullable=True),
     sa.Column('original_url', sa.Text(), nullable=False),
     sa.Column('original_hash', sa.Text(), nullable=False),
+    sa.Column('last_updated', sa.DateTime(), server_default=sa.text(u'now()'), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text(u'now()'), nullable=False),
     sa.ForeignKeyConstraint(['content_id'], ['contents.id'], ),
     sa.PrimaryKeyConstraint('content_id', 'version')

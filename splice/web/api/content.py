@@ -9,6 +9,21 @@ from splice.queries.content import get_content, get_contents,\
 content_bp = Blueprint('api.content', __name__, url_prefix='/api')
 
 
+@content_bp.route('/content', methods=['GET'])
+def handler_get_content_all():
+    content_list = get_contents()
+    return jsonify(result=content_list)
+
+
+@content_bp.route('/content/<name>', methods=['GET'])
+def handler_get_content(name):
+    content = get_content(name)
+    if content is None:
+        return jsonify(message="Can't find content %s" % name), 404
+    else:
+        return jsonify(result=content)
+
+
 @content_bp.route('/content/resignall', methods=['POST'])
 def handler_content_resign_all():
     succeeded, failed = [], []

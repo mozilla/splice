@@ -50,7 +50,7 @@ def _get_original_content(name, version, bucket, url):
 def _check_content_integrity(content_file, checksum):
     content_file.seek(0)
     raw = content_file.read()
-    return base64.b64encode(hashlib.sha1(raw).digest()) == checksum
+    return hashlib.sha1(raw).hexdigest() == checksum
 
 
 def resign_content(content):
@@ -96,7 +96,7 @@ def handle_content(content, name, version, freeze=False):
         version: the signed content version. It could be an old version for re-signing, or a
         new version if the version gets bumped
 
-        original_hash: base64 encoded sha1 hash of the original content
+        original_hash: sha1 digest of the original content formatted as hex string
     """
     urls = []
     bucket, headers = setup_s3(bucket="content")
@@ -114,7 +114,7 @@ def handle_content(content, name, version, freeze=False):
     asset = (_ORIGINAL_NAME, raw, None)
     url = upload_content_to_s3(name, version, asset, bucket_original, headers)
     urls.append(url)
-    original_hash = base64.b64encode(hashlib.sha1(raw).digest())
+    original_hash = hashlib.sha1(raw).hexdigest()
 
     return urls, version, original_hash
 
@@ -150,7 +150,7 @@ def _digest_content(content):
                 raise Exception("File %s in manifest is not in the content" % s)
 
             # the content payload reference: https://github.com/mozilla-services/autograph
-            hash = hashlib.sha384(zf.read(s)).digest()
+            hash = hashlib.sha384(zf.read(s)).digest()  # digest is intentionally used for signature verifying
             payload = {
                 "input": "%s" % base64.b64encode(hash),
             }
@@ -251,7 +251,9 @@ def upload_content_to_s3(name, version, asset, bucket, headers):  # pragma: no c
 
     key = Key(bucket)
     key.name = s3_key
-    _, ext = os.path.splitext(asset_name)
+    ext = os.path.splitext(asset_name)[-1][1:]
+    if ext == "html":
+        headers["Cache-Control"] = "public, max-age=86400"
     headers['Content-Type'] = MIME_EXTENSIONS.get(ext) or 'text/plain'
     if signature:
         encrypt_key, sig = _extract_entryption_info(signature)

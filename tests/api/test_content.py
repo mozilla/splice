@@ -14,6 +14,25 @@ class TestContent(BaseTestCase):
         self.zip_file = self.get_fixture_path("content-demo.zip")
         super(TestContent, self).setUp()
 
+    def test_get_content_all(self):
+        url = url_for('api.content.handler_get_content_all')
+        response = self.client.get(url)
+        assert_equal(response.status_code, 200)
+        l = json.loads(response.data)['result']
+        assert_equal(len(l), 3)
+
+    def test_get_content_name(self):
+        url = url_for('api.content.handler_get_content', name="remote_new_tab")
+        response = self.client.get(url)
+        assert_equal(response.status_code, 200)
+        c = json.loads(response.data)['result']
+        assert_equal(c["id"], 1)
+        assert_equal(len(c["versions"]), 1)
+
+        url = url_for('api.content.handler_get_content', name="not_existed")
+        response = self.client.get(url)
+        assert_equal(response.status_code, 404)
+
     @mock.patch('splice.web.api.content_upload._verify_signature')
     @mock.patch('splice.web.api.content_upload._sign_content')
     @mock.patch('splice.web.api.content_upload.upload_content_to_s3')

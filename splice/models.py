@@ -24,6 +24,7 @@ class Version(db.Model):
     signing_key = db.Column('signing_key', db.Text(), nullable=True)
     original_url = db.Column('original_url', db.Text(), nullable=False)
     original_hash = db.Column('original_hash', db.Text(), nullable=False)
+    last_updated = db.Column('last_updated', db.DateTime(), server_default=db.func.now(), nullable=False)
     created_at = db.Column('created_at', db.DateTime(), server_default=db.func.now(), nullable=False)
 
 

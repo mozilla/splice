@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy.orm.exc import NoResultFound
 
 from splice.models import Content, Version
@@ -83,6 +85,7 @@ def update_version(session, content_id, version, record):
     if version is None:  # pragma: no cover
         raise NoResultFound('Version not found')
 
+    record["last_updated"] = datetime.datetime.utcnow()
     for key, val in record.items():
         setattr(version, key, val)
 
