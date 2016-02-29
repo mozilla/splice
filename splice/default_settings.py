@@ -10,6 +10,7 @@ class DefaultConfig(object):
     """
     DEBUG = True
     APPLICATION_ROOT = None
+    ALLOWED_APPS = ["tiles", "signing"]
     JSONIFY_PRETTYPRINT_REGULAR = True
 
     STATIC_ENABLED_ENVS = {"dev", "test"}
