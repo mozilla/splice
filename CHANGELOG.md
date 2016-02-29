@@ -1,3 +1,11 @@
+2.1.0
+=====
+Add content signing APIs
+
+__note__:
+* Include new database migration in migrations/versions/456611d35239_.py
+* Add a few configuration items, including: two new s3 buckets, detail of signing service, and app control
+
 2.0.8
 =====
 Fix a bug that will create invalid image field in tile assest
