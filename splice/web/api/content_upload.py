@@ -184,7 +184,7 @@ def _bump_needed(content):
 
 def _sign_content(sign_payload):
     content_type = 'application/json'
-    sender = Sender({'id': 'alice',
+    sender = Sender({'id': env.config.SIGNING_HAWK_ID,
                      'key': env.config.SIGNING_HAWK_KEY,
                      'algorithm': 'sha256'},         # credentials
                     env.config.SIGNING_SERVICE_URL,  # url
