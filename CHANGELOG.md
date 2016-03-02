@@ -1,3 +1,8 @@
+2.1.1
+=====
+* Fix the hardcoded HAwK user id
+* Upgrade gevent to 1.1rc5
+
 2.1.0
 =====
 Add content signing APIs
