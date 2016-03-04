@@ -215,6 +215,30 @@ application_stats_daily = db.Table(
 )
 
 
+activity_stream_stats_daily = db.Table(
+    'activity_stream_stats_daily',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('tab_id', db.Integer, nullable=False),
+    db.Column('addon_version', db.String(16), nullable=False),
+    db.Column('load_reason', db.String(64), nullable=False),
+    db.Column('source', db.String(64), nullable=False),
+    db.Column('unload_reason', db.String(64), nullable=False),
+    db.Column('max_scroll_depth', db.Integer, nullable=False),
+    db.Column('click_position', db.String(16), nullable=False),
+    db.Column('total_bookmarks', db.Integer, nullable=False),
+    db.Column('total_history_size', db.Integer, nullable=False),
+    db.Column('session_duration', db.Integer, nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
+
 site_stats_daily = db.Table(
     'site_stats_daily',
     db.Column('date', db.Date, nullable=False),
