@@ -217,7 +217,7 @@ def _verify_signature(sign_payload, signature_dict):
         input = str(input).replace("_", "/")
         input = str(input).replace("-", "+")
         if len(input) % 4 > 0:  # pragma: no cover
-            input += "=" * (len(input) % 4)
+            input += "=" * (4 - len(input) % 4)
         return input
 
     pub_key = un_urlsafe(signature_dict["public_key"])
