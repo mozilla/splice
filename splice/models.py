@@ -140,6 +140,46 @@ class AdgroupCategory(db.Model):
     category = db.Column(db.String(255), primary_key=True)
 
 
+class BucketerDomain(db.Model):
+    __tablename__ = "bucketer_domain"
+
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True)
+    domain = db.Column(db.String(128), nullable=False, unique=True)
+    rank = db.Column(db.Integer())
+    description = db.Column(db.String(1024))
+    title = db.Column(db.String(216))
+
+
+class BucketerRelated(db.Model):
+    __tablename__ = "bucketer_related"
+
+    domain_id = db.Column(db.Integer(), db.ForeignKey("bucketer_domain.id", ondelete="CASCADE"), primary_key=True)
+    related_id = db.Column(db.Integer(), db.ForeignKey("bucketer_domain.id", ondelete="CASCADE"), primary_key=True)
+    source = db.Column(db.String(64), primary_key=True)
+    score = db.Column(db.Float(), default=1)
+
+
+class BucketerComscore(db.Model):
+    __tablename__ = "bucketer_comscore"
+
+    domain_id = db.Column(db.Integer(), db.ForeignKey("bucketer_domain.id", ondelete="CASCADE"), primary_key=True)
+    rank = db.Column(db.Integer(), nullable=False)
+    reach = db.Column(db.Float(), nullable=False)
+    users = db.Column(db.Float(), nullable=False)
+    visits = db.Column(db.Float(), nullable=False)
+    pages = db.Column(db.Float(), nullable=False)
+
+
+class BucketerModel(db.Model):
+    __tablename__ = "bucketer_model"
+
+    id = db.Column(db.Integer(), autoincrement=True, primary_key=True)
+    description = db.Column(db.String(128), nullable=False)
+    slope = db.Column(db.Float(), nullable=False)
+    intercept = db.Column(db.Float(), nullable=False)
+    std_er = db.Column(db.Float(), nullable=False)
+
+
 blacklisted_ips = db.Table(
     'blacklisted_ips',
     db.Column('ip', db.String(64), nullable=False),
