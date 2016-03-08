@@ -50,7 +50,7 @@ def _get_original_content(name, version, bucket, url):
 def _check_content_integrity(content_file, checksum):
     content_file.seek(0)
     raw = content_file.read()
-    return hashlib.sha1(raw).hexdigest() == checksum
+    return hashlib.sha256(raw).hexdigest() == checksum
 
 
 def resign_content(content):
@@ -96,7 +96,7 @@ def handle_content(content, name, version, freeze=False):
         version: the signed content version. It could be an old version for re-signing, or a
         new version if the version gets bumped
 
-        original_hash: sha1 digest of the original content formatted as hex string
+        original_hash: sha256 digest of the original content formatted as hex string
     """
     urls = []
     bucket, headers = setup_s3(bucket="content")
@@ -114,7 +114,7 @@ def handle_content(content, name, version, freeze=False):
     asset = (_ORIGINAL_NAME, raw, None)
     url = upload_content_to_s3(name, version, asset, bucket_original, headers)
     urls.append(url)
-    original_hash = hashlib.sha1(raw).hexdigest()
+    original_hash = hashlib.sha256(raw).hexdigest()
 
     return urls, version, original_hash
 
