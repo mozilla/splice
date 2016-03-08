@@ -1,3 +1,11 @@
+2.1.2
+=====
+Add redshift table: activity_stream_stats_daily
+
+__note__:
+* Include a new migration: migrations/versions/171b15035012_.py
+* Include a new schema: ddl/migrations/redshift/1457402851
+
 2.1.1
 =====
 * Fix the hardcoded HAwK user id
