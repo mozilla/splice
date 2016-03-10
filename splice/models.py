@@ -218,7 +218,7 @@ application_stats_daily = db.Table(
 activity_stream_stats_daily = db.Table(
     'activity_stream_stats_daily',
     db.Column('client_id', db.String(64), nullable=False),
-    db.Column('tab_id', db.Integer, nullable=False),
+    db.Column('tab_id', db.String(64), nullable=False),
     db.Column('addon_version', db.String(16), nullable=False),
     db.Column('load_reason', db.String(64), nullable=False),
     db.Column('source', db.String(64), nullable=False),
