@@ -59,6 +59,7 @@ def resign_content(content):
     It downloads the original content file first, then re-signs the assets according to
     the manifest. Also, it won't change the version of the content.
     """
+    new_pub_key = None
     bucket, headers = setup_s3(bucket="content-original")
     for version in content["versions"]:
         name, v, url = content["name"], version["version"], version["original_url"]
@@ -72,11 +73,14 @@ def resign_content(content):
             for asset in _digest_content(original):
                 if asset[2] is None:  # skip it if it's not signed
                     continue
+                if new_pub_key is None:
+                    new_pub_key = asset[2].get("public_key")
                 upload_content_to_s3(name, v, asset, bucket, headers)
         except:
             raise
         finally:
             original.close()
+    return new_pub_key
 
 
 def handle_content(content, name, version, freeze=False):
@@ -97,14 +101,19 @@ def handle_content(content, name, version, freeze=False):
         new version if the version gets bumped
 
         original_hash: sha1 digest of the original content formatted as hex string
+
+        pub_key: the public signing key returned from the signing server
     """
     urls = []
     bucket, headers = setup_s3(bucket="content")
+    pub_key = None
     if not freeze and _bump_needed(content):
         version += 1
     for asset in _digest_content(content):
         url = upload_content_to_s3(name, version, asset, bucket, headers)
         urls.append(url)
+        if asset[2] and pub_key is None:
+            pub_key = asset[2].get("public_key")
     urls.sort()
 
     # upload the original content to its bucket
@@ -116,7 +125,7 @@ def handle_content(content, name, version, freeze=False):
     urls.append(url)
     original_hash = hashlib.sha1(raw).hexdigest()
 
-    return urls, version, original_hash
+    return urls, version, original_hash, pub_key
 
 
 def _digest_content(content):
@@ -150,7 +159,8 @@ def _digest_content(content):
                 raise Exception("File %s in manifest is not in the content" % s)
 
             # the content payload reference: https://github.com/mozilla-services/autograph
-            hash = hashlib.sha384(zf.read(s)).digest()  # digest is intentionally used for signature verifying
+            # digest() is intentionally used for signature verifying
+            hash = hashlib.sha384(zf.read(s)).digest()
             payload = {
                 "input": "%s" % base64.b64encode(hash),
             }
@@ -183,6 +193,10 @@ def _bump_needed(content):
 
 
 def _sign_content(sign_payload):
+    # if the list is empty, return an empty signature list
+    if len(sign_payload) == 0:
+        return []
+
     content_type = 'application/json'
     sender = Sender({'id': env.config.SIGNING_HAWK_ID,
                      'key': env.config.SIGNING_HAWK_KEY,
