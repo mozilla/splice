@@ -141,6 +141,9 @@ def _digest_content(content):
         Where signature_dict has two keys: "encrypted key" and "signature".
         If the asset is not in the manifest, signature_dict will be None.
     """
+    def _prepend_template(content):
+        return "%s%s" % (env.config.SIGNING_TEMPLATE, content)
+
     with zipfile.ZipFile(content, 'r') as zf:
         all_assets = set([n for n in zf.namelist() if n[-1] != '/'])
 
@@ -160,7 +163,7 @@ def _digest_content(content):
 
             # the content payload reference: https://github.com/mozilla-services/autograph
             # digest() is intentionally used for signature verifying
-            hash = hashlib.sha384(zf.read(s)).digest()
+            hash = hashlib.sha384(_prepend_template(zf.read(s))).digest()
             payload = {
                 "input": "%s" % base64.b64encode(hash),
             }
