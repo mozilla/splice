@@ -29,7 +29,11 @@ def handler_content_resign_all():
     succeeded, failed = [], []
     for content in get_contents():
         try:
-            resign_content(content)
+            new_pub_key = resign_content(content)
+            update_record = {"signing_key": new_pub_key}
+            with session_scope() as session:
+                for version in content["versions"]:
+                    update_version(session, content["id"], version["version"], update_record)
         except Exception as e:
             failed.append("%s: %s" % (content['name'], e))
         else:
@@ -78,21 +82,22 @@ def handler_content_upload():
 
     # sign the content then upload it to S3
     try:
-        urls, new_version, original_hash = handle_content(content_file.stream, name, version, freeze)
+        urls, new_version, original_hash, pub_key = handle_content(content_file.stream, name, version, freeze)
     except Exception as e:
         return jsonify(message="%s" % e), 500
     else:
         try:
-            content_rec, version_rec = _sync_to_database(content_record, new_content, new_version, urls[-1], original_hash, freeze)
+            content_rec, version_rec = _sync_to_database(content_record, new_content, new_version, urls[-1], original_hash, pub_key, freeze)
         except Exception as e:
             return jsonify(message="%s" % e), 500
         return jsonify(uploaded=urls, content=content_rec, version=version_rec)
 
 
-def _sync_to_database(content_record, new_content, new_version, original_url, original_hash, freeze):
+def _sync_to_database(content_record, new_content, new_version, original_url, original_hash, pub_key, freeze):
     version_record = {
         "original_url": original_url,
-        "original_hash": original_hash
+        "original_hash": original_hash,
+        "signing_key": pub_key
     }
 
     with session_scope() as session:
