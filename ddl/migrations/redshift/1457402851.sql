@@ -10,6 +10,7 @@ CREATE TABLE activity_stream_stats_daily (
     source VARCHAR(64) NOT NULL, 
     unload_reason VARCHAR(64) NOT NULL, 
     max_scroll_depth INTEGER NOT NULL, 
+    load_latency INTEGER NOT NULL,
     click_position INTEGER NOT NULL,
     total_bookmarks INTEGER NOT NULL, 
     total_history_size INTEGER NOT NULL, 

@@ -224,6 +224,7 @@ activity_stream_stats_daily = db.Table(
     db.Column('source', db.String(64), nullable=False),
     db.Column('unload_reason', db.String(64), nullable=False),
     db.Column('max_scroll_depth', db.Integer, nullable=False),
+    db.Column('load_latency', db.Integer, nullable=False),
     db.Column('click_position', db.String(16), nullable=False),
     db.Column('total_bookmarks', db.Integer, nullable=False),
     db.Column('total_history_size', db.Integer, nullable=False),

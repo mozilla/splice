@@ -49,6 +49,7 @@ def upgrade_stats():
     sa.Column('source', sa.String(length=64), nullable=False),
     sa.Column('unload_reason', sa.String(length=64), nullable=False),
     sa.Column('max_scroll_depth', sa.Integer(), nullable=False),
+    sa.Column('load_latency', sa.Integer(), nullable=False),
     sa.Column('click_position', sa.Integer(), nullable=False),
     sa.Column('total_bookmarks', sa.Integer(), nullable=False),
     sa.Column('total_history_size', sa.Integer(), nullable=False),
