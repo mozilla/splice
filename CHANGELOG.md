@@ -1,3 +1,11 @@
+2.1.4
+=====
+Alter schema for activity_stream_stats_daily
+* change tab_id to integer
+* change click_position to integer
+* add load_latency
+__note__: no migration was created for the changes above, modify the previous migration in ddl/migrations/redshift/1457402851
+
 2.1.3
 =====
 Fix variour issues:
