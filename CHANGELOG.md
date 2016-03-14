@@ -1,3 +1,10 @@
+2.1.3
+=====
+Fix variour issues:
+* use stronger checksum for the original content
+* use new signing service endpoint
+* start tracking signing public key in the database
+
 2.1.2
 =====
 Add redshift table: activity_stream_stats_daily
