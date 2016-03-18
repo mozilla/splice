@@ -109,6 +109,8 @@ def handle_content(content, name, version, freeze=False):
     pub_key = None
     if not freeze and _bump_needed(content):
         version += 1
+    if version == 0:  # pragma: no cover
+        version = 1  # version always starts from 1
     for asset in _digest_content(content):
         url = upload_content_to_s3(name, version, asset, bucket, headers)
         urls.append(url)
