@@ -230,6 +230,7 @@ activity_stream_stats_daily = db.Table(
     db.Column('total_history_size', db.Integer, nullable=False),
     db.Column('session_duration', db.Integer, nullable=False),
     db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
     db.Column('locale', db.String(14), nullable=False),
     db.Column('country_code', db.String(5), nullable=False),
     db.Column('os', db.String(64), nullable=False),
