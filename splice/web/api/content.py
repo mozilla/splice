@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from flask.json import jsonify
-from splice.web.api.content_upload import handle_content, resign_content
+from splice.web.api.content_upload import handle_content, resign_content, extract_manifest
 from splice.queries.common import session_scope
 from splice.queries.content import get_content, get_contents,\
     insert_content, update_content, update_version, insert_version
@@ -80,9 +80,15 @@ def handler_content_upload():
     except Exception as e:
         return jsonify(message="%s" % e), 400
 
+    # check the manifest
+    try:
+        manifest = extract_manifest(content_file.stream)
+    except Exception as e:
+        return jsonify(message="%s" % e), 400
+
     # sign the content then upload it to S3
     try:
-        urls, new_version, original_hash, pub_key = handle_content(content_file.stream, name, version, freeze)
+        urls, new_version, original_hash, pub_key = handle_content(content_file.stream, manifest, name, version, freeze)
     except Exception as e:
         return jsonify(message="%s" % e), 500
     else:

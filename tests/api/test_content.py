@@ -120,6 +120,43 @@ class TestContent(BaseTestCase):
             # it should bump up the version for the existing content
             assert_equal(content['version'], 2)
 
+    @mock.patch('json.loads')
+    def test_upload_content_endpoint_invalid_manifest(self, jsonMock):
+        """Test the API endpoint for the content upload, the invalid manifest"""
+        url = url_for('api.content.handler_content_upload', name="foo", version="0")
+
+        jsonMock.return_value = {"bump_version": True}
+        with open(self.zip_file) as f:
+            data = {
+                'content': (f, 'test.zip'),
+            }
+            response = self.client.post(url, data=data)
+            assert_equal(response.status_code, 400)
+
+        jsonMock.return_value = {"bump_version": "True"}
+        with open(self.zip_file) as f:
+            data = {
+                'content': (f, 'test.zip'),
+            }
+            response = self.client.post(url, data=data)
+            assert_equal(response.status_code, 400)
+
+        jsonMock.return_value = {"signature_required": "abc.html"}
+        with open(self.zip_file) as f:
+            data = {
+                'content': (f, 'test.zip'),
+            }
+            response = self.client.post(url, data=data)
+            assert_equal(response.status_code, 400)
+
+        jsonMock.return_value = {"signature_required": ["abc.html"]}
+        with open(self.zip_file) as f:
+            data = {
+                'content': (f, 'test.zip'),
+            }
+            response = self.client.post(url, data=data)
+            assert_equal(response.status_code, 400)
+
     @mock.patch('splice.web.api.content_upload._digest_content')
     def test_upload_content_endpoint_failure(self, signMock):
         """Test the API endpoint for the content upload, the failure case """

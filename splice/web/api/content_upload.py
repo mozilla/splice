@@ -70,7 +70,8 @@ def resign_content(content):
             raise Exception("Content integrity check failed, the original file may have modified")
 
         try:
-            for asset in _digest_content(original):
+            manifest = extract_manifest(original)
+            for asset in _digest_content(original, manifest):
                 if asset[2] is None:  # skip it if it's not signed
                     continue
                 if new_pub_key is None:
@@ -83,7 +84,7 @@ def resign_content(content):
     return new_pub_key
 
 
-def handle_content(content, name, version, freeze=False):
+def handle_content(content, manifest, name, version, freeze=False):
     """Content signing and uploading. The content is a zip file with a manifest file
     that in turn specifies the to-be-signed files and the version control flag.
     Once all signatures get verified locally, all the files, including the content
@@ -91,6 +92,7 @@ def handle_content(content, name, version, freeze=False):
 
     Params:
         content: a file object of the target content
+        manifest: the manifest structure, already parsed as a dict
         name: name of the content
         version: the target version
         freeze: a boolean flag to prevent splice from bumping up the version based on manifest
@@ -107,9 +109,11 @@ def handle_content(content, name, version, freeze=False):
     urls = []
     bucket, headers = setup_s3(bucket="content")
     pub_key = None
-    if not freeze and _bump_needed(content):
+    if not freeze and manifest["bump_version"]:
         version += 1
-    for asset in _digest_content(content):
+    if version == 0:  # pragma: no cover
+        version = 1  # version always starts from 1
+    for asset in _digest_content(content, manifest):
         url = upload_content_to_s3(name, version, asset, bucket, headers)
         urls.append(url)
         if asset[2] and pub_key is None:
@@ -128,11 +132,12 @@ def handle_content(content, name, version, freeze=False):
     return urls, version, original_hash, pub_key
 
 
-def _digest_content(content):
+def _digest_content(content, manifest):
     """Digest the content and sign assets in the content based on manifest
 
     Params:
         content: file object of the target creative
+        manifest: the manifest dict
     Return:
         A generator with each element as:
 
@@ -146,14 +151,7 @@ def _digest_content(content):
 
     with zipfile.ZipFile(content, 'r') as zf:
         all_assets = set([n for n in zf.namelist() if n[-1] != '/'])
-
-        # parse the manifest
-        try:
-            manifest = json.loads(zf.read("manifest.json"))
-        except:
-            raise Exception("Failed to load manifest.json from the content")
-        else:
-            sign_list = manifest['signature_required']
+        sign_list = manifest['signature_required']
 
         # prepare sign payload, note that the signing service supports multiple files in a single request
         sign_payload = []
@@ -184,15 +182,21 @@ def _digest_content(content):
             yield name, zf.read(name), signatures.get(name)
 
 
-def _bump_needed(content):
+def extract_manifest(content):
     with zipfile.ZipFile(content, 'r') as zf:
-        # parse the manifest
         try:
             manifest = json.loads(zf.read("manifest.json"))
-        except:
-            return False
+        except:  # pragma: no cover
+            raise
         else:
-            return manifest['bump_version']
+            for field in ["bump_version", "signature_required"]:
+                if field not in manifest:
+                    raise Exception("Missing required field %s in manifest.json" % field)
+            if not isinstance(manifest["bump_version"], bool):
+                raise Exception("Expect a bool value for bump_version in manifest.json")
+            if not isinstance(manifest["signature_required"], list):
+                raise Exception("Expect an array value for signature_required in manifest.json")
+            return manifest
 
 
 def _sign_content(sign_payload):
