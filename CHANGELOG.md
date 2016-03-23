@@ -1,3 +1,9 @@
+2.1.5
+=====
+Bugfixes:
+* force to start a new content from version 1
+* add data validation for manifest.json
+
 2.1.4
 =====
 Alter schema for activity_stream_stats_daily
