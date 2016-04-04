@@ -1,3 +1,11 @@
+2.1.6
+=====
+Alter table schemas for activity stream
+
+__note__:
+* Include a new migration: migrations/versions/44fe26926437_.py
+* Include a new schema: ddl/migrations/redshift/1458766468.sql
+
 2.1.5
 =====
 Bugfixes:
@@ -25,7 +33,7 @@ Add redshift table: activity_stream_stats_daily
 
 __note__:
 * Include a new migration: migrations/versions/171b15035012_.py
-* Include a new schema: ddl/migrations/redshift/1457402851
+* Include a new schema: ddl/migrations/redshift/1457402851.sql
 
 2.1.1
 =====
