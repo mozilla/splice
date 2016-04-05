@@ -1,10 +1,9 @@
 BEGIN;
 
-ALTER TABLE activity_stream_stats_daily ADD COLUMN date DATE;
+ALTER TABLE activity_stream_stats_daily ADD COLUMN date DATE DEFAULT CURRENT_DATE NOT NULL;
 UPDATE activity_stream_stats_daily SET date = TRUNC(receive_at);
-ALTER TABLE activity_stream_stats_daily ALTER COLUMN date SET NOT NULL;
 
-ALTER TABLE activity_stream_stats_daily ADD COLUMN page VARCHAR(16) NOT NULL;
+ALTER TABLE activity_stream_stats_daily ADD COLUMN page VARCHAR(16) DEFAULT 'newtab' NOT NULL;
 
 ALTER TABLE activity_stream_stats_daily DROP COLUMN click_position;
 
