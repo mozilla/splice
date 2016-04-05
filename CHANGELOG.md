@@ -1,3 +1,9 @@
+2.1.7
+=====
+Fix the migration script for Redshift
+* Use CURRENT_DATE as default for the 'date' column 'activity_stream_stats_daily'
+* Use 'newtab' as default for the 'page' column in 'activity_stream_stats_daily'
+
 2.1.6
 =====
 Alter table schemas for activity stream
