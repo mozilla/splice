@@ -1,3 +1,7 @@
+2.1.8
+=====
+* Add a script to expire data in redshift
+
 2.1.7
 =====
 Fix the migration script for Redshift
