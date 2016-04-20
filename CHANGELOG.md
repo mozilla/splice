@@ -1,3 +1,7 @@
+2.1.9
+=====
+* Lock the UI deps and use absolute path for build script
+
 2.1.8
 =====
 * Add a script to expire data in redshift
