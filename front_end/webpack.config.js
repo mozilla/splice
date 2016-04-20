@@ -6,8 +6,8 @@
  */
 'use strict';
 const webpack = require('webpack');
-
-const assetPath = require('path').join(__dirname, 'dist');
+const path = require('path');
+const assetPath = path.join(__dirname, 'dist');
 const generateWebpack = require('./build_utils/generate-webpack');
 
 // Note; this needs to export a function to work with gulp
@@ -21,7 +21,7 @@ module.exports = function (preset) {
       publicPath: config.WEBPACK_PUBLIC_PATH
     },
     entry: [
-      './src/main.js'
+      path.join(__dirname, 'src/main.js')
     ],
 
     cache: isDevelop,
