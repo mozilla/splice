@@ -1,3 +1,7 @@
+2.1.10
+======
+* Add SQL for compressing redshift daily tables
+
 2.1.9
 =====
 * Lock the UI deps and use absolute path for build script
