@@ -1,3 +1,11 @@
+2.1.12
+======
+* Fix the truncation issues by changing table schemas for activity stream
+
+__note__:
+* Include a new migration: migrations/versions/11b247298d4_.py
+* Include a new schema: ddl/migrations/redshift/1461612090.sql
+
 2.1.11
 ======
 * Fix an issue in 2.1.10 - add the SQL to the setup.py
