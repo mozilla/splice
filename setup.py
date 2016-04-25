@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="splice",
-    version="2.1.10",
+    version="2.1.11",
     description="Link authoring tool for " +
                 "Firefox Directory and Enhanced Tiles",
     author="Mozilla",
@@ -10,5 +10,6 @@ setup(
     include_package_data=True,
     scripts=["scripts/manage.py", "scripts/tile_index_crawl.py",
              "scripts/rs_to_pg.py", "scripts/index_walker.py",
-             "scripts/expire_redshift_data.py"],
+             "scripts/expire_redshift_data.py",
+             "scripts/compress_redshift_daily.sql"],
 )

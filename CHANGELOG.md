@@ -1,3 +1,7 @@
+2.1.11
+======
+* Fix an issue in 2.1.10 - add the SQL to the setup.py
+
 2.1.10
 ======
 * Add SQL for compressing redshift daily tables
