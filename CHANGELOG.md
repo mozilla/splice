@@ -1,3 +1,7 @@
+2.1.14
+======
+* Fix the last db migration - reorder the SQL statements
+
 2.1.13
 ======
 * Fix the db migration script in 2.1.12, replace ALTER COLUMN with a workaround script
