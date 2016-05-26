@@ -246,6 +246,7 @@ activity_stream_events_daily = db.Table(
     db.Column('addon_version', db.String(64), nullable=False),
     db.Column('source', db.String(64), nullable=False),
     db.Column('page', db.String(64), nullable=False),
+    db.Column('experiment_id', db.String(64)),
     db.Column('action_position', db.String(16), nullable=False),
     db.Column('event', db.String(16), nullable=False),
     db.Column('receive_at', db.DateTime, nullable=False),
