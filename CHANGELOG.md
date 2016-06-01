@@ -1,3 +1,13 @@
+2.1.15
+======
+Table schema changes for Activity Stream
+* Add activity_stream_performance_daily table
+* Add experiment_id and session_id for all activity_stream tables
+
+__note__:
+* Include a new migration: migrations/versions/31e24c646a0a_.py
+* Include a new schema: ddl/migrations/redshift/1464292273.sql
+
 2.1.14
 ======
 * Fix the last db migration - reorder the SQL statements
