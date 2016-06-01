@@ -1,3 +1,7 @@
+2.1.16
+======
+* Add missing deps in requirements.txt for fabric
+
 2.1.15
 ======
 Table schema changes for Activity Stream
