@@ -1,3 +1,12 @@
+2.1.17
+======
+Table schema changes for Activity Stream
+* Add recommendation_url and recommender_type for activity_stream_events_daily
+
+__note__:
+* Include a new migration: migrations/versions/410f1493e84b_.py
+* Include a new schema: ddl/migrations/redshift/1469217681.sql
+
 2.1.16
 ======
 * Add missing deps in requirements.txt for fabric
