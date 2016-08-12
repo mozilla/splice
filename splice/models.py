@@ -255,6 +255,7 @@ activity_stream_events_daily = db.Table(
     db.Column('recommendation_url', db.String(255), nullable=True),
     db.Column('recommender_type', db.String(64), nullable=True),
     db.Column('highlight_type', db.String(64), nullable=True),
+    db.Column('share_provider', db.String(64), nullable=True),
     db.Column('receive_at', db.DateTime, nullable=False),
     db.Column('date', db.Date, nullable=False),
     db.Column('locale', db.String(14), nullable=False),
