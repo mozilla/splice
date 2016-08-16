@@ -1,3 +1,12 @@
+2.1.18
+======
+Table schema changes for Activity Stream
+* Add share_provider and highlight_type for activity_stream_events_daily
+
+__note__:
+* Include a new migration: migrations/versions/52c5946188c4_.py
+* Include a new schema: ddl/migrations/redshift/1470674567.sql
+
 2.1.17
 ======
 Table schema changes for Activity Stream
