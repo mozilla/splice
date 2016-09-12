@@ -1,3 +1,12 @@
+2.1.19
+======
+Table schema changes for Activity Stream
+* Add metadata_source for activity_stream_events_daily and activity_stream_performance_daily
+
+__note__:
+* Include a new migration: migrations/versions/c662f052956_.py
+* Include a new schema: ddl/migrations/redshift/1472479343.sql
+
 2.1.18
 ======
 Table schema changes for Activity Stream
