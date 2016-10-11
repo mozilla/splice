@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { pageVisit } from 'actions/App/AppActions';
 
-export default class AdGroupsPage extends Component {
+class AdGroupsPage extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
 

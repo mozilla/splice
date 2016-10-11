@@ -7,7 +7,7 @@ import AccountList from 'components/Accounts/AccountList/AccountList';
 
 import { Link } from 'react-router';
 
-export default class AccountsPage extends Component {
+class AccountsPage extends Component {
   componentDidMount() {
     pageVisit('Accounts', this);
 

@@ -12,7 +12,7 @@ import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 import TileDetails from 'components/Tiles/TileDetails/TileDetails';
 import TilePreview from 'components/Tiles/TilePreview/TilePreview';
 
-export default class TileViewPage extends Component {
+class TileViewPage extends Component {
   componentWillMount() {
     this.fetchTileDetails(this.props);
   }

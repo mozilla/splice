@@ -5,7 +5,7 @@ import { fetchCampaigns } from 'actions/Campaigns/CampaignActions';
 
 import CampaignList from 'components/Campaigns/CampaignList/CampaignList';
 
-export default class CampaignsPage extends Component {
+class CampaignsPage extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
 

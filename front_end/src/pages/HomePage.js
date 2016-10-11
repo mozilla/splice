@@ -10,7 +10,7 @@ import AccountList from 'components/Accounts/AccountList/AccountList';
 import AppList from 'components/App/AppList/AppList';
 import RecentlyViewedList from 'components/App/RecentlyViewed/RecentlyViewedList';
 
-export default class HomePage extends Component {
+class HomePage extends Component {
   componentDidMount() {
     updateDocTitle('Home');
 

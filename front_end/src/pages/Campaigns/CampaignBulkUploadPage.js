@@ -13,7 +13,7 @@ import { bindFormValidators, bindFormConfig } from 'helpers/FormValidators';
 bindFormConfig();
 require('parsleyjs');
 
-export default class CampaignBulkUploadPage extends Component {
+class CampaignBulkUploadPage extends Component {
   constructor(props) {
     super(props);
     this.handleFileUpload = this.handleFileUpload.bind(this);

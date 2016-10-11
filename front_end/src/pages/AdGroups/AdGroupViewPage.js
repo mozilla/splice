@@ -10,7 +10,7 @@ import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 import AdGroupDetails from 'components/AdGroups/AdGroupDetails/AdGroupDetails';
 import TileList from 'components/Tiles/TileList/TileList';
 
-export default class AdGroupViewPage extends Component {
+class AdGroupViewPage extends Component {
   componentWillMount() {
     this.fetchAdGroupDetails(this.props);
   }

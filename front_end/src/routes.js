@@ -39,7 +39,7 @@ import {
 
 import ReportsPage from './pages/Reporting/Reporting-Reports';
 
-export default class App extends Component {
+class App extends Component {
   render() {
     return (
       <Router history={history} onUpdate={() => this.handleRouteChange()}>
