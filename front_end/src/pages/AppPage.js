@@ -9,7 +9,7 @@ import TopBar from 'components/App/Navigation/TopBar.js';
 
 import AppMessage from 'components/App/AppMessage/AppMessage.js';
 
-export default class AppPage extends Component {
+class AppPage extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     if (this.props.Account.rows.length === 0) {

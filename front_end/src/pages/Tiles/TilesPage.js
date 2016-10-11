@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { pageVisit } from 'actions/App/AppActions';
 
-export default class TilesPage extends Component {
+class TilesPage extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
 

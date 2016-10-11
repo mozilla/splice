@@ -10,7 +10,7 @@ import { fetchHierarchy } from 'actions/App/BreadCrumbActions';
 import CampaignDetails from 'components/Campaigns/CampaignDetails/CampaignDetails';
 import AdGroupList from 'components/AdGroups/AdGroupList/AdGroupList';
 
-export default class CampaignViewPage extends Component {
+class CampaignViewPage extends Component {
   componentWillMount() {
     this.fetchCampaignDetails(this.props);
   }

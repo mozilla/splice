@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { pageVisit } from 'actions/App/AppActions';
 
-export default class ApprovalsPage extends Component {
+class ApprovalsPage extends Component {
   componentDidMount() {
 
   }

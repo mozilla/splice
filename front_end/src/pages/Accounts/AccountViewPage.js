@@ -12,7 +12,7 @@ import CampaignList from 'components/Campaigns/CampaignList/CampaignList';
 
 window.$ = require('jquery');
 
-export default class AccountViewPage extends Component {
+class AccountViewPage extends Component {
   componentWillMount() {
     this.fetchAccountDetails(this.props);
   }

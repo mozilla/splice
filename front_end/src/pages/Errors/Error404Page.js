@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { updateDocTitle } from 'actions/App/AppActions';
 
-export default class Error404Page extends Component {
+class Error404Page extends Component {
   componentDidMount() {
     updateDocTitle('Page Not Found');
   }
