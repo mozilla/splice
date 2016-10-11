@@ -1,3 +1,8 @@
+2.1.20
+======
+* Fix the adgroup type for suggested tiles
+* Fix the default exports in the front end
+
 2.1.19
 ======
 Table schema changes for Activity Stream
