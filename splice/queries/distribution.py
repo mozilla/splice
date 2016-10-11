@@ -43,7 +43,7 @@ def _create_tiles(tile, bucketer, legacy=False):
         tile_dict['imageURI'] = switch_to_cdn_url(tile.image_uri)
     if tile.enhanced_image_uri:
         tile_dict['enhancedImageURI'] = switch_to_cdn_url(tile.enhanced_image_uri)
-    if not legacy and tile.adgroup.categories:
+    if not legacy and tile.adgroup.type == "suggested" and tile.adgroup.categories:
         for category in tile.adgroup.categories:
             bucket = bucketer[category.category]
             frequency_caps = {"daily": tile.adgroup.frequency_cap_daily,
@@ -162,7 +162,7 @@ def get_possible_distributions(today=None, channel_id=None):
 
         new_tiles = _create_tiles(tile, bucketer)
         legacy_tiles = _create_tiles(tile, bucketer, True)
-        suggested = len(tile.adgroup.categories) > 0
+        suggested = tile.adgroup.type == "suggested" and len(tile.adgroup.categories) > 0
 
         for country in countries:
             key = (safe_channel_name, country.country_code, locale)
