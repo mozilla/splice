@@ -1,3 +1,12 @@
+2.1.21
+======
+Table schema changes for Activity Stream
+* Add tables: ss_session, ss_event, and ss_performance for A-S shield study
+
+__note__:
+* Include a new migration: migrations/versions/5614f34b9d8b_.py
+* Include a new schema: ddl/migrations/redshift/1477592326.sql
+
 2.1.20
 ======
 * Fix the adgroup type for suggested tiles
