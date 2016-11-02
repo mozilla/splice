@@ -1,3 +1,12 @@
+2.1.22
+======
+Table schema changes for Activity Stream Shield Study
+* Add tp_version for ss_session, ss_event, and ss_performance
+
+__note__:
+* Include a new migration: migrations/versions/3addd85ccbc9_.py
+* Include a new schema: ddl/migrations/redshift/1478097203.sql
+
 2.1.21
 ======
 Table schema changes for Activity Stream
