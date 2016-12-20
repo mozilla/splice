@@ -228,6 +228,7 @@ activity_stream_stats_daily = db.Table(
     db.Column('load_latency', db.Integer, nullable=False),
     db.Column('total_bookmarks', db.Integer, nullable=False),
     db.Column('total_history_size', db.Integer, nullable=False),
+    db.Column('highlights_size', db.Integer),
     db.Column('session_duration', db.Integer, nullable=False),
     db.Column('session_id', db.String(64)),
     db.Column('receive_at', db.DateTime, nullable=False),
@@ -291,6 +292,27 @@ activity_stream_performance_daily = db.Table(
     info={'bind_key': 'stats'}
 )
 
+activity_stream_masga_daily = db.Table(
+    'activity_stream_masga',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('tab_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('source', db.String(64), nullable=False),
+    db.Column('session_id', db.String(64)),
+    db.Column('experiment_id', db.String(64)),
+    db.Column('event', db.String(64), nullable=False),
+    db.Column('event_id', db.String(64), nullable=False),
+    db.Column('value', db.Integer, nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    info={'bind_key': 'stats'}
+)
 
 ss_session = db.Table(
     'ss_session',
@@ -305,6 +327,7 @@ ss_session = db.Table(
     db.Column('load_latency', db.Integer, nullable=False),
     db.Column('total_bookmarks', db.Integer, nullable=False),
     db.Column('total_history_size', db.Integer, nullable=False),
+    db.Column('highlights_size', db.Integer),
     db.Column('session_duration', db.Integer, nullable=False),
     db.Column('session_id', db.String(64)),
     db.Column('shield_variant', db.String(64)),
@@ -362,6 +385,28 @@ ss_performance = db.Table(
     db.Column('event', db.String(64), nullable=False),
     db.Column('event_id', db.String(64), nullable=False),
     db.Column('metadata_source', db.String(64), nullable=True),
+    db.Column('value', db.Integer, nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
+ss_masga = db.Table(
+    'ss_masga',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('tab_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('source', db.String(64), nullable=False),
+    db.Column('session_id', db.String(64)),
+    db.Column('experiment_id', db.String(64)),
+    db.Column('event', db.String(64), nullable=False),
+    db.Column('event_id', db.String(64), nullable=False),
     db.Column('value', db.Integer, nullable=False),
     db.Column('receive_at', db.DateTime, nullable=False),
     db.Column('date', db.Date, nullable=False),
