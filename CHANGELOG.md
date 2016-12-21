@@ -1,3 +1,13 @@
+2.1.23
+======
+Table schema changes for Activity Stream
+* Add highlights_size for the session and shield study session tables
+* Add a new table activity_stream_masga to track the undesired states
+
+__note__:
+* Include a new migration: migrations/versions/4aada554f5e4_.py
+* Include a new schema: ddl/migrations/redshift/1482266757.sql
+
 2.1.22
 ======
 Table schema changes for Activity Stream Shield Study
