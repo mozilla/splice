@@ -314,6 +314,25 @@ activity_stream_masga_daily = db.Table(
     info={'bind_key': 'stats'}
 )
 
+ping_centre_test_pilot = db.Table(
+    'ping_centre_test_pilot',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('event_type', db.String(64), nullable=False),
+    db.Column('object', db.String(64)),
+    db.Column('client_time', db.Integer, nullable=False),
+    db.Column('variants', db.String(64)),
+    db.Column('addon_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('firefox_version', db.String(64), nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('os_name', db.String(64), nullable=False),
+    db.Column('os_version', db.String(64), nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('raw', db.String(4096), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
 ss_session = db.Table(
     'ss_session',
     db.Column('client_id', db.String(64), nullable=False),
