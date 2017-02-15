@@ -329,7 +329,7 @@ ping_centre_test_pilot = db.Table(
     db.Column('os_name', db.String(64), nullable=False),
     db.Column('os_version', db.String(64), nullable=False),
     db.Column('locale', db.String(14), nullable=False),
-    db.Column('raw', db.String(4096), nullable=False),
+    db.Column('raw', db.String(16384), nullable=False),
     info={'bind_key': 'stats'}
 )
 

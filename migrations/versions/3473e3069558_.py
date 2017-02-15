@@ -58,7 +58,7 @@ def upgrade_stats():
     sa.Column('os_name', sa.String(length=64), nullable=False),
     sa.Column('os_version', sa.String(length=64), nullable=False),
     sa.Column('locale', sa.String(length=14), nullable=False),
-    sa.Column('raw', sa.String(length=4096), nullable=False)
+    sa.Column('raw', sa.String(length=16384), nullable=False)
     )
     op.create_table('activity_stream_mobile_events_daily',
     sa.Column('client_id', sa.String(length=64), nullable=False),

@@ -14,7 +14,7 @@ CREATE TABLE ping_centre_test_pilot (
     os_name VARCHAR(64) NOT NULL, 
     os_version VARCHAR(64) NOT NULL, 
     locale VARCHAR(14) NOT NULL, 
-    raw VARCHAR(4096) NOT NULL
+    raw VARCHAR(16384) NOT NULL
 );
 
 CREATE TABLE activity_stream_mobile_events_daily (
