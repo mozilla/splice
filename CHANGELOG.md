@@ -1,3 +1,14 @@
+2.1.24
+======
+Table schema changes for Ping-centre
+* Add ping_centre_test_pilot table
+* Add activity_stream_mobile_stats_daily table
+* Add activity_stream_events_daily table
+
+__note__:
+* Include a new migration: migrations/versions/3473e3069558_.py
+* Include a new schema: ddl/migrations/redshift/1487106710.sql
+
 2.1.23
 ======
 Table schema changes for Activity Stream
