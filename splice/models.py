@@ -333,6 +333,43 @@ ping_centre_test_pilot = db.Table(
     info={'bind_key': 'stats'}
 )
 
+activity_stream_mobile_stats_daily = db.Table(
+    'activity_stream_mobile_stats_daily',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('build', db.String(64), nullable=False),
+    db.Column('app_version', db.String(64), nullable=False),
+    db.Column('session_duration', db.Integer, nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(14), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
+activity_stream_mobile_events_daily = db.Table(
+    'activity_stream_mobile_events_daily',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('build', db.String(64), nullable=False),
+    db.Column('app_version', db.String(64), nullable=False),
+    db.Column('page', db.String(64), nullable=False),
+    db.Column('action_position', db.String(16)),
+    db.Column('source', db.String(64)),
+    db.Column('event', db.String(64), nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(14), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
 ss_session = db.Table(
     'ss_session',
     db.Column('client_id', db.String(64), nullable=False),

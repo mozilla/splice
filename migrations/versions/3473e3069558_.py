@@ -60,6 +60,37 @@ def upgrade_stats():
     sa.Column('locale', sa.String(length=14), nullable=False),
     sa.Column('raw', sa.String(length=4096), nullable=False)
     )
+    op.create_table('activity_stream_mobile_events_daily',
+    sa.Column('client_id', sa.String(length=64), nullable=False),
+    sa.Column('build', sa.String(length=64), nullable=False),
+    sa.Column('app_version', sa.String(length=64), nullable=False),
+    sa.Column('page', sa.String(length=64), nullable=False),
+    sa.Column('action_position', sa.String(length=16), nullable=True),
+    sa.Column('source', sa.String(length=64), nullable=True),
+    sa.Column('event', sa.String(length=64), nullable=False),
+    sa.Column('receive_at', sa.DateTime(), nullable=False),
+    sa.Column('date', sa.Date(), nullable=False),
+    sa.Column('locale', sa.String(length=14), nullable=False),
+    sa.Column('country_code', sa.String(length=5), nullable=False),
+    sa.Column('os', sa.String(length=64), nullable=False),
+    sa.Column('browser', sa.String(length=64), nullable=False),
+    sa.Column('version', sa.String(length=64), nullable=False),
+    sa.Column('device', sa.String(length=14), nullable=False)
+    )
+    op.create_table('activity_stream_mobile_stats_daily',
+    sa.Column('client_id', sa.String(length=64), nullable=False),
+    sa.Column('build', sa.String(length=64), nullable=False),
+    sa.Column('app_version', sa.String(length=64), nullable=False),
+    sa.Column('session_duration', sa.Integer(), nullable=False),
+    sa.Column('receive_at', sa.DateTime(), nullable=False),
+    sa.Column('date', sa.Date(), nullable=False),
+    sa.Column('locale', sa.String(length=14), nullable=False),
+    sa.Column('country_code', sa.String(length=5), nullable=False),
+    sa.Column('os', sa.String(length=64), nullable=False),
+    sa.Column('browser', sa.String(length=64), nullable=False),
+    sa.Column('version', sa.String(length=64), nullable=False),
+    sa.Column('device', sa.String(length=14), nullable=False)
+    )
     ### end Alembic commands ###
 
 
@@ -69,5 +100,7 @@ def downgrade_stats():
     if os.environ.get("SPLICE_IGNORE_REDSHIFT", "") == "true":
         return
     op.drop_table('ping_centre_test_pilot')
+    op.drop_table('activity_stream_mobile_stats_daily')
+    op.drop_table('activity_stream_mobile_events_daily')
     ### end Alembic commands ###
 
