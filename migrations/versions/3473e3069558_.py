@@ -58,7 +58,7 @@ def upgrade_stats():
     sa.Column('os_name', sa.String(length=64), nullable=False),
     sa.Column('os_version', sa.String(length=64), nullable=False),
     sa.Column('locale', sa.String(length=14), nullable=False),
-    sa.Column('raw', sa.String(length=16384), nullable=False)
+    sa.Column('raw_ping', sa.String(length=16384), nullable=False)
     )
     op.create_table('activity_stream_mobile_events_daily',
     sa.Column('client_id', sa.String(length=64), nullable=False),
@@ -67,6 +67,7 @@ def upgrade_stats():
     sa.Column('page', sa.String(length=64), nullable=False),
     sa.Column('action_position', sa.String(length=16), nullable=True),
     sa.Column('source', sa.String(length=64), nullable=True),
+    sa.Column('release_channel', sa.String(length=32), nullable=True),
     sa.Column('event', sa.String(length=64), nullable=False),
     sa.Column('receive_at', sa.DateTime(), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
@@ -82,6 +83,7 @@ def upgrade_stats():
     sa.Column('build', sa.String(length=64), nullable=False),
     sa.Column('app_version', sa.String(length=64), nullable=False),
     sa.Column('session_duration', sa.Integer(), nullable=False),
+    sa.Column('release_channel', sa.String(length=32), nullable=True),
     sa.Column('receive_at', sa.DateTime(), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
     sa.Column('locale', sa.String(length=14), nullable=False),
