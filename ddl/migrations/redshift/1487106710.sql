@@ -1,5 +1,9 @@
 BEGIN;
 
+DROP TABLE IF EXISTS ping_centre_test_pilot;
+DROP TABLE IF EXISTS activity_stream_mobile_events_daily;
+DROP TABLE IF EXISTS activity_stream_mobile_stats_daily;
+
 CREATE TABLE ping_centre_test_pilot (
     client_id VARCHAR(64) NOT NULL, 
     event_type VARCHAR(64) NOT NULL, 
@@ -14,7 +18,7 @@ CREATE TABLE ping_centre_test_pilot (
     os_name VARCHAR(64) NOT NULL, 
     os_version VARCHAR(64) NOT NULL, 
     locale VARCHAR(14) NOT NULL, 
-    "raw" VARCHAR(16384) NOT NULL
+    raw_ping VARCHAR(16384) NOT NULL
 );
 
 CREATE TABLE activity_stream_mobile_events_daily (
@@ -24,6 +28,7 @@ CREATE TABLE activity_stream_mobile_events_daily (
     page VARCHAR(64) NOT NULL, 
     action_position VARCHAR(16), 
     source VARCHAR(64), 
+    release_channel VARCHAR(32),
     event VARCHAR(64) NOT NULL, 
     receive_at TIMESTAMP WITHOUT TIME ZONE NOT NULL, 
     date DATE NOT NULL, 
@@ -40,6 +45,7 @@ CREATE TABLE activity_stream_mobile_stats_daily (
     build VARCHAR(64) NOT NULL, 
     app_version VARCHAR(64) NOT NULL, 
     session_duration INTEGER NOT NULL, 
+    release_channel VARCHAR(32),
     receive_at TIMESTAMP WITHOUT TIME ZONE NOT NULL, 
     date DATE NOT NULL, 
     locale VARCHAR(14) NOT NULL, 
