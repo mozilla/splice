@@ -1,3 +1,7 @@
+2.1.25
+======
+Fix the Redshift DDL by quoting the keyword
+
 2.1.24
 ======
 Table schema changes for Ping-centre
