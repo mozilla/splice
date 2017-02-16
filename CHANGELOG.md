@@ -1,6 +1,7 @@
 2.1.25
 ======
-Fix the Redshift DDL by quoting the keyword
+Fix the Redshift DDL by rename the "raw" field
+Add a "release_channel" for A-S mobile tables
 
 2.1.24
 ======
