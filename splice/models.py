@@ -229,6 +229,10 @@ activity_stream_stats_daily = db.Table(
     db.Column('total_bookmarks', db.Integer, nullable=False),
     db.Column('total_history_size', db.Integer, nullable=False),
     db.Column('highlights_size', db.Integer),
+    db.Column('topsites_size', db.Integer),
+    db.Column('topsites_screenshot', db.Integer),
+    db.Column('topsites_tippytop', db.Integer),
+    db.Column('user_prefs', db.Integer),
     db.Column('session_duration', db.Integer, nullable=False),
     db.Column('session_id', db.String(64)),
     db.Column('receive_at', db.DateTime, nullable=False),
@@ -266,6 +270,7 @@ activity_stream_events_daily = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(64), nullable=False),
+    db.Column('user_prefs', db.Integer),
     info={'bind_key': 'stats'}
 )
 
@@ -289,6 +294,7 @@ activity_stream_performance_daily = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(64), nullable=False),
+    db.Column('user_prefs', db.Integer),
     info={'bind_key': 'stats'}
 )
 
@@ -311,6 +317,7 @@ activity_stream_masga_daily = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(64), nullable=False),
+    db.Column('user_prefs', db.Integer),
     info={'bind_key': 'stats'}
 )
 
@@ -386,6 +393,10 @@ ss_session = db.Table(
     db.Column('total_bookmarks', db.Integer, nullable=False),
     db.Column('total_history_size', db.Integer, nullable=False),
     db.Column('highlights_size', db.Integer),
+    db.Column('topsites_size', db.Integer),
+    db.Column('topsites_screenshot', db.Integer),
+    db.Column('topsites_tippytop', db.Integer),
+    db.Column('user_prefs', db.Integer),
     db.Column('session_duration', db.Integer, nullable=False),
     db.Column('session_id', db.String(64)),
     db.Column('shield_variant', db.String(64)),
@@ -427,6 +438,7 @@ ss_event = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(64), nullable=False),
+    db.Column('user_prefs', db.Integer),
     info={'bind_key': 'stats'}
 )
 
@@ -452,6 +464,7 @@ ss_performance = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(64), nullable=False),
+    db.Column('user_prefs', db.Integer),
     info={'bind_key': 'stats'}
 )
 
@@ -474,6 +487,7 @@ ss_masga = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(64), nullable=False),
+    db.Column('user_prefs', db.Integer),
     info={'bind_key': 'stats'}
 )
 
