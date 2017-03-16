@@ -1,3 +1,13 @@
+2.1.26
+======
+Table schema changes for Activity Stream
+* Add topsites_size, topsites_tippytop, topsites_screenshot for session table
+* Add user_prefs for all tables
+
+__note__:
+* Include a new migration: migration/versions/18b96423fcf0_.py
+* Include a new schema: ddl/migrations/redshift/1489612009.sql
+
 2.1.25
 ======
 Fix the Redshift DDL by rename the "raw" field
