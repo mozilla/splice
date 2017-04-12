@@ -1,3 +1,12 @@
+2.1.27
+======
+Table schema changes for Activity Stream
+* Add topsites_pinned, topsites_lowresicon
+
+__note__:
+* Include a new migration: migration/version/556e52d3d14b_.py
+* Include a new schema: ddl/migrations/redshift/1492003954.sql
+
 2.1.26
 ======
 Table schema changes for Activity Stream
