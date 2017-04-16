@@ -44,6 +44,9 @@ def setup_routes(app):
 
             register_flask_restful = True
 
+    import splice.web.api.heartbeat
+    splice.web.api.heartbeat.register_routes(app)
+
 
 def create_webapp(*args, **kwargs):
     env = Environment.instance(*args, **kwargs)
