@@ -64,7 +64,8 @@ def upgrade_stats():
     sa.Column('version', sa.String(length=64), nullable=False),
     sa.Column('device', sa.String(length=64), nullable=False),
     sa.Column('blacklisted', sa.Boolean(), server_default='false', nullable=False),
-    sa.Column('user_prefs', sa.Integer(), nullable=True)
+    sa.Column('user_prefs', sa.Integer(), nullable=True),
+    sa.Column('experiment_id', sa.String(length=64), nullable=True)
     )
     op.create_table('ss_impression',
     sa.Column('client_id', sa.String(length=64), nullable=False),
@@ -87,7 +88,8 @@ def upgrade_stats():
     sa.Column('device', sa.String(length=64), nullable=False),
     sa.Column('blacklisted', sa.Boolean(), server_default='false', nullable=False),
     sa.Column('user_prefs', sa.Integer(), nullable=True),
-    sa.Column('tp_version', sa.String(length=64), nullable=True)
+    sa.Column('tp_version', sa.String(length=64), nullable=True),
+    sa.Column('experiment_id', sa.String(length=64), nullable=True)
     )
     op.add_column(u'ss_masga', sa.Column('tp_version', sa.String(length=64), nullable=True))
     ### end Alembic commands ###

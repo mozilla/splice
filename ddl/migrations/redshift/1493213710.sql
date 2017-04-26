@@ -20,7 +20,8 @@ CREATE TABLE activity_stream_impression_daily (
     version VARCHAR(64) NOT NULL, 
     device VARCHAR(64) NOT NULL, 
     blacklisted BOOLEAN DEFAULT 'false' NOT NULL, 
-    user_prefs INTEGER
+    user_prefs INTEGER,
+    experiment_id VARCHAR(64)
 );
 
 CREATE TABLE ss_impression (
@@ -44,7 +45,8 @@ CREATE TABLE ss_impression (
     device VARCHAR(64) NOT NULL, 
     blacklisted BOOLEAN DEFAULT 'false' NOT NULL, 
     user_prefs INTEGER, 
-    tp_version VARCHAR(64)
+    tp_version VARCHAR(64),
+    experiment_id VARCHAR(64)
 );
 
 ALTER TABLE ss_masga ADD COLUMN tp_version VARCHAR(64);

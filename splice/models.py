@@ -322,6 +322,7 @@ activity_stream_impression_daily = db.Table(
     db.Column('device', db.String(64), nullable=False),
     db.Column('blacklisted', db.Boolean, nullable=False, server_default="false"),
     db.Column('user_prefs', db.Integer),
+    db.Column('experiment_id', db.String(64)),
     info={'bind_key': 'stats'}
 )
 
@@ -544,6 +545,7 @@ ss_impression = db.Table(
     db.Column('blacklisted', db.Boolean, nullable=False, server_default="false"),
     db.Column('user_prefs', db.Integer),
     db.Column('tp_version', db.String(64)),
+    db.Column('experiment_id', db.String(64)),
     info={'bind_key': 'stats'}
 )
 
