@@ -1,3 +1,14 @@
+2.1.28
+======
+Table schema changes for Activity Stream
+* Add activity_stream_impression_daily
+* Add tp_version to ss_masga
+
+__note__:
+* Include a new migration: migration/version/25c409de54cc_.py
+* Include a new schema: ddl/migrations/redshift/1493213710.sql
+
+
 2.1.27
 ======
 Table schema changes for Activity Stream
