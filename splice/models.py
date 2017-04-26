@@ -300,6 +300,32 @@ activity_stream_performance_daily = db.Table(
     info={'bind_key': 'stats'}
 )
 
+activity_stream_impression_daily = db.Table(
+    'activity_stream_impression_daily',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('tile_id', db.Integer, nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('impressions', db.Integer, nullable=False, server_default="0"),
+    db.Column('clicks', db.Integer, nullable=False, server_default="0"),
+    db.Column('pinned', db.Integer, nullable=False, server_default="0"),
+    db.Column('blocked', db.Integer, nullable=False, server_default="0"),
+    db.Column('pocketed', db.Integer, nullable=False, server_default="0"),
+    db.Column('position', db.Integer, nullable=False, server_default="0"),
+    db.Column('source', db.String(64), nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    db.Column('blacklisted', db.Boolean, nullable=False, server_default="false"),
+    db.Column('user_prefs', db.Integer),
+    db.Column('experiment_id', db.String(64)),
+    info={'bind_key': 'stats'}
+)
+
 activity_stream_masga_daily = db.Table(
     'activity_stream_masga',
     db.Column('client_id', db.String(64), nullable=False),
@@ -492,6 +518,34 @@ ss_masga = db.Table(
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(64), nullable=False),
     db.Column('user_prefs', db.Integer),
+    db.Column('tp_version', db.String(64)),
+    info={'bind_key': 'stats'}
+)
+
+ss_impression = db.Table(
+    'ss_impression',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('tile_id', db.Integer, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('impressions', db.Integer, nullable=False, server_default="0"),
+    db.Column('clicks', db.Integer, nullable=False, server_default="0"),
+    db.Column('pinned', db.Integer, nullable=False, server_default="0"),
+    db.Column('blocked', db.Integer, nullable=False, server_default="0"),
+    db.Column('pocketed', db.Integer, nullable=False, server_default="0"),
+    db.Column('position', db.Integer, nullable=False, server_default="0"),
+    db.Column('source', db.String(64), nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    db.Column('blacklisted', db.Boolean, nullable=False, server_default="false"),
+    db.Column('user_prefs', db.Integer),
+    db.Column('tp_version', db.String(64)),
+    db.Column('experiment_id', db.String(64)),
     info={'bind_key': 'stats'}
 )
 
