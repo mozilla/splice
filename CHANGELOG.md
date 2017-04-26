@@ -1,3 +1,7 @@
+2.1.29
+======
+Tweak the last schema change to remove "receive_at" of activity_stream_impression_daily
+
 2.1.28
 ======
 Table schema changes for Activity Stream
