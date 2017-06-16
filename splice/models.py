@@ -1,5 +1,6 @@
 import pytz
 from splice.environment import Environment
+from sqlalchemy.dialects.postgresql import DOUBLE_PRECISION
 
 
 db = Environment.instance().db
@@ -548,6 +549,93 @@ ss_impression = db.Table(
     db.Column('experiment_id', db.String(64)),
     info={'bind_key': 'stats'}
 )
+
+
+assa_sessions_daily = db.Table(
+    'assa_sessions_daily',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('page', db.String(64), nullable=False),
+    db.Column('session_duration', db.Integer, nullable=False),
+    db.Column('session_id', db.String(64), nullable=False),
+    db.Column('load_trigger_type', db.String(64)),
+    db.Column('load_trigger_ts', DOUBLE_PRECISION),
+    db.Column('visibility_event_rcvd_ts', DOUBLE_PRECISION),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
+
+assa_events_daily = db.Table(
+    'assa_events_daily',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('source', db.String(64), nullable=False),
+    db.Column('session_id', db.String(64), nullable=False),
+    db.Column('page', db.String(64), nullable=False),
+    db.Column('action_position', db.String(16), nullable=False),
+    db.Column('event', db.String(64), nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
+
+assa_performance_daily = db.Table(
+    'assa_performance_daily',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('source', db.String(64), nullable=False),
+    db.Column('session_id', db.String(64)),
+    db.Column('page', db.String(64), nullable=False),
+    db.Column('event', db.String(64), nullable=False),
+    db.Column('event_id', db.String(64), nullable=False),
+    db.Column('value', db.Integer, nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
+
+assa_masga_daily = db.Table(
+    'assa_masga_daily',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('source', db.String(64), nullable=False),
+    db.Column('session_id', db.String(64)),
+    db.Column('page', db.String(64), nullable=False),
+    db.Column('event', db.String(64), nullable=False),
+    db.Column('value', db.Integer, nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
 
 site_stats_daily = db.Table(
     'site_stats_daily',
