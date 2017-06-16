@@ -1,3 +1,15 @@
+2.1.30
+======
+Table schema changes for Activity Stream system addon
+* Add assa_sessions_daily
+* Add assa_events_daily
+* Add assa_performance_daily
+* Add assa_masga_daily
+
+_note__:
+* Include a new migration: migration/version/55df5c7c41fd_.py
+* Include a new schema: ddl/migrations/redshift/1497554727.sql
+
 2.1.29
 ======
 Tweak the last schema change to remove "receive_at" of activity_stream_impression_daily
