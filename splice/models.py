@@ -561,6 +561,7 @@ assa_sessions_daily = db.Table(
     db.Column('load_trigger_type', db.String(64)),
     db.Column('load_trigger_ts', DOUBLE_PRECISION),
     db.Column('visibility_event_rcvd_ts', DOUBLE_PRECISION),
+    db.Column('topsites_first_painted_ts', DOUBLE_PRECISION),
     db.Column('receive_at', db.DateTime, nullable=False),
     db.Column('date', db.Date, nullable=False),
     db.Column('locale', db.String(14), nullable=False),
