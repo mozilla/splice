@@ -1,3 +1,7 @@
+2.1.32
+======
+Bump PyOpenSSL to 17.2.0
+
 2.1.31
 ======
 Table schema change for assa_session_daily
