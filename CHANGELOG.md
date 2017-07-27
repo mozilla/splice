@@ -1,3 +1,12 @@
+2.1.31
+======
+Table schema change for assa_session_daily
+* Add topsites_first_painted_ts
+
+__note__:
+* Include a new migration: migration/version/90123954ee7_.py
+* Include a new schema: ddl/migrations/redshift/1501099589.sql
+
 2.1.30
 ======
 Table schema changes for Activity Stream system addon
