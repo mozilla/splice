@@ -1,3 +1,12 @@
+2.1.33
+======
+Table schema change for all assa tables
+* Add user_prefs
+
+__note__:
+* Include a new migration: migration/version/2809b3efc07e_.py
+* Include a new schema: ddl/migrations/redshift/1502386025.sql
+
 2.1.32
 ======
 Bump PyOpenSSL to 17.2.0
