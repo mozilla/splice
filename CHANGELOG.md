@@ -1,3 +1,12 @@
+2.1.34
+======
+Table schema for Activity Stream system addon
+* Add assa_impression_stats_daily
+
+__note__:
+* Include a new migration: migrations/versions/49387f326d6a_.py
+* Include a new schema: ddl/migrations/redshift/1502811414.sql
+
 2.1.33
 ======
 Table schema change for all assa tables
