@@ -1,3 +1,13 @@
+2.1.35
+======
+Table schema for Activity Stream system addon and Firefox onboarding
+* Add a release_channel for all the Activity Stream tables
+* Create new tables for Firefox onboarding
+
+__note__:
+* Include a new migration: migrations/versions/386a01af44c_.py
+* Include a new schema: ddl/migrations/redshift/1504024867.sql
+
 2.1.34
 ======
 Table schema for Activity Stream system addon
