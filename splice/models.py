@@ -408,6 +408,48 @@ activity_stream_mobile_events_daily = db.Table(
     info={'bind_key': 'stats'}
 )
 
+firefox_onboarding_sessions_daily = db.Table(
+    'firefox_onboarding_sessions_daily',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('session_duration', db.Integer, nullable=False),
+    db.Column('session_id', db.String(64), nullable=False),
+    db.Column('impression', db.Integer, nullable=False),
+    db.Column('page', db.String(64), nullable=False),
+    db.Column('event', db.String(64), nullable=False),
+    db.Column('category', db.String(64), nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(14), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
+firefox_onboarding_events_daily = db.Table(
+    'firefox_onboarding_events_daily',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('session_id', db.String(64), nullable=False),
+    db.Column('page', db.String(64), nullable=False),
+    db.Column('event', db.String(64), nullable=False),
+    db.Column('tour_id', db.String(64)),
+    db.Column('impression', db.Integer, nullable=False),
+    db.Column('category', db.String(64), nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(14), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
 ss_session = db.Table(
     'ss_session',
     db.Column('client_id', db.String(64), nullable=False),
@@ -564,6 +606,7 @@ assa_sessions_daily = db.Table(
     db.Column('topsites_first_painted_ts', DOUBLE_PRECISION),
     db.Column('receive_at', db.DateTime, nullable=False),
     db.Column('user_prefs', db.Integer),
+    db.Column('release_channel', db.String(16)),
     db.Column('date', db.Date, nullable=False),
     db.Column('locale', db.String(14), nullable=False),
     db.Column('country_code', db.String(5), nullable=False),
@@ -586,6 +629,7 @@ assa_events_daily = db.Table(
     db.Column('event', db.String(64), nullable=False),
     db.Column('receive_at', db.DateTime, nullable=False),
     db.Column('user_prefs', db.Integer),
+    db.Column('release_channel', db.String(16)),
     db.Column('date', db.Date, nullable=False),
     db.Column('locale', db.String(14), nullable=False),
     db.Column('country_code', db.String(5), nullable=False),
@@ -609,6 +653,7 @@ assa_performance_daily = db.Table(
     db.Column('value', db.Integer, nullable=False),
     db.Column('receive_at', db.DateTime, nullable=False),
     db.Column('user_prefs', db.Integer),
+    db.Column('release_channel', db.String(16)),
     db.Column('date', db.Date, nullable=False),
     db.Column('locale', db.String(14), nullable=False),
     db.Column('country_code', db.String(5), nullable=False),
@@ -631,6 +676,7 @@ assa_masga_daily = db.Table(
     db.Column('value', db.Integer, nullable=False),
     db.Column('receive_at', db.DateTime, nullable=False),
     db.Column('user_prefs', db.Integer),
+    db.Column('release_channel', db.String(16)),
     db.Column('date', db.Date, nullable=False),
     db.Column('locale', db.String(14), nullable=False),
     db.Column('country_code', db.String(5), nullable=False),
@@ -664,6 +710,7 @@ assa_impression_stats_daily = db.Table(
     db.Column('device', db.String(64), nullable=False),
     db.Column('blacklisted', db.Boolean, nullable=False, server_default="false"),
     db.Column('user_prefs', db.Integer),
+    db.Column('release_channel', db.String(16)),
     info={'bind_key': 'stats'}
 )
 
