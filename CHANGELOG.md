@@ -1,3 +1,8 @@
+2.1.36
+======
+Alter schema for Firefox Onboarding
+In-place change based on 2.1.35, no new schema created
+
 2.1.35
 ======
 Table schema for Activity Stream system addon and Firefox onboarding
