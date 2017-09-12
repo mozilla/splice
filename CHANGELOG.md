@@ -1,3 +1,8 @@
+2.1.37
+======
+Alter schema to drop tour_source column for firefox_onboarding_events_daily
+In-place change based on 2.1.35, no new schema created
+
 2.1.36
 ======
 Alter schema for Firefox Onboarding
