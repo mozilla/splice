@@ -53,7 +53,6 @@ def upgrade_stats():
     sa.Column('tour_id', sa.String(length=64), nullable=True),
     sa.Column('impression', sa.Integer(), nullable=False),
     sa.Column('category', sa.String(length=64), nullable=False),
-    sa.Column('tour_source', sa.String(length=64), nullable=False),
     sa.Column('receive_at', sa.DateTime(), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
     sa.Column('locale', sa.String(length=14), nullable=False),

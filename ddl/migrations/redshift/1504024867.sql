@@ -9,7 +9,6 @@ CREATE TABLE firefox_onboarding_events_daily (
     tour_id VARCHAR(64), 
     impression INTEGER NOT NULL, 
     category VARCHAR(64) NOT NULL, 
-    tour_source VARCHAR(64) NOT NULL, 
     receive_at TIMESTAMP WITHOUT TIME ZONE NOT NULL, 
     date DATE NOT NULL, 
     locale VARCHAR(14) NOT NULL, 

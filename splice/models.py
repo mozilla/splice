@@ -441,7 +441,6 @@ firefox_onboarding_events_daily = db.Table(
     db.Column('tour_id', db.String(64)),
     db.Column('impression', db.Integer, nullable=False),
     db.Column('category', db.String(64), nullable=False),
-    db.Column('tour_source', db.String(64), nullable=False),
     db.Column('receive_at', db.DateTime, nullable=False),
     db.Column('date', db.Date, nullable=False),
     db.Column('locale', db.String(14), nullable=False),
