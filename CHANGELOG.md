@@ -1,3 +1,11 @@
+2.1.38
+======
+Add shield_id to all the activity stream tables
+
+__note__:
+* Include a new migration: migrations/versions/153663fadcdb_.py
+* Include a new schema: ddl/migrations/redshift/1505922169.sql
+
 2.1.37
 ======
 Alter schema to drop tour_source column for firefox_onboarding_events_daily
