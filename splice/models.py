@@ -369,6 +369,23 @@ ping_centre_test_pilot = db.Table(
     info={'bind_key': 'stats'}
 )
 
+ping_centre_main = db.Table(
+    'ping_centre_main',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('shield_id', db.String(256), nullable=False),
+    db.Column('release_channel', db.String(32), nullable=False),
+    db.Column('event', db.String(64), nullable=False),
+    db.Column('value', db.String(256), nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(14), nullable=False),
+)
+
 activity_stream_mobile_stats_daily = db.Table(
     'activity_stream_mobile_stats_daily',
     db.Column('client_id', db.String(64), nullable=False),

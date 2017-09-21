@@ -44,6 +44,21 @@ def upgrade_stats():
     import os
     if os.environ.get("SPLICE_IGNORE_REDSHIFT", "") == "true":
         return
+    op.create_table('ping_centre_main',
+    sa.Column('client_id', sa.String(length=64), nullable=False),
+    sa.Column('shield_id', sa.String(length=256), nullable=False),
+    sa.Column('release_channel', sa.String(length=32), nullable=False),
+    sa.Column('event', sa.String(length=64), nullable=False),
+    sa.Column('value', sa.String(length=256), nullable=False),
+    sa.Column('receive_at', sa.DateTime(), nullable=False),
+    sa.Column('date', sa.Date(), nullable=False),
+    sa.Column('locale', sa.String(length=14), nullable=False),
+    sa.Column('country_code', sa.String(length=5), nullable=False),
+    sa.Column('os', sa.String(length=64), nullable=False),
+    sa.Column('browser', sa.String(length=64), nullable=False),
+    sa.Column('version', sa.String(length=64), nullable=False),
+    sa.Column('device', sa.String(length=14), nullable=False)
+    )
     op.add_column(u'assa_events_daily', sa.Column('shield_id', sa.String(length=256), nullable=True))
     op.add_column(u'assa_impression_stats_daily', sa.Column('shield_id', sa.String(length=256), nullable=True))
     op.add_column(u'assa_masga_daily', sa.Column('shield_id', sa.String(length=256), nullable=True))
@@ -57,6 +72,7 @@ def downgrade_stats():
     import os
     if os.environ.get("SPLICE_IGNORE_REDSHIFT", "") == "true":
         return
+    op.drop_table('ping_centre_main')
     op.drop_column(u'assa_sessions_daily', 'shield_id')
     op.drop_column(u'assa_performance_daily', 'shield_id')
     op.drop_column(u'assa_masga_daily', 'shield_id')
