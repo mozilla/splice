@@ -1,3 +1,8 @@
+2.1.39
+======
+Add a new table ping_centre_main
+In-place change based on 2.1.38, no new schema created
+
 2.1.38
 ======
 Add shield_id to all the activity stream tables
