@@ -384,6 +384,7 @@ ping_centre_main = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(14), nullable=False),
+    info={'bind_key': 'stats'}
 )
 
 activity_stream_mobile_stats_daily = db.Table(
@@ -623,6 +624,14 @@ assa_sessions_daily = db.Table(
     db.Column('load_trigger_ts', DOUBLE_PRECISION),
     db.Column('visibility_event_rcvd_ts', DOUBLE_PRECISION),
     db.Column('topsites_first_painted_ts', DOUBLE_PRECISION),
+    db.Column('is_preloaded', db.Boolean),
+    db.Column('is_prerendered', db.Boolean),
+    db.Column('topsites_data_late_by_ms', db.Integer),
+    db.Column('highlights_data_late_by_ms', db.Integer),
+    db.Column('screenshot_with_icon', db.Integer),
+    db.Column('screenshot', db.Integer),
+    db.Column('tippytop', db.Integer),
+    db.Column('rich_icon', db.Integer),
     db.Column('receive_at', db.DateTime, nullable=False),
     db.Column('user_prefs', db.Integer),
     db.Column('release_channel', db.String(16)),
@@ -717,6 +726,8 @@ assa_impression_stats_daily = db.Table(
     db.Column('tile_id', db.Integer, nullable=False),
     db.Column('addon_version', db.String(64), nullable=False),
     db.Column('date', db.Date, nullable=False),
+    db.Column('hour', db.Integer),
+    db.Column('minute', db.Integer),
     db.Column('impressions', db.Integer, nullable=False, server_default="0"),
     db.Column('clicks', db.Integer, nullable=False, server_default="0"),
     db.Column('pinned', db.Integer, nullable=False, server_default="0"),
