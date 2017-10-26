@@ -1,3 +1,13 @@
+2.1.40
+======
+* Add is_preloaded, is_prerendered, topsites_data_late_by_ms, highlights_data_by_ms
+screenshot_with_icon, screenshot, tipppytop, and rich_icon to assa_session_daily
+* Add hour and minute to assa_impression_stats_daily
+
+__note__:
+* Include a new migration: migrations/versions/14abd58d84f5_.py
+* Include a new schema: ddl/migrations/redshift/1508945470.sql
+
 2.1.39
 ======
 Add a new table ping_centre_main
