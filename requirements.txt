@@ -21,6 +21,7 @@ Flask-Cors==2.1.0
 pytz==2015.6
 Pillow==3.0.0
 pyOpenSSL==17.2.0
+cryptography==2.0.3
 ndg-httpsclient==0.4.0
 Fabric==1.8.1
 mohawk==0.3.1
