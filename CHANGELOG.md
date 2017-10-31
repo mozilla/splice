@@ -1,3 +1,8 @@
+2.1.41
+======
+Add no_image to assa_session_daily
+In-place change based on 2.1.40, no new schema created
+
 2.1.40
 ======
 * Add is_preloaded, is_prerendered, topsites_data_late_by_ms, highlights_data_by_ms
