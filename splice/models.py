@@ -632,6 +632,7 @@ assa_sessions_daily = db.Table(
     db.Column('screenshot', db.Integer),
     db.Column('tippytop', db.Integer),
     db.Column('rich_icon', db.Integer),
+    db.Column('no_image', db.Integer),
     db.Column('receive_at', db.DateTime, nullable=False),
     db.Column('user_prefs', db.Integer),
     db.Column('release_channel', db.String(16)),
