@@ -1,3 +1,11 @@
+2.1.42
+======
+* Add various columns to firefox onboarding tables
+
+__note__:
+* Include a new migration: migrations/versions/1766adfa8fd_.py
+* Include a new schema: ddl/migrations/redshift/1510327834.sql
+
 2.1.41
 ======
 Add no_image to assa_session_daily
