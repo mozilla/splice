@@ -446,6 +446,7 @@ firefox_onboarding_sessions_daily = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(14), nullable=False),
+    db.Column('tour_type', db.String(64)),
     info={'bind_key': 'stats'}
 )
 
@@ -467,6 +468,11 @@ firefox_onboarding_events_daily = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(14), nullable=False),
+    db.Column('tour_type', db.String(64)),
+    db.Column('timestamp', db.BigInteger),
+    db.Column('tour_source', db.String(64)),
+    db.Column('bubble_state', db.String(64)),
+    db.Column('notification_state', db.String(64)),
     info={'bind_key': 'stats'}
 )
 
