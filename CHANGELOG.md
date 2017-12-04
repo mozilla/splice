@@ -1,3 +1,11 @@
+2.1.43
+======
+* Add table schema for firefox onboarding v2
+
+__note__:
+* Include a new migration: migrations/versions/11352353f786_.py
+* Include a new schema: ddl/migrations/redshift/1512152206.sql
+
 2.1.42
 ======
 * Add various columns to firefox onboarding tables
