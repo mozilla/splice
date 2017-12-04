@@ -476,6 +476,61 @@ firefox_onboarding_events_daily = db.Table(
     info={'bind_key': 'stats'}
 )
 
+firefox_onboarding_sessions2_daily = db.Table(
+    'firefox_onboarding_sessions2_daily',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('category', db.String(64), nullable=False),
+    db.Column('page', db.String(64), nullable=False),
+    db.Column('parent_session_id', db.String(64), nullable=False),
+    db.Column('root_session_id', db.String(64), nullable=False),
+    db.Column('session_begin', db.BigInteger, nullable=False),
+    db.Column('session_end', db.BigInteger, nullable=False),
+    db.Column('session_id', db.String(64), nullable=False),
+    db.Column('tour_type', db.String(64), nullable=False),
+    db.Column('type', db.String(64), nullable=False),
+    db.Column('release_channel', db.String(16), nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(14), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
+firefox_onboarding_events2_daily = db.Table(
+    'firefox_onboarding_events2_daily',
+    db.Column('client_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('bubble_state', db.String(16), nullable=False),
+    db.Column('category', db.String(64), nullable=False),
+    db.Column('current_tour_id', db.String(64), nullable=False),
+    db.Column('logo_state', db.String(16), nullable=False),
+    db.Column('notification_impression', db.Integer, nullable=False),
+    db.Column('notification_state', db.String(16), nullable=False),
+    db.Column('page', db.String(64), nullable=False),
+    db.Column('parent_session_id', db.String(64), nullable=False),
+    db.Column('root_session_id', db.String(64), nullable=False),
+    db.Column('target_tour_id', db.String(64), nullable=False),
+    db.Column('timestamp', db.BigInteger, nullable=False),
+    db.Column('tour_type', db.String(16), nullable=False),
+    db.Column('type', db.String(64), nullable=False),
+    db.Column('width', db.Integer, nullable=False),
+    db.Column('release_channel', db.String(16), nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(14), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
 ss_session = db.Table(
     'ss_session',
     db.Column('client_id', db.String(64), nullable=False),
