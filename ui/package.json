@@ -18,7 +18,7 @@
   "dependencies": {
     "history": "1.13.1",
     "isomorphic-fetch": "2.2.0",
-    "moment": "2.10.6",
+    "moment": "2.20.1",
     "react": "0.14.3",
     "react-datetime": "2.0.1",
     "react-dom": "0.14.3",
