@@ -694,6 +694,7 @@ assa_sessions_daily = db.Table(
     db.Column('tippytop', db.Integer),
     db.Column('rich_icon', db.Integer),
     db.Column('no_image', db.Integer),
+    db.Column('custom_screenshot', db.Integer),
     db.Column('topsites_pinned', db.Integer),
     db.Column('profile_creation_date', db.Integer),
     db.Column('client_region', db.String(5)),
