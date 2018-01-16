@@ -1,3 +1,11 @@
+2.1.44
+======
+* Add various columns to activity stream
+
+__note__:
+* Include a new migration: migrations/versions/3e454722b821_.py
+* Include a new schema: ddl/migrations/redshift/1516031096.sql
+
 2.1.43
 ======
 * Add table schema for firefox onboarding v2
