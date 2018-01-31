@@ -1,3 +1,11 @@
+2.1.45
+======
+* Drop various unused tables
+
+__note__:
+* Include a new migration: migration/version/4cf6cb2e2309_.py
+* Include a new schem: ddl/migrations/redshift/1517416472.sql
+
 2.1.44
 ======
 * Add various columns to activity stream
