@@ -1,0 +1,5 @@
+BEGIN;
+
+ALTER TABLE assa_events_daily ADD COLUMN value VARCHAR(256) ENCODE ZSTD;
+
+COMMIT;
