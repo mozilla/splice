@@ -1,10 +1,18 @@
+2.1.46
+======
+* Add a column "value" to assa_events_daily
+
+__note__:
+* Include a new migration: migrations/versions/4b94f1530fa8_.py
+* Include a new schema: ddl/migrations/redshift/1519755317.sql
+
 2.1.45
 ======
 * Drop various unused tables
 
 __note__:
 * Include a new migration: migration/version/4cf6cb2e2309_.py
-* Include a new schem: ddl/migrations/redshift/1517416472.sql
+* Include a new schema: ddl/migrations/redshift/1517416472.sql
 
 2.1.44
 ======
