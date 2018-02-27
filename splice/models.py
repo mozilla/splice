@@ -429,6 +429,7 @@ assa_events_daily = db.Table(
     db.Column('event', db.String(64), nullable=False),
     db.Column('receive_at', db.DateTime, nullable=False),
     db.Column('user_prefs', db.Integer),
+    db.Column('value', db.String(256)),
     db.Column('release_channel', db.String(16)),
     db.Column('shield_id', db.String(256)),
     db.Column('date', db.Date, nullable=False),
