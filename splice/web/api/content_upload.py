@@ -261,7 +261,7 @@ def _extract_entryption_info(signature_dict):
     Reference: https://github.com/mozilla-services/autograph
     """
     encrypt_key = signature_dict.get("public_key")  # signing server might not send pub key
-    signature = signature_dict["content-signature"]
+    signature = signature_dict["signature"]
     return encrypt_key, signature
 
 
