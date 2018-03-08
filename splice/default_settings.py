@@ -54,6 +54,7 @@ class DefaultConfig(object):
     SIGNING_HAWK_ID = "alice"
     SIGNING_HAWK_KEY = "fs5wgcer9qj819kfptdlp8gm227ewxnzvsuj9ztycsx08hfhzu"
     SIGNING_TEMPLATE = "Content-Signature:\x00"
+    SIGNING_KEY_ID = "normankey"
 
     LOG_HANDLERS = {
         'application': {
