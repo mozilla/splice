@@ -40,7 +40,8 @@ class TestContent(BaseTestCase):
         """Test the API endpoint for the content upload """
         dummy_signature = {
             "public_key": "somerandomkey",
-            "signature": "somesignature"
+            "signature": "somesignature",
+            "x5u": "somex5u"
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
@@ -77,7 +78,8 @@ class TestContent(BaseTestCase):
         """Test the API endpoint for the content upload - re-sign a content"""
         dummy_signature = {
             "public_key": "somerandomkey",
-            "signature": "somesignature"
+            "signature": "somesignature",
+            "x5u": "somex5u"
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
@@ -100,7 +102,8 @@ class TestContent(BaseTestCase):
         """Test the API endpoint for the content upload - sign an existing content"""
         dummy_signature = {
             "public_key": "somerandomkey",
-            "signature": "somesignature"
+            "signature": "somesignature",
+            "x5u": "somex5u"
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
@@ -126,7 +129,8 @@ class TestContent(BaseTestCase):
     def test_upload_content_endpoint_sign_existing_without_bumping_version(self, s3Mock, signMock, verifyMock):
         dummy_signature = {
             "public_key": "somerandomkey",
-            "signature": "somesignature"
+            "signature": "somesignature",
+            "x5u": "somex5u"
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
@@ -271,7 +275,8 @@ class TestContent(BaseTestCase):
         """Test the API endpoint for the content resign all"""
         dummy_signature = {
             "public_key": "somerandomkey",
-            "signature": "somesignature"
+            "signature": "somesignature",
+            "x5u": "somex5u"
         }
         signMock.return_value = [dummy_signature] * 4  # four files in the manifest
         s3Mock.return_value = "http://bucket/content"
@@ -323,7 +328,8 @@ class TestContent(BaseTestCase):
         signature_dict = {
             'public_key': 'MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE4k3FmG7dFoOt3Tuzl76abTRtK8sb/r/ibCSeVKa96RbrOX2ciscz/TT8wfqBYS/8cN4zMe1+f7wRmkNrCUojZR1ZKmYM2BeiUOMlMoqk2O7+uwsn1DwNQSYP58TkvZt6',
             'ref': '51frsk7tsnx42s0cwo9rbc99r',
-            'signature': 'haRzzBXgPEpe9050ybZMIxFoQS3gcESzqxLBYU2SRVEyolnTD815U5NQ4JO2jGanOSqcAbmJUuo1ceSC9p8xFjrCuWU8mEemcRPdNGzu1b3T3tE-SYuANQpaZVBfuy1B'
+            'signature': 'haRzzBXgPEpe9050ybZMIxFoQS3gcESzqxLBYU2SRVEyolnTD815U5NQ4JO2jGanOSqcAbmJUuo1ceSC9p8xFjrCuWU8mEemcRPdNGzu1b3T3tE-SYuANQpaZVBfuy1B',
+            'x5u': 'https://foo.example.com/chains/certificates.pem'
         }
         ret = content_upload._verify_signature(sign_payload, signature_dict)
         self.assertTrue(ret)

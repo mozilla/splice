@@ -165,6 +165,9 @@ def _digest_content(content, manifest):
             payload = {
                 "input": "%s" % base64.b64encode(hash),
             }
+            # signing key_id is optional, we need it for dev and test
+            if env.config.SIGNING_KEY_ID:
+                payload["keyid"] = env.config.SIGNING_KEY_ID
             sign_payload.append(payload)
 
         # send to signing server
@@ -262,7 +265,8 @@ def _extract_entryption_info(signature_dict):
     """
     encrypt_key = signature_dict.get("public_key")  # signing server might not send pub key
     signature = signature_dict["signature"]
-    return encrypt_key, signature
+    x5u = signature_dict.get("x5u")
+    return encrypt_key, signature, x5u
 
 
 def upload_content_to_s3(name, version, asset, bucket, headers):  # pragma: no cover
@@ -277,10 +281,12 @@ def upload_content_to_s3(name, version, asset, bucket, headers):  # pragma: no c
         headers["Cache-Control"] = "public, max-age=86400"
     headers['Content-Type'] = MIME_EXTENSIONS.get(ext) or 'text/plain'
     if signature:
-        encrypt_key, sig = _extract_entryption_info(signature)
+        encrypt_key, sig, x5u = _extract_entryption_info(signature)
         headers['X-amz-meta-content-signature'] = sig
         if encrypt_key:  # as the encrypt key is optional
             headers['X-amz-meta-encryption-key'] = encrypt_key
+        if x5u:  # as x5u is optional
+            headers['X-amz-meta-x5u'] = x5u
     key.set_contents_from_string(asset_body, headers=headers)
     key.set_acl("public-read")
 
