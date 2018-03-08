@@ -120,6 +120,43 @@ class TestContent(BaseTestCase):
             # it should bump up the version for the existing content
             assert_equal(content['version'], 2)
 
+    @mock.patch('splice.web.api.content_upload._verify_signature')
+    @mock.patch('splice.web.api.content_upload._sign_content')
+    @mock.patch('splice.web.api.content_upload.upload_content_to_s3')
+    def test_upload_content_endpoint_sign_existing_without_bumping_version(self, s3Mock, signMock, verifyMock):
+        dummy_signature = {
+            "public_key": "somerandomkey",
+            "content-signature": "somesignature"
+        }
+        signMock.return_value = [dummy_signature] * 4  # four files in the manifest
+        s3Mock.return_value = "http://bucket/content"
+        verifyMock.return_value = True
+        url = url_for('api.content.handler_content_upload', name="remote_new_tab")
+
+        response = None
+        with mock.patch('json.loads') as jsonMock:
+            jsonMock.return_value = {
+                "bump_version": False,
+                "signature_required": [
+                    "nightly/en-US/index.html",
+                    "nightly/en-GB/index.html",
+                    "release/en-US/index.html",
+                    "release/en-GB/index.html"
+                ]
+            }
+            with open(self.zip_file) as f:
+                data = {
+                    'content': (f, 'test.zip'),
+                }
+                response = self.client.post(url, data=data)
+        assert_equal(response.status_code, 200)
+        urls = json.loads(response.data)['uploaded']
+        # (2 unsigned + 4 signed) + (manifest) + (the original zip file)
+        assert_equal(len(urls), 8)
+        content = json.loads(response.data)['content']
+        # it should not bump up the version for the existing content if bump_version is false
+        assert_equal(content['version'], 1)
+
     @mock.patch('json.loads')
     def test_upload_content_endpoint_invalid_manifest(self, jsonMock):
         """Test the API endpoint for the content upload, the invalid manifest"""

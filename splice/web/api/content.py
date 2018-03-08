@@ -116,7 +116,7 @@ def _sync_to_database(content_record, new_content, new_version, original_url, or
             version_rec = content_rec.pop("versions")
         else:
             # just worked on an existing content
-            if freeze:
+            if freeze or new_version == content_record.get("version"):
                 # modified an existing version
                 version_rec = update_version(session, content_record['id'], new_version, version_record)
                 content_rec = content_record
