@@ -1,0 +1,24 @@
+BEGIN;
+
+CREATE TABLE assa_router_events_daily (
+    impression_id VARCHAR(64) NOT NULL ENCODE ZSTD, 
+    addon_version VARCHAR(64) NOT NULL ENCODE ZSTD, 
+    source VARCHAR(64) NOT NULL ENCODE ZSTD, 
+    event VARCHAR(64) NOT NULL ENCODE ZSTD, 
+    value VARCHAR(256) ENCODE ZSTD, 
+    message_id VARCHAR(128) NOT NULL ENCODE ZSTD, 
+    receive_at TIMESTAMP WITHOUT TIME ZONE NOT NULL ENCODE ZSTD, 
+    release_channel VARCHAR(16) ENCODE ZSTD, 
+    shield_id VARCHAR(256) ENCODE ZSTD, 
+    date DATE NOT NULL ENCODE ZSTD, 
+    locale VARCHAR(14) NOT NULL ENCODE BYTEDICT, 
+    country_code VARCHAR(5) NOT NULL ENCODE BYTEDICT, 
+    os VARCHAR(64) NOT NULL ENCODE ZSTD, 
+    browser VARCHAR(64) NOT NULL ENCODE ZSTD, 
+    version VARCHAR(64) NOT NULL ENCODE ZSTD, 
+    device VARCHAR(64) NOT NULL ENCODE ZSTD
+)
+DISTKEY (impression_id)
+SORTKEY (date, source, event);
+
+COMMIT;

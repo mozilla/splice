@@ -523,6 +523,28 @@ assa_impression_stats_daily = db.Table(
 )
 
 
+assa_router_events_daily = db.Table(
+    'assa_router_events_daily',
+    db.Column('impression_id', db.String(64), nullable=False),
+    db.Column('addon_version', db.String(64), nullable=False),
+    db.Column('source', db.String(64), nullable=False),
+    db.Column('event', db.String(64), nullable=False),
+    db.Column('value', db.String(256)),
+    db.Column('message_id', db.String(128), nullable=False),
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('release_channel', db.String(16)),
+    db.Column('shield_id', db.String(256)),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('locale', db.String(14), nullable=False),
+    db.Column('country_code', db.String(5), nullable=False),
+    db.Column('os', db.String(64), nullable=False),
+    db.Column('browser', db.String(64), nullable=False),
+    db.Column('version', db.String(64), nullable=False),
+    db.Column('device', db.String(64), nullable=False),
+    info={'bind_key': 'stats'}
+)
+
+
 site_stats_daily = db.Table(
     'site_stats_daily',
     db.Column('date', db.Date, nullable=False),
