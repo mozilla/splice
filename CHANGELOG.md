@@ -1,3 +1,11 @@
+2.1.47
+======
+* Add a new table assa_router_events_daily
+
+__note__:
+* Include a new migration: migrations/versions/599fe459913b_.py
+* Include a new schema: ddl/migrations/redshift/1526998293.sql
+
 2.1.46
 ======
 * Add a column "value" to assa_events_daily
