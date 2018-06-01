@@ -1,3 +1,11 @@
+2.1.48
+======
+* Add profile_creation_date to ping_centre_main
+
+__note__:
+* Include a new migration: migrations/versions/159a3bd70527_.py
+* Include a new schema: ddl/migrations/redshift/1527872829.sql
+
 2.1.47
 ======
 * Add a new table assa_router_events_daily
