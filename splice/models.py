@@ -231,6 +231,7 @@ ping_centre_main = db.Table(
     db.Column('browser', db.String(64), nullable=False),
     db.Column('version', db.String(64), nullable=False),
     db.Column('device', db.String(14), nullable=False),
+    db.Column('profile_creation_date', db.Integer),
     info={'bind_key': 'stats'}
 )
 
