@@ -1,3 +1,11 @@
+2.1.49
+======
+* Add topsites_search_shortcuts to assa_sessions_daily and assa_sessions_daily_by_client_id
+
+__note__:
+* Include a new migration: /migrations/versions/2a9ca56929cc_.py
+* Include a new schema: ddl/migrations/redshift/1534278813.sql
+
 2.1.48
 ======
 * Add profile_creation_date to ping_centre_main
