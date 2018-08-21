@@ -547,6 +547,29 @@ assa_router_events_daily = db.Table(
 )
 
 
+watchdog_proxy_events_daily = db.Table(
+    'watchdog_proxy_events_daily',
+    db.Column('receive_at', db.DateTime, nullable=False),
+    db.Column('date', db.Date, nullable=False),
+    db.Column('event', db.String(64), nullable=False),
+    db.Column('consumer_name', db.String(128)),
+    db.Column('watchdog_id', db.String(128)),
+    db.Column('type', db.String(64)),
+    db.Column('poller_id', db.String(128)),
+    db.Column('items_in_queue', db.Integer),
+    db.Column('items_in_progress', db.Integer),
+    db.Column('items_in_waiting', db.Integer),
+    db.Column('photodna_tracking_id', db.String(128)),
+    db.Column('worker_id', db.String(128)),
+    db.Column('is_match', db.Boolean),
+    db.Column('is_error', db.Boolean),
+    db.Column('timing_sent', db.Integer),
+    db.Column('timing_received', db.Integer),
+    db.Column('timing_submitted', db.Integer),
+    info={'bind_key': 'stats'}
+)
+
+
 site_stats_daily = db.Table(
     'site_stats_daily',
     db.Column('date', db.Date, nullable=False),
