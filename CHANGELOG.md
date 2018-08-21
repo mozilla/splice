@@ -1,3 +1,7 @@
+2.1.51
+======
+* Change encoding for boolean types in watchdog_proxy_events_daily
+
 2.1.50
 ======
 * Add watchdog_proxy_events_daily
