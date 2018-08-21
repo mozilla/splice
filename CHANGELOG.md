@@ -1,3 +1,11 @@
+2.1.50
+======
+* Add watchdog_proxy_events_daily
+
+__note__:
+* Include a new migration: migrations/versions/332da7ae51f3_.py
+* Include a new schema: ddl/migrations/redshift/1534527018.sql
+
 2.1.49
 ======
 * Add topsites_search_shortcuts to assa_sessions_daily and assa_sessions_daily_by_client_id
