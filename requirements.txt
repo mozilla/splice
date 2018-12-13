@@ -26,5 +26,5 @@ ndg-httpsclient==0.4.0
 Fabric==1.8.1
 mohawk==0.3.1
 ecdsa==0.13
-setuptools==22.0.0
+setuptools==40.6.3
 pycrypto==2.6.1
