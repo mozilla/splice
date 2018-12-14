@@ -1,3 +1,11 @@
+2.1.52
+======
+* Add profile_creation_date to assa_events_daily
+
+__note__:
+* Include a new migration: migrations/versions/47a9cfc38ebe_.py
+* Include a new schema: ddl/migrations/redshift/1544737615.sql
+
 2.1.51
 ======
 * Change encoding for boolean types in watchdog_proxy_events_daily
