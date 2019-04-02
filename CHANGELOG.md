@@ -1,3 +1,11 @@
+2.1.54
+======
+* Add loaded to assa_impression_stats_daily
+
+__note__:
+* Include a new migration: migrations/versions/41cb4c084ba7_.py
+* Include a new schema: ddl/migrations/redshift/1553545788.sql
+
 2.1.53
 ======
 * Add receive_at to assa_impression_stats_daily
