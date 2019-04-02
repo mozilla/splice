@@ -523,6 +523,7 @@ assa_impression_stats_daily = db.Table(
     db.Column('release_channel', db.String(16)),
     db.Column('shield_id', db.String(256)),
     db.Column('receive_at', db.DateTime),
+    db.Column('loaded', db.Integer, server_default="0"),
     info={'bind_key': 'stats'}
 )
 

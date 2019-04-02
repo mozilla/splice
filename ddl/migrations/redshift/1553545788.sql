@@ -1,0 +1,5 @@
+BEGIN;
+
+ALTER TABLE assa_impression_stats_daily ADD COLUMN loaded INTEGER DEFAULT '0' ENCODE ZSTD;
+
+COMMIT;
